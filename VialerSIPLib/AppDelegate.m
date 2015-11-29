@@ -4,6 +4,8 @@
 //
 
 #import "AppDelegate.h"
+#import "HDLumberjackLogFormatter.h"
+#import "VialerSIPLib.h"
 
 @interface AppDelegate ()
 
@@ -11,10 +13,31 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [self setupCocoaLumberjackLogging];
+
+    VialerSIPLib *sipLib = [[VialerSIPLib alloc] init];
+    [sipLib callNumber:@"0501234567"];
+
     return YES;
+}
+
+- (void)setupCocoaLumberjackLogging {
+    //Add the Terminal and TTY(XCode console) loggers to CocoaLumberjack (simulate the default NSLog behaviour)
+    HDLumberjackLogFormatter* logFormat = [[HDLumberjackLogFormatter alloc] init];
+
+    DDASLLogger *aslLogger = [DDASLLogger sharedInstance];
+    [aslLogger setLogFormatter: logFormat];
+    DDTTYLogger *ttyLogger = [DDTTYLogger sharedInstance];
+    [ttyLogger setLogFormatter:logFormat];
+    [ttyLogger setColorsEnabled:YES];
+
+    //Give INFO a color
+    UIColor *pink = [UIColor colorWithRed:(255/255.0) green:(58/255.0) blue:(159/255.0) alpha:1.0];
+    [[DDTTYLogger sharedInstance] setForegroundColor:pink backgroundColor:nil forFlag:DDLogFlagInfo];
+
+    [DDLog addLogger:aslLogger];
+    [DDLog addLogger:ttyLogger];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

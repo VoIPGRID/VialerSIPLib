@@ -7,212 +7,241 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		37F5D92F4347ADD3A6DB3325F01171F2 /* Pods-VialerSIPLib-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = EE086112F043EE9AB4C16600A6DB86E9 /* Pods-VialerSIPLib-dummy.m */; };
-		E3CC184F5ADFB07EFB2854F3191084C8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
+		0049C778018E82BFD8585A8A604EA245 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
+		1E6A591B3DEE6317BB014BD71A50B689 /* DDASLLogCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = EA796D29BBC32EA0CAA04875B1874928 /* DDASLLogCapture.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DDD0FB94D61AB71C8F5C727EC7A0BD9 /* DDLogMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 10A09FF4707EFD5EA016AE86A9B5EB02 /* DDLogMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		41F221F9E8FDE456D3E9EB34B4C5EBF1 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B3DBAFBF42045196D50D0A986DB625B /* DDFileLogger.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		456BEEAD8F6C8D0B35D5A12E72068119 /* DDLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 6820D52B886C17B8BF0972DC5202E0BF /* DDLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CAAFD85FC04FBFFB61A22F14C8D4684 /* DDContextFilterLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5267B355E7B9CE6E755383F5E239CF9B /* DDContextFilterLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5539A292EFC958D90F290DBA5FF86220 /* DDDispatchQueueLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 396185086D95F46AF414BFB70372943C /* DDDispatchQueueLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5BF0AD69CA624AFBE91AA9F62D42BBCD /* HDLumberjackLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = F15E9D26662055B761A2229E066AFB0E /* HDLumberjackLogFormatter.m */; };
+		5DCBA219BC81D9190F11EE56F93BB908 /* DDTTYLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 92204A196AD408147E31EEB31583DDD8 /* DDTTYLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6077EFC05DC2551A7F5A1CFAC0B90187 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ED1C7100884D0B58838336CC0EA90C /* DDAbstractDatabaseLogger.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		6475050C8BA464772209BD6AF03F1EB1 /* DDMultiFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = F2D3CF0604906A2387D0CFB5E61F20BA /* DDMultiFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		656479029A5A15463E080FD25F8903B2 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C5B995A0902711E330DD53E90D1097 /* DDASLLogger.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		67E741D303696F9A1E863BC42E6A9C79 /* DDASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D6150E26DD973C362246C979C433A49 /* DDASLLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6DAEF151B35D00265D60C4AD34431DD9 /* DDContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BCDE35ADABA2432ECB6038D2972BE18 /* DDContextFilterLogFormatter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		906BA39B4449184A264475B0AAA9CD7B /* DDAssertMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 06CBAC2737A77145721423552EC9FCC6 /* DDAssertMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9258A7B71D4C13DBFC66C4B8BE43B79A /* DDAbstractDatabaseLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 028FE10F0AA632FA1EACB7C19A7B9FD8 /* DDAbstractDatabaseLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9DFB1378A337698012F7CE5D593DC04F /* DDASLLogCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = A7BBCEFAE1E95EAC0C25818114E35B16 /* DDASLLogCapture.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		A2D0EE5602557677B5D9AB8D46F2F1AF /* DDLog+LOGV.h in Headers */ = {isa = PBXBuildFile; fileRef = 25BECAD50B71E5F4C7F79CE7C94E713C /* DDLog+LOGV.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A34EF7C35E4E0657AFC8B4BA0B343867 /* CocoaLumberjack-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AE0204DA3148152FA8D31FAAAEA7BCA /* CocoaLumberjack-dummy.m */; };
+		A3A18FE4AF50D5B1C57596CA46F7EA42 /* HDLumberjackLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 51925B9D57309FE61AC15291CC5C7CC3 /* HDLumberjackLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBCA69A708A7B3DD861FB839B3A251B3 /* DDLegacyMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 7824484F3B6B1FEFA9FB58C4C85723C0 /* DDLegacyMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BF525D162B9ABC5DFA69FB7A8779F76E /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1072439EB537066F61C20DBE7BD4C5AC /* DDTTYLogger.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		C34C2488CE64875477FB93AF10E83573 /* HDLumberjackLogFormatter-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A4DF9E558DA1DF12F70B32AB6C88FD /* HDLumberjackLogFormatter-dummy.m */; };
+		C515A390D549AF8A16A76DD72388BD2C /* DDFileLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 68E99FF20C5C4990145D69D6177E9D5A /* DDFileLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CBB6BB497EC1A4C36506AD74ECDCD99F /* CocoaLumberjack.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D88982ADD34A87622713EBB7650D7B /* CocoaLumberjack.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D70BDFA09F4803DCFEAD7AF5DFE21C6A /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6371AF578882490DEAB1AB245095AE /* DDLog.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		D86F62CA5DFEB5481E009AF3C783B179 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
+		E17DFA62D83793A54B229E7854504DCF /* Pods-VialerSIPLib-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = EE086112F043EE9AB4C16600A6DB86E9 /* Pods-VialerSIPLib-dummy.m */; };
+		E1ED34DB49C6A05D740B8425F88CEC20 /* DDMultiFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 29112C2CB882D02D008E9DA85287858F /* DDMultiFormatter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		F74B431D055124BE84DAD26F732D07B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
+		FE6239BDE2049B920243DC0F907F57B9 /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = FB3CC6DF89E382A252EDE4727922FEE3 /* DDDispatchQueueLogFormatter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		196DDB1D761A28C5C2744C6DCD794A2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05F63C96B4DE4C01D766E129E1918E90;
+			remoteInfo = HDLumberjackLogFormatter;
+		};
+		6CA596710B177F433BCFB4B22F9C9333 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 12E2BC28C62976C425F4B71C2723F0B1;
+			remoteInfo = CocoaLumberjack;
+		};
+		BD00507676AB069274B648CF116DD0EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 12E2BC28C62976C425F4B71C2723F0B1;
+			remoteInfo = CocoaLumberjack;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		0061D0E1AC11D78F36ABF4407E410DE0 /* des_old.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = des_old.h; path = "include-ios/openssl/des_old.h"; sourceTree = "<group>"; };
-		016E7F5E050E35C5F628DD56A94D2D7E /* cast.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = cast.h; path = "include-ios/openssl/cast.h"; sourceTree = "<group>"; };
-		06D307BD0683DAF26F48CFFEF6273694 /* cms.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = cms.h; path = "include-ios/openssl/cms.h"; sourceTree = "<group>"; };
-		06DEC326C24259728E979C895D605C34 /* dtls1.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dtls1.h; path = "include-ios/openssl/dtls1.h"; sourceTree = "<group>"; };
-		089EB1D4A2672AA767B67723D2ECC54A /* md4.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = md4.h; path = "include-ios/openssl/md4.h"; sourceTree = "<group>"; };
-		0A27F9B20932E6C87FBCB05C4F677F34 /* libcrypto.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libcrypto.a; path = "lib-ios/libcrypto.a"; sourceTree = "<group>"; };
-		0BCF6D0817348152D8638C78E809ECAE /* x509.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = x509.h; path = "include-ios/openssl/x509.h"; sourceTree = "<group>"; };
-		0E108DA87B41E72D8D281B4D1AD228D6 /* srp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = srp.h; path = "include-ios/openssl/srp.h"; sourceTree = "<group>"; };
-		0ED762EDEA03AA48F29C2CB7063B1924 /* libpjsip-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsip-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsip-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		10A60779B04AA28576F5D12B808BC14E /* pkcs12.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pkcs12.h; path = "include-ios/openssl/pkcs12.h"; sourceTree = "<group>"; };
-		1101C2DE6D3E5FE98C871BBBA3A40F1E /* opensslv.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = opensslv.h; path = "include-ios/openssl/opensslv.h"; sourceTree = "<group>"; };
-		1234461FE3E7C354C7F3483442CAC80D /* rc4.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = rc4.h; path = "include-ios/openssl/rc4.h"; sourceTree = "<group>"; };
-		12965AAA67469FA26EEA3CD81F786B2B /* err.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = err.h; path = "include-ios/openssl/err.h"; sourceTree = "<group>"; };
+		0098DA6533FE34A73C1F94775AED850B /* comp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = comp.h; path = "include-ios/openssl/comp.h"; sourceTree = "<group>"; };
+		01B05E4B37AB62A41E7B2D012C7D7EA7 /* pem2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pem2.h; path = "include-ios/openssl/pem2.h"; sourceTree = "<group>"; };
+		02689BC5AD8FB97D49B0A4AAAEF14608 /* libpjsip-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsip-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsip-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		028FE10F0AA632FA1EACB7C19A7B9FD8 /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDAbstractDatabaseLogger.h; path = Classes/DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
+		06627E8378F316F57601880086710072 /* dh.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dh.h; path = "include-ios/openssl/dh.h"; sourceTree = "<group>"; };
+		06CBAC2737A77145721423552EC9FCC6 /* DDAssertMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDAssertMacros.h; path = Classes/DDAssertMacros.h; sourceTree = "<group>"; };
+		076BF47FB9428A8C00307C9984CBC243 /* objects.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = objects.h; path = "include-ios/openssl/objects.h"; sourceTree = "<group>"; };
+		1072439EB537066F61C20DBE7BD4C5AC /* DDTTYLogger.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDTTYLogger.m; path = Classes/DDTTYLogger.m; sourceTree = "<group>"; };
+		10A09FF4707EFD5EA016AE86A9B5EB02 /* DDLogMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDLogMacros.h; path = Classes/DDLogMacros.h; sourceTree = "<group>"; };
+		116F0F158512B061797F25C25D6311B0 /* mdc2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = mdc2.h; path = "include-ios/openssl/mdc2.h"; sourceTree = "<group>"; };
 		13FA497CB8FFCD25A79AD90150318F7A /* Pods-VialerSIPLib.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-VialerSIPLib.debug.xcconfig"; sourceTree = "<group>"; };
-		169F3DF95E25CE9279DA4B5AA5A610BC /* ocsp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ocsp.h; path = "include-ios/openssl/ocsp.h"; sourceTree = "<group>"; };
-		1B186EFE1DF46DA6FD8AACDED6346D51 /* crypto.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto.h; path = "include-ios/openssl/crypto.h"; sourceTree = "<group>"; };
-		1D26114B552C628F863504E9E2FEE6B6 /* libpjmedia-audiodev-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjmedia-audiodev-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjmedia-audiodev-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		1E5632CBE583563FCF59477541056E4F /* stack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = stack.h; path = "include-ios/openssl/stack.h"; sourceTree = "<group>"; };
-		1F770F35D0664536FDDA8C6766C77FE6 /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		2C63354CF883CA18E9CBCB710C903EFC /* dh.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dh.h; path = "include-ios/openssl/dh.h"; sourceTree = "<group>"; };
-		36D3033FE09BCD196493F2779634BA98 /* comp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = comp.h; path = "include-ios/openssl/comp.h"; sourceTree = "<group>"; };
-		38930083C130DC079CD90EE76520A689 /* dsa.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dsa.h; path = "include-ios/openssl/dsa.h"; sourceTree = "<group>"; };
-		38DF261F284F698AADC8A078D89D1C7A /* libPods-VialerSIPLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B22D9451FE4DD38B316E361A24FFD98 /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		3DDA4EA148E8BCAF1AD12E789936A1A6 /* libpjsip-simple-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsip-simple-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsip-simple-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		145C3A36BF00FECAC89A55274F5331D5 /* bio.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = bio.h; path = "include-ios/openssl/bio.h"; sourceTree = "<group>"; };
+		16E101089DCFA8699DEB3BF91DC3ACB5 /* ec.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ec.h; path = "include-ios/openssl/ec.h"; sourceTree = "<group>"; };
+		1B0D414A192C1D804E1418563E61FC48 /* ecdh.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ecdh.h; path = "include-ios/openssl/ecdh.h"; sourceTree = "<group>"; };
+		1B4712D811B6EFC5434D89F19090822D /* safestack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = safestack.h; path = "include-ios/openssl/safestack.h"; sourceTree = "<group>"; };
+		1D78C7003505A2230E1709649410D903 /* ebcdic.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ebcdic.h; path = "include-ios/openssl/ebcdic.h"; sourceTree = "<group>"; };
+		1F5A76E9FECFDCDB2D8DD6DF2D49F1F6 /* libpjmedia-audiodev-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjmedia-audiodev-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjmedia-audiodev-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		20BC7A6680082451A826538862F692E5 /* des.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = des.h; path = "include-ios/openssl/des.h"; sourceTree = "<group>"; };
+		214805F60315E4BCE8559E7009A844D0 /* libssl.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libssl.a; path = "lib-ios/libssl.a"; sourceTree = "<group>"; };
+		21C5B995A0902711E330DD53E90D1097 /* DDASLLogger.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDASLLogger.m; path = Classes/DDASLLogger.m; sourceTree = "<group>"; };
+		231430DB26CB8E7C18124CF0F288E15C /* opensslconf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = opensslconf.h; path = "include-ios/openssl/opensslconf.h"; sourceTree = "<group>"; };
+		25BECAD50B71E5F4C7F79CE7C94E713C /* DDLog+LOGV.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "DDLog+LOGV.h"; path = "Classes/DDLog+LOGV.h"; sourceTree = "<group>"; };
+		26DEAD616080BD800DFFF2A7BA0B886D /* pkcs12.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pkcs12.h; path = "include-ios/openssl/pkcs12.h"; sourceTree = "<group>"; };
+		290FCBC97FA0E4617742C27C1BB4F81E /* libpjsua-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsua-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsua-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		29112C2CB882D02D008E9DA85287858F /* DDMultiFormatter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDMultiFormatter.m; path = Classes/Extensions/DDMultiFormatter.m; sourceTree = "<group>"; };
+		2C428D3CEE847564F46A4906D457A168 /* ecdsa.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ecdsa.h; path = "include-ios/openssl/ecdsa.h"; sourceTree = "<group>"; };
+		2C6371AF578882490DEAB1AB245095AE /* DDLog.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDLog.m; path = Classes/DDLog.m; sourceTree = "<group>"; };
+		324856CF086DDA1D8839BAD2FF73DEFE /* asn1.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = asn1.h; path = "include-ios/openssl/asn1.h"; sourceTree = "<group>"; };
+		33C786E47EB4930A824F775FFC0DC7A8 /* libg7221codec-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libg7221codec-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libg7221codec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		36A4DF9E558DA1DF12F70B32AB6C88FD /* HDLumberjackLogFormatter-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "HDLumberjackLogFormatter-dummy.m"; sourceTree = "<group>"; };
+		3849B9CD36D52DBECF3E2019D1AC085B /* idea.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = idea.h; path = "include-ios/openssl/idea.h"; sourceTree = "<group>"; };
+		396185086D95F46AF414BFB70372943C /* DDDispatchQueueLogFormatter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDDispatchQueueLogFormatter.h; path = Classes/Extensions/DDDispatchQueueLogFormatter.h; sourceTree = "<group>"; };
+		3A101AE04FC3F2BA0D41380A0AB308F7 /* ts.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ts.h; path = "include-ios/openssl/ts.h"; sourceTree = "<group>"; };
+		3A88618E48413FD7B32326E320B8CAD7 /* krb5_asn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = krb5_asn.h; path = "include-ios/openssl/krb5_asn.h"; sourceTree = "<group>"; };
+		3B3DBAFBF42045196D50D0A986DB625B /* DDFileLogger.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDFileLogger.m; path = Classes/DDFileLogger.m; sourceTree = "<group>"; };
+		3BCDE35ADABA2432ECB6038D2972BE18 /* DDContextFilterLogFormatter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDContextFilterLogFormatter.m; path = Classes/Extensions/DDContextFilterLogFormatter.m; sourceTree = "<group>"; };
 		3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		3EB3279DBD3608E4DBF2735D0A8952E3 /* cmac.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = cmac.h; path = "include-ios/openssl/cmac.h"; sourceTree = "<group>"; };
-		4473698A36BF7AA03FAA36A87C0A6BF2 /* e_os2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = e_os2.h; path = "include-ios/openssl/e_os2.h"; sourceTree = "<group>"; };
-		4550EC43DAACBD611A93152F5F14B643 /* ebcdic.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ebcdic.h; path = "include-ios/openssl/ebcdic.h"; sourceTree = "<group>"; };
-		483E4616B76844D0AF5387E6BE10E6F5 /* des.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = des.h; path = "include-ios/openssl/des.h"; sourceTree = "<group>"; };
-		49EA18AF9AE298606D869EC6D9C89096 /* hmac.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = hmac.h; path = "include-ios/openssl/hmac.h"; sourceTree = "<group>"; };
-		4B736D368C38110FA29C5CA9284865A0 /* libilbccodec-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libilbccodec-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libilbccodec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		4D35D4EFA37F25DCF4AD947BE99180AF /* pem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pem.h; path = "include-ios/openssl/pem.h"; sourceTree = "<group>"; };
-		59A91F9CD707AB95B6FDFACD08480B12 /* lhash.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = lhash.h; path = "include-ios/openssl/lhash.h"; sourceTree = "<group>"; };
-		59B6E7BD7E2C48C2BD732369F31CAA75 /* asn1t.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = asn1t.h; path = "include-ios/openssl/asn1t.h"; sourceTree = "<group>"; };
-		5B32D0E0E424FCF1C09261AC8BDD4CD1 /* ecdsa.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ecdsa.h; path = "include-ios/openssl/ecdsa.h"; sourceTree = "<group>"; };
-		5D4765F82DB726BD83A59A681481ED5E /* pqueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pqueue.h; path = "include-ios/openssl/pqueue.h"; sourceTree = "<group>"; };
-		5F7847E9E59F3D598E32DED8217B910C /* camellia.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = camellia.h; path = "include-ios/openssl/camellia.h"; sourceTree = "<group>"; };
-		6294EF9939DFE8F7662CAEE9BDA543AF /* libg7221codec-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libg7221codec-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libg7221codec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		66F5A12F1453411BAE8ADE29A653F451 /* bn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = bn.h; path = "include-ios/openssl/bn.h"; sourceTree = "<group>"; };
-		6996021D41C6D2B705058B4E94975728 /* ssl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ssl.h; path = "include-ios/openssl/ssl.h"; sourceTree = "<group>"; };
-		71FD8DA40CFF70FCCDC921223A6C5948 /* pkcs7.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pkcs7.h; path = "include-ios/openssl/pkcs7.h"; sourceTree = "<group>"; };
-		7243D592FE26F05511452F84096505D4 /* idea.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = idea.h; path = "include-ios/openssl/idea.h"; sourceTree = "<group>"; };
-		73B95B4CB8040E1A307C2F5CB544441E /* obj_mac.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = obj_mac.h; path = "include-ios/openssl/obj_mac.h"; sourceTree = "<group>"; };
-		7625DDEF840BF0E8AA1CB7D91ADDFEC2 /* ts.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ts.h; path = "include-ios/openssl/ts.h"; sourceTree = "<group>"; };
-		766163CDED184362D92391DEE29D64AB /* ssl2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ssl2.h; path = "include-ios/openssl/ssl2.h"; sourceTree = "<group>"; };
-		788C2EE0BC011AA5A5130688EB73F95B /* libpjsdp-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsdp-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsdp-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		7961624D47323F1A6BD7925A574CBA28 /* symhacks.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = symhacks.h; path = "include-ios/openssl/symhacks.h"; sourceTree = "<group>"; };
-		7A6A4F173F2BDD1DD145E85ED9EA27A7 /* aes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = aes.h; path = "include-ios/openssl/aes.h"; sourceTree = "<group>"; };
+		3EFD0E7DFAA521E521B1671980877BF2 /* x509v3.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = x509v3.h; path = "include-ios/openssl/x509v3.h"; sourceTree = "<group>"; };
+		3F7D343E5898065B973C8E6B51E7867E /* HDLumberjackLogFormatter-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "HDLumberjackLogFormatter-prefix.pch"; sourceTree = "<group>"; };
+		41068FA4DD91588B7E99D3F1DBAFB49E /* cmac.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = cmac.h; path = "include-ios/openssl/cmac.h"; sourceTree = "<group>"; };
+		414D3EE3FE3EE42DD59FA7AAEB017CD7 /* conf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = conf.h; path = "include-ios/openssl/conf.h"; sourceTree = "<group>"; };
+		447CD5FB7444B88D4F47D34F12CD732E /* dtls1.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dtls1.h; path = "include-ios/openssl/dtls1.h"; sourceTree = "<group>"; };
+		462A26CEA7286BF660BB6B527D7A6BB9 /* asn1_mac.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = asn1_mac.h; path = "include-ios/openssl/asn1_mac.h"; sourceTree = "<group>"; };
+		490F38924896BBF6BA20AFE4DAD06C41 /* hmac.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = hmac.h; path = "include-ios/openssl/hmac.h"; sourceTree = "<group>"; };
+		4B8DB00E8C8281ADA0CBF6F480116EB6 /* aes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = aes.h; path = "include-ios/openssl/aes.h"; sourceTree = "<group>"; };
+		4D6150E26DD973C362246C979C433A49 /* DDASLLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDASLLogger.h; path = Classes/DDASLLogger.h; sourceTree = "<group>"; };
+		51925B9D57309FE61AC15291CC5C7CC3 /* HDLumberjackLogFormatter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HDLumberjackLogFormatter.h; path = HDLumberjackLogFormatter/Classes/HDLumberjackLogFormatter.h; sourceTree = "<group>"; };
+		5267B355E7B9CE6E755383F5E239CF9B /* DDContextFilterLogFormatter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDContextFilterLogFormatter.h; path = Classes/Extensions/DDContextFilterLogFormatter.h; sourceTree = "<group>"; };
+		5283F665B6F084584F314F60EA70CFD9 /* ossl_typ.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ossl_typ.h; path = "include-ios/openssl/ossl_typ.h"; sourceTree = "<group>"; };
+		5311BC2274F0FA8A6AAC5AB4B25DFADA /* libpjmedia-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjmedia-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjmedia-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		55B31AA977A23027F23405F408953787 /* pqueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pqueue.h; path = "include-ios/openssl/pqueue.h"; sourceTree = "<group>"; };
+		58966AF4FB345C1D41F2C73B313FAD45 /* stack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = stack.h; path = "include-ios/openssl/stack.h"; sourceTree = "<group>"; };
+		58DE474EC5487F0FD1FDC93EF3B19790 /* kssl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = kssl.h; path = "include-ios/openssl/kssl.h"; sourceTree = "<group>"; };
+		5D10069CE1D0B5B5FD97B567EA41D212 /* libpjsip-simple-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsip-simple-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsip-simple-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		5D58EDF6916BD1D8475A5AB21AD22460 /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		5F046FD4716D6BE400D0C832176E8AC8 /* libsrtp-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libsrtp-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libsrtp-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		5F1586D61F3F09E8B5B3B5EE371312A5 /* rand.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = rand.h; path = "include-ios/openssl/rand.h"; sourceTree = "<group>"; };
+		5F88169EBA0B786F7D4075B9EE835EB3 /* des_old.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = des_old.h; path = "include-ios/openssl/des_old.h"; sourceTree = "<group>"; };
+		6078B658092831145ED23EA6851BAE23 /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		61C6D2A84E41C1888BDF03B4E0CA48F3 /* libPods-VialerSIPLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6419150A31DB16006FC056674009B547 /* modes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = modes.h; path = "include-ios/openssl/modes.h"; sourceTree = "<group>"; };
+		67C0AD8CC390019851BF6448F6AA5057 /* bn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = bn.h; path = "include-ios/openssl/bn.h"; sourceTree = "<group>"; };
+		6820D52B886C17B8BF0972DC5202E0BF /* DDLog.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDLog.h; path = Classes/DDLog.h; sourceTree = "<group>"; };
+		68E99FF20C5C4990145D69D6177E9D5A /* DDFileLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDFileLogger.h; path = Classes/DDFileLogger.h; sourceTree = "<group>"; };
+		6AE0204DA3148152FA8D31FAAAEA7BCA /* CocoaLumberjack-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaLumberjack-dummy.m"; sourceTree = "<group>"; };
+		6B5E3F1EC9347FB9632D3E20099A7F78 /* crypto.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto.h; path = "include-ios/openssl/crypto.h"; sourceTree = "<group>"; };
+		6E3264E7A98D02AE940360FE8AB38698 /* ssl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ssl.h; path = "include-ios/openssl/ssl.h"; sourceTree = "<group>"; };
+		778AB6EEEC5515E7F29C0EA43FE7E1DF /* libcrypto.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libcrypto.a; path = "lib-ios/libcrypto.a"; sourceTree = "<group>"; };
+		7824484F3B6B1FEFA9FB58C4C85723C0 /* DDLegacyMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDLegacyMacros.h; path = Classes/DDLegacyMacros.h; sourceTree = "<group>"; };
+		7B4A31FFA633909D132E471865EB00B3 /* ocsp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ocsp.h; path = "include-ios/openssl/ocsp.h"; sourceTree = "<group>"; };
+		801FEC608694751B75FCC24472419406 /* ripemd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ripemd.h; path = "include-ios/openssl/ripemd.h"; sourceTree = "<group>"; };
 		82786CC97F1DCB72D8BDF008EC7BFE2C /* Pods-VialerSIPLib-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-VialerSIPLib-frameworks.sh"; sourceTree = "<group>"; };
-		8370F40891625C72DF71BD8918E7D745 /* pem2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pem2.h; path = "include-ios/openssl/pem2.h"; sourceTree = "<group>"; };
-		87556F21499348716E42B8DA313F7F8B /* libpjmedia-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjmedia-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjmedia-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		87B49ADF6C89518C8C78E2B923C5BCC7 /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		894FD66A9E9F3572EDDF30928C5E6F19 /* libpjmedia-videodev-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjmedia-videodev-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjmedia-videodev-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		82EACF66A4C0D86567CDA5F8F35CC2D0 /* lhash.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = lhash.h; path = "include-ios/openssl/lhash.h"; sourceTree = "<group>"; };
+		87369FCE062A8350424DECE38C3FFDFE /* evp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = evp.h; path = "include-ios/openssl/evp.h"; sourceTree = "<group>"; };
 		898F1F2F0C0EDB10CADCA0EB0F510DEA /* Pods-VialerSIPLib-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-VialerSIPLib-acknowledgements.markdown"; sourceTree = "<group>"; };
-		8CFE5A225A4398F2A7A61234399F1E66 /* libsrtp-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libsrtp-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libsrtp-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		93953484F1AFDDB2B9F70576676FFF1C /* ssl3.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ssl3.h; path = "include-ios/openssl/ssl3.h"; sourceTree = "<group>"; };
-		9936C39A67C2E3609584FDF294FE5385 /* txt_db.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = txt_db.h; path = "include-ios/openssl/txt_db.h"; sourceTree = "<group>"; };
+		8CDF6F151B0E43D826C72F67E1FF0097 /* srp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = srp.h; path = "include-ios/openssl/srp.h"; sourceTree = "<group>"; };
+		8E004E35951DD0932FD1C52A694550D2 /* x509.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = x509.h; path = "include-ios/openssl/x509.h"; sourceTree = "<group>"; };
+		8FAEFC0D8E9B24E926A03ADE94B1524E /* pem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pem.h; path = "include-ios/openssl/pem.h"; sourceTree = "<group>"; };
+		92204A196AD408147E31EEB31583DDD8 /* DDTTYLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDTTYLogger.h; path = Classes/DDTTYLogger.h; sourceTree = "<group>"; };
+		93F42BC3675EAB5E053FC461FA55237D /* libilbccodec-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libilbccodec-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libilbccodec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		9879F093F0A81DEF2B7506E3CCB4794D /* libresample-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libresample-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libresample-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		98C7484915D48FE0E539F6EA1AA24F72 /* engine.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = engine.h; path = "include-ios/openssl/engine.h"; sourceTree = "<group>"; };
 		9EF87E580380458106B54B4BCF2B2F69 /* Pods-VialerSIPLib.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-VialerSIPLib.release.xcconfig"; sourceTree = "<group>"; };
-		9F12B4DB55F6389B8786CDE69170922B /* libresample-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libresample-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libresample-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		9F9B5A4A4D162ABE0D1F925A417EE570 /* conf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = conf.h; path = "include-ios/openssl/conf.h"; sourceTree = "<group>"; };
-		A245E03EFB6624728F7DCC4B174956F9 /* libpjsua-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsua-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsua-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		A2AD74929F1019764F661412B32BCE52 /* krb5_asn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = krb5_asn.h; path = "include-ios/openssl/krb5_asn.h"; sourceTree = "<group>"; };
-		A56FC761F39E902C4534614531880091 /* objects.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = objects.h; path = "include-ios/openssl/objects.h"; sourceTree = "<group>"; };
-		A5E50A8E62444B2BEB95846E762A4BAB /* libpjmedia-codec-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjmedia-codec-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjmedia-codec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		A73232CCA98B81423C47B0775837E5A1 /* whrlpool.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = whrlpool.h; path = "include-ios/openssl/whrlpool.h"; sourceTree = "<group>"; };
-		A76C9E0EEF45A7E96ECD653E9A7BA874 /* libspeex-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libspeex-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libspeex-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		A95A8D8B6A06430165073F826050D191 /* x509_vfy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = x509_vfy.h; path = "include-ios/openssl/x509_vfy.h"; sourceTree = "<group>"; };
-		AFB4565D8F0DC34AC1589FDC534DF87C /* evp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = evp.h; path = "include-ios/openssl/evp.h"; sourceTree = "<group>"; };
-		B20DB188B81F231BF94004E3D0137D9E /* bio.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = bio.h; path = "include-ios/openssl/bio.h"; sourceTree = "<group>"; };
-		B76556BDE3AD23D67F389FEFC42A7C42 /* tls1.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = tls1.h; path = "include-ios/openssl/tls1.h"; sourceTree = "<group>"; };
-		B7D94504D42F6ACB4FDAC5F9D395C358 /* asn1_mac.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = asn1_mac.h; path = "include-ios/openssl/asn1_mac.h"; sourceTree = "<group>"; };
+		A3D685D278935D49F97A1D1A85DAE31D /* opensslv.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = opensslv.h; path = "include-ios/openssl/opensslv.h"; sourceTree = "<group>"; };
+		A435A0CD4B790DCC994C71A6DABB8C58 /* rsa.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = rsa.h; path = "include-ios/openssl/rsa.h"; sourceTree = "<group>"; };
+		A5D560964F984BDE388129B781FD393D /* libpjmedia-codec-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjmedia-codec-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjmedia-codec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		A7BBCEFAE1E95EAC0C25818114E35B16 /* DDASLLogCapture.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDASLLogCapture.m; path = Classes/DDASLLogCapture.m; sourceTree = "<group>"; };
+		A9D88982ADD34A87622713EBB7650D7B /* CocoaLumberjack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CocoaLumberjack.h; path = Classes/CocoaLumberjack.h; sourceTree = "<group>"; };
+		AA84A569F5F60F2551B286DE91FEC9D7 /* md4.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = md4.h; path = "include-ios/openssl/md4.h"; sourceTree = "<group>"; };
+		AB995BF896DEFC93DE5C29A25EB739BA /* libHDLumberjackLogFormatter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHDLumberjackLogFormatter.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACF3640E944B727A4A61CAEE12FF779B /* srtp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = srtp.h; path = "include-ios/openssl/srtp.h"; sourceTree = "<group>"; };
+		B125A1B9EAFCDFAE16A3621DA41AA55C /* ui.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ui.h; path = "include-ios/openssl/ui.h"; sourceTree = "<group>"; };
+		B164489E662380D7E8EEFBF7B5356ED9 /* cms.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = cms.h; path = "include-ios/openssl/cms.h"; sourceTree = "<group>"; };
+		B62F50904B982BDC3A4662FE29F24776 /* blowfish.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = blowfish.h; path = "include-ios/openssl/blowfish.h"; sourceTree = "<group>"; };
+		B6DD36193EB26F75DA95883E304F8DD5 /* asn1t.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = asn1t.h; path = "include-ios/openssl/asn1t.h"; sourceTree = "<group>"; };
 		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		BADE8FF5E589024686595AE0A4F8BAC8 /* srtp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = srtp.h; path = "include-ios/openssl/srtp.h"; sourceTree = "<group>"; };
-		BE4CF05EDDD9A8F4DA77EAAADD2B6655 /* ui.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ui.h; path = "include-ios/openssl/ui.h"; sourceTree = "<group>"; };
-		C0F6956ED26BBDA55FD06A238C99BE6B /* libssl.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libssl.a; path = "lib-ios/libssl.a"; sourceTree = "<group>"; };
-		C25ABA8ECBF8970199E2A5A68E3234FE /* x509v3.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = x509v3.h; path = "include-ios/openssl/x509v3.h"; sourceTree = "<group>"; };
-		C33B85930EB8365E1C4F95C47B883A7E /* ripemd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ripemd.h; path = "include-ios/openssl/ripemd.h"; sourceTree = "<group>"; };
-		C4BA02711B0ED5FF51108BD182485F59 /* libpjsua2-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsua2-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsua2-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		C4F8132344FDA5CEC4FA0035C641B880 /* rc2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = rc2.h; path = "include-ios/openssl/rc2.h"; sourceTree = "<group>"; };
-		C5576AFE68F21115521C83413574610D /* ecdh.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ecdh.h; path = "include-ios/openssl/ecdh.h"; sourceTree = "<group>"; };
-		C58047974D02928FDDC1F42394869829 /* blowfish.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = blowfish.h; path = "include-ios/openssl/blowfish.h"; sourceTree = "<group>"; };
-		C8D43D0D5714D28D799C9243BBBC395E /* conf_api.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = conf_api.h; path = "include-ios/openssl/conf_api.h"; sourceTree = "<group>"; };
-		CB4F4E63EA333E459346F677044E53F4 /* dso.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dso.h; path = "include-ios/openssl/dso.h"; sourceTree = "<group>"; };
-		CBD93D7C5264F16CBF8CDFD46A270681 /* mdc2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = mdc2.h; path = "include-ios/openssl/mdc2.h"; sourceTree = "<group>"; };
-		CC4B8E60D477245C434F07D022904CDC /* ssl23.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ssl23.h; path = "include-ios/openssl/ssl23.h"; sourceTree = "<group>"; };
-		CDB891BCCDE157D75EA6B23B4A8413C3 /* libpjsip-ua-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsip-ua-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsip-ua-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		D21F88E0E94627EE09EC39B65DA34FEF /* rsa.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = rsa.h; path = "include-ios/openssl/rsa.h"; sourceTree = "<group>"; };
-		D2CD3B50E0D9BF7EAF4E0236D9ECD4AF /* asn1.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = asn1.h; path = "include-ios/openssl/asn1.h"; sourceTree = "<group>"; };
-		D3B6039F0340452A93ACADEB02E93A90 /* modes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = modes.h; path = "include-ios/openssl/modes.h"; sourceTree = "<group>"; };
-		D92AE47EF2DAF3BCA4A5BEFCD5132D84 /* ossl_typ.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ossl_typ.h; path = "include-ios/openssl/ossl_typ.h"; sourceTree = "<group>"; };
-		DB9B13023D91123B4E18780382C52973 /* engine.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = engine.h; path = "include-ios/openssl/engine.h"; sourceTree = "<group>"; };
+		BA7D24FE100ABC608E27809938C5FA0D /* libpjsua2-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsua2-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsua2-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		BE2213A226B322A08E05A214EA5AE6FD /* ui_compat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ui_compat.h; path = "include-ios/openssl/ui_compat.h"; sourceTree = "<group>"; };
+		BF02B1A8298327D139FED5FBF21B3638 /* tls1.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = tls1.h; path = "include-ios/openssl/tls1.h"; sourceTree = "<group>"; };
+		BF14F7DF7BC3824BFA35C03362DE5366 /* x509_vfy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = x509_vfy.h; path = "include-ios/openssl/x509_vfy.h"; sourceTree = "<group>"; };
+		BFDB121247618387C77C9406AFAD83C8 /* libspeex-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libspeex-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libspeex-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		C19F30D17011EEB29D55A60E39511335 /* pkcs7.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pkcs7.h; path = "include-ios/openssl/pkcs7.h"; sourceTree = "<group>"; };
+		C1ED1C7100884D0B58838336CC0EA90C /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDAbstractDatabaseLogger.m; path = Classes/DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
+		C3EA0AE915BC1AFF7C14DDB472E54995 /* conf_api.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = conf_api.h; path = "include-ios/openssl/conf_api.h"; sourceTree = "<group>"; };
+		C52AAAD9D49E670BC3EADE3393BF720F /* ssl23.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ssl23.h; path = "include-ios/openssl/ssl23.h"; sourceTree = "<group>"; };
+		C5D78436C0FDC4A2D78922A9A43A2A04 /* seed.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = seed.h; path = "include-ios/openssl/seed.h"; sourceTree = "<group>"; };
+		C75762848192E8AFE156639C99CE930F /* CocoaLumberjack.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CocoaLumberjack.xcconfig; sourceTree = "<group>"; };
+		C8BB5606B6123CD03FC9B8054379B3F3 /* HDLumberjackLogFormatter.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = HDLumberjackLogFormatter.xcconfig; sourceTree = "<group>"; };
+		CAC9C489C10652C3F46DE87D32F98F02 /* libCocoaLumberjack.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCocoaLumberjack.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF42038E8205A79B57ED84C4D678257D /* rc2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = rc2.h; path = "include-ios/openssl/rc2.h"; sourceTree = "<group>"; };
+		D10D7310737C434F5AB1A33BB93CD1A7 /* rc4.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = rc4.h; path = "include-ios/openssl/rc4.h"; sourceTree = "<group>"; };
+		D270B5ADDAE58751217979B900A55F86 /* ssl2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ssl2.h; path = "include-ios/openssl/ssl2.h"; sourceTree = "<group>"; };
+		D3B786FBD8AC64109F0295A5D176DC35 /* CocoaLumberjack-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaLumberjack-prefix.pch"; sourceTree = "<group>"; };
+		D56A9FE9D4837F4D193B94D15CB2D919 /* whrlpool.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = whrlpool.h; path = "include-ios/openssl/whrlpool.h"; sourceTree = "<group>"; };
+		D8B5CD1177B844C5C71A55FA4A6E84E8 /* md5.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = md5.h; path = "include-ios/openssl/md5.h"; sourceTree = "<group>"; };
+		DA149D8839D7B2DB5A2F8B82C13FB3CA /* camellia.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = camellia.h; path = "include-ios/openssl/camellia.h"; sourceTree = "<group>"; };
+		DC437DE870E7F1276F3C3B1370C6B9C4 /* obj_mac.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = obj_mac.h; path = "include-ios/openssl/obj_mac.h"; sourceTree = "<group>"; };
 		E2181F2CAADBC0CDAAD86880376FE463 /* Pods-VialerSIPLib-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-VialerSIPLib-resources.sh"; sourceTree = "<group>"; };
-		E610F954D31093E043D013BE51919A70 /* ec.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ec.h; path = "include-ios/openssl/ec.h"; sourceTree = "<group>"; };
-		EA89B300F783CA34BF511DA6D7CD95E4 /* rand.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = rand.h; path = "include-ios/openssl/rand.h"; sourceTree = "<group>"; };
+		E7C9BC3C1A9C246C62FB2259D8A84EF5 /* symhacks.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = symhacks.h; path = "include-ios/openssl/symhacks.h"; sourceTree = "<group>"; };
+		E9082BDFF899C0249CFDB81A00DEB49E /* libgsmcodec-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libgsmcodec-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libgsmcodec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		E9762612F75E7378C34F7D3F369DB213 /* buffer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = buffer.h; path = "include-ios/openssl/buffer.h"; sourceTree = "<group>"; };
+		EA796D29BBC32EA0CAA04875B1874928 /* DDASLLogCapture.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDASLLogCapture.h; path = Classes/DDASLLogCapture.h; sourceTree = "<group>"; };
+		EAE9670F7502D283E1B8E3BAB9F5752C /* e_os2.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = e_os2.h; path = "include-ios/openssl/e_os2.h"; sourceTree = "<group>"; };
 		EE086112F043EE9AB4C16600A6DB86E9 /* Pods-VialerSIPLib-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-VialerSIPLib-dummy.m"; sourceTree = "<group>"; };
-		EE856B2A6E96634D6D8DCD67C4AA6564 /* sha.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = sha.h; path = "include-ios/openssl/sha.h"; sourceTree = "<group>"; };
-		F3DB7AACE52B6A33ED8CEBCB22184E30 /* buffer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = buffer.h; path = "include-ios/openssl/buffer.h"; sourceTree = "<group>"; };
-		F4E452DDAFC311373B05B68E1EE40BF0 /* safestack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = safestack.h; path = "include-ios/openssl/safestack.h"; sourceTree = "<group>"; };
-		F663B6B877453821461EAC3996CEC16C /* seed.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = seed.h; path = "include-ios/openssl/seed.h"; sourceTree = "<group>"; };
-		F781628A7D4229D2740CD132FEABB710 /* md5.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = md5.h; path = "include-ios/openssl/md5.h"; sourceTree = "<group>"; };
+		EE0B4DC08D686ACCB119BE21BA330A2C /* dso.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dso.h; path = "include-ios/openssl/dso.h"; sourceTree = "<group>"; };
+		EF684FB30AB41C6FC4310F7344CF7658 /* dsa.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dsa.h; path = "include-ios/openssl/dsa.h"; sourceTree = "<group>"; };
+		EFDA3C2BAD704186FDA3D7F74543A9C3 /* txt_db.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = txt_db.h; path = "include-ios/openssl/txt_db.h"; sourceTree = "<group>"; };
+		F00DD78C5195E4D3EF1D4A55206EFA14 /* libpjsdp-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsdp-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsdp-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		F1264B237E940F59208F28B4CE7B7E66 /* cast.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = cast.h; path = "include-ios/openssl/cast.h"; sourceTree = "<group>"; };
+		F15E9D26662055B761A2229E066AFB0E /* HDLumberjackLogFormatter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HDLumberjackLogFormatter.m; path = HDLumberjackLogFormatter/Classes/HDLumberjackLogFormatter.m; sourceTree = "<group>"; };
+		F22695FED1BD894CBEF6732F86369EC7 /* libpjmedia-videodev-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjmedia-videodev-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjmedia-videodev-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		F2D3CF0604906A2387D0CFB5E61F20BA /* DDMultiFormatter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDMultiFormatter.h; path = Classes/Extensions/DDMultiFormatter.h; sourceTree = "<group>"; };
+		F686432F7AA5C8A2F7A3EF37EE7AC987 /* ssl3.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ssl3.h; path = "include-ios/openssl/ssl3.h"; sourceTree = "<group>"; };
+		F6DD1463532570320F3A808368D4711E /* sha.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = sha.h; path = "include-ios/openssl/sha.h"; sourceTree = "<group>"; };
+		F7065455103340951F281FC7F7656384 /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		F97775D20B8CD49A162C25453F98B4AB /* libpjsip-ua-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libpjsip-ua-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libpjsip-ua-arm-apple-darwin9.a"; sourceTree = "<group>"; };
+		FB3CC6DF89E382A252EDE4727922FEE3 /* DDDispatchQueueLogFormatter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDDispatchQueueLogFormatter.m; path = Classes/Extensions/DDDispatchQueueLogFormatter.m; sourceTree = "<group>"; };
 		FC0AD72956F0219C2B6B3BA586860F4A /* Pods-VialerSIPLib-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-VialerSIPLib-acknowledgements.plist"; sourceTree = "<group>"; };
-		FC923F03D4EA0412B61ABB91B72A011A /* libgsmcodec-arm-apple-darwin9.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libgsmcodec-arm-apple-darwin9.a"; path = "Pod/pjsip-lib/libgsmcodec-arm-apple-darwin9.a"; sourceTree = "<group>"; };
-		FD511F5FEF176C25397D99DE6F2AC580 /* ui_compat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ui_compat.h; path = "include-ios/openssl/ui_compat.h"; sourceTree = "<group>"; };
-		FE186807A96338EF816ED4B758A0BC53 /* opensslconf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = opensslconf.h; path = "include-ios/openssl/opensslconf.h"; sourceTree = "<group>"; };
-		FF63138A31A22A0C5F649488295B9E1C /* kssl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = kssl.h; path = "include-ios/openssl/kssl.h"; sourceTree = "<group>"; };
+		FCA025C0C3ABBFCB2CE25488435B6F80 /* err.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = err.h; path = "include-ios/openssl/err.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		462A56308867084015B761DB11EA9861 /* Frameworks */ = {
+		05BCD33A93C626516F479F56D2116E49 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3CC184F5ADFB07EFB2854F3191084C8 /* Foundation.framework in Frameworks */,
+				D86F62CA5DFEB5481E009AF3C783B179 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18F07E6D112054AF59084EFE9F7CA004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F74B431D055124BE84DAD26F732D07B4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FDD4EE63B80D67C6A13743A63BA25E26 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0049C778018E82BFD8585A8A604EA245 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		116A284CE6C409F56A26E8550B670A44 /* OpenSSL-Universal */ = {
+		01F1C9787088BD273C8A7F366F3807A4 /* HDLumberjackLogFormatter */ = {
 			isa = PBXGroup;
 			children = (
-				7A6A4F173F2BDD1DD145E85ED9EA27A7 /* aes.h */,
-				D2CD3B50E0D9BF7EAF4E0236D9ECD4AF /* asn1.h */,
-				B7D94504D42F6ACB4FDAC5F9D395C358 /* asn1_mac.h */,
-				59B6E7BD7E2C48C2BD732369F31CAA75 /* asn1t.h */,
-				B20DB188B81F231BF94004E3D0137D9E /* bio.h */,
-				C58047974D02928FDDC1F42394869829 /* blowfish.h */,
-				66F5A12F1453411BAE8ADE29A653F451 /* bn.h */,
-				F3DB7AACE52B6A33ED8CEBCB22184E30 /* buffer.h */,
-				5F7847E9E59F3D598E32DED8217B910C /* camellia.h */,
-				016E7F5E050E35C5F628DD56A94D2D7E /* cast.h */,
-				3EB3279DBD3608E4DBF2735D0A8952E3 /* cmac.h */,
-				06D307BD0683DAF26F48CFFEF6273694 /* cms.h */,
-				36D3033FE09BCD196493F2779634BA98 /* comp.h */,
-				9F9B5A4A4D162ABE0D1F925A417EE570 /* conf.h */,
-				C8D43D0D5714D28D799C9243BBBC395E /* conf_api.h */,
-				1B186EFE1DF46DA6FD8AACDED6346D51 /* crypto.h */,
-				483E4616B76844D0AF5387E6BE10E6F5 /* des.h */,
-				0061D0E1AC11D78F36ABF4407E410DE0 /* des_old.h */,
-				2C63354CF883CA18E9CBCB710C903EFC /* dh.h */,
-				38930083C130DC079CD90EE76520A689 /* dsa.h */,
-				CB4F4E63EA333E459346F677044E53F4 /* dso.h */,
-				06DEC326C24259728E979C895D605C34 /* dtls1.h */,
-				4473698A36BF7AA03FAA36A87C0A6BF2 /* e_os2.h */,
-				4550EC43DAACBD611A93152F5F14B643 /* ebcdic.h */,
-				E610F954D31093E043D013BE51919A70 /* ec.h */,
-				C5576AFE68F21115521C83413574610D /* ecdh.h */,
-				5B32D0E0E424FCF1C09261AC8BDD4CD1 /* ecdsa.h */,
-				DB9B13023D91123B4E18780382C52973 /* engine.h */,
-				12965AAA67469FA26EEA3CD81F786B2B /* err.h */,
-				AFB4565D8F0DC34AC1589FDC534DF87C /* evp.h */,
-				49EA18AF9AE298606D869EC6D9C89096 /* hmac.h */,
-				7243D592FE26F05511452F84096505D4 /* idea.h */,
-				A2AD74929F1019764F661412B32BCE52 /* krb5_asn.h */,
-				FF63138A31A22A0C5F649488295B9E1C /* kssl.h */,
-				59A91F9CD707AB95B6FDFACD08480B12 /* lhash.h */,
-				089EB1D4A2672AA767B67723D2ECC54A /* md4.h */,
-				F781628A7D4229D2740CD132FEABB710 /* md5.h */,
-				CBD93D7C5264F16CBF8CDFD46A270681 /* mdc2.h */,
-				D3B6039F0340452A93ACADEB02E93A90 /* modes.h */,
-				73B95B4CB8040E1A307C2F5CB544441E /* obj_mac.h */,
-				A56FC761F39E902C4534614531880091 /* objects.h */,
-				169F3DF95E25CE9279DA4B5AA5A610BC /* ocsp.h */,
-				FE186807A96338EF816ED4B758A0BC53 /* opensslconf.h */,
-				1101C2DE6D3E5FE98C871BBBA3A40F1E /* opensslv.h */,
-				D92AE47EF2DAF3BCA4A5BEFCD5132D84 /* ossl_typ.h */,
-				4D35D4EFA37F25DCF4AD947BE99180AF /* pem.h */,
-				8370F40891625C72DF71BD8918E7D745 /* pem2.h */,
-				10A60779B04AA28576F5D12B808BC14E /* pkcs12.h */,
-				71FD8DA40CFF70FCCDC921223A6C5948 /* pkcs7.h */,
-				5D4765F82DB726BD83A59A681481ED5E /* pqueue.h */,
-				EA89B300F783CA34BF511DA6D7CD95E4 /* rand.h */,
-				C4F8132344FDA5CEC4FA0035C641B880 /* rc2.h */,
-				1234461FE3E7C354C7F3483442CAC80D /* rc4.h */,
-				C33B85930EB8365E1C4F95C47B883A7E /* ripemd.h */,
-				D21F88E0E94627EE09EC39B65DA34FEF /* rsa.h */,
-				F4E452DDAFC311373B05B68E1EE40BF0 /* safestack.h */,
-				F663B6B877453821461EAC3996CEC16C /* seed.h */,
-				EE856B2A6E96634D6D8DCD67C4AA6564 /* sha.h */,
-				0E108DA87B41E72D8D281B4D1AD228D6 /* srp.h */,
-				BADE8FF5E589024686595AE0A4F8BAC8 /* srtp.h */,
-				6996021D41C6D2B705058B4E94975728 /* ssl.h */,
-				766163CDED184362D92391DEE29D64AB /* ssl2.h */,
-				CC4B8E60D477245C434F07D022904CDC /* ssl23.h */,
-				93953484F1AFDDB2B9F70576676FFF1C /* ssl3.h */,
-				1E5632CBE583563FCF59477541056E4F /* stack.h */,
-				7961624D47323F1A6BD7925A574CBA28 /* symhacks.h */,
-				B76556BDE3AD23D67F389FEFC42A7C42 /* tls1.h */,
-				7625DDEF840BF0E8AA1CB7D91ADDFEC2 /* ts.h */,
-				9936C39A67C2E3609584FDF294FE5385 /* txt_db.h */,
-				BE4CF05EDDD9A8F4DA77EAAADD2B6655 /* ui.h */,
-				FD511F5FEF176C25397D99DE6F2AC580 /* ui_compat.h */,
-				A73232CCA98B81423C47B0775837E5A1 /* whrlpool.h */,
-				0BCF6D0817348152D8638C78E809ECAE /* x509.h */,
-				A95A8D8B6A06430165073F826050D191 /* x509_vfy.h */,
-				C25ABA8ECBF8970199E2A5A68E3234FE /* x509v3.h */,
-				51514B73743D15157CF97369E54918DA /* Frameworks */,
+				51925B9D57309FE61AC15291CC5C7CC3 /* HDLumberjackLogFormatter.h */,
+				F15E9D26662055B761A2229E066AFB0E /* HDLumberjackLogFormatter.m */,
+				38D09B496443FC7D6468840A5E0D6091 /* Support Files */,
 			);
-			path = "OpenSSL-Universal";
+			path = HDLumberjackLogFormatter;
 			sourceTree = "<group>";
 		};
 		17E6D18AE174463AA9B3412E1E2C8DEB /* Targets Support Files */ = {
@@ -223,21 +252,33 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		3E6877882B56DF7348A7B12F20E491CF /* pjsip-ios */ = {
+		26743394630A8162D781E3090EDB545C /* Default */ = {
 			isa = PBXGroup;
 			children = (
-				F7CE1D8E8E4791C69434A3C1E82DEE1D /* Frameworks */,
+				A9D88982ADD34A87622713EBB7650D7B /* CocoaLumberjack.h */,
 			);
-			path = "pjsip-ios";
+			name = Default;
 			sourceTree = "<group>";
 		};
-		48626F868924892C0F314C39EB2E1196 /* Pods */ = {
+		320B24DF864A26BB3F26E0EFE81CD3C3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				116A284CE6C409F56A26E8550B670A44 /* OpenSSL-Universal */,
-				3E6877882B56DF7348A7B12F20E491CF /* pjsip-ios */,
+				CAC9C489C10652C3F46DE87D32F98F02 /* libCocoaLumberjack.a */,
+				AB995BF896DEFC93DE5C29A25EB739BA /* libHDLumberjackLogFormatter.a */,
+				61C6D2A84E41C1888BDF03B4E0CA48F3 /* libPods-VialerSIPLib.a */,
 			);
-			name = Pods;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		38D09B496443FC7D6468840A5E0D6091 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C8BB5606B6123CD03FC9B8054379B3F3 /* HDLumberjackLogFormatter.xcconfig */,
+				36A4DF9E558DA1DF12F70B32AB6C88FD /* HDLumberjackLogFormatter-dummy.m */,
+				3F7D343E5898065B973C8E6B51E7867E /* HDLumberjackLogFormatter-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/HDLumberjackLogFormatter";
 			sourceTree = "<group>";
 		};
 		4B654526757007BC99625E4F87291A21 /* Pods-VialerSIPLib */ = {
@@ -255,13 +296,56 @@
 			path = "Target Support Files/Pods-VialerSIPLib";
 			sourceTree = "<group>";
 		};
-		51514B73743D15157CF97369E54918DA /* Frameworks */ = {
+		561AB438C9AEE81D192E73A402238F64 /* pjsip-ios */ = {
 			isa = PBXGroup;
 			children = (
-				0A27F9B20932E6C87FBCB05C4F677F34 /* libcrypto.a */,
-				C0F6956ED26BBDA55FD06A238C99BE6B /* libssl.a */,
+				BB52D9359CF4AE206D551555E8E1872A /* Frameworks */,
+			);
+			path = "pjsip-ios";
+			sourceTree = "<group>";
+		};
+		5992B59C8C6148AAA83EA8F1F67CD23D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5267B355E7B9CE6E755383F5E239CF9B /* DDContextFilterLogFormatter.h */,
+				3BCDE35ADABA2432ECB6038D2972BE18 /* DDContextFilterLogFormatter.m */,
+				396185086D95F46AF414BFB70372943C /* DDDispatchQueueLogFormatter.h */,
+				FB3CC6DF89E382A252EDE4727922FEE3 /* DDDispatchQueueLogFormatter.m */,
+				F2D3CF0604906A2387D0CFB5E61F20BA /* DDMultiFormatter.h */,
+				29112C2CB882D02D008E9DA85287858F /* DDMultiFormatter.m */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		63E8DEE4BC0C5A5256C78E8FDCCB758D /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C75762848192E8AFE156639C99CE930F /* CocoaLumberjack.xcconfig */,
+				6AE0204DA3148152FA8D31FAAAEA7BCA /* CocoaLumberjack-dummy.m */,
+				D3B786FBD8AC64109F0295A5D176DC35 /* CocoaLumberjack-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/CocoaLumberjack";
+			sourceTree = "<group>";
+		};
+		6EF42FEDB5D9D2295D1DD69EF3A1117B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				778AB6EEEC5515E7F29C0EA43FE7E1DF /* libcrypto.a */,
+				214805F60315E4BCE8559E7009A844D0 /* libssl.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7939DC14A51FAC0B6183759114E7D35D /* CocoaLumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				BA12F506B596BA5C766CF74ACD5D1D76 /* Core */,
+				26743394630A8162D781E3090EDB545C /* Default */,
+				5992B59C8C6148AAA83EA8F1F67CD23D /* Extensions */,
+				63E8DEE4BC0C5A5256C78E8FDCCB758D /* Support Files */,
+			);
+			path = CocoaLumberjack;
 			sourceTree = "<group>";
 		};
 		7DB346D0F39D3F0E887471402A8071AB = {
@@ -269,10 +353,59 @@
 			children = (
 				BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */,
 				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
-				48626F868924892C0F314C39EB2E1196 /* Pods */,
-				C16AB6AAF29DF6567227A8E1F7158A32 /* Products */,
+				F47A12B02D2B7214DBDCA4326008498E /* Pods */,
+				320B24DF864A26BB3F26E0EFE81CD3C3 /* Products */,
 				17E6D18AE174463AA9B3412E1E2C8DEB /* Targets Support Files */,
 			);
+			sourceTree = "<group>";
+		};
+		BA12F506B596BA5C766CF74ACD5D1D76 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				028FE10F0AA632FA1EACB7C19A7B9FD8 /* DDAbstractDatabaseLogger.h */,
+				C1ED1C7100884D0B58838336CC0EA90C /* DDAbstractDatabaseLogger.m */,
+				EA796D29BBC32EA0CAA04875B1874928 /* DDASLLogCapture.h */,
+				A7BBCEFAE1E95EAC0C25818114E35B16 /* DDASLLogCapture.m */,
+				4D6150E26DD973C362246C979C433A49 /* DDASLLogger.h */,
+				21C5B995A0902711E330DD53E90D1097 /* DDASLLogger.m */,
+				06CBAC2737A77145721423552EC9FCC6 /* DDAssertMacros.h */,
+				68E99FF20C5C4990145D69D6177E9D5A /* DDFileLogger.h */,
+				3B3DBAFBF42045196D50D0A986DB625B /* DDFileLogger.m */,
+				7824484F3B6B1FEFA9FB58C4C85723C0 /* DDLegacyMacros.h */,
+				6820D52B886C17B8BF0972DC5202E0BF /* DDLog.h */,
+				2C6371AF578882490DEAB1AB245095AE /* DDLog.m */,
+				25BECAD50B71E5F4C7F79CE7C94E713C /* DDLog+LOGV.h */,
+				10A09FF4707EFD5EA016AE86A9B5EB02 /* DDLogMacros.h */,
+				92204A196AD408147E31EEB31583DDD8 /* DDTTYLogger.h */,
+				1072439EB537066F61C20DBE7BD4C5AC /* DDTTYLogger.m */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		BB52D9359CF4AE206D551555E8E1872A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				33C786E47EB4930A824F775FFC0DC7A8 /* libg7221codec-arm-apple-darwin9.a */,
+				E9082BDFF899C0249CFDB81A00DEB49E /* libgsmcodec-arm-apple-darwin9.a */,
+				93F42BC3675EAB5E053FC461FA55237D /* libilbccodec-arm-apple-darwin9.a */,
+				5D58EDF6916BD1D8475A5AB21AD22460 /* libpj-arm-apple-darwin9.a */,
+				6078B658092831145ED23EA6851BAE23 /* libpjlib-util-arm-apple-darwin9.a */,
+				5311BC2274F0FA8A6AAC5AB4B25DFADA /* libpjmedia-arm-apple-darwin9.a */,
+				1F5A76E9FECFDCDB2D8DD6DF2D49F1F6 /* libpjmedia-audiodev-arm-apple-darwin9.a */,
+				A5D560964F984BDE388129B781FD393D /* libpjmedia-codec-arm-apple-darwin9.a */,
+				F22695FED1BD894CBEF6732F86369EC7 /* libpjmedia-videodev-arm-apple-darwin9.a */,
+				F7065455103340951F281FC7F7656384 /* libpjnath-arm-apple-darwin9.a */,
+				F00DD78C5195E4D3EF1D4A55206EFA14 /* libpjsdp-arm-apple-darwin9.a */,
+				02689BC5AD8FB97D49B0A4AAAEF14608 /* libpjsip-arm-apple-darwin9.a */,
+				5D10069CE1D0B5B5FD97B567EA41D212 /* libpjsip-simple-arm-apple-darwin9.a */,
+				F97775D20B8CD49A162C25453F98B4AB /* libpjsip-ua-arm-apple-darwin9.a */,
+				290FCBC97FA0E4617742C27C1BB4F81E /* libpjsua-arm-apple-darwin9.a */,
+				BA7D24FE100ABC608E27809938C5FA0D /* libpjsua2-arm-apple-darwin9.a */,
+				9879F093F0A81DEF2B7506E3CCB4794D /* libresample-arm-apple-darwin9.a */,
+				BFDB121247618387C77C9406AFAD83C8 /* libspeex-arm-apple-darwin9.a */,
+				5F046FD4716D6BE400D0C832176E8AC8 /* libsrtp-arm-apple-darwin9.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
@@ -291,57 +424,186 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		C16AB6AAF29DF6567227A8E1F7158A32 /* Products */ = {
+		DBCD330E218F49651D4DCAF4E1ABEF62 /* OpenSSL-Universal */ = {
 			isa = PBXGroup;
 			children = (
-				38DF261F284F698AADC8A078D89D1C7A /* libPods-VialerSIPLib.a */,
+				4B8DB00E8C8281ADA0CBF6F480116EB6 /* aes.h */,
+				324856CF086DDA1D8839BAD2FF73DEFE /* asn1.h */,
+				462A26CEA7286BF660BB6B527D7A6BB9 /* asn1_mac.h */,
+				B6DD36193EB26F75DA95883E304F8DD5 /* asn1t.h */,
+				145C3A36BF00FECAC89A55274F5331D5 /* bio.h */,
+				B62F50904B982BDC3A4662FE29F24776 /* blowfish.h */,
+				67C0AD8CC390019851BF6448F6AA5057 /* bn.h */,
+				E9762612F75E7378C34F7D3F369DB213 /* buffer.h */,
+				DA149D8839D7B2DB5A2F8B82C13FB3CA /* camellia.h */,
+				F1264B237E940F59208F28B4CE7B7E66 /* cast.h */,
+				41068FA4DD91588B7E99D3F1DBAFB49E /* cmac.h */,
+				B164489E662380D7E8EEFBF7B5356ED9 /* cms.h */,
+				0098DA6533FE34A73C1F94775AED850B /* comp.h */,
+				414D3EE3FE3EE42DD59FA7AAEB017CD7 /* conf.h */,
+				C3EA0AE915BC1AFF7C14DDB472E54995 /* conf_api.h */,
+				6B5E3F1EC9347FB9632D3E20099A7F78 /* crypto.h */,
+				20BC7A6680082451A826538862F692E5 /* des.h */,
+				5F88169EBA0B786F7D4075B9EE835EB3 /* des_old.h */,
+				06627E8378F316F57601880086710072 /* dh.h */,
+				EF684FB30AB41C6FC4310F7344CF7658 /* dsa.h */,
+				EE0B4DC08D686ACCB119BE21BA330A2C /* dso.h */,
+				447CD5FB7444B88D4F47D34F12CD732E /* dtls1.h */,
+				EAE9670F7502D283E1B8E3BAB9F5752C /* e_os2.h */,
+				1D78C7003505A2230E1709649410D903 /* ebcdic.h */,
+				16E101089DCFA8699DEB3BF91DC3ACB5 /* ec.h */,
+				1B0D414A192C1D804E1418563E61FC48 /* ecdh.h */,
+				2C428D3CEE847564F46A4906D457A168 /* ecdsa.h */,
+				98C7484915D48FE0E539F6EA1AA24F72 /* engine.h */,
+				FCA025C0C3ABBFCB2CE25488435B6F80 /* err.h */,
+				87369FCE062A8350424DECE38C3FFDFE /* evp.h */,
+				490F38924896BBF6BA20AFE4DAD06C41 /* hmac.h */,
+				3849B9CD36D52DBECF3E2019D1AC085B /* idea.h */,
+				3A88618E48413FD7B32326E320B8CAD7 /* krb5_asn.h */,
+				58DE474EC5487F0FD1FDC93EF3B19790 /* kssl.h */,
+				82EACF66A4C0D86567CDA5F8F35CC2D0 /* lhash.h */,
+				AA84A569F5F60F2551B286DE91FEC9D7 /* md4.h */,
+				D8B5CD1177B844C5C71A55FA4A6E84E8 /* md5.h */,
+				116F0F158512B061797F25C25D6311B0 /* mdc2.h */,
+				6419150A31DB16006FC056674009B547 /* modes.h */,
+				DC437DE870E7F1276F3C3B1370C6B9C4 /* obj_mac.h */,
+				076BF47FB9428A8C00307C9984CBC243 /* objects.h */,
+				7B4A31FFA633909D132E471865EB00B3 /* ocsp.h */,
+				231430DB26CB8E7C18124CF0F288E15C /* opensslconf.h */,
+				A3D685D278935D49F97A1D1A85DAE31D /* opensslv.h */,
+				5283F665B6F084584F314F60EA70CFD9 /* ossl_typ.h */,
+				8FAEFC0D8E9B24E926A03ADE94B1524E /* pem.h */,
+				01B05E4B37AB62A41E7B2D012C7D7EA7 /* pem2.h */,
+				26DEAD616080BD800DFFF2A7BA0B886D /* pkcs12.h */,
+				C19F30D17011EEB29D55A60E39511335 /* pkcs7.h */,
+				55B31AA977A23027F23405F408953787 /* pqueue.h */,
+				5F1586D61F3F09E8B5B3B5EE371312A5 /* rand.h */,
+				CF42038E8205A79B57ED84C4D678257D /* rc2.h */,
+				D10D7310737C434F5AB1A33BB93CD1A7 /* rc4.h */,
+				801FEC608694751B75FCC24472419406 /* ripemd.h */,
+				A435A0CD4B790DCC994C71A6DABB8C58 /* rsa.h */,
+				1B4712D811B6EFC5434D89F19090822D /* safestack.h */,
+				C5D78436C0FDC4A2D78922A9A43A2A04 /* seed.h */,
+				F6DD1463532570320F3A808368D4711E /* sha.h */,
+				8CDF6F151B0E43D826C72F67E1FF0097 /* srp.h */,
+				ACF3640E944B727A4A61CAEE12FF779B /* srtp.h */,
+				6E3264E7A98D02AE940360FE8AB38698 /* ssl.h */,
+				D270B5ADDAE58751217979B900A55F86 /* ssl2.h */,
+				C52AAAD9D49E670BC3EADE3393BF720F /* ssl23.h */,
+				F686432F7AA5C8A2F7A3EF37EE7AC987 /* ssl3.h */,
+				58966AF4FB345C1D41F2C73B313FAD45 /* stack.h */,
+				E7C9BC3C1A9C246C62FB2259D8A84EF5 /* symhacks.h */,
+				BF02B1A8298327D139FED5FBF21B3638 /* tls1.h */,
+				3A101AE04FC3F2BA0D41380A0AB308F7 /* ts.h */,
+				EFDA3C2BAD704186FDA3D7F74543A9C3 /* txt_db.h */,
+				B125A1B9EAFCDFAE16A3621DA41AA55C /* ui.h */,
+				BE2213A226B322A08E05A214EA5AE6FD /* ui_compat.h */,
+				D56A9FE9D4837F4D193B94D15CB2D919 /* whrlpool.h */,
+				8E004E35951DD0932FD1C52A694550D2 /* x509.h */,
+				BF14F7DF7BC3824BFA35C03362DE5366 /* x509_vfy.h */,
+				3EFD0E7DFAA521E521B1671980877BF2 /* x509v3.h */,
+				6EF42FEDB5D9D2295D1DD69EF3A1117B /* Frameworks */,
 			);
-			name = Products;
+			path = "OpenSSL-Universal";
 			sourceTree = "<group>";
 		};
-		F7CE1D8E8E4791C69434A3C1E82DEE1D /* Frameworks */ = {
+		F47A12B02D2B7214DBDCA4326008498E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6294EF9939DFE8F7662CAEE9BDA543AF /* libg7221codec-arm-apple-darwin9.a */,
-				FC923F03D4EA0412B61ABB91B72A011A /* libgsmcodec-arm-apple-darwin9.a */,
-				4B736D368C38110FA29C5CA9284865A0 /* libilbccodec-arm-apple-darwin9.a */,
-				3B22D9451FE4DD38B316E361A24FFD98 /* libpj-arm-apple-darwin9.a */,
-				1F770F35D0664536FDDA8C6766C77FE6 /* libpjlib-util-arm-apple-darwin9.a */,
-				87556F21499348716E42B8DA313F7F8B /* libpjmedia-arm-apple-darwin9.a */,
-				1D26114B552C628F863504E9E2FEE6B6 /* libpjmedia-audiodev-arm-apple-darwin9.a */,
-				A5E50A8E62444B2BEB95846E762A4BAB /* libpjmedia-codec-arm-apple-darwin9.a */,
-				894FD66A9E9F3572EDDF30928C5E6F19 /* libpjmedia-videodev-arm-apple-darwin9.a */,
-				87B49ADF6C89518C8C78E2B923C5BCC7 /* libpjnath-arm-apple-darwin9.a */,
-				788C2EE0BC011AA5A5130688EB73F95B /* libpjsdp-arm-apple-darwin9.a */,
-				0ED762EDEA03AA48F29C2CB7063B1924 /* libpjsip-arm-apple-darwin9.a */,
-				3DDA4EA148E8BCAF1AD12E789936A1A6 /* libpjsip-simple-arm-apple-darwin9.a */,
-				CDB891BCCDE157D75EA6B23B4A8413C3 /* libpjsip-ua-arm-apple-darwin9.a */,
-				A245E03EFB6624728F7DCC4B174956F9 /* libpjsua-arm-apple-darwin9.a */,
-				C4BA02711B0ED5FF51108BD182485F59 /* libpjsua2-arm-apple-darwin9.a */,
-				9F12B4DB55F6389B8786CDE69170922B /* libresample-arm-apple-darwin9.a */,
-				A76C9E0EEF45A7E96ECD653E9A7BA874 /* libspeex-arm-apple-darwin9.a */,
-				8CFE5A225A4398F2A7A61234399F1E66 /* libsrtp-arm-apple-darwin9.a */,
+				7939DC14A51FAC0B6183759114E7D35D /* CocoaLumberjack */,
+				01F1C9787088BD273C8A7F366F3807A4 /* HDLumberjackLogFormatter */,
+				DBCD330E218F49651D4DCAF4E1ABEF62 /* OpenSSL-Universal */,
+				561AB438C9AEE81D192E73A402238F64 /* pjsip-ios */,
 			);
-			name = Frameworks;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		3D1929340700AE302905262BB6EE9651 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CBB6BB497EC1A4C36506AD74ECDCD99F /* CocoaLumberjack.h in Headers */,
+				9258A7B71D4C13DBFC66C4B8BE43B79A /* DDAbstractDatabaseLogger.h in Headers */,
+				1E6A591B3DEE6317BB014BD71A50B689 /* DDASLLogCapture.h in Headers */,
+				67E741D303696F9A1E863BC42E6A9C79 /* DDASLLogger.h in Headers */,
+				906BA39B4449184A264475B0AAA9CD7B /* DDAssertMacros.h in Headers */,
+				4CAAFD85FC04FBFFB61A22F14C8D4684 /* DDContextFilterLogFormatter.h in Headers */,
+				5539A292EFC958D90F290DBA5FF86220 /* DDDispatchQueueLogFormatter.h in Headers */,
+				C515A390D549AF8A16A76DD72388BD2C /* DDFileLogger.h in Headers */,
+				BBCA69A708A7B3DD861FB839B3A251B3 /* DDLegacyMacros.h in Headers */,
+				A2D0EE5602557677B5D9AB8D46F2F1AF /* DDLog+LOGV.h in Headers */,
+				456BEEAD8F6C8D0B35D5A12E72068119 /* DDLog.h in Headers */,
+				3DDD0FB94D61AB71C8F5C727EC7A0BD9 /* DDLogMacros.h in Headers */,
+				6475050C8BA464772209BD6AF03F1EB1 /* DDMultiFormatter.h in Headers */,
+				5DCBA219BC81D9190F11EE56F93BB908 /* DDTTYLogger.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81EA92497302C6DFF13F9ED3C672C465 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3A18FE4AF50D5B1C57596CA46F7EA42 /* HDLumberjackLogFormatter.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		A1ABD2A519B204C308F060A8F2D82A9F /* Pods-VialerSIPLib */ = {
+		05F63C96B4DE4C01D766E129E1918E90 /* HDLumberjackLogFormatter */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 329AB1F3DD1740C84C3CA1901B2E0194 /* Build configuration list for PBXNativeTarget "Pods-VialerSIPLib" */;
+			buildConfigurationList = 0CF2A8CA5B64916B32E12805D49E1760 /* Build configuration list for PBXNativeTarget "HDLumberjackLogFormatter" */;
 			buildPhases = (
-				E9421E527FB461361AE1ABB05B7625C9 /* Sources */,
-				462A56308867084015B761DB11EA9861 /* Frameworks */,
+				A2F0DB0CEBBD0ED224D3873F2AF38C88 /* Sources */,
+				18F07E6D112054AF59084EFE9F7CA004 /* Frameworks */,
+				81EA92497302C6DFF13F9ED3C672C465 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2BCCEFA7C3C88A7E0A03178241B16F01 /* PBXTargetDependency */,
+			);
+			name = HDLumberjackLogFormatter;
+			productName = HDLumberjackLogFormatter;
+			productReference = AB995BF896DEFC93DE5C29A25EB739BA /* libHDLumberjackLogFormatter.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		12E2BC28C62976C425F4B71C2723F0B1 /* CocoaLumberjack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E0C8BB684C9CCC379207FFA69ED0D571 /* Build configuration list for PBXNativeTarget "CocoaLumberjack" */;
+			buildPhases = (
+				896BFDD81CD617BCCE12E7FCD204E6D7 /* Sources */,
+				05BCD33A93C626516F479F56D2116E49 /* Frameworks */,
+				3D1929340700AE302905262BB6EE9651 /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
+			name = CocoaLumberjack;
+			productName = CocoaLumberjack;
+			productReference = CAC9C489C10652C3F46DE87D32F98F02 /* libCocoaLumberjack.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		2BF03BFCC02FD3C7742E272132402DF8 /* Pods-VialerSIPLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E71A340FA61CDF41D026FE5EC7E2BC8E /* Build configuration list for PBXNativeTarget "Pods-VialerSIPLib" */;
+			buildPhases = (
+				0F91C150A75BF2294D800582E1DEA465 /* Sources */,
+				FDD4EE63B80D67C6A13743A63BA25E26 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EE0D34450AACAA3549E34E4ADC677872 /* PBXTargetDependency */,
+				8C3A9BCEFE05118F01F4F67F4B83A3D1 /* PBXTargetDependency */,
+			);
 			name = "Pods-VialerSIPLib";
 			productName = "Pods-VialerSIPLib";
-			productReference = 38DF261F284F698AADC8A078D89D1C7A /* libPods-VialerSIPLib.a */;
+			productReference = 61C6D2A84E41C1888BDF03B4E0CA48F3 /* libPods-VialerSIPLib.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -361,25 +623,74 @@
 				en,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
-			productRefGroup = C16AB6AAF29DF6567227A8E1F7158A32 /* Products */;
+			productRefGroup = 320B24DF864A26BB3F26E0EFE81CD3C3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A1ABD2A519B204C308F060A8F2D82A9F /* Pods-VialerSIPLib */,
+				12E2BC28C62976C425F4B71C2723F0B1 /* CocoaLumberjack */,
+				05F63C96B4DE4C01D766E129E1918E90 /* HDLumberjackLogFormatter */,
+				2BF03BFCC02FD3C7742E272132402DF8 /* Pods-VialerSIPLib */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E9421E527FB461361AE1ABB05B7625C9 /* Sources */ = {
+		0F91C150A75BF2294D800582E1DEA465 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37F5D92F4347ADD3A6DB3325F01171F2 /* Pods-VialerSIPLib-dummy.m in Sources */,
+				E17DFA62D83793A54B229E7854504DCF /* Pods-VialerSIPLib-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		896BFDD81CD617BCCE12E7FCD204E6D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A34EF7C35E4E0657AFC8B4BA0B343867 /* CocoaLumberjack-dummy.m in Sources */,
+				6077EFC05DC2551A7F5A1CFAC0B90187 /* DDAbstractDatabaseLogger.m in Sources */,
+				9DFB1378A337698012F7CE5D593DC04F /* DDASLLogCapture.m in Sources */,
+				656479029A5A15463E080FD25F8903B2 /* DDASLLogger.m in Sources */,
+				6DAEF151B35D00265D60C4AD34431DD9 /* DDContextFilterLogFormatter.m in Sources */,
+				FE6239BDE2049B920243DC0F907F57B9 /* DDDispatchQueueLogFormatter.m in Sources */,
+				41F221F9E8FDE456D3E9EB34B4C5EBF1 /* DDFileLogger.m in Sources */,
+				D70BDFA09F4803DCFEAD7AF5DFE21C6A /* DDLog.m in Sources */,
+				E1ED34DB49C6A05D740B8425F88CEC20 /* DDMultiFormatter.m in Sources */,
+				BF525D162B9ABC5DFA69FB7A8779F76E /* DDTTYLogger.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2F0DB0CEBBD0ED224D3873F2AF38C88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C34C2488CE64875477FB93AF10E83573 /* HDLumberjackLogFormatter-dummy.m in Sources */,
+				5BF0AD69CA624AFBE91AA9F62D42BBCD /* HDLumberjackLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2BCCEFA7C3C88A7E0A03178241B16F01 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CocoaLumberjack;
+			target = 12E2BC28C62976C425F4B71C2723F0B1 /* CocoaLumberjack */;
+			targetProxy = 6CA596710B177F433BCFB4B22F9C9333 /* PBXContainerItemProxy */;
+		};
+		8C3A9BCEFE05118F01F4F67F4B83A3D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = HDLumberjackLogFormatter;
+			target = 05F63C96B4DE4C01D766E129E1918E90 /* HDLumberjackLogFormatter */;
+			targetProxy = 196DDB1D761A28C5C2744C6DCD794A2E /* PBXContainerItemProxy */;
+		};
+		EE0D34450AACAA3549E34E4ADC677872 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CocoaLumberjack;
+			target = 12E2BC28C62976C425F4B71C2723F0B1 /* CocoaLumberjack */;
+			targetProxy = BD00507676AB069274B648CF116DD0EE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		5CE5176205D06FF3FFE3DDDA9291E44B /* Debug */ = {
@@ -421,6 +732,24 @@
 			};
 			name = Debug;
 		};
+		737DD28B1F59431B951170B5722983BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8BB5606B6123CD03FC9B8054379B3F3 /* HDLumberjackLogFormatter.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/HDLumberjackLogFormatter/HDLumberjackLogFormatter-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		74857149DC1E0D599B8A01A78349A926 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -455,7 +784,25 @@
 			};
 			name = Release;
 		};
-		AFAAC40174462942167B32F2BFA024C3 /* Release */ = {
+		7F19C01808F648C944A1E141A6FCED30 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8BB5606B6123CD03FC9B8054379B3F3 /* HDLumberjackLogFormatter.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/HDLumberjackLogFormatter/HDLumberjackLogFormatter-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		7F88D35683A81A618140F3D526E05C4C /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9EF87E580380458106B54B4BCF2B2F69 /* Pods-VialerSIPLib.release.xcconfig */;
 			buildSettings = {
@@ -472,7 +819,25 @@
 			};
 			name = Release;
 		};
-		CE97BF9F662047A6F3A625692E3D8D60 /* Debug */ = {
+		902EEDC221D06E669F88905966BB48BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C75762848192E8AFE156639C99CE930F /* CocoaLumberjack.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		CB53F4E3551D4E048A14DAB51620D2B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 13FA497CB8FFCD25A79AD90150318F7A /* Pods-VialerSIPLib.debug.xcconfig */;
 			buildSettings = {
@@ -489,9 +854,36 @@
 			};
 			name = Debug;
 		};
+		E33A9B9B4F276ECCA9317C8EE8ADEE87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C75762848192E8AFE156639C99CE930F /* CocoaLumberjack.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0CF2A8CA5B64916B32E12805D49E1760 /* Build configuration list for PBXNativeTarget "HDLumberjackLogFormatter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F19C01808F648C944A1E141A6FCED30 /* Debug */,
+				737DD28B1F59431B951170B5722983BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -501,11 +893,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		329AB1F3DD1740C84C3CA1901B2E0194 /* Build configuration list for PBXNativeTarget "Pods-VialerSIPLib" */ = {
+		E0C8BB684C9CCC379207FFA69ED0D571 /* Build configuration list for PBXNativeTarget "CocoaLumberjack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CE97BF9F662047A6F3A625692E3D8D60 /* Debug */,
-				AFAAC40174462942167B32F2BFA024C3 /* Release */,
+				E33A9B9B4F276ECCA9317C8EE8ADEE87 /* Debug */,
+				902EEDC221D06E669F88905966BB48BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E71A340FA61CDF41D026FE5EC7E2BC8E /* Build configuration list for PBXNativeTarget "Pods-VialerSIPLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB53F4E3551D4E048A14DAB51620D2B1 /* Debug */,
+				7F88D35683A81A618140F3D526E05C4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

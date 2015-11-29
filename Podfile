@@ -4,7 +4,8 @@ platform :ios, '9.0'
 # use_frameworks!
 
 target 'VialerSIPLib' do
-    pod 'pjsip-ios'
+    pod 'HDLumberjackLogFormatter', :git => 'https://hd-apps@bitbucket.org/hd-apps/hdlumberjacklogformatter.git'
+    pod 'pjsip-ios' #TODO: replace with own pjsip implementation
 end
 
 target 'VialerSIPLibTests' do

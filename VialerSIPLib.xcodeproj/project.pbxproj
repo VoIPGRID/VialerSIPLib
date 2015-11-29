@@ -16,8 +16,12 @@
 		F25343221C09E9EB00627DE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F25343201C09E9EB00627DE2 /* LaunchScreen.storyboard */; };
 		F253432D1C09E9EC00627DE2 /* VialerSIPLibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F253432C1C09E9EC00627DE2 /* VialerSIPLibTests.m */; };
 		F253433C1C09EF2D00627DE2 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F25343391C09EF2D00627DE2 /* LICENSE */; };
-		F253433D1C09EF2D00627DE2 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F253433A1C09EF2D00627DE2 /* README.md */; };
 		F253433E1C09EF2D00627DE2 /* VialerSIPLib.podspec in Resources */ = {isa = PBXBuildFile; fileRef = F253433B1C09EF2D00627DE2 /* VialerSIPLib.podspec */; };
+		F25343461C09F27D00627DE2 /* VSLEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = F25343451C09F27D00627DE2 /* VSLEndpoint.m */; };
+		F25343471C09F27D00627DE2 /* VSLEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = F25343451C09F27D00627DE2 /* VSLEndpoint.m */; };
+		F253434A1C0AFE9F00627DE2 /* VialerSIPLib.m in Sources */ = {isa = PBXBuildFile; fileRef = F25343491C0AFE9F00627DE2 /* VialerSIPLib.m */; };
+		F253434D1C0B389A00627DE2 /* VSLCall.m in Sources */ = {isa = PBXBuildFile; fileRef = F253434C1C0B389A00627DE2 /* VSLCall.m */; };
+		F25343501C0B398A00627DE2 /* VSLAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = F253434F1C0B398A00627DE2 /* VSLAccount.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +54,14 @@
 		F25343391C09EF2D00627DE2 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		F253433A1C09EF2D00627DE2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F253433B1C09EF2D00627DE2 /* VialerSIPLib.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VialerSIPLib.podspec; sourceTree = "<group>"; };
+		F25343441C09F27D00627DE2 /* VSLEndpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLEndpoint.h; sourceTree = "<group>"; };
+		F25343451C09F27D00627DE2 /* VSLEndpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLEndpoint.m; sourceTree = "<group>"; };
+		F25343481C0AFE9F00627DE2 /* VialerSIPLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VialerSIPLib.h; sourceTree = "<group>"; };
+		F25343491C0AFE9F00627DE2 /* VialerSIPLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VialerSIPLib.m; sourceTree = "<group>"; };
+		F253434B1C0B389A00627DE2 /* VSLCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLCall.h; sourceTree = "<group>"; };
+		F253434C1C0B389A00627DE2 /* VSLCall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLCall.m; sourceTree = "<group>"; };
+		F253434E1C0B398A00627DE2 /* VSLAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLAccount.h; sourceTree = "<group>"; };
+		F253434F1C0B398A00627DE2 /* VSLAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccount.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +168,14 @@
 		F25343431C09F18400627DE2 /* Pod Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F25343481C0AFE9F00627DE2 /* VialerSIPLib.h */,
+				F25343491C0AFE9F00627DE2 /* VialerSIPLib.m */,
+				F25343441C09F27D00627DE2 /* VSLEndpoint.h */,
+				F25343451C09F27D00627DE2 /* VSLEndpoint.m */,
+				F253434B1C0B389A00627DE2 /* VSLCall.h */,
+				F253434C1C0B389A00627DE2 /* VSLCall.m */,
+				F253434E1C0B398A00627DE2 /* VSLAccount.h */,
+				F253434F1C0B398A00627DE2 /* VSLAccount.m */,
 			);
 			path = "Pod Classes";
 			sourceTree = SOURCE_ROOT;
@@ -314,9 +334,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				F253431A1C09E9EB00627DE2 /* ViewController.m in Sources */,
+				F25343501C0B398A00627DE2 /* VSLAccount.m in Sources */,
 				F25343171C09E9EB00627DE2 /* AppDelegate.m in Sources */,
-				F253433D1C09EF2D00627DE2 /* README.md in Sources */,
+				F25343461C09F27D00627DE2 /* VSLEndpoint.m in Sources */,
+				F253434A1C0AFE9F00627DE2 /* VialerSIPLib.m in Sources */,
 				F25343141C09E9EB00627DE2 /* main.m in Sources */,
+				F253434D1C0B389A00627DE2 /* VSLCall.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +347,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F25343471C09F27D00627DE2 /* VSLEndpoint.m in Sources */,
 				F253432D1C09E9EC00627DE2 /* VialerSIPLibTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
