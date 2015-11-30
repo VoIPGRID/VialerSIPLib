@@ -1,0 +1,192 @@
+#!/bin/bash
+
+cd `dirname $BASH_SOURCE`
+export BASE_DIR=`pwd -P`
+
+set -o errexit
+set -o errtrace
+
+export PRE=" ───── "
+
+function help() {
+cat <<EOF
+pjsip help          # shows this help message.
+pjsip svn_checkout  # Get the latest PJSIP sources from SVN
+pjsip clean         # cleans the pjsip source folder.
+
+pjsip all           # build fat binary that works on all architectures.
+pjsip armv7         # build armv7 static lib.
+pjsip armv7s        # build armv7s static lib.
+pjsip arm64         # build arm64 static lib.
+pjsip i386          # build i386 static lib.
+pjsip x86_64        # build x86_64 static lib.
+
+pjsip info armv7    # show architecture information for armv7 libs.
+pjsip info armv7s   # show architecture information for armv7s libs.
+pjsip info arm64    # show architecture information for arm64 libs.
+pjsip info i386     # show architecture information for i386 libs.
+pjsip info x86_64   # show architecture information for x86_64 libs.
+EOF
+}
+
+function complete() {
+clean
+svn_checkout
+mkdir -p "$BASE_DIR"/pjsip/logs/
+all
+copy_headers
+}
+
+function clean() {
+echo "$PRE CLEAN"
+echo "WARNING: About to clean directory: $BASE_DIR/logs"
+echo "WARNING: About to clean directory: $BASE_DIR/src"
+echo "WARNING: About to clean directory: $BASE_DIR/VialerPjsip"
+echo "waiting 5 seconds for sanity check... CTRL-C to abort now"
+sleep 1 && echo "4..." && \
+sleep 1 && echo "3..." && \
+sleep 1 && echo "2..." && \
+sleep 1 && echo "1..." && \
+sleep 1
+
+rm -Rf "$BASE_DIR"/pjsip/
+rm -Rf "$BASE_DIR"/Pod/lib/
+}
+
+# Checks out the supplied PJSIP version source from SVN. If no version provided latest version is used.
+function svn_checkout() {
+BASE_URL="http://svn.pjsip.org/repos/pjproject"
+
+if [ -z ${1} ]; then
+echo "No version provided, checking out \"trunk\""
+CHECKOUT_URL="${BASE_URL}/trunk/"
+else
+echo "Checking out version ${1}"
+CHECKOUT_URL="${BASE_URL}/tags/${1}/"
+fi
+
+if [ ! -d "${BASE_DIR}/src/" ]; then
+# Src does not exist, assuming no previous version downloaded, using checkout.
+svn checkout "${CHECKOUT_URL}" pjsip/src/
+# Svn checkout http://svn.pjsip.org/repos/pjproject/tags/2.2.1/ src/
+else
+# Src directory exists, using switch to prevent 'is already a working copy for a different URL' error.
+svn switch "${CHECKOUT_URL}" pjsip/src/
+fi
+}
+
+function info() {
+echo "$PRE ARCH"
+find lib/$1/*.a | \
+xargs lipo -info 2>/dev/null | grep "rchitecture" | \
+sed -El "s/^.+\: .+\/(.+) (are|is architecture)\: (.+)$/\\3 - \\1/g" | \
+sort
+
+echo
+echo "$PRE INCLUDES"
+find src | grep "\\include$" | sort
+}
+
+
+function armv7() { _build "armv7"; }
+function armv7s() { _build "armv7s"; }
+function arm64() { _build "arm64"; }
+
+function i386() {
+export DEVPATH=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer
+export CFLAGS="-O2 -m32 -mios-simulator-version-min=9.0"
+export LDFLAGS="-O2 -m32 -mios-simulator-version-min=9.0"
+_build "i386"
+}
+
+function x86_64() {
+export DEVPATH=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer
+export CFLAGS="-O2 -m32 -mios-simulator-version-min=9.0"
+export LDFLAGS="-O2 -m32 -mios-simulator-version-min=9.0"
+_build "x86_64"
+}
+
+function all() {
+armv7 && echo && armv7s && echo && arm64 && echo && i386 && echo && x86_64
+echo
+_merge
+}
+
+
+function _build() {
+echo "$PRE BUILD"
+echo "building for $1. this may take a while, tail -f $1.log to see progress."
+echo ""
+
+cd "$BASE_DIR"/pjsip/src
+cp "$BASE_DIR"/config_site.h "$BASE_DIR"/pjsip/src/pjlib/include/pj
+ARCH="-arch $1" ./configure-iphone 2>&1 > "$BASE_DIR"/pjsip/logs/$1.log
+
+make dep 2>&1 >> "$BASE_DIR"/pjsip/logs/$1.log
+make clean 2>&1 >> "$BASE_DIR"/pjsip/logs/$1.log
+make 2>&1 >> "$BASE_DIR"/pjsip/logs/$1.log
+
+echo
+_collect $1
+}
+
+function _collect() {
+echo "$PRE COLLECT"
+cd "$BASE_DIR"
+mkdir -p pjsip/temp/$1
+
+#for x in `find src | grep "\.a$"`; do
+for x in `find pjsip/src -name *$1*.a`; do
+cp -v ./$x ./pjsip/temp/$1
+done | tee "$BASE_DIR"/pjsip/logs/collect.log
+}
+
+function _merge() {
+echo "$PRE MERGE"
+cd "$BASE_DIR"
+
+mkdir -p "$BASE_DIR"/Pod/lib
+libtool -o Pod/lib/libpjsip.a `find ./pjsip/temp -name *darwin_ios.a -exec printf '%s ' {} +`
+rm -Rf "$BASE_DIR"/pjsip/temp
+}
+
+function copy_headers() {
+cd "$BASE_DIR"/pjsip/src
+find . -path ./third_party -prune -o -path ./pjsip-apps -prune -o -path ./include -prune -o -type f -wholename '*include/*.h*' -exec bash -c 'copy_to_lib_dir "{}"' ';'
+cd "$BASE_DIR"
+}
+
+function copy_to_lib_dir() {
+OLD_PATH=$1
+NEW_PATH=()
+
+PATH_PARTS=(`echo $1 | tr '/' '\n'`)
+for x in "${PATH_PARTS[@]}"
+do
+if [ "$x" = "include" ] || [ "${#NEW_PATH[@]}" -ne "0" ]
+then
+NEW_PATH+=("$x")
+fi
+done
+
+NEW_PATH="${NEW_PATH[@]:1}"
+NEW_PATH="${NEW_PATH// //}"
+
+d=$BASE_DIR/Pod/lib/include/pjsip/$(dirname $NEW_PATH)
+mkdir -p $d
+cp $OLD_PATH $d
+}
+
+export -f copy_to_lib_dir
+
+if [ -n "$1" ]; then
+CMD=$1
+shift
+$CMD $*
+
+echo
+echo "$PRE DONE"
+
+else
+help
+fi
