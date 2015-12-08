@@ -17,8 +17,8 @@
     "ios": "9.0"
   },
   "requires_arc": true,
-  "source_files": "Pod/Classes/**/*",
-  "public_header_files": "Pod/Classes/VialerSIPLib.h",
+  "source_files": "Pod/Classes/**/*.{h,m}",
+  "public_header_files": "Pod/Classes/**/*.h",
   "dependencies": {
     "Vialer-pjsip-iOS": [
 

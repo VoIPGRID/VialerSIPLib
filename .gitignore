@@ -211,3 +211,7 @@ xcuserdata/
 # -- UNVERIFIED: c.f. http://stackoverflow.com/a/50283/153422
 #
 #tm_build_errors
+
+# To speed up development progress, use Keys.h to store private sip details
+Example/VialerSIPLib/Keys.h
+

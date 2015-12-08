@@ -9,6 +9,8 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+Rename `Keys.sample.h` from the Example/VialerSIPLib directory to Keys.h and add your personal credentials.
+
 ## Requirements
 
 ## Installation

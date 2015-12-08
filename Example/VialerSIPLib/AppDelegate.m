@@ -4,16 +4,31 @@
 //
 
 #import "AppDelegate.h"
-#import "VialerSIPLib.h"
 #import "HDLumberjackLogFormatter.h"
+#import <VialerSIPLib-iOS/VialerSIPLib.h>
+#import <VialerSIPLib-iOS/VSLEndpointConfiguration.h>
+#import <VialerSIPLib-iOS/VSLTransportConfiguration.h>
+
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupCocoaLumberjackLogging];
 
-    VialerSIPLib *sipLib = [[VialerSIPLib alloc] init];
-    [sipLib callNumber:@"0501234567"];
+    VSLEndpointConfiguration *endpointConfiguration = [[VSLEndpointConfiguration alloc] init];
+    VSLTransportConfiguration *tcpTransportConfiguration = [VSLTransportConfiguration configurationWithTransportType:VSLTransportTypeTCP];
+
+    endpointConfiguration.transportConfigurations = @[tcpTransportConfiguration];
+
+    [[VialerSIPLib sharedInstance] configureLibraryWithEndPointConfiguration:endpointConfiguration withCompletion:^(NSError *error) {
+        if (error) {
+            DDLogError(@"%@", error);
+        } else {
+            DDLogInfo(@"Endpoint configuration done");
+        }
+    }];
+
     return YES;
 }
 

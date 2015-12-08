@@ -12,4 +12,5 @@ end
 
 target 'VialerSIPLib_Tests', :exclusive => true do
     pod "VialerSIPLib-iOS", :path => "../"
+    pod "OCMock"
 end
