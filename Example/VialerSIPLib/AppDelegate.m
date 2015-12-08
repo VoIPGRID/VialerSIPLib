@@ -1,6 +1,5 @@
 //
 //  AppDelegate.m
-//  VialerSIPLib
 //  Copyright © 2015 Devhouse Spindle. All rights reserved.
 //
 
@@ -8,19 +7,13 @@
 #import "VialerSIPLib.h"
 #import "HDLumberjackLogFormatter.h"
 
-@interface AppDelegate ()
-
-@end
-
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupCocoaLumberjackLogging];
 
     VialerSIPLib *sipLib = [[VialerSIPLib alloc] init];
     [sipLib callNumber:@"0501234567"];
-
     return YES;
 }
 

@@ -1,0 +1,30 @@
+{
+  "name": "VialerSIPLib-iOS",
+  "version": "0.0.1",
+  "summary": "Vialer SIP Library for iOS",
+  "description": "Objective-C wrapper around PJSIP",
+  "homepage": "https://www.wearespindle.com",
+  "license": "MIT",
+  "authors": {
+    "Devhouse Spindle": "hello@wearespindle.com"
+  },
+  "source": {
+    "git": "https://github.com/VoIPGRID/VialerSIPLib-iOS.git",
+    "tag": "0.0.1"
+  },
+  "social_media_url": "https://twitter.com/wearespindle",
+  "platforms": {
+    "ios": "9.0"
+  },
+  "requires_arc": true,
+  "source_files": "Pod/Classes/**/*",
+  "public_header_files": "Pod/Classes/VialerSIPLib.h",
+  "dependencies": {
+    "Vialer-pjsip-iOS": [
+
+    ],
+    "CocoaLumberjack": [
+      "~> 2.2"
+    ]
+  }
+}

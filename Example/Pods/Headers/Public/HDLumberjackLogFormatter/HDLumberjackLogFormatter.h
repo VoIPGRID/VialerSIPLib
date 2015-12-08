@@ -1,0 +1,1 @@
+../../../HDLumberjackLogFormatter/HDLumberjackLogFormatter/Classes/HDLumberjackLogFormatter.h

@@ -1,0 +1,38 @@
+PODS:
+  - CocoaLumberjack (2.2.0):
+    - CocoaLumberjack/Default (= 2.2.0)
+    - CocoaLumberjack/Extensions (= 2.2.0)
+  - CocoaLumberjack/Core (2.2.0)
+  - CocoaLumberjack/Default (2.2.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (2.2.0):
+    - CocoaLumberjack/Default
+  - HDLumberjackLogFormatter (2.0.0):
+    - CocoaLumberjack
+  - Vialer-pjsip-iOS (0.0.1)
+  - VialerSIPLib-iOS (0.0.1):
+    - CocoaLumberjack (~> 2.2)
+    - Vialer-pjsip-iOS
+
+DEPENDENCIES:
+  - HDLumberjackLogFormatter (from `https://hd-apps@bitbucket.org/hd-apps/hdlumberjacklogformatter.git`)
+  - VialerSIPLib-iOS (from `../`)
+
+EXTERNAL SOURCES:
+  HDLumberjackLogFormatter:
+    :git: https://hd-apps@bitbucket.org/hd-apps/hdlumberjacklogformatter.git
+  VialerSIPLib-iOS:
+    :path: "../"
+
+CHECKOUT OPTIONS:
+  HDLumberjackLogFormatter:
+    :commit: b182a2d5054831870dfb301450a14aadb3cd5cd4
+    :git: https://hd-apps@bitbucket.org/hd-apps/hdlumberjacklogformatter.git
+
+SPEC CHECKSUMS:
+  CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
+  HDLumberjackLogFormatter: c8d6015a1041ced2ff4720dbb0b8991bccb9f1ab
+  Vialer-pjsip-iOS: b4f2227473f53aa0de6e87788b04cfa7f4d2eaf4
+  VialerSIPLib-iOS: a2d40cc8251f047045104b22b32de7632a73f952
+
+COCOAPODS: 0.39.0

@@ -192,7 +192,7 @@ xcuserdata/
 # c.f. http://guides.cocoapods.org/using/using-cocoapods.html#what-is-a-podfilelock
 # c.f. http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
 #
-#!Podfile.lock
+!Podfile.lock
 #
 # RUBY:
 #
@@ -211,8 +211,3 @@ xcuserdata/
 # -- UNVERIFIED: c.f. http://stackoverflow.com/a/50283/153422
 #
 #tm_build_errors
-
-# To build pjsip, we use some temporary libs we don't want to include in the source
-pjsip/
-Example/Podfile.lock
-Example/Pods/

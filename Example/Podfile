@@ -1,9 +1,15 @@
-# Uncomment this line to define a global platform for your project
-platform :ios, '9.0'
-# Uncomment this line if you're using Swift
-# use_frameworks!
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/VoIPGRID/PrivatePodSpecs-iOS.git'
 
-target 'VialerSIPLib' do
-    pod 'VialerSIPLib', :path => '../'
+platform :ios, '9.0'
+#use_frameworks! #!! Do not enable, causes an error about "target has transitive dependencies that include static binaries.... "
+
+target 'VialerSIPLib_Example', :exclusive => true do
+    pod "VialerSIPLib-iOS", :path => "../"
+
     pod 'HDLumberjackLogFormatter', :git => 'https://hd-apps@bitbucket.org/hd-apps/hdlumberjacklogformatter.git'
+end
+
+target 'VialerSIPLib_Tests', :exclusive => true do
+    pod "VialerSIPLib-iOS", :path => "../"
 end
