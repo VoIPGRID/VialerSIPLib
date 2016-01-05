@@ -1,4 +1,4 @@
-/* $Id: sip_config.h 5152 2015-08-07 09:00:52Z ming $ */
+/* $Id: sip_config.h 5176 2015-09-11 02:59:01Z nanang $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -315,8 +315,6 @@ PJ_INLINE(pjsip_cfg_t*) pjsip_cfg(void)
 
 /**
  * Specify maximum URL size.
- * This constant is used mainly when printing the URL for logging purpose 
- * only.
  */
 #ifndef PJSIP_MAX_URL_SIZE
 #   define PJSIP_MAX_URL_SIZE		256

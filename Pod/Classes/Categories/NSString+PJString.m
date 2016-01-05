@@ -21,6 +21,21 @@
     return sipUri;
 }
 
+- (pj_str_t)sipUriWithDomain:(NSString *)domain {
+    NSString *sipUri = [self prependSipUri];
+
+    if ([sipUri rangeOfString:@"@"].location == NSNotFound) {
+        sipUri = [NSString stringWithFormat:@"%@@%@", sipUri, domain];
+    }
+
+    if (![sipUri hasSuffix:domain]) {
+
+        sipUri = [sipUri stringByPaddingToLength:[sipUri rangeOfString:@"@"].location withString:@"" startingAtIndex:0];
+        sipUri = [NSString stringWithFormat:@"%@@%@", sipUri, domain];
+    }
+    return sipUri.pjString;
+}
+
 - (pj_str_t)pjString {
     return pj_str((char *)[self cStringUsingEncoding:NSUTF8StringEncoding]);
 }

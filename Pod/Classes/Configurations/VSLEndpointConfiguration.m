@@ -5,14 +5,15 @@
 
 #import "VSLEndpointConfiguration.h"
 
-#include <VialerPJSIP/pj/file_io.h>
+#import <VialerPJSIP/pjsua.h>
+#import <VialerPJSIP/pj/file_io.h>
 #import "VSLTransportConfiguration.h"
 
 static NSUInteger const VSLEndpointConfigurationMaxCalls = 4;
 static NSUInteger const VSLEndpointConfigurationLogLevel = 5;
 static NSUInteger const  VSLEndpointConfigurationLogConsoleLevel = 4;
 static NSString * const VSLEndpointConfigurationLogFileName = nil;
-static NSUInteger const VSLEndpointConfigurationClockRate = 0;
+static NSUInteger const VSLEndpointConfigurationClockRate = PJSUA_DEFAULT_CLOCK_RATE;
 static NSUInteger const VSLEndpointConfigurationSndClockRate = 0;
 
 @implementation VSLEndpointConfiguration

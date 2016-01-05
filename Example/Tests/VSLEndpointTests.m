@@ -16,7 +16,6 @@
 
 - (void)setUp {
     [super setUp];
-    [VSLEndpoint resetSharedEndpoint];
     self.endpoint = [VSLEndpoint sharedEndpoint];
 }
 
@@ -38,25 +37,6 @@
     [self.endpoint removeAccount:account];
 
     XCTAssertFalse([self.endpoint.accounts containsObject:account], @"The account should have been removed from the array");
-}
-
-- (void)testThatResetWillCreateNewEndpoint {
-    // Bit of a hack, but it is a way to check
-    VSLAccount *account = [[VSLAccount alloc] init];
-    [self.endpoint addAccount:account];
-    NSArray *previousAccounts = self.endpoint.accounts;
-
-    [VSLEndpoint resetSharedEndpoint];
-
-    XCTAssertNotEqual([VSLEndpoint sharedEndpoint].accounts, previousAccounts);
-}
-
-- (void)testCanAddConfigurationToEndpoint {
-    VSLEndpointConfiguration *config = [[VSLEndpointConfiguration alloc] init];
-    [self.endpoint configureWithEndpointConfiguration:config withCompletion:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"There should be no error");
-        XCTAssertEqual(self.endpoint.endpointConfiguration, config, @"The config should have been stored");
-    }];
 }
 
 @end

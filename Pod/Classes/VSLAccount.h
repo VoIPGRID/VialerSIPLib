@@ -7,6 +7,16 @@
 
 #import "VSLAccountConfiguration.h"
 
+@class VSLCall;
+
+/**
+ The ErrorCodes VSLAccount can return.
+ */
+typedef NS_ENUM(NSInteger, VSLAccountErrors) {
+    VSLAccountErrorCannotConfigureAccount,
+    VSLAccountErrorFailedCallingNumber
+};
+
 /**
  The states which an account can have.
  */
@@ -18,6 +28,7 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
 };
 
 @interface VSLAccount : NSObject
+
 /**
  The accountId which an account receives when it is added.
  */
@@ -41,14 +52,45 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
  This will configure the account on the endpoint.
 
  @param accountConfiguration Instance of the VSLAccountConfiguration.
- @param completion Completion block which will be executed when the
- 
- @warning accountConfiguration, completion can't be null.
+ @param error Pointer to NSError pointer. Will be set to a NSError instance if cannot configure account.
+
+ @return BOOL success of configuration.
+
+ @warning accountConfiguration can't be null.
  */
-- (void)configureWithAccountConfiguration:(VSLAccountConfiguration *_Nonnull)accountConfiguration withCompletion:(void(^_Nonnull)(NSError * _Nullable error))completion;
+- (BOOL)configureWithAccountConfiguration:(VSLAccountConfiguration * _Nonnull)accountConfiguration error:(NSError **)error;
 
 /**
- This will remove the account from the endpoint and will also de-register the account from the server.
+ This will remove the account from the Endpoint and will also de-register the account from the server.
  */
 - (void)removeAccount;
+
+/**
+ The number that the sip library will call.
+
+ @param number The phonenumber which will be called.
+ @param completion Completion block which will be executed when evertything has been setup. May contain a outbound call or an error object.
+
+ @warning number and completion can't be null.
+ */
+- (void)callNumber:(NSString * _Nonnull)number withCompletion:(void(^_Nonnull)(NSError * _Nullable error, VSLCall * _Nullable outboundCall))completion;
+
+/**
+ This will check if there is a call present on this account given the callId.
+
+ @param callId The callId of the call.
+
+ @return If call was found, it will return the call.
+ */
+- (VSLCall * _Nullable)lookupCall:(NSInteger)callId;
+
+/**
+ This will add the call to the account.
+
+ @param call The call instance that should be added
+
+ @warning call can't be null.
+ */
+- (void)addCall:(VSLCall * _Nonnull)call;
+
 @end

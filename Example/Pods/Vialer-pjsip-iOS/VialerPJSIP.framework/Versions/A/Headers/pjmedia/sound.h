@@ -1,4 +1,4 @@
-/* $Id: sound.h 3553 2011-05-05 06:14:19Z nanang $ */
+/* $Id: sound.h 5201 2015-11-19 04:03:00Z ming $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -75,7 +75,8 @@ typedef struct pjmedia_snd_stream pjmedia_snd_stream;
  */
 typedef struct pjmedia_snd_dev_info
 {
-    char	name[64];	        /**< Device name.		    */
+    char	name[PJMEDIA_AUD_DEV_INFO_NAME_LEN];	        
+    					/**< Device name.		    */
     unsigned	input_count;	        /**< Max number of input channels.  */
     unsigned	output_count;	        /**< Max number of output channels. */
     unsigned	default_samples_per_sec;/**< Default sampling rate.	    */

@@ -7,31 +7,42 @@
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #import "NSString+PJString.h"
-#import <VialerPJSIP/pjsua.h>
-#import "VSLEndpointConfiguration.h"
+#import "VSLCall.h"
 #import "VSLTransportConfiguration.h"
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-static VSLEndpoint *sharedEndpoint = nil;
+
+static NSString * const VSLEndpointErrorDomain = @"VialerSIPLib.VSLEndpoint.error";
+
+static void logCallBack(int level, const char *data, int len);
+static void onCallState(pjsua_call_id callId, pjsip_event *event);
+static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata);
+static void onCallMediaState(pjsua_call_id call_id);
+static void onCallTransferStatus(pjsua_call_id call_id, int st_code, const pj_str_t *st_text, pj_bool_t final, pj_bool_t *p_cont);
+static void onCallReplaced(pjsua_call_id old_call_id, pjsua_call_id new_call_id);
+static void onRegState(pjsua_acc_id acc_id);
+static void onNatDetect(const pj_stun_nat_detect_result *res);
 
 @interface VSLEndpoint()
 @property (nonatomic, strong) VSLEndpointConfiguration *endpointConfiguration;
 @property (nonatomic, strong) NSArray *accounts;
+@property(assign) pj_pool_t *pjPool;
 @end
 
 @implementation VSLEndpoint
 
+#pragma mark - Singleton
+
 + (id)sharedEndpoint {
-    if (!sharedEndpoint) {
-        sharedEndpoint = [[self alloc] init];
-    }
-    return sharedEndpoint;
+    static VSLEndpoint *_sharedEndpoint;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedEndpoint = [[VSLEndpoint alloc] init];
+    });
+    return _sharedEndpoint;
 }
 
-+ (void)resetSharedEndpoint {
-    [sharedEndpoint destoryPJSUAInstance];
-    sharedEndpoint = nil;
-}
+#pragma mark - Properties
 
 - (NSArray *)accounts {
     if (!_accounts) {
@@ -39,6 +50,197 @@ static VSLEndpoint *sharedEndpoint = nil;
     }
     return _accounts;
 }
+
+#pragma mark - Lifecycle
+
+- (BOOL)startEndpointWithEndpointConfiguration:(VSLEndpointConfiguration  * _Nonnull)endpointConfiguration error:(NSError **)error {
+    // Do nothing if it's already started or being started.
+    if (self.state > VSLEndpointStopped) {
+        return NO;
+    }
+
+    DDLogInfo(@"Creating new PJSIP Endpoint instance.");
+    self.state = VSLEndpointStarting;
+
+    // Create PJSUA on the main thread to make all subsequent calls from the main
+    // thread.
+    pj_status_t status = pjsua_create();
+    if (status != PJ_SUCCESS) {
+        self.state = VSLEndpointStopped;
+        if (error != NULL) {
+            NSDictionary *userInfo = @{
+                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not create PJSIP Enpoint instance", nil),
+                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
+                                       };
+            *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotCreatePJSUA userInfo:userInfo];
+        }
+        return NO;
+    }
+
+    // Create Thread & Pool
+    NSError *threadError;
+    if (![self createPJThreadAndPoolwithError:&threadError]) {
+        *error = threadError;
+        return NO;
+    }
+
+    // Configure the different logging information for the endpoint.
+    pjsua_logging_config logConfig;
+    pjsua_logging_config_default(&logConfig);
+    logConfig.cb = &logCallBack;
+    logConfig.level = (unsigned int)endpointConfiguration.logLevel;
+    logConfig.console_level = (unsigned int)endpointConfiguration.logConsoleLevel;
+    logConfig.log_filename = endpointConfiguration.logFilename.pjString;
+    logConfig.log_file_flags = (unsigned int)endpointConfiguration.logFileFlags;
+
+    // Configure the call information for the endpoint.
+    pjsua_config endpointConfig;
+    pjsua_config_default(&endpointConfig);
+    endpointConfig.cb.on_incoming_call = &onIncomingCall;
+    endpointConfig.cb.on_call_media_state = &onCallMediaState;
+    endpointConfig.cb.on_call_state = &onCallState;
+    endpointConfig.cb.on_call_transfer_status = &onCallTransferStatus;
+    endpointConfig.cb.on_call_replaced = &onCallReplaced;
+    endpointConfig.cb.on_reg_state = &onRegState;
+    endpointConfig.cb.on_nat_detect = &onNatDetect;
+    endpointConfig.max_calls = (unsigned int)endpointConfiguration.maxCalls;
+
+    // Configure the media information for the endpoint.
+    pjsua_media_config mediaConfig;
+    pjsua_media_config_default(&mediaConfig);
+    mediaConfig.clock_rate = (unsigned int)endpointConfiguration.clockRate == 0 ? PJSUA_DEFAULT_CLOCK_RATE : (unsigned int)endpointConfiguration.clockRate;
+    mediaConfig.snd_clock_rate = (unsigned int)endpointConfiguration.sndClockRate;
+
+    // Initialize Endpoint.
+    status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
+    if (status != PJ_SUCCESS) {
+        [self destoryPJSUAInstance];
+        if (error != NULL) {
+            NSDictionary *userInfo = @{
+                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not initialize Endpoint.", nil),
+                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
+                                       };
+            *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotInitPJSUA userInfo:userInfo];
+        }
+        return NO;
+    }
+
+    // Add the transport configuration to the endpoint.
+    for (VSLTransportConfiguration *transportConfiguration in endpointConfiguration.transportConfigurations) {
+        pjsua_transport_config transportConfig;
+        pjsua_transport_config_default(&transportConfig);
+
+        pjsip_transport_type_e transportType = (pjsip_transport_type_e)transportConfiguration.transportType;
+        pjsua_transport_id transportId;
+
+        status = pjsua_transport_create(transportType, &transportConfig, &transportId);
+        if (status != PJ_SUCCESS) {
+            if (error != NULL) {
+                NSDictionary *userInfo = @{
+                                           NSLocalizedDescriptionKey: NSLocalizedString(@"Could not add transport configuration", nil),
+                                           NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
+                                           };
+                *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotAddTransportConfiguration userInfo:userInfo];
+            }
+            return NO;
+        }
+    }
+
+    // Start Endpoint.
+    status = pjsua_start();
+    if (status != PJ_SUCCESS) {
+        [self destoryPJSUAInstance];
+        if (error != NULL) {
+            NSDictionary *userInfo = @{
+                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not start PJSIP Endpoint", nil),
+                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
+                                       };
+            *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotStartPJSUA userInfo:userInfo];
+        }
+        return NO;
+    }
+    DDLogInfo(@"PJSIP Endpoint started succesfully");
+    self.endpointConfiguration = endpointConfiguration;
+    self.state = VSLEndpointStarted;
+    return YES;
+}
+
+- (BOOL)createPJThreadAndPoolwithError:(NSError **)error {
+    // Create a seperate thread
+    pj_thread_desc aPJThreadDesc;
+    if (!pj_thread_is_registered()) {
+        pj_thread_t *pjThread;
+        pj_status_t status = pj_thread_register(NULL, aPJThreadDesc, &pjThread);
+        if (status != PJ_SUCCESS) {
+            NSDictionary *userInfo = @{
+                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not create PJSIP thread", nil),
+                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
+                                       };
+            *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotCreateThread userInfo:userInfo];
+            return NO;
+        }
+    }
+
+    // Create pool for PJSUA.
+    self.pjPool = pjsua_pool_create("VialerSIPLib-pjsua", 1000, 1000);
+    return YES;
+}
+
+- (void)destoryPJSUAInstance {
+    DDLogInfo(@"PJSUA was already running destroying old instance.");
+
+    if (!pj_thread_is_registered()) {
+        pj_thread_desc aPJThreadDesc;
+        pj_thread_t *pjThread;
+        pj_status_t status = pj_thread_register(NULL, aPJThreadDesc, &pjThread);
+
+        if (status != PJ_SUCCESS) {
+            NSLog(@"Error registering thread at PJSUA");
+        }
+    }
+
+    if (self.pjPool != NULL) {
+        pj_pool_release([self pjPool]);
+        self.pjPool = NULL;
+    }
+
+    // Destroy PJSUA.
+    pj_status_t status = pjsua_destroy();
+
+    if (status != PJ_SUCCESS) {
+        DDLogError(@"Error stopping SIP Endpoint");
+    }
+}
+
+#pragma mark - Account functions
+
+- (void)addAccount:(VSLAccount *)account {
+    self.accounts = [self.accounts arrayByAddingObject:account];
+}
+
+- (void)removeAccount:(VSLAccount *)account {
+    NSMutableArray *mutableArray = [self.accounts mutableCopy];
+    [mutableArray removeObject:account];
+    self.accounts = [mutableArray copy];
+}
+
+-(VSLAccount *)lookupAccount:(NSInteger)accountId {
+    NSUInteger accountIndex = [self.accounts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        VSLAccount *account = (VSLAccount *)obj;
+        if (account.accountId == accountId && account.accountId != PJSUA_INVALID_ID) {
+            return YES;
+        }
+        return NO;
+    }];
+
+    if (accountIndex != NSNotFound) {
+        return [self.accounts objectAtIndex:accountIndex]; //TODO add more management
+    } else {
+        return nil;
+    }
+}
+
+#pragma mark - PJSUA callbacks
 
 static void logCallBack(int level, const char *data, int len) {
     NSString *logString = [[NSString alloc] initWithUTF8String:data];
@@ -56,99 +258,60 @@ static void logCallBack(int level, const char *data, int len) {
     DDLogVerbose(@"Level:%i %@", level, logString);
 }
 
-- (void)configureWithEndpointConfiguration:(VSLEndpointConfiguration  * _Nonnull)endpointConfiguration withCompletion:(void(^_Nonnull)(NSError * _Nullable error))completion {
+static void onCallState(pjsua_call_id callId, pjsip_event *event) {
+    DDLogVerbose(@"Updated callState");
 
-    if (pjsua_get_state() == PJSUA_STATE_RUNNING) {
-        [self destoryPJSUAInstance];
-    }
+    pjsua_call_info callInfo;
+    pjsua_call_get_info(callId, &callInfo);
 
-    DDLogInfo(@"Creating new PJSUA instance.");
-    pj_status_t status;
-    status = pjsua_create();
-
-    if (status != PJ_SUCCESS) {
-        [self destoryPJSUAInstance];
-        NSError *error = [NSError errorWithDomain:@"Error creating PJSUA" code:status userInfo:nil];
-        completion(error);
-        return;
-    }
-
-    // Configure the different logging information for the endpoint.
-    pjsua_logging_config log_cfg;
-    pjsua_logging_config_default(&log_cfg);
-    log_cfg.cb = &logCallBack;
-    log_cfg.level = (unsigned int)endpointConfiguration.logLevel;
-    log_cfg.console_level = (unsigned int)endpointConfiguration.logConsoleLevel;
-    log_cfg.log_filename = endpointConfiguration.logFilename.pjString;
-    log_cfg.log_file_flags = (unsigned int)endpointConfiguration.logFileFlags;
-
-    // Configure the call information for the endpoint.
-    pjsua_config pj_cfg;
-    pjsua_config_default(&pj_cfg);
-    //    pj_cfg.cb.on_incoming_call = &SWOnIncomingCall;
-    //    pj_cfg.cb.on_call_media_state = &SWOnCallMediaState;
-    //    pj_cfg.cb.on_call_state = &SWOnCallState;
-    //    pj_cfg.cb.on_call_transfer_status = &SWOnCallTransferStatus;
-    //    pj_cfg.cb.on_call_replaced = &SWOnCallReplaced;
-    //    pj_cfg.cb.on_reg_state = &SWOnRegState;
-    //    pj_cfg.cb.on_nat_detect = &SWOnNatDetect;
-    pj_cfg.max_calls = (unsigned int)endpointConfiguration.maxCalls;
-
-    // Configure the media information for the endpoint.
-    pjsua_media_config media_cfg;
-    pjsua_media_config_default(&media_cfg);
-    media_cfg.clock_rate = (unsigned int)endpointConfiguration.clockRate == 0 ? PJSUA_DEFAULT_CLOCK_RATE : (unsigned int)endpointConfiguration.clockRate;
-    media_cfg.snd_clock_rate = (unsigned int)endpointConfiguration.sndClockRate;
-
-    status = pjsua_init(&pj_cfg, &log_cfg, &media_cfg);
-    if (status != PJ_SUCCESS) {
-        [self destoryPJSUAInstance];
-        NSError *error = [NSError errorWithDomain:@"Error initializing pjsua" code:status userInfo:nil];
-        completion(error);
-        return;
-    }
-
-    // Add the transport configuration to the endpoint.
-    for (VSLTransportConfiguration *transportConfiguration in endpointConfiguration.transportConfigurations) {
-        pjsua_transport_config transportConfig;
-        pjsua_transport_config_default(&transportConfig);
-
-        pjsip_transport_type_e transportType = (pjsip_transport_type_e)transportConfiguration.transportType;
-        pjsua_transport_id transportId;
-
-        status = pjsua_transport_create(transportType, &transportConfig, &transportId);
-        if (status != PJ_SUCCESS) {
-            NSError *error = [NSError errorWithDomain:@"Error creating pjsua transport" code:status userInfo:nil];
-            completion(error);
-            return;
+    VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
+    if (account) {
+        VSLCall *call = [account lookupCall:callId];
+        if (call) {
+            [call callStateChanged:callInfo];
         }
     }
+}
 
-    status = pjsua_start();
-    if (status == PJ_SUCCESS) {
-        DDLogInfo(@"PJSUA started succesfully");
-        self.endpointConfiguration = endpointConfiguration;
-        completion(nil);
-    } else {
-        [self destoryPJSUAInstance];
-        NSError *error = [NSError errorWithDomain:@"Error starting pjsua" code:status userInfo:nil];
-        completion(error);
+static void onCallMediaState(pjsua_call_id call_id) {
+    DDLogVerbose(@"Updated mediastate");
+
+    pjsua_call_info callInfo;
+    pjsua_call_get_info(call_id, &callInfo);
+
+    VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
+    if (account) {
+        VSLCall *call = [account lookupCall:call_id];
+        if (call) {
+            [call mediaStateChanged:callInfo];
+        }
     }
 }
 
-- (void)destoryPJSUAInstance {
-    DDLogInfo(@"PJSUA was already running destroying old instance.");
-    pjsua_destroy();
+//TODO: implement these
+
+static void onRegState(pjsua_acc_id acc_id) {
+    DDLogVerbose(@"Updated regState");
 }
 
-- (void)addAccount:(VSLAccount *)account {
-    self.accounts = [self.accounts arrayByAddingObject:account];
+static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
+    DDLogVerbose(@"Incoming call");
 }
 
-- (void)removeAccount:(VSLAccount *)account {
-    NSMutableArray *mutableArray = [self.accounts mutableCopy];
-    [mutableArray removeObject:account];
-    self.accounts = [mutableArray copy];
+
+static void onCallTransferStatus(pjsua_call_id call_id, int st_code, const pj_str_t *st_text, pj_bool_t final, pj_bool_t *p_cont) {
+    DDLogVerbose(@"Updated transfer");
 }
+
+static void onCallReplaced(pjsua_call_id old_call_id, pjsua_call_id new_call_id) {
+    DDLogVerbose(@"call replaced");
+}
+
+static void onNatDetect(const pj_stun_nat_detect_result *res){
+    DDLogVerbose(@"Updated natdetect");
+}
+
+# pragma mark - Utils
+
 
 @end

@@ -1,4 +1,4 @@
-/* $Id: config.h 5160 2015-08-12 02:39:26Z riza $ */
+/* $Id: config.h 5164 2015-08-12 05:28:43Z riza $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -1226,7 +1226,7 @@ PJ_BEGIN_DECL
  * Extra suffix for the version (e.g. "-trunk"), or empty for
  * web release version.
  */
-#define PJ_VERSION_NUM_EXTRA	""
+#define PJ_VERSION_NUM_EXTRA	"-svn"
 
 /**
  * PJLIB version number consists of three bytes with the following format:

@@ -1,4 +1,4 @@
-/* $Id: config.h 4981 2015-02-11 05:10:06Z nanang $ */
+/* $Id: config.h 5186 2015-10-06 05:57:51Z ming $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -653,6 +653,24 @@
  */
 #ifndef PJMEDIA_SPEEX_AEC_USE_DENOISE
 #   define PJMEDIA_SPEEX_AEC_USE_DENOISE	1
+#endif
+
+
+/**
+ * WebRtc Accoustic Echo Cancellation (AEC).
+ * By default is disabled.
+ */
+#ifndef PJMEDIA_HAS_WEBRTC_AEC
+#   define PJMEDIA_HAS_WEBRTC_AEC		0
+#endif
+
+/**
+ * Specify whether WebRtc EC should use its mobile version AEC.
+ *
+ * Default: 0 (no)
+ */
+#ifndef PJMEDIA_WEBRTC_AEC_USE_MOBILE
+#   define PJMEDIA_WEBRTC_AEC_USE_MOBILE 	0
 #endif
 
 

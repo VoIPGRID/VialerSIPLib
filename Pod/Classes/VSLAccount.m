@@ -8,14 +8,17 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #import "NSString+PJString.h"
 #import <VialerPJSIP/pjsua.h>
+#import "VSLCall.h"
 #import "VSLEndpoint.h"
 #import "VSLEndpointConfiguration.h"
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSUInteger const VSLAccountRegistrationTimeoutInSeconds = 800;
+static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 @interface VSLAccount()
 @property (readwrite, nonnull, nonatomic) VSLAccountConfiguration *accountConfiguration;
+@property (nonatomic, strong) NSMutableArray *calls;
 @end
 
 @implementation VSLAccount
@@ -27,7 +30,14 @@ static NSUInteger const VSLAccountRegistrationTimeoutInSeconds = 800;
     return self;
 }
 
-- (void)configureWithAccountConfiguration:(VSLAccountConfiguration *)accountConfiguration withCompletion:(void (^__nonnull)(NSError * __nullable error))completion {
+- (NSMutableArray *)calls {
+    if (!_calls) {
+        _calls = [NSMutableArray array];
+    }
+    return _calls;
+}
+
+- (BOOL)configureWithAccountConfiguration:(VSLAccountConfiguration * _Nonnull)accountConfiguration error:(NSError **)error {
 
     // If the endpoint has a tcp connection create a variable with the needed information.
     NSString *tcp = @"";
@@ -60,18 +70,25 @@ static NSUInteger const VSLAccountRegistrationTimeoutInSeconds = 800;
         acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:tcp] prependSipUri].pjString;
     }
 
-    int accountId = (int)self.accountId;
+    int accountId;
     pj_status_t status = pjsua_acc_add(&acc_cfg, PJ_TRUE, &accountId);
 
     if (status == PJ_SUCCESS) {
         DDLogInfo(@"Account added succesfully");
         self.accountConfiguration = accountConfiguration;
         self.accountId = accountId;
-        completion(nil);
+        [[VSLEndpoint sharedEndpoint] addAccount:self];
     } else {
-        NSError *error = [NSError errorWithDomain:@"Error adding account" code:status userInfo:nil];
-        completion(error);
+        if (error != NULL) {
+            NSDictionary *userInfo = @{
+                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not configure VSLAccount", nil),
+                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
+                                       };
+            *error = [NSError errorWithDomain:VSLAccountErrorDomain code:VSLAccountErrorCannotConfigureAccount userInfo:userInfo];
+        }
+        return NO;
     }
+    return YES;
 }
 
 - (void)removeAccount {
@@ -79,6 +96,44 @@ static NSUInteger const VSLAccountRegistrationTimeoutInSeconds = 800;
 
     status = pjsua_acc_del((int)self.accountId);
     [[VSLEndpoint sharedEndpoint] removeAccount:self];
+}
+
+#pragma mark - Calling methods
+
+- (void)callNumber:(NSString *)number withCompletion:(void (^)(NSError * _Nullable, VSLCall * _Nullable))completion {
+    NSError *callNumberError;
+    VSLCall *call = [VSLCall callNumber:number withAccount:self error:&callNumberError];
+    if (callNumberError) {
+        NSDictionary *userInfo = @{NSUnderlyingErrorKey : callNumberError,
+                                   NSLocalizedDescriptionKey : NSLocalizedString(@"The call couldn't be setup.", nil)
+                                   };
+        NSError *error =  [NSError errorWithDomain:VSLAccountErrorDomain
+                                              code:VSLAccountErrorFailedCallingNumber
+                                          userInfo:userInfo];
+        completion(error, nil);
+    } else {
+        completion(nil, call);
+    }
+}
+
+- (void)addCall:(VSLCall *)call {
+    [self.calls addObject:call];
+}
+
+- (VSLCall *)lookupCall:(NSInteger)callId {
+    NSUInteger callIndex = [self.calls indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        VSLCall *call = (VSLCall *)obj;
+        if (call.callId == callId && call.callId != PJSUA_INVALID_ID) {
+            return YES;
+        }
+        return NO;
+    }];
+
+    if (callIndex != NSNotFound) {
+        return [self.calls objectAtIndex:callIndex];
+    } else {
+        return nil;
+    }
 }
 
 @end

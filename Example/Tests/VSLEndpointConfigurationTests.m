@@ -36,7 +36,7 @@
 }
 
 - (void)testThereIsNoDefaultClockRate {
-    XCTAssertEqual(self.configuration.clockRate, 0);
+    XCTAssertEqual(self.configuration.clockRate, PJSUA_DEFAULT_CLOCK_RATE);
 }
 
 - (void)testThereIsNoDefaultSndClockRate {

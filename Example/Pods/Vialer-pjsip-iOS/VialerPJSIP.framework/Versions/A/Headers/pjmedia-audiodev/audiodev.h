@@ -1,4 +1,4 @@
-/* $Id: audiodev.h 5110 2015-06-18 06:06:02Z nanang $ */
+/* $Id: audiodev.h 5201 2015-11-19 04:03:00Z ming $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -223,7 +223,7 @@ typedef struct pjmedia_aud_dev_info
     /** 
      * The device name 
      */
-    char name[64];
+    char name[PJMEDIA_AUD_DEV_INFO_NAME_LEN];
 
     /** 
      * Maximum number of input channels supported by this device. If the

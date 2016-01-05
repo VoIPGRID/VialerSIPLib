@@ -5,6 +5,8 @@
 
 #import "AppDelegate.h"
 #import "HDLumberjackLogFormatter.h"
+#import "SipUser.h"
+#import "Keys.h"
 #import <VialerSIPLib-iOS/VialerSIPLib.h>
 #import <VialerSIPLib-iOS/VSLEndpointConfiguration.h>
 #import <VialerSIPLib-iOS/VSLTransportConfiguration.h>
@@ -17,18 +19,28 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [self setupCocoaLumberjackLogging];
 
     VSLEndpointConfiguration *endpointConfiguration = [[VSLEndpointConfiguration alloc] init];
-    VSLTransportConfiguration *tcpTransportConfiguration = [VSLTransportConfiguration configurationWithTransportType:VSLTransportTypeTCP];
+    VSLTransportConfiguration *updTransportConfiguration = [VSLTransportConfiguration configurationWithTransportType:VSLTransportTypeUDP];
 
-    endpointConfiguration.transportConfigurations = @[tcpTransportConfiguration];
+    endpointConfiguration.transportConfigurations = @[updTransportConfiguration];
 
-    [[VialerSIPLib sharedInstance] configureLibraryWithEndPointConfiguration:endpointConfiguration withCompletion:^(NSError *error) {
+    NSError *error;
+    BOOL success = [[VialerSIPLib sharedInstance] configureLibraryWithEndPointConfiguration:endpointConfiguration error:&error];
+    if (!success || error) {
+        DDLogError(@"Failed to startup VialerSIPLib: %@", error);
+    } else {
+        SipUser *testUser = [[SipUser alloc] init];
+        testUser.sipUsername = KeysUsername;
+        testUser.sipPassword = KeysPassword;
+        testUser.sipDomain = KeysDomain;
+        testUser.sipProxy = KeysProxy;
+        testUser.sipRegisterOnAdd = NO;
+
+        NSError *error;
+        [[VialerSIPLib sharedInstance] createAccountWithSipUser:testUser error:&error];
         if (error) {
-            DDLogError(@"%@", error);
-        } else {
-            DDLogInfo(@"Endpoint configuration done");
+            DDLogError(@"Failed to create Account: %@", error);
         }
-    }];
-
+    }
     return YES;
 }
 

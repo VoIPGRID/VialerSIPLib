@@ -28,9 +28,10 @@
     VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
     config.sipDomain = @"";
 
-    [self.account configureWithAccountConfiguration:config withCompletion:^(NSError * _Nullable error) {
-        XCTAssertNotNil(error, @"There should be an error");
-    }];
+    NSError *error;
+    BOOL success = [self.account configureWithAccountConfiguration:config error:&error];
+    XCTAssertFalse(success);
+    XCTAssertNotNil(error);
 }
 
 - (void)testAccountHasNoErrorWhenDomainAndUsernameInConfig {
@@ -38,9 +39,12 @@
     config.sipUsername = @"test";
     config.sipDomain = @"sip.test.com";
 
-    [self.account configureWithAccountConfiguration:config withCompletion:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"There should be no error");
-    }];
+    NSError *error;
+    BOOL success = [self.account configureWithAccountConfiguration:config error:&error];
+    XCTAssertTrue(success);
+    XCTAssertNil(error);
+
+    [self.account removeAccount];
 }
 
 - (void)testAccountHasAValidAccountIdWhenConfigured {
@@ -48,9 +52,13 @@
     config.sipUsername = @"test";
     config.sipDomain = @"sip.test.com";
 
-    [self.account configureWithAccountConfiguration:config withCompletion:^(NSError * _Nullable error) {
-        XCTAssertNotEqual(self.account.accountId, PJSUA_INVALID_ID);
-    }];
+    NSError *error;
+    BOOL success = [self.account configureWithAccountConfiguration:config error:&error];
+    XCTAssertTrue(success);
+    XCTAssertNil(error);
+    XCTAssertNotEqual(self.account.accountId, PJSUA_INVALID_ID);
+
+    [self.account removeAccount];
 }
 
 - (void)testAccountHasACorrectConfigWhenProperlyConfigured {
@@ -58,18 +66,19 @@
     config.sipUsername = @"test";
     config.sipDomain = @"sip.test.com";
 
-    [self.account configureWithAccountConfiguration:config withCompletion:^(NSError * _Nullable error) {
-        XCTAssertEqual(self.account.accountConfiguration, config, @"The config should have been stored");
-    }];
+    [self.account configureWithAccountConfiguration:config error:nil];
+    XCTAssertEqual(self.account.accountConfiguration, config, @"The config should have been stored");
+
+    [self.account removeAccount];
 }
 
 - (void)testAccountHasNoConfigWhenWrongConfigured {
     VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
     config.sipUsername = @"1234";
 
-    [self.account configureWithAccountConfiguration:config withCompletion:^(NSError * _Nullable error) {
-        XCTAssertNil(self.account.accountConfiguration, @"there should be no configuration when config isn't correct");
-    }];
+    NSError *error = nil;
+    [self.account configureWithAccountConfiguration:config error:&error];
+    XCTAssertNil(self.account.accountConfiguration, @"there should be no configuration when config isn't correct");
 }
 
 - (void)testAccountStateIsOfflineOnDefault {
@@ -84,7 +93,7 @@
     VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
     config.sipDomain = @"sip.test.com";
 
-    [self.account configureWithAccountConfiguration:config withCompletion:^(NSError * _Nullable error) {}];
+    [self.account configureWithAccountConfiguration:config error:nil];
     [endpointMock stopMocking];
 }
 

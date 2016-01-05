@@ -1,4 +1,4 @@
-/* $Id: config.h 4537 2013-06-19 06:47:43Z riza $ */
+/* $Id: config.h 5201 2015-11-19 04:03:00Z ming $ */
 /* 
  * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
  * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
@@ -41,6 +41,20 @@ PJ_BEGIN_DECL
  * @brief Compile time configurations
  * @{
  */
+
+/**
+ * This setting controls the buffer length of audio device name.
+ *
+ * Default: 128 for Windows platforms, 64 for others
+ */
+#ifndef PJMEDIA_AUD_DEV_INFO_NAME_LEN
+#   if (defined(PJ_WIN32) && PJ_WIN32!=0) || \
+       (defined(PJ_WIN64) && PJ_WIN64!=0)
+#	define PJMEDIA_AUD_DEV_INFO_NAME_LEN 128
+#   else
+#	define PJMEDIA_AUD_DEV_INFO_NAME_LEN 64
+#   endif
+#endif
 
 /**
  * This setting controls whether PortAudio support should be included.

@@ -12,7 +12,7 @@
 #import "VSLEndpoint.h"
 #import "VSLEndpointConfiguration.h"
 
-NSString *const ErrorDomain = @"VialerSIPLib.error";
+static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
 
 @interface VialerSIPLib()
 @property (strong, nonatomic) VSLEndpoint *endpoint;
@@ -37,24 +37,26 @@ NSString *const ErrorDomain = @"VialerSIPLib.error";
     return _endpoint;
 }
 
-- (void)callNumber:(NSString * _Nonnull)number withSipUser:(id<SIPEnabledUser> _Nonnull)sipUser withCompletion:(void (^ _Nonnull)(VSLCall * _Nullable outboundCall, NSError * _Nullable error))completion {
-    [self addSipAccount:sipUser withCompletion:^(NSError *error) {
-        if (error) {
-            NSDictionary *userInfo = @{NSUnderlyingErrorKey : error,
-                                       NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"The account configuration has failed.", @"VialerSIPLib", @"account configuration error")
-                                       };
-            NSError *error =  [NSError errorWithDomain:ErrorDomain
-                                                  code:VSLAccountConfigurationFailed
-                                              userInfo:userInfo];
-            completion(nil, error);
-        } else {
-            // TODO: VIALI-3061: Create outbound call here.
-            completion(nil, nil);
-        }
-    }];
+- (BOOL)configureLibraryWithEndPointConfiguration:(VSLEndpointConfiguration * _Nonnull)endpointConfiguration error:(NSError **)error {
+
+    // Make sure interrupts are handled by pjsip
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+
+    // Start the Endpoint
+    NSError *endpointConfigurationError;
+    BOOL success = [self.endpoint startEndpointWithEndpointConfiguration:endpointConfiguration error:&endpointConfigurationError];
+    if (endpointConfigurationError && error != NULL) {
+        NSDictionary *userInfo = @{NSUnderlyingErrorKey : endpointConfigurationError,
+                                   NSLocalizedDescriptionKey : NSLocalizedString(@"The endpoint configuration has failed.", nil)
+                                   };
+        *error =  [NSError errorWithDomain:VialerSIPLibErrorDomain
+                                      code:VialerSIPLibErrorEndpointConfigurationFailed
+                                  userInfo:userInfo];
+    }
+    return success;
 }
 
-- (void)addSipAccount:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser withCompletion:(void (^ _Nonnull)(NSError * _Nullable error))completion {
+- (VSLAccount * _Nullable)createAccountWithSipUser:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser error:(NSError **) error {
     VSLAccountConfiguration *accountConfiguration = [[VSLAccountConfiguration alloc] init];
     accountConfiguration.sipUsername = sipUser.sipUsername;
     accountConfiguration.sipPassword = sipUser.sipPassword;
@@ -64,28 +66,17 @@ NSString *const ErrorDomain = @"VialerSIPLib.error";
 
     VSLAccount *account = [[VSLAccount alloc] init];
 
-    [account configureWithAccountConfiguration:accountConfiguration withCompletion:completion];
+    NSError *accountConfigError = nil;
+    [account configureWithAccountConfiguration:accountConfiguration error:&accountConfigError];
+    if (accountConfigError && error != NULL) {
+        *error = accountConfigError;
+        return nil;
+    }
+    return account;
 }
 
-- (void)configureLibraryWithEndPointConfiguration:(VSLEndpointConfiguration * _Nonnull)endpointConfiguration withCompletion:(void (^ _Nonnull)(NSError * _Nullable error))completion {
-    [self.endpoint configureWithEndpointConfiguration:endpointConfiguration withCompletion:^(NSError * _Nullable error) {
-        if (error) {
-            NSDictionary *userInfo = @{NSUnderlyingErrorKey : error,
-                                       NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"The endpoint configuration has failed.", @"VialerSIPLib", @"endpoint configuration error")
-                                       };
-            NSError *error =  [NSError errorWithDomain:ErrorDomain
-                                                  code:VSLEndPointConfigurationFailed
-                                              userInfo:userInfo];
-            completion(error);
-        } else {
-            completion(nil);
-        }
-    }];
-}
-
-- (void)hangup {
-    VSLAccount *account = [[VSLAccount alloc] init];
-    [account removeAccount];
+- (VSLAccount *)firstAccount {
+    return [self.endpoint.accounts firstObject];
 }
 
 @end
