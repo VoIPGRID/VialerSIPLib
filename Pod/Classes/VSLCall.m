@@ -6,6 +6,7 @@
 #import "VSLCall.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import "NSError+VSLError.h"
 #import "NSString+PJString.h"
 #import "VSLRingback.h"
 
@@ -29,7 +30,7 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 @implementation VSLCall
 
 #pragma mark - Life Cycle
-+ (instancetype)callNumber:(NSString *)number withAccount:(VSLAccount *)account error:(NSError **)error {
++ (instancetype)callNumber:(NSString *)number withAccount:(VSLAccount *)account error:(NSError * _Nullable __autoreleasing *)error {
     pj_str_t sipUri = [number sipUriWithDomain:account.accountConfiguration.sipDomain];
 
     // Create call settings.
@@ -44,11 +45,11 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
     if (status != PJ_SUCCESS) {
         DDLogInfo(@"Error creating call");
         if (error != NULL) {
-            NSDictionary *userInfo = @{
-                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not setup call", nil),
-                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
-                                       };
-            *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotCreateCall userInfo:userInfo];
+            *error = [NSError VSLUnderlyingError:nil
+               localizedDescriptionKey:NSLocalizedString(@"Could not setup call", nil)
+           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                           errorDomain:VSLCallErrorDomain
+                             errorCode:VSLCallErrorCannotCreateCall];
         }
         return nil;
     }
@@ -81,7 +82,7 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
         if (callInfo.state == VSLCallStateIncoming) {
             self.incoming = YES;
         } else {
-            self.incoming = YES;
+            self.incoming = NO;
         }
     }
     return self;
@@ -138,18 +139,18 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
     return _ringback;
 }
 
-- (BOOL)hangup:(NSError **)error {
+- (BOOL)hangup:(NSError * _Nullable __autoreleasing *)error {
     pj_status_t status;
 
     if (self.callId != PJSUA_INVALID_ID && self.callState != VSLCallStateDisconnected) {
         status = pjsua_call_hangup((int)self.callId, 0, NULL, NULL);
         if (status != PJ_SUCCESS) {
             if (error != NULL) {
-                NSDictionary *userInfo = @{
-                                           NSLocalizedDescriptionKey: NSLocalizedString(@"Could not hangup call", nil),
-                                           NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
-                                           };
-                *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotHangupCall userInfo:userInfo];
+                *error = [NSError VSLUnderlyingError:nil
+                   localizedDescriptionKey:NSLocalizedString(@"Could not hangup call", nil)
+               localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                               errorDomain:VSLCallErrorDomain
+                                 errorCode:VSLCallErrorCannotHangupCall];
             }
             return NO;
         }

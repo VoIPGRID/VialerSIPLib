@@ -6,6 +6,7 @@
 #import "VSLEndpoint.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import "NSError+VSLError.h"
 #import "NSString+PJString.h"
 #import "VSLCall.h"
 #import "VSLTransportConfiguration.h"
@@ -24,9 +25,9 @@ static void onRegState(pjsua_acc_id acc_id);
 static void onNatDetect(const pj_stun_nat_detect_result *res);
 
 @interface VSLEndpoint()
-@property (nonatomic, strong) VSLEndpointConfiguration *endpointConfiguration;
-@property (nonatomic, strong) NSArray *accounts;
-@property(assign) pj_pool_t *pjPool;
+@property (strong, nonatomic) VSLEndpointConfiguration *endpointConfiguration;
+@property (strong, nonatomic) NSArray *accounts;
+@property (assign) pj_pool_t *pjPool;
 @end
 
 @implementation VSLEndpoint
@@ -68,11 +69,11 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     if (status != PJ_SUCCESS) {
         self.state = VSLEndpointStopped;
         if (error != NULL) {
-            NSDictionary *userInfo = @{
-                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not create PJSIP Enpoint instance", nil),
-                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
-                                       };
-            *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotCreatePJSUA userInfo:userInfo];
+            *error = [NSError VSLUnderlyingError:nil
+               localizedDescriptionKey:NSLocalizedString(@"Could not create PJSIP Enpoint instance", nil)
+           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                           errorDomain:VSLEndpointErrorDomain
+                             errorCode:VSLEndpointErrorCannotCreatePJSUA];
         }
         return NO;
     }
@@ -116,11 +117,11 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     if (status != PJ_SUCCESS) {
         [self destoryPJSUAInstance];
         if (error != NULL) {
-            NSDictionary *userInfo = @{
-                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not initialize Endpoint.", nil),
-                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
-                                       };
-            *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotInitPJSUA userInfo:userInfo];
+            *error = [NSError VSLUnderlyingError:nil
+               localizedDescriptionKey:NSLocalizedString(@"Could not initialize Endpoint.", nil)
+           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                           errorDomain:VSLEndpointErrorDomain
+                             errorCode:VSLEndpointErrorCannotInitPJSUA];
         }
         return NO;
     }
@@ -136,11 +137,11 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         status = pjsua_transport_create(transportType, &transportConfig, &transportId);
         if (status != PJ_SUCCESS) {
             if (error != NULL) {
-                NSDictionary *userInfo = @{
-                                           NSLocalizedDescriptionKey: NSLocalizedString(@"Could not add transport configuration", nil),
-                                           NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
-                                           };
-                *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotAddTransportConfiguration userInfo:userInfo];
+                *error = [NSError VSLUnderlyingError:nil
+                   localizedDescriptionKey:NSLocalizedString(@"Could not add transport configuration", nil)
+               localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                               errorDomain:VSLEndpointErrorDomain
+                                 errorCode:VSLEndpointErrorCannotAddTransportConfiguration];
             }
             return NO;
         }
@@ -151,11 +152,11 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     if (status != PJ_SUCCESS) {
         [self destoryPJSUAInstance];
         if (error != NULL) {
-            NSDictionary *userInfo = @{
-                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not start PJSIP Endpoint", nil),
-                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
-                                       };
-            *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotStartPJSUA userInfo:userInfo];
+            *error = [NSError VSLUnderlyingError:nil
+               localizedDescriptionKey:NSLocalizedString(@"Could not start PJSIP Endpoint", nil)
+           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                           errorDomain:VSLEndpointErrorDomain
+                             errorCode:VSLEndpointErrorCannotStartPJSUA];
         }
         return NO;
     }
@@ -165,18 +166,18 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     return YES;
 }
 
-- (BOOL)createPJThreadAndPoolwithError:(NSError **)error {
+- (BOOL)createPJThreadAndPoolwithError:(NSError * _Nullable __autoreleasing *)error {
     // Create a seperate thread
     pj_thread_desc aPJThreadDesc;
     if (!pj_thread_is_registered()) {
         pj_thread_t *pjThread;
         pj_status_t status = pj_thread_register(NULL, aPJThreadDesc, &pjThread);
         if (status != PJ_SUCCESS) {
-            NSDictionary *userInfo = @{
-                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not create PJSIP thread", nil),
-                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
-                                       };
-            *error = [NSError errorWithDomain:VSLEndpointErrorDomain code:VSLEndpointErrorCannotCreateThread userInfo:userInfo];
+            *error = [NSError VSLUnderlyingError:nil
+               localizedDescriptionKey:NSLocalizedString(@"Could not create PJSIP thread", nil)
+           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                           errorDomain:VSLEndpointErrorDomain
+                             errorCode:VSLEndpointErrorCannotCreateThread];
             return NO;
         }
     }
@@ -224,7 +225,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     self.accounts = [mutableArray copy];
 }
 
--(VSLAccount *)lookupAccount:(NSInteger)accountId {
+- (VSLAccount *)lookupAccount:(NSInteger)accountId {
     NSUInteger accountIndex = [self.accounts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         VSLAccount *account = (VSLAccount *)obj;
         if (account.accountId == accountId && account.accountId != PJSUA_INVALID_ID) {
@@ -238,6 +239,15 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     } else {
         return nil;
     }
+}
+
+- (VSLAccount *)getAccountWithSipUsername:(NSString *)sipUsername {
+    for (VSLAccount *account in self.accounts) {
+        if (account.accountConfiguration.sipUsername == sipUsername) {
+            return account;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - PJSUA callbacks
@@ -288,14 +298,37 @@ static void onCallMediaState(pjsua_call_id call_id) {
     }
 }
 
-//TODO: implement these
-
 static void onRegState(pjsua_acc_id acc_id) {
     DDLogVerbose(@"Updated regState");
+
+    VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
+
+    if (account) {
+        [account accountStateChanged];
+    }
 }
 
+//TODO: implement these
+
+
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
-    DDLogVerbose(@"Incoming call");
+    DDLogInfo(@"Incoming call");
+    DDLogInfo(@"AccountID: %d", acc_id);
+
+    VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
+
+    if (account) {
+
+        VSLCall *call = [VSLCall callWithId:call_id andAccountId:acc_id];
+        DDLogWarn(@"%@", call);
+        if (call) {
+            [account addCall:call];
+
+            if ([VSLEndpoint sharedEndpoint].incomingCallBlock) {
+                [VSLEndpoint sharedEndpoint].incomingCallBlock(call);
+            }
+        }
+    }
 }
 
 

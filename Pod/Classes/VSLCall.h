@@ -115,7 +115,7 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  @warning number, account can't be null.
  @warning this method must be called from the main thread.
  */
-+ (instancetype _Nullable)callNumber:(NSString * _Nonnull)number withAccount:(VSLAccount * _Nonnull)account error:(NSError **)error;
++ (instancetype _Nullable)callNumber:(NSString * _Nonnull)number withAccount:(VSLAccount * _Nonnull)account error:(NSError * _Nullable * _Nullable)error;
 
 /**
  This will create a call instance and attached to the account.
@@ -134,7 +134,7 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
 
  @return YES if hangup was successfull.
  */
-- (BOOL)hangup:(NSError **)error;
+- (BOOL)hangup:(NSError * _Nullable * _Nullable)error;
 
 /**
  This will change the callState of the call.

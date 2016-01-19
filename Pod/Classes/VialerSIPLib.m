@@ -6,6 +6,7 @@
 #import "VialerSIPLib.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import "NSError+VSLError.h"
 #import "VSLAccount.h"
 #import "VSLAccountConfiguration.h"
 #import "VSLCall.h"
@@ -13,6 +14,7 @@
 #import "VSLEndpointConfiguration.h"
 
 static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @interface VialerSIPLib()
 @property (strong, nonatomic) VSLEndpoint *endpoint;
@@ -37,8 +39,7 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
     return _endpoint;
 }
 
-- (BOOL)configureLibraryWithEndPointConfiguration:(VSLEndpointConfiguration * _Nonnull)endpointConfiguration error:(NSError **)error {
-
+- (BOOL)configureLibraryWithEndPointConfiguration:(VSLEndpointConfiguration * _Nonnull)endpointConfiguration error:(NSError * _Nullable __autoreleasing *)error {
     // Make sure interrupts are handled by pjsip
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 
@@ -46,17 +47,16 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
     NSError *endpointConfigurationError;
     BOOL success = [self.endpoint startEndpointWithEndpointConfiguration:endpointConfiguration error:&endpointConfigurationError];
     if (endpointConfigurationError && error != NULL) {
-        NSDictionary *userInfo = @{NSUnderlyingErrorKey : endpointConfigurationError,
-                                   NSLocalizedDescriptionKey : NSLocalizedString(@"The endpoint configuration has failed.", nil)
-                                   };
-        *error =  [NSError errorWithDomain:VialerSIPLibErrorDomain
-                                      code:VialerSIPLibErrorEndpointConfigurationFailed
-                                  userInfo:userInfo];
+        *error = [NSError VSLUnderlyingError:endpointConfigurationError
+           localizedDescriptionKey:NSLocalizedString(@"The endpoint configuration has failed.", nil)
+       localizedFailureReasonError:nil
+                       errorDomain:VialerSIPLibErrorDomain
+                         errorCode:VialerSIPLibErrorEndpointConfigurationFailed];
     }
     return success;
 }
 
-- (VSLAccount * _Nullable)createAccountWithSipUser:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser error:(NSError **) error {
+- (VSLAccount *)createAccountWithSipUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser error:(NSError * _Nullable __autoreleasing *)error {
     VSLAccountConfiguration *accountConfiguration = [[VSLAccountConfiguration alloc] init];
     accountConfiguration.sipUsername = sipUser.sipUsername;
     accountConfiguration.sipPassword = sipUser.sipPassword;
@@ -73,6 +73,63 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
         return nil;
     }
     return account;
+}
+
+- (void)setIncomingCallBlock:(void (^)(VSLCall * _Nonnull))incomingCallBlock {
+    [VSLEndpoint sharedEndpoint].incomingCallBlock = incomingCallBlock;
+}
+
+- (BOOL)registerAccount:(id<SIPEnabledUser> _Nonnull __autoreleasing)sipUser error:(NSError * _Nullable __autoreleasing *)error {
+    VSLAccount *account = [self.endpoint getAccountWithSipUsername:sipUser.sipUsername];
+
+    if (!account) {
+        NSError *accountConfigError;
+        VSLAccount *account = [self createAccountWithSipUser:sipUser error:&accountConfigError];
+        if (!account) {
+            if (error != nil) {
+                *error = [NSError VSLUnderlyingError:accountConfigError
+                   localizedDescriptionKey:NSLocalizedString(@"The configure the account has failed.", nil)
+               localizedFailureReasonError:nil
+                               errorDomain:VialerSIPLibErrorDomain
+                                 errorCode:VialerSIPLibErrorAccountConfigurationFailed];
+
+            }
+            return NO;
+        }
+
+        NSError *accountError;
+        BOOL success = [account registerAccount:&accountError];
+
+        if (!success) {
+            if (error != nil) {
+                *error = [NSError VSLUnderlyingError:accountError
+                   localizedDescriptionKey:NSLocalizedString(@"The registration of the account has failed.", nil)
+               localizedFailureReasonError:nil
+                               errorDomain:VialerSIPLibErrorDomain
+                                 errorCode:VialerSIPLibErrorAccountRegistrationFailed];
+            }
+            return NO;
+        }
+        return YES;
+    }
+
+    NSError *accountError;
+    BOOL success = YES;
+    if (account.accountState == VSLAccountStateOffline) {
+        success = [account registerAccount:&accountError];
+    }
+
+    if (!success) {
+        if (error != nil) {
+            *error = [NSError VSLUnderlyingError:accountError
+               localizedDescriptionKey:NSLocalizedString(@"The registration of the account has failed.", nil)
+           localizedFailureReasonError:nil
+                           errorDomain:VialerSIPLibErrorDomain
+                             errorCode:VialerSIPLibErrorAccountRegistrationFailed];
+        }
+        return NO;
+    }
+    return YES;
 }
 
 - (VSLAccount *)firstAccount {

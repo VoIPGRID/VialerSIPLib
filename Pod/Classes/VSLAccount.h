@@ -14,7 +14,9 @@
  */
 typedef NS_ENUM(NSInteger, VSLAccountErrors) {
     VSLAccountErrorCannotConfigureAccount,
-    VSLAccountErrorFailedCallingNumber
+    VSLAccountErrorFailedCallingNumber,
+    VSLAccountErrorRegistrationFailed,
+    VSLAccountErrorSettingOnlineStatus,
 };
 
 /**
@@ -22,9 +24,9 @@ typedef NS_ENUM(NSInteger, VSLAccountErrors) {
  */
 typedef NS_ENUM(NSInteger, VSLAccountState) {
     VSLAccountStateOffline,
-    VSLAccountStateDisconnected,
     VSLAccountStateConnecting,
-    VSLAccountStateConnected
+    VSLAccountStateConnected,
+    VSLAccountStateDisconnected,
 };
 
 @interface VSLAccount : NSObject
@@ -58,12 +60,24 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
 
  @warning accountConfiguration can't be null.
  */
-- (BOOL)configureWithAccountConfiguration:(VSLAccountConfiguration * _Nonnull)accountConfiguration error:(NSError **)error;
+- (BOOL)configureWithAccountConfiguration:(VSLAccountConfiguration * _Nonnull)accountConfiguration error:(NSError * _Nullable * _Nullable)error;
+
+/**
+ Register the account with pjsua.
+
+ @param error Pointer to NSError pointer. Will be set to a NSError instance if cannot register the account.
+ */
+- (BOOL)registerAccount:(NSError * _Nullable * _Nullable)error;
 
 /**
  This will remove the account from the Endpoint and will also de-register the account from the server.
  */
 - (void)removeAccount;
+
+/**
+ This will set the state of the account. Based on the pjsua account state and the VSLAccountState enum.
+ */
+- (void)accountStateChanged;
 
 /**
  The number that the sip library will call.

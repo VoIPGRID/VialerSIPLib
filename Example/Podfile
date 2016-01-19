@@ -4,14 +4,17 @@ source 'https://github.com/VoIPGRID/PrivatePodSpecs-iOS.git'
 platform :ios, '9.0'
 #use_frameworks! #!! Do not enable, causes an error about "target has transitive dependencies that include static binaries.... "
 
-target 'VialerSIPLib_Example', :exclusive => true do
+def pods_for_all_targets
     pod "VialerSIPLib-iOS", :path => "../"
+end
 
+target 'VialerSIPLib_Example' do
+    pods_for_all_targets
     pod 'HDLumberjackLogFormatter', :git => 'https://hd-apps@bitbucket.org/hd-apps/hdlumberjacklogformatter.git'
 end
 
-target 'VialerSIPLib_Tests', :exclusive => true do
-    pod "VialerSIPLib-iOS", :path => "../"
+target 'VialerSIPLib_Tests' do
+    pods_for_all_targets
     pod "OCMock"
 end
 

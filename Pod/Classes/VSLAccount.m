@@ -6,6 +6,7 @@
 #import "VSLAccount.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import "NSError+VSLError.h"
 #import "NSString+PJString.h"
 #import <VialerPJSIP/pjsua.h>
 #import "VSLCall.h"
@@ -18,7 +19,8 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 @interface VSLAccount()
 @property (readwrite, nonnull, nonatomic) VSLAccountConfiguration *accountConfiguration;
-@property (nonatomic, strong) NSMutableArray *calls;
+@property (strong, nonatomic) NSMutableArray *calls;
+@property (readwrite, nonatomic) VSLAccountState accountState;
 @end
 
 @implementation VSLAccount
@@ -80,14 +82,19 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         [[VSLEndpoint sharedEndpoint] addAccount:self];
     } else {
         if (error != NULL) {
-            NSDictionary *userInfo = @{
-                                       NSLocalizedDescriptionKey: NSLocalizedString(@"Could not configure VSLAccount", nil),
-                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status],
-                                       };
-            *error = [NSError errorWithDomain:VSLAccountErrorDomain code:VSLAccountErrorCannotConfigureAccount userInfo:userInfo];
+            *error = [NSError VSLUnderlyingError:nil
+               localizedDescriptionKey: NSLocalizedString(@"Could not configure VSLAccount", nil)
+           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                           errorDomain:VSLAccountErrorDomain
+                             errorCode:VSLAccountErrorCannotConfigureAccount];
         }
         return NO;
     }
+
+    if (!accountConfiguration.sipRegisterOnAdd) {
+        self.accountState = VSLAccountStateOffline;
+    }
+
     return YES;
 }
 
@@ -98,18 +105,56 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     [[VSLEndpoint sharedEndpoint] removeAccount:self];
 }
 
+- (BOOL)registerAccount:(NSError * _Nullable __autoreleasing *)error {
+    pj_status_t status;
+
+    status = pjsua_acc_set_registration((int)self.accountId, PJ_TRUE);
+
+    if (status != PJ_SUCCESS) {
+        DDLogError(@"Account registration failed");
+        if (error != nil) {
+            *error = [NSError VSLUnderlyingError:nil
+               localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
+           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                           errorDomain:VSLAccountErrorDomain
+                             errorCode:VSLAccountErrorRegistrationFailed];
+        }
+        return NO;
+    }
+    DDLogInfo(@"Account registered succesfully");
+    return YES;
+}
+
+- (void)accountStateChanged {
+    pjsua_acc_info accountInfo;
+    pjsua_acc_get_info((int)self.accountId, &accountInfo);
+
+    pjsip_status_code code = accountInfo.status;
+
+    if (code == 0 || accountInfo.expires == -1) {
+        self.accountState = VSLAccountStateDisconnected;
+    } else if (PJSIP_IS_STATUS_IN_CLASS(code, 100) || PJSIP_IS_STATUS_IN_CLASS(code, 300)) {
+        self.accountState = VSLAccountStateConnecting;
+    } else if (PJSIP_IS_STATUS_IN_CLASS(code, 200)) {
+        self.accountState = VSLAccountStateConnected;
+    } else {
+        self.accountState = VSLAccountStateDisconnected;
+    }
+
+    DDLogInfo(@"Account state changed to: %ld", (long)self.accountState);
+}
+
 #pragma mark - Calling methods
 
 - (void)callNumber:(NSString *)number withCompletion:(void (^)(NSError * _Nullable, VSLCall * _Nullable))completion {
     NSError *callNumberError;
     VSLCall *call = [VSLCall callNumber:number withAccount:self error:&callNumberError];
     if (callNumberError) {
-        NSDictionary *userInfo = @{NSUnderlyingErrorKey : callNumberError,
-                                   NSLocalizedDescriptionKey : NSLocalizedString(@"The call couldn't be setup.", nil)
-                                   };
-        NSError *error =  [NSError errorWithDomain:VSLAccountErrorDomain
-                                              code:VSLAccountErrorFailedCallingNumber
-                                          userInfo:userInfo];
+        NSError *error = [NSError VSLUnderlyingError:callNumberError
+                   localizedDescriptionKey:NSLocalizedString(@"The call couldn't be setup.", nil)
+               localizedFailureReasonError:nil
+                               errorDomain:VSLAccountErrorDomain
+                                 errorCode:VSLAccountErrorFailedCallingNumber];
         completion(error, nil);
     } else {
         completion(nil, call);
