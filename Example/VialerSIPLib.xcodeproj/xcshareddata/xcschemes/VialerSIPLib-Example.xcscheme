@@ -38,11 +38,6 @@
                BlueprintName = "VialerSIPLib_Tests"
                ReferencedContainer = "container:VialerSIPLib.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "VSLUserAgentTests/testCanAddConfigurationToUserAgent">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

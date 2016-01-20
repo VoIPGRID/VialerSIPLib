@@ -8,6 +8,7 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
+#import "VSLEndpoint.h"
 #import "VSLRingback.h"
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -25,6 +26,7 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 @property (readwrite, nonatomic) NSInteger accountId;
 @property (strong, nonatomic) VSLRingback *ringback;
 @property (readwrite, nonatomic) BOOL incoming;
+@property (strong, nonatomic) VSLAccount *account;
 @end
 
 @implementation VSLCall
@@ -119,8 +121,20 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 
         case VSLCallStateDisconnected: {
             [self.ringback stop];
+            [self.account removeCall:self];
         } break;
     }
+}
+
+- (VSLAccount *)account {
+    return [[VSLEndpoint sharedEndpoint] lookupAccount:self.accountId];
+}
+
+- (VSLRingback *)ringback {
+    if (!_ringback) {
+        _ringback = [[VSLRingback alloc] init];
+    }
+    return _ringback;
 }
 
 - (void)updateCallInfo:(pjsua_call_info)callInfo {
@@ -130,13 +144,6 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
     self.lastStatusText = [NSString stringWithPJString:callInfo.last_status_text];
     self.localURI = [NSString stringWithPJString:callInfo.local_info];
     self.remoteURI = [NSString stringWithPJString:callInfo.remote_info];
-}
-
-- (VSLRingback *)ringback {
-    if (!_ringback) {
-        _ringback = [[VSLRingback alloc] init];
-    }
-    return _ringback;
 }
 
 - (BOOL)hangup:(NSError * _Nullable __autoreleasing *)error {

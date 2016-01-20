@@ -32,11 +32,46 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     return self;
 }
 
+#pragma mark - Properties
+
 - (NSMutableArray *)calls {
     if (!_calls) {
         _calls = [NSMutableArray array];
     }
     return _calls;
+}
+
+- (NSInteger)registrationStatus {
+    if (self.accountId == PJSUA_INVALID_ID) {
+        return 0;
+    }
+    pjsua_acc_info accountInfo;
+    pj_status_t status;
+
+    status = pjsua_acc_get_info((pjsua_acc_id)self.accountId, &accountInfo);
+    if (status != PJ_SUCCESS) {
+        return 0;
+    }
+    return accountInfo.status;
+}
+
+- (NSInteger)registrationExpiresTime {
+    if (self.accountId == PJSUA_INVALID_ID) {
+        return -1;
+    }
+
+    pjsua_acc_info accountInfo;
+    pj_status_t status;
+
+    status = pjsua_acc_get_info((pjsua_acc_id)self.accountId, &accountInfo);
+    if (status != PJ_SUCCESS) {
+        return -1;
+    }
+    return accountInfo.expires;
+}
+
+- (BOOL)isRegistered {
+    return (self.registrationStatus / 100 == 2) && (self.registrationExpiresTime > 0);
 }
 
 - (BOOL)configureWithAccountConfiguration:(VSLAccountConfiguration * _Nonnull)accountConfiguration error:(NSError **)error {
@@ -121,7 +156,31 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         }
         return NO;
     }
-    DDLogInfo(@"Account registered succesfully");
+    DDLogInfo(@"Account (un)registered succesfully");
+    return YES;
+}
+
+- (BOOL)unregisterAccount:(NSError * _Nullable __autoreleasing *)error {
+
+    if (!self.isRegistered) {
+        return YES;
+    }
+
+    pj_status_t status;
+    status = pjsua_acc_set_registration((int)self.accountId, PJ_FALSE);
+
+    if (status != PJ_SUCCESS) {
+        DDLogError(@"Account unregistration failed");
+        if (error != nil) {
+            *error = [NSError VSLUnderlyingError:nil
+                         localizedDescriptionKey:NSLocalizedString(@"Account unregistration failed", nil)
+                     localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                     errorDomain:VSLAccountErrorDomain
+                                       errorCode:VSLAccountErrorRegistrationFailed];
+        }
+        return NO;
+    }
+    DDLogInfo(@"Account unregistered succesfully");
     return YES;
 }
 
@@ -176,8 +235,16 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
     if (callIndex != NSNotFound) {
         return [self.calls objectAtIndex:callIndex];
-    } else {
-        return nil;
+    }
+    return nil;
+}
+
+- (void)removeCall:(VSLCall *)call {
+    [self.calls removeObject:call];
+
+    // All calls are ended, we unregister the account
+    if ([self.calls count] == 0) {
+        [self unregisterAccount:nil];
     }
 }
 

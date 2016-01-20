@@ -14,7 +14,6 @@
 #import "VSLEndpointConfiguration.h"
 
 static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @interface VialerSIPLib()
 @property (strong, nonatomic) VSLEndpoint *endpoint;
@@ -84,7 +83,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
     if (!account) {
         NSError *accountConfigError;
-        VSLAccount *account = [self createAccountWithSipUser:sipUser error:&accountConfigError];
+        account = [self createAccountWithSipUser:sipUser error:&accountConfigError];
         if (!account) {
             if (error != nil) {
                 *error = [NSError VSLUnderlyingError:accountConfigError
@@ -96,21 +95,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             }
             return NO;
         }
-
-        NSError *accountError;
-        BOOL success = [account registerAccount:&accountError];
-
-        if (!success) {
-            if (error != nil) {
-                *error = [NSError VSLUnderlyingError:accountError
-                   localizedDescriptionKey:NSLocalizedString(@"The registration of the account has failed.", nil)
-               localizedFailureReasonError:nil
-                               errorDomain:VialerSIPLibErrorDomain
-                                 errorCode:VialerSIPLibErrorAccountRegistrationFailed];
-            }
-            return NO;
-        }
-        return YES;
     }
 
     NSError *accountError;

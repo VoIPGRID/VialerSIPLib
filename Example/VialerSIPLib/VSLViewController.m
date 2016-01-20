@@ -43,6 +43,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     return _account;
 }
 
+- (void)setCall:(VSLCall *)call {
+    if (_call) {
+        [_call removeObserver:self forKeyPath:@"callState"];
+        [_call removeObserver:self forKeyPath:@"mediaState"];
+    }
+    _call = call;
+}
+
 - (IBAction)makeCall:(id)sender {
     [self.account callNumber:self.numberToCall.text withCompletion:^(NSError *error, VSLCall *call) {
         if (error) {

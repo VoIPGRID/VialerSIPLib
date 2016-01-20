@@ -97,4 +97,22 @@
     [endpointMock stopMocking];
 }
 
+- (void)testAccountRegistrationStatusIsInvalidOnDefault {
+    XCTAssertEqual(self.account.registrationStatus, 0, @"The registration status of an account should be 0 on default.");
+}
+
+- (void)testAccountRegistrationExpireTimeIsNegativeValueOndefault {
+    XCTAssertEqual(self.account.registrationExpiresTime, -1, @"The account should have a negative registration time on default.");
+}
+
+- (void)testAccountIsntRegisteredOnDefault {
+    XCTAssertFalse(self.account.isRegistered, @"An account should not be registered on default.");
+}
+
+- (void)testAccountCanUnRegisterWhenNotRegistered {
+    NSError *error;
+    XCTAssertTrue([self.account unregisterAccount:&error], @"It should be possible to unregister when not registered");
+    XCTAssertNil(error, @"There should be no error when unregistering the account.");
+}
+
 @end
