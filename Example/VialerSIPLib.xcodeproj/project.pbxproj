@@ -23,7 +23,14 @@
 		C424B50B1C3BD27500178E52 /* VSLAccountConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50A1C3BD27500178E52 /* VSLAccountConfigurationTests.m */; };
 		C424B50D1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50C1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m */; };
 		C424B50F1C3BDBD900178E52 /* VSLTransportConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50E1C3BDBD900178E52 /* VSLTransportConfigurationTests.m */; };
+		C42858241C4FC1F600BAF52C /* Classes.md in Sources */ = {isa = PBXBuildFile; fileRef = C42858231C4FC1F600BAF52C /* Classes.md */; };
 		C47182491C3DC87700AAC58A /* ringback.wav in Resources */ = {isa = PBXBuildFile; fileRef = C47182481C3DC87700AAC58A /* ringback.wav */; };
+		C48736141C4F897D00604413 /* GettingStarted.md in Sources */ = {isa = PBXBuildFile; fileRef = C48736131C4F897D00604413 /* GettingStarted.md */; };
+		C48736171C4F904100604413 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = C48736161C4F904100604413 /* README.md */; };
+		C48736191C4F912C00604413 /* Middleware.md in Sources */ = {isa = PBXBuildFile; fileRef = C48736181C4F912C00604413 /* Middleware.md */; };
+		C487361B1C4F91BC00604413 /* Goals.md in Sources */ = {isa = PBXBuildFile; fileRef = C487361A1C4F91BC00604413 /* Goals.md */; };
+		C487361D1C4F927300604413 /* Pjsip.md in Sources */ = {isa = PBXBuildFile; fileRef = C487361C1C4F927300604413 /* Pjsip.md */; };
+		C487361F1C4F96B200604413 /* Credits.md in Sources */ = {isa = PBXBuildFile; fileRef = C487361E1C4F96B200604413 /* Credits.md */; };
 		F27386111C170862002C4CD1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F27386131C170862002C4CD1 /* Main.storyboard */; };
 		F27386181C170B3C002C4CD1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F273861A1C170B3C002C4CD1 /* LaunchScreen.storyboard */; };
 		F930F6C71C22F33600B8DBD0 /* SipUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F930F6C61C22F33600B8DBD0 /* SipUser.m */; };
@@ -71,7 +78,14 @@
 		C424B50A1C3BD27500178E52 /* VSLAccountConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountConfigurationTests.m; sourceTree = "<group>"; };
 		C424B50C1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLEndpointConfigurationTests.m; sourceTree = "<group>"; };
 		C424B50E1C3BDBD900178E52 /* VSLTransportConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLTransportConfigurationTests.m; sourceTree = "<group>"; };
+		C42858231C4FC1F600BAF52C /* Classes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Classes.md; path = ../Documentation/Classes.md; sourceTree = "<group>"; };
 		C47182481C3DC87700AAC58A /* ringback.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ringback.wav; sourceTree = "<group>"; };
+		C48736131C4F897D00604413 /* GettingStarted.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = GettingStarted.md; path = ../Documentation/GettingStarted.md; sourceTree = "<group>"; };
+		C48736161C4F904100604413 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../Documentation/README.md; sourceTree = "<group>"; };
+		C48736181C4F912C00604413 /* Middleware.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Middleware.md; path = ../Documentation/Middleware.md; sourceTree = "<group>"; };
+		C487361A1C4F91BC00604413 /* Goals.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Goals.md; path = ../Documentation/Goals.md; sourceTree = "<group>"; };
+		C487361C1C4F927300604413 /* Pjsip.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Pjsip.md; path = ../Documentation/Pjsip.md; sourceTree = "<group>"; };
+		C487361E1C4F96B200604413 /* Credits.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Credits.md; path = ../Documentation/Credits.md; sourceTree = "<group>"; };
 		F27386101C16EE96002C4CD1 /* VialerSIPLib-iOS.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = "VialerSIPLib-iOS.podspec"; path = "../VialerSIPLib-iOS.podspec"; sourceTree = "<group>"; };
 		F27386121C170862002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F27386191C170B3C002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -197,6 +211,7 @@
 				F27386101C16EE96002C4CD1 /* VialerSIPLib-iOS.podspec */,
 				5D24E0A5A14D1689830035B2 /* README.md */,
 				751644FF6D649E93790619BF /* LICENSE */,
+				C48736151C4F901600604413 /* Documentation */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
@@ -238,6 +253,20 @@
 				C424B50E1C3BDBD900178E52 /* VSLTransportConfigurationTests.m */,
 			);
 			name = Configurations;
+			sourceTree = "<group>";
+		};
+		C48736151C4F901600604413 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				C48736131C4F897D00604413 /* GettingStarted.md */,
+				C48736161C4F904100604413 /* README.md */,
+				C48736181C4F912C00604413 /* Middleware.md */,
+				C487361A1C4F91BC00604413 /* Goals.md */,
+				C487361C1C4F927300604413 /* Pjsip.md */,
+				C487361E1C4F96B200604413 /* Credits.md */,
+				C42858231C4FC1F600BAF52C /* Classes.md */,
+			);
+			name = Documentation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -445,10 +474,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C48736171C4F904100604413 /* README.md in Sources */,
 				6003F59E195388D20070C39A /* AppDelegate.m in Sources */,
+				C487361D1C4F927300604413 /* Pjsip.md in Sources */,
+				C48736141C4F897D00604413 /* GettingStarted.md in Sources */,
+				C42858241C4FC1F600BAF52C /* Classes.md in Sources */,
 				6003F5A7195388D20070C39A /* VSLViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				C487361B1C4F91BC00604413 /* Goals.md in Sources */,
+				C48736191C4F912C00604413 /* Middleware.md in Sources */,
 				F930F6C71C22F33600B8DBD0 /* SipUser.m in Sources */,
+				C487361F1C4F96B200604413 /* Credits.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

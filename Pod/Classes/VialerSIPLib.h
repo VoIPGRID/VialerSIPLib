@@ -30,6 +30,7 @@ typedef NS_ENUM (NSUInteger, VialerSIPLibErrors) {
 @class VSLTransportConfiguration;
 
 @interface VialerSIPLib : NSObject
+
 /**
  * The shared instance for the sip library.
  */
@@ -69,10 +70,15 @@ typedef NS_ENUM (NSUInteger, VialerSIPLibErrors) {
  */
 - (BOOL)registerAccount:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser error:(NSError * _Nullable * _Nullable)error;
 
+<<<<<<< HEAD
 /**
  This will return the first account that is available.
 
  @return VSLAccount instance or null.
+=======
+/**
+ This will return the first account available
+>>>>>>> 9685789... Start of documentation
  */
 - (VSLAccount * _Nullable)firstAccount;
 

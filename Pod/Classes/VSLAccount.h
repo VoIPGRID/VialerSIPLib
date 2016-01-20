@@ -74,12 +74,16 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
  */
 - (void)removeAccount;
 
+<<<<<<< HEAD
 /**
  This will set the state of the account. Based on the pjsua account state and the VSLAccountState enum.
  */
 - (void)accountStateChanged;
 
 /**
+=======
+/**
+>>>>>>> 9685789... Start of documentation
  The number that the sip library will call.
 
  @param number The phonenumber which will be called.
