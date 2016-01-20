@@ -8,6 +8,7 @@
 #import "VSLEndpointConfiguration.h"
 
 @class VSLAccount;
+@class VSLCall;
 @class VSLTransportConfiguration;
 
 typedef NS_ENUM(NSInteger, VSLEndpointError) {
@@ -28,6 +29,7 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
 
 @property (nonatomic) VSLEndpointState state;
 @property (readonly) pj_pool_t * _Nullable pjPool;
+@property (copy, nonatomic) void (^ _Nonnull incomingCallBlock)(VSLCall * _Nullable call);
 
 /**
  References to the account that have been added to the endpoint.
@@ -62,7 +64,7 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
 
  @warning endpointConfiguration can't be null.
  */
-- (BOOL)startEndpointWithEndpointConfiguration:(VSLEndpointConfiguration  * _Nonnull)endpointConfiguration error:(NSError **)error;
+- (BOOL)startEndpointWithEndpointConfiguration:(VSLEndpointConfiguration  * _Nonnull)endpointConfiguration error:(NSError * _Nullable * _Nullable)error;
 
 /**
  This will add the account as reference to the endpoint.
@@ -81,4 +83,15 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
  @warning account can't be null.
  */
 - (void)removeAccount:(VSLAccount * _Nonnull)account;
+
+/**
+ Returns an account if it is available otherwise return nil.
+ 
+ @param sipUserName NSString the sip username you want to check.
+ 
+ @returns VSLAccount instance of the account. It can also return null
+ */
+- (VSLAccount * _Nullable)getAccountWithSipUsername:(NSString * _Nonnull)sipUsername;
+
+
 @end

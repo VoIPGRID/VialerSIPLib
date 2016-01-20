@@ -24,6 +24,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 @property (weak, nonatomic) IBOutlet UILabel *localUriLabel;
 @property (weak, nonatomic) IBOutlet UILabel *remoteUriLabel;
 @property (weak, nonatomic) IBOutlet UILabel *incomingLabel;
+@property (weak, nonatomic) IBOutlet UILabel *accountStateLabel;
 
 @property (strong, nonatomic) VSLCall *call;
 @property (strong, nonatomic) VSLAccount *account;
@@ -34,6 +35,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
+
 - (VSLAccount *)account {
     if (!_account) {
         _account = [[VialerSIPLib sharedInstance] firstAccount];
@@ -55,6 +57,27 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }];
 }
 
+- (IBAction)registerAccount:(id)sender {
+    [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
+
+    SipUser *testUser = [[SipUser alloc] init];
+    testUser.sipUsername = KeysUsername;
+    testUser.sipPassword = KeysPassword;
+    testUser.sipDomain = KeysDomain;
+    testUser.sipProxy = KeysProxy;
+
+    NSError *error;
+    BOOL success = [[VialerSIPLib sharedInstance] registerAccount:testUser error:&error];
+
+    if (success && error == nil) {
+        [[VialerSIPLib sharedInstance] setIncomingCallBlock:^(VSLCall * _Nonnull call) {
+            DDLogInfo(@"Incoming call");
+        }];
+    } else {
+        DDLogError(@"%@", error);
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
 
     if (object == self.call) {
@@ -63,6 +86,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             if (self.call.callState == VSLCallStateDisconnected) {
                 [UIDevice currentDevice].proximityMonitoringEnabled = NO;
             }
+        });
+    }
+    if (object == self.account) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.accountStateLabel.text = [NSString stringWithFormat:@"%ld", (long)self.account.accountState];
         });
     }
 }
