@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		06FBC581B7042B0B58655071 /* libPods-VialerSIPLib_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C083CB4DBC3298A6F9F99281 /* libPods-VialerSIPLib_Example.a */; };
-		4B951C1AAC96557B84C916F9 /* libPods-VialerSIPLib_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B938C3E8CF55CE78AAEA76B /* libPods-VialerSIPLib_Tests.a */; };
+		5A762C789D3006E534D6FF07 /* libPods-VialerSIPLib_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFB1BFDBB0F2EAB0F29BA879 /* libPods-VialerSIPLib_Example.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -23,20 +22,17 @@
 		C424B50B1C3BD27500178E52 /* VSLAccountConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50A1C3BD27500178E52 /* VSLAccountConfigurationTests.m */; };
 		C424B50D1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50C1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m */; };
 		C424B50F1C3BDBD900178E52 /* VSLTransportConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50E1C3BDBD900178E52 /* VSLTransportConfigurationTests.m */; };
-		C42858241C4FC1F600BAF52C /* Classes.md in Sources */ = {isa = PBXBuildFile; fileRef = C42858231C4FC1F600BAF52C /* Classes.md */; };
 		C47182491C3DC87700AAC58A /* ringback.wav in Resources */ = {isa = PBXBuildFile; fileRef = C47182481C3DC87700AAC58A /* ringback.wav */; };
-		C48736141C4F897D00604413 /* GettingStarted.md in Sources */ = {isa = PBXBuildFile; fileRef = C48736131C4F897D00604413 /* GettingStarted.md */; };
-		C48736171C4F904100604413 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = C48736161C4F904100604413 /* README.md */; };
-		C48736191C4F912C00604413 /* Middleware.md in Sources */ = {isa = PBXBuildFile; fileRef = C48736181C4F912C00604413 /* Middleware.md */; };
-		C487361B1C4F91BC00604413 /* Goals.md in Sources */ = {isa = PBXBuildFile; fileRef = C487361A1C4F91BC00604413 /* Goals.md */; };
-		C487361D1C4F927300604413 /* Pjsip.md in Sources */ = {isa = PBXBuildFile; fileRef = C487361C1C4F927300604413 /* Pjsip.md */; };
-		C487361F1C4F96B200604413 /* Credits.md in Sources */ = {isa = PBXBuildFile; fileRef = C487361E1C4F96B200604413 /* Credits.md */; };
 		F27386111C170862002C4CD1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F27386131C170862002C4CD1 /* Main.storyboard */; };
 		F27386181C170B3C002C4CD1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F273861A1C170B3C002C4CD1 /* LaunchScreen.storyboard */; };
 		F930F6C71C22F33600B8DBD0 /* SipUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F930F6C61C22F33600B8DBD0 /* SipUser.m */; };
+		F93260141C4FE47400BF6AC7 /* VSLRingtone.m in Sources */ = {isa = PBXBuildFile; fileRef = F93260131C4FE47400BF6AC7 /* VSLRingtone.m */; };
+		F951E38D1C56214300FA480F /* VialerSIPLibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F951E38C1C56214300FA480F /* VialerSIPLibTests.m */; };
 		F9906C211C3A85AC0044EA99 /* VSLAccountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */; };
 		F9906C231C3A85E80044EA99 /* VSLEndpointTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C221C3A85E80044EA99 /* VSLEndpointTests.m */; };
 		F9906C251C3A87EB0044EA99 /* NSStringPlusPJStringTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C241C3A87EB0044EA99 /* NSStringPlusPJStringTests.m */; };
+		F9D9EE561C51058800E10546 /* ringtone.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9D9EE551C51058800E10546 /* ringtone.wav */; };
+		FF8B8158F4BF1F12DE915614 /* libPods-VialerSIPLib_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 036F58935349CC798B2B170D /* libPods-VialerSIPLib_Tests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,8 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		04CBB586FCFC033CC914DEDC /* Pods-VialerSIPLib_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		0B938C3E8CF55CE78AAEA76B /* libPods-VialerSIPLib_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		036F58935349CC798B2B170D /* libPods-VialerSIPLib_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D24E0A5A14D1689830035B2 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* VialerSIPLib_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VialerSIPLib_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -70,10 +65,10 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		751644FF6D649E93790619BF /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		856F415400DF5E064D1143F1 /* Pods-VialerSIPLib_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		A38FC5E3AF148C54FC517D6A /* Pods-VialerSIPLib_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		C0576C33E4A63D9282B3EFC5 /* Pods-VialerSIPLib_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.release.xcconfig"; sourceTree = "<group>"; };
-		C083CB4DBC3298A6F9F99281 /* libPods-VialerSIPLib_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AF78300327D7684E539E9BC /* Pods-VialerSIPLib_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		9ED8C066BA174FF5A4176F2B /* Pods-VialerSIPLib_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		A06A21B11CC3D21DEDE777BE /* Pods-VialerSIPLib_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.release.xcconfig"; sourceTree = "<group>"; };
+		B412D6296DE60D890B84F665 /* Pods-VialerSIPLib_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		C424B5001C3BAD2E00178E52 /* Keys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keys.h; sourceTree = "<group>"; };
 		C424B50A1C3BD27500178E52 /* VSLAccountConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountConfigurationTests.m; sourceTree = "<group>"; };
 		C424B50C1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLEndpointConfigurationTests.m; sourceTree = "<group>"; };
@@ -86,14 +81,20 @@
 		C487361A1C4F91BC00604413 /* Goals.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Goals.md; path = ../Documentation/Goals.md; sourceTree = "<group>"; };
 		C487361C1C4F927300604413 /* Pjsip.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Pjsip.md; path = ../Documentation/Pjsip.md; sourceTree = "<group>"; };
 		C487361E1C4F96B200604413 /* Credits.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Credits.md; path = ../Documentation/Credits.md; sourceTree = "<group>"; };
+		EFB1BFDBB0F2EAB0F29BA879 /* libPods-VialerSIPLib_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F27386101C16EE96002C4CD1 /* VialerSIPLib-iOS.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = "VialerSIPLib-iOS.podspec"; path = "../VialerSIPLib-iOS.podspec"; sourceTree = "<group>"; };
 		F27386121C170862002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F27386191C170B3C002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F930F6C51C22F33600B8DBD0 /* SipUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SipUser.h; sourceTree = "<group>"; };
 		F930F6C61C22F33600B8DBD0 /* SipUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SipUser.m; sourceTree = "<group>"; };
+		F93260121C4FE47400BF6AC7 /* VSLRingtone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLRingtone.h; sourceTree = "<group>"; };
+		F93260131C4FE47400BF6AC7 /* VSLRingtone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLRingtone.m; sourceTree = "<group>"; };
+		F951E38C1C56214300FA480F /* VialerSIPLibTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VialerSIPLibTests.m; sourceTree = "<group>"; };
 		F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountTests.m; sourceTree = "<group>"; };
 		F9906C221C3A85E80044EA99 /* VSLEndpointTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLEndpointTests.m; sourceTree = "<group>"; };
 		F9906C241C3A87EB0044EA99 /* NSStringPlusPJStringTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringPlusPJStringTests.m; sourceTree = "<group>"; };
+		F9D9EE551C51058800E10546 /* ringtone.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ringtone.wav; sourceTree = "<group>"; };
+		F9D9EE5A1C510F9C00E10546 /* mute.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = mute.caf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +105,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				06FBC581B7042B0B58655071 /* libPods-VialerSIPLib_Example.a in Frameworks */,
+				5A762C789D3006E534D6FF07 /* libPods-VialerSIPLib_Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +116,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				4B951C1AAC96557B84C916F9 /* libPods-VialerSIPLib_Tests.a in Frameworks */,
+				FF8B8158F4BF1F12DE915614 /* libPods-VialerSIPLib_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,7 +131,7 @@
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				AD592123983BAC144E64F976 /* Pods */,
+				AC7B89A76CE18E4E22EC9575 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -150,8 +151,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				C083CB4DBC3298A6F9F99281 /* libPods-VialerSIPLib_Example.a */,
-				0B938C3E8CF55CE78AAEA76B /* libPods-VialerSIPLib_Tests.a */,
+				EFB1BFDBB0F2EAB0F29BA879 /* libPods-VialerSIPLib_Example.a */,
+				036F58935349CC798B2B170D /* libPods-VialerSIPLib_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -165,12 +166,16 @@
 				F930F6C61C22F33600B8DBD0 /* SipUser.m */,
 				6003F5A5195388D20070C39A /* VSLViewController.h */,
 				6003F5A6195388D20070C39A /* VSLViewController.m */,
+				F93260121C4FE47400BF6AC7 /* VSLRingtone.h */,
+				F93260131C4FE47400BF6AC7 /* VSLRingtone.m */,
 				F27386131C170862002C4CD1 /* Main.storyboard */,
 				6003F5A8195388D20070C39A /* Assets.xcassets */,
 				F273861A1C170B3C002C4CD1 /* LaunchScreen.storyboard */,
 				6003F595195388D20070C39A /* Info.plist */,
 				C424B5001C3BAD2E00178E52 /* Keys.h */,
 				C47182481C3DC87700AAC58A /* ringback.wav */,
+				F9D9EE551C51058800E10546 /* ringtone.wav */,
+				F9D9EE5A1C510F9C00E10546 /* mute.caf */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
 			name = "Example for VialerSIPLib";
@@ -216,13 +221,13 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		AD592123983BAC144E64F976 /* Pods */ = {
+		AC7B89A76CE18E4E22EC9575 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				04CBB586FCFC033CC914DEDC /* Pods-VialerSIPLib_Example.debug.xcconfig */,
-				C0576C33E4A63D9282B3EFC5 /* Pods-VialerSIPLib_Example.release.xcconfig */,
-				A38FC5E3AF148C54FC517D6A /* Pods-VialerSIPLib_Tests.debug.xcconfig */,
-				856F415400DF5E064D1143F1 /* Pods-VialerSIPLib_Tests.release.xcconfig */,
+				9ED8C066BA174FF5A4176F2B /* Pods-VialerSIPLib_Example.debug.xcconfig */,
+				A06A21B11CC3D21DEDE777BE /* Pods-VialerSIPLib_Example.release.xcconfig */,
+				B412D6296DE60D890B84F665 /* Pods-VialerSIPLib_Tests.debug.xcconfig */,
+				8AF78300327D7684E539E9BC /* Pods-VialerSIPLib_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -241,6 +246,7 @@
 				C424B5091C3BD25700178E52 /* Configurations */,
 				F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */,
 				F9906C221C3A85E80044EA99 /* VSLEndpointTests.m */,
+				F951E38C1C56214300FA480F /* VialerSIPLibTests.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -276,12 +282,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "VialerSIPLib_Example" */;
 			buildPhases = (
-				9B856BFD86BAD3D98476A008 /* Check Pods Manifest.lock */,
+				90440D165B998D2343DC908F /* Check Pods Manifest.lock */,
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				714A87EB675A23BD4F23AF08 /* Embed Pods Frameworks */,
-				20B66737FB54A5AC59D36ED5 /* Copy Pods Resources */,
+				E9BBFB8E7D17E2343A94C0A3 /* Embed Pods Frameworks */,
+				CEA8A01796A604FA39BB0FCB /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -296,12 +302,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "VialerSIPLib_Tests" */;
 			buildPhases = (
-				4C508B8437EC22A021C9D89B /* Check Pods Manifest.lock */,
+				5E659E2C110656317E799F39 /* Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				6256545924F65751D1408830 /* Embed Pods Frameworks */,
-				AF43665F922CCF5CD0AA9AA2 /* Copy Pods Resources */,
+				46106E293B33597874FEAC0D /* Embed Pods Frameworks */,
+				95333C79F12ADD449FED570C /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -362,6 +368,7 @@
 				F27386181C170B3C002C4CD1 /* LaunchScreen.storyboard in Resources */,
 				C47182491C3DC87700AAC58A /* ringback.wav in Resources */,
 				F27386111C170862002C4CD1 /* Main.storyboard in Resources */,
+				F9D9EE561C51058800E10546 /* ringtone.wav in Resources */,
 				6003F5A9195388D20070C39A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -377,37 +384,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		20B66737FB54A5AC59D36ED5 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4C508B8437EC22A021C9D89B /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		6256545924F65751D1408830 /* Embed Pods Frameworks */ = {
+		46106E293B33597874FEAC0D /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -422,22 +399,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		714A87EB675A23BD4F23AF08 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9B856BFD86BAD3D98476A008 /* Check Pods Manifest.lock */ = {
+		5E659E2C110656317E799F39 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -452,7 +414,22 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		AF43665F922CCF5CD0AA9AA2 /* Copy Pods Resources */ = {
+		90440D165B998D2343DC908F /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		95333C79F12ADD449FED570C /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -467,6 +444,36 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		CEA8A01796A604FA39BB0FCB /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E9BBFB8E7D17E2343A94C0A3 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -474,17 +481,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C48736171C4F904100604413 /* README.md in Sources */,
 				6003F59E195388D20070C39A /* AppDelegate.m in Sources */,
-				C487361D1C4F927300604413 /* Pjsip.md in Sources */,
-				C48736141C4F897D00604413 /* GettingStarted.md in Sources */,
-				C42858241C4FC1F600BAF52C /* Classes.md in Sources */,
 				6003F5A7195388D20070C39A /* VSLViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				C487361B1C4F91BC00604413 /* Goals.md in Sources */,
-				C48736191C4F912C00604413 /* Middleware.md in Sources */,
+				F93260141C4FE47400BF6AC7 /* VSLRingtone.m in Sources */,
 				F930F6C71C22F33600B8DBD0 /* SipUser.m in Sources */,
-				C487361F1C4F96B200604413 /* Credits.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,6 +494,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C424B50F1C3BDBD900178E52 /* VSLTransportConfigurationTests.m in Sources */,
+				F951E38D1C56214300FA480F /* VialerSIPLibTests.m in Sources */,
 				F9906C251C3A87EB0044EA99 /* NSStringPlusPJStringTests.m in Sources */,
 				C424B50D1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m in Sources */,
 				F9906C231C3A85E80044EA99 /* VSLEndpointTests.m in Sources */,
@@ -614,7 +616,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 04CBB586FCFC033CC914DEDC /* Pods-VialerSIPLib_Example.debug.xcconfig */;
+			baseConfigurationReference = 9ED8C066BA174FF5A4176F2B /* Pods-VialerSIPLib_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ENABLE_BITCODE = NO;
@@ -630,7 +632,7 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0576C33E4A63D9282B3EFC5 /* Pods-VialerSIPLib_Example.release.xcconfig */;
+			baseConfigurationReference = A06A21B11CC3D21DEDE777BE /* Pods-VialerSIPLib_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ENABLE_BITCODE = NO;
@@ -645,7 +647,7 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A38FC5E3AF148C54FC517D6A /* Pods-VialerSIPLib_Tests.debug.xcconfig */;
+			baseConfigurationReference = B412D6296DE60D890B84F665 /* Pods-VialerSIPLib_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -669,7 +671,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 856F415400DF5E064D1143F1 /* Pods-VialerSIPLib_Tests.release.xcconfig */;
+			baseConfigurationReference = 8AF78300327D7684E539E9BC /* Pods-VialerSIPLib_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (

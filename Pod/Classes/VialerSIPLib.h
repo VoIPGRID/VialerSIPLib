@@ -105,7 +105,7 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 - (BOOL)registerAccount:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser error:(NSError * _Nullable * _Nullable)error;
 
-/**
+/*
  *  This will return the first account that is available.
  *
  *  @return VSLAccount instance or null.

@@ -248,4 +248,12 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     }
 }
 
+- (VSLCall *)firstCall {
+    if (self.calls.count > 0) {
+        return self.calls[0];
+    } else {
+        return nil;
+    }
+}
+
 @end

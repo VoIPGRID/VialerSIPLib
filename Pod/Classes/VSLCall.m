@@ -14,6 +14,14 @@
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 
+/**
+ The states which the media can have.
+ */
+typedef NS_ENUM(NSInteger, VSLStatusCodes) {
+    VSLStatusCodesBusyHere = PJSIP_SC_BUSY_HERE,
+
+};
+
 @interface VSLCall()
 @property (readwrite, nonatomic) VSLCallState callState;
 @property (readwrite, nonatomic) NSString *callStateText;
@@ -149,20 +157,55 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 - (BOOL)hangup:(NSError * _Nullable __autoreleasing *)error {
     pj_status_t status;
 
-    if (self.callId != PJSUA_INVALID_ID && self.callState != VSLCallStateDisconnected) {
-        status = pjsua_call_hangup((int)self.callId, 0, NULL, NULL);
-        if (status != PJ_SUCCESS) {
-            if (error != NULL) {
-                *error = [NSError VSLUnderlyingError:nil
-                   localizedDescriptionKey:NSLocalizedString(@"Could not hangup call", nil)
-               localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                               errorDomain:VSLCallErrorDomain
-                                 errorCode:VSLCallErrorCannotHangupCall];
+    if (self.callId != PJSUA_INVALID_ID) {
+        if (self.callState == VSLCallStateIncoming) {
+            status = pjsua_call_hangup((int)self.callId, VSLStatusCodesBusyHere, NULL, NULL);
+            if (status != PJ_SUCCESS) {
+                if (error != NULL) {
+                    *error = [NSError VSLUnderlyingError:nil
+                                 localizedDescriptionKey:NSLocalizedString(@"Could not hangup call", nil)
+                             localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                             errorDomain:VSLCallErrorDomain
+                                               errorCode:VSLCallErrorCannotHangupCall];
+                }
+                return NO;
             }
-            return NO;
+        } else if (self.callState != VSLCallStateDisconnected) {
+            status = pjsua_call_hangup((int)self.callId, 0, NULL, NULL);
+            if (status != PJ_SUCCESS) {
+                if (error != NULL) {
+                    *error = [NSError VSLUnderlyingError:nil
+                                 localizedDescriptionKey:NSLocalizedString(@"Could not hangup call", nil)
+                             localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                             errorDomain:VSLCallErrorDomain
+                                               errorCode:VSLCallErrorCannotHangupCall];
+                }
+                return NO;
+            }
         }
     }
     return YES;
+}
+
+- (BOOL)answer:(NSError *__autoreleasing  _Nullable *)error {
+    pj_status_t status;
+
+    if (self.callId != PJSUA_INVALID_ID) {
+        status = pjsua_call_answer((int)self.callId, PJSIP_SC_OK, NULL, NULL);
+
+        if (status != PJ_SUCCESS) {
+            if (error != NULL) {
+                *error = [NSError VSLUnderlyingError:nil
+                             localizedDescriptionKey:NSLocalizedString(@"Could not answer call", nil)
+                         localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                         errorDomain:VSLCallErrorDomain
+                                           errorCode:VSLCallErrorCannotHangupCall];
+            }
+            return NO;
+        }
+        return YES;
+    }
+    return NO;
 }
 
 - (void)callStateChanged:(pjsua_call_info)callInfo {
