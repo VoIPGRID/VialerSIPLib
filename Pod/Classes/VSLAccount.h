@@ -104,7 +104,6 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
  */
 - (BOOL)registerAccount:(NSError * _Nullable * _Nullable)error;
 
-
 /**
  *  Unregister the account if registered.
  *

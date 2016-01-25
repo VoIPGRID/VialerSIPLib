@@ -8,11 +8,20 @@
 #import <VialerPJSIP/pjsua.h>
 
 /**
- The posible errors VSLCall can return.
+ *  The posible errors VSLCall can return.
  */
 typedef NS_ENUM(NSInteger, VSLCallErrors) {
+    /**
+     *  Unable to create a PJSip thread.
+     */
     VSLCallErrorCannotCreateThread,
+    /**
+     *  Unable to create call.
+     */
     VSLCallErrorCannotCreateCall,
+    /**
+     *  Unable to hangup call.
+     */
     VSLCallErrorCannotHangupCall
 };
 
