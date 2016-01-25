@@ -157,4 +157,6 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
  */
 - (void)removeCall:(VSLCall * _Nonnull)call;
 
+- (VSLCall * _Nullable)firstCall;
+
 @end

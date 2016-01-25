@@ -158,6 +158,9 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  */
 - (BOOL)hangup:(NSError * _Nullable * _Nullable)error;
 
+- (BOOL)answer:(NSError * _Nullable * _Nullable)error;
+
+
 /**
  *  This will change the callState of the call.
  *

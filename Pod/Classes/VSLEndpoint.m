@@ -308,9 +308,6 @@ static void onRegState(pjsua_acc_id acc_id) {
     }
 }
 
-//TODO: implement these
-
-
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
     DDLogInfo(@"Incoming call");
     DDLogInfo(@"AccountID: %d", acc_id);
@@ -320,7 +317,6 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
     if (account) {
 
         VSLCall *call = [VSLCall callWithId:call_id andAccountId:acc_id];
-        DDLogWarn(@"%@", call);
         if (call) {
             [account addCall:call];
 
@@ -331,6 +327,7 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
     }
 }
 
+//TODO: implement these
 
 static void onCallTransferStatus(pjsua_call_id call_id, int st_code, const pj_str_t *st_text, pj_bool_t final, pj_bool_t *p_cont) {
     DDLogVerbose(@"Updated transfer");

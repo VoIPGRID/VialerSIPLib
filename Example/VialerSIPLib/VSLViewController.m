@@ -9,6 +9,7 @@
 #import "Keys.h"
 #import "SipUser.h"
 #import <VialerSIPLib-iOS/VialerSIPLib.h>
+#import "VSLRingtone.h"
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
@@ -25,15 +26,30 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 @property (weak, nonatomic) IBOutlet UILabel *remoteUriLabel;
 @property (weak, nonatomic) IBOutlet UILabel *incomingLabel;
 @property (weak, nonatomic) IBOutlet UILabel *accountStateLabel;
+@property (weak, nonatomic) IBOutlet UIButton *acceptCallButton;
+@property (weak, nonatomic) IBOutlet UIButton *makeCallButton;
 
 @property (strong, nonatomic) VSLCall *call;
 @property (strong, nonatomic) VSLAccount *account;
+@property (strong, nonatomic) VSLRingtone *ringtone;
 @end
 
 @implementation VSLViewController
 
+// Overriding both setter and getter this is needed.
+@synthesize ringtone = _ringtone;
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(handleEnteredBackground:) name: UIApplicationDidEnterBackgroundNotification object:nil];
+
+    [VialerSIPLib sharedInstance].incomingCallBlock = ^(VSLCall * _Nonnull call) {
+        [call addObserver:self forKeyPath:@"callState" options:0 context:NULL];
+        [call addObserver:self forKeyPath:@"mediaState" options:0 context:NULL];
+        self.makeCallButton.enabled = NO;
+        self.call = call;
+        [self.ringtone start];
+    };
 }
 
 - (VSLAccount *)account {
@@ -51,6 +67,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     _call = call;
 }
 
+- (VSLRingtone *)ringtone {
+    if (!_ringtone) {
+        NSURL *fileUrl = [[NSBundle mainBundle] URLForResource:@"ringtone" withExtension:@"wav"];
+        _ringtone = [[VSLRingtone alloc] initWithRingtonePath:fileUrl];
+    }
+    return _ringtone;
+}
+
 - (IBAction)makeCall:(id)sender {
     [self.account callNumber:self.numberToCall.text withCompletion:^(NSError *error, VSLCall *call) {
         if (error) {
@@ -65,6 +89,19 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }];
 }
 
+- (IBAction)acceptCall:(id)sender {
+    if (self.call) {
+        NSError *error;
+        [self.call answer:&error];
+        if (error) {
+            DDLogError(@"Error accepting call: %@", error);
+        } else {
+            [UIDevice currentDevice].proximityMonitoringEnabled = YES;
+            [self.ringtone stop];
+        }
+    }
+}
+
 - (IBAction)registerAccount:(id)sender {
     [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
 
@@ -77,12 +114,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSError *error;
     BOOL success = [[VialerSIPLib sharedInstance] registerAccount:testUser error:&error];
 
-    if (success && error == nil) {
-        [[VialerSIPLib sharedInstance] setIncomingCallBlock:^(VSLCall * _Nonnull call) {
-            DDLogInfo(@"Incoming call");
-        }];
+    if (!success) {
+        if (error != NULL) {
+            DDLogError(@"%@", error);
+        }
+    }
+}
+
+- (IBAction)endCall:(id)sender {
+    NSError *error;
+    [self.call hangup:&error];
+    [self.ringtone stop];
+    if (error) {
+        DDLogError(@"Error hangup call: %@", error);
     } else {
-        DDLogError(@"%@", error);
+        self.call = nil;
     }
 }
 
@@ -93,6 +139,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             [self updateUIForCall];
             if (self.call.callState == VSLCallStateDisconnected) {
                 [UIDevice currentDevice].proximityMonitoringEnabled = NO;
+                [self.ringtone stop];
             }
         });
     }
@@ -116,11 +163,26 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     self.incomingLabel.text = self.call.incoming ? @"YES": @"NO";
 }
 
-- (IBAction)endCall:(id)sender {
-    NSError *error;
-    [self.call hangup:&error];
-    if (error) {
-        DDLogError(@"Error hangup call: %@", error);
+- (void)setRingtone:(VSLRingtone *)ringtone {
+    if (_ringtone.isPlaying) {
+        [_ringtone stop];
+        _ringtone = ringtone;
+        [ringtone start];
+    } else {
+        _ringtone = ringtone;
+    }
+}
+
+- (void)handleEnteredBackground:(NSNotification *)notification {
+    [self.ringtone stop];
+    if (self.call) {
+        NSError *error;
+        [self.call hangup:&error];
+        if (error) {
+            DDLogError(@"Error hangup call: %@", error);
+        } else {
+            self.call = nil;
+        }
     }
 }
 

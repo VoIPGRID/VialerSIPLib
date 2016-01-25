@@ -6,7 +6,6 @@
 #import <XCTest/XCTest.h>
 #import <VialerSIPLib-iOS/VSLAccount.h>
 #import <VialerSIPLib-iOS/VSLEndpoint.h>
-#import <VialerSIPLib-iOS/VSLEndpointConfiguration.h>
 
 @interface VSLEndpointTests : XCTestCase
 @property (strong, nonatomic) VSLEndpoint *endpoint;
