@@ -40,11 +40,11 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
 /**
  *  The password that should be used when authenticate on remote PBX.
  *
- *  @return NSString with the password. 
+ *  @return NSString with the password.
  */
 - (NSString * _Nonnull)sipPassword;
 /**
- *  The domain where the PBX can be find.
+ *  The domain where the PBX can be found.
  *
  *  @return NSString with the domain.
  */

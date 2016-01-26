@@ -507,7 +507,8 @@
 				24B38DA43F48D5262EA9391C69C550DB /* NSString+PJString.h */,
 				DB31946E514FBF9A27575A40120A555B /* NSString+PJString.m */,
 			);
-			path = Categories;
+			name = Categories;
+			path = Classes/Categories;
 			sourceTree = "<group>";
 		};
 		4CE1A7D3432D2D4F42D6F929C230F586 /* Vialer-pjsip-iOS */ = {
@@ -545,6 +546,7 @@
 		5C7A38551DC5A0818C713CA446BA8333 /* Pod */ = {
 			isa = PBXGroup;
 			children = (
+				4731C2E797A474B29E6DA90A72FF6EDA /* Categories */,
 				D1E11D0B693A693B46AA5E07FD9748A3 /* Classes */,
 			);
 			path = Pod;
@@ -751,7 +753,6 @@
 				808F1D37F4C401949D78D3D0B51B3183 /* VSLEndpoint.m */,
 				F57489A033DF604853AA9EAB03AD5E7E /* VSLRingback.h */,
 				078973FCAD0D4902A8F73E0951C5D6DE /* VSLRingback.m */,
-				4731C2E797A474B29E6DA90A72FF6EDA /* Categories */,
 				55513F9E41DC67143BF821031349A036 /* Configurations */,
 			);
 			path = Classes;

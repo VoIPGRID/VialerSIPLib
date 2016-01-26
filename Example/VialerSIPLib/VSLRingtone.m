@@ -68,7 +68,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)start {
     if (!self.isPlaying) {
         [self.audioPlayer prepareToPlay];
-        [self configureAudioSession];
+        [self configureAudioSessionBeforeRingtoneIsPlayed];
         [self.audioPlayer play];
 
         [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
@@ -82,13 +82,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [self.vibrateTimer invalidate];
     }
     [self.audioPlayer setCurrentTime:0];
+    [self configureAudioSessionAfterRingtoneStopped];
 }
 
 - (void)vibrate {
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
 }
 
-- (void)configureAudioSession {
+- (void)configureAudioSessionBeforeRingtoneIsPlayed {
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
 
     // Set the audio session category. The category that is set repects the silent switch.
@@ -110,7 +111,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         if (overrideOutputAudioPortError != NULL) {
             DDLogWarn(@"Error overriding audio port: %@", overrideOutputAudioPortError);
         }
-
     }
 
     // Activate the audio session.
@@ -119,6 +119,20 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     if (!setActiveSuccess) {
         if (setActiveError != NULL) {
             DDLogWarn(@"Error activatiing audio: %@", setActiveError);
+        }
+    }
+}
+
+- (void)configureAudioSessionAfterRingtoneStopped {
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+
+    // Set the audio session category. The category that is set is able to handle VoIP calls.
+    NSError *setCategoryError;
+    BOOL setCategorySuccess = [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
+                                                  error:&setCategoryError];
+    if (!setCategorySuccess) {
+        if (setCategoryError != NULL) {
+            DDLogWarn(@"Error setting audioplayer category: %@", setCategoryError);
         }
     }
 }

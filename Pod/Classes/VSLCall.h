@@ -22,7 +22,15 @@ typedef NS_ENUM(NSInteger, VSLCallErrors) {
     /**
      *  Unable to hangup call.
      */
-    VSLCallErrorCannotHangupCall
+    VSLCallErrorCannotHangupCall,
+    /**
+     *  Unable to toggle mute call.
+     */
+    VSLCallErrorCannotToggleMute,
+    /**
+     *  Unable to toggle hold call.
+     */
+    VSLCallErrorCannotToggleHold
 };
 
 /**
@@ -135,7 +143,22 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
 /**
  *  True if the call was incoming.
  */
-@property(readonly, getter=isIncoming) BOOL incoming;
+@property (readonly, getter=isIncoming) BOOL incoming;
+
+/**
+ *  True if the microphone is muted.
+ */
+@property (readonly, nonatomic) BOOL muted;
+
+/**
+ *  True if the call is in speaker mode.
+ */
+@property (readonly, nonatomic) BOOL speaker;
+
+/**
+ *  True if the call is on hold locally.
+ */
+@property (readonly, nonatomic) BOOL onHold;
 
 /**
  *  This will setup a call to the given number and attached to the account.
@@ -149,26 +172,14 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
 + (instancetype _Nullable)callNumber:(NSString * _Nonnull)number withAccount:(VSLAccount * _Nonnull)account error:(NSError * _Nullable * _Nullable)error;
 
 /**
- *  This will create a call instance and attached to the account.
+ *  This will create a call instance and with the given accountId.
  *
  *  @param callId    The id of the call.
- *  @param accountId The id of the account to which the number should be added.
+ *  @param accountId The id of the account to which the call should be added.
  *
  *  @return VSLCall instance
  */
 + (instancetype _Nullable)callWithId:(NSInteger)callId andAccountId:(NSInteger)accountId;
-
-/**
- *  This will end the call.
- *
- *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot hangup the call.
- *
- *  @return BOOL success of hanging up the call.
- */
-- (BOOL)hangup:(NSError * _Nullable * _Nullable)error;
-
-- (BOOL)answer:(NSError * _Nullable * _Nullable)error;
-
 
 /**
  *  This will change the callState of the call.
@@ -183,5 +194,44 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  *  @param callInfo pjsip callInfo
  */
 - (void)mediaStateChanged:(pjsua_call_info)callInfo;
+
+/**
+ *  This will end the call.
+ *
+ *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot hangup the call.
+ *
+ *  @return BOOL success of hanging up the call.
+ */
+- (BOOL)hangup:(NSError * _Nullable * _Nullable)error;
+
+/**
+ *  Toggle mute of the microphone for this call.
+ *
+ *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot toggle mute of the call.
+ */
+- (void)toggleMute:(NSError * _Nullable * _Nullable)error;
+
+/**
+ *  This will answer the incoming call.
+ *
+ *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot answer the call.
+ *
+ *  @return BOOL success of answering the call.
+ */
+- (BOOL)answer:(NSError * _Nullable * _Nullable)error;
+
+/**
+ *  Toggle speaker mode of the call.
+ *
+ *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot put call in speaker mode.
+ */
+- (void)toggleSpeaker;
+
+/**
+ *  Toggle hold of the call.
+ *
+ *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot put call on hold.
+ */
+- (void)toggleHold:(NSError * _Nullable * _Nullable)error;
 
 @end

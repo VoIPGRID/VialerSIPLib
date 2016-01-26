@@ -7,14 +7,55 @@
 
 @interface VSLAccountConfiguration : NSObject
 
-@property (strong, nonnull, nonatomic) NSString *sipUsername;
-@property (strong, nonnull, nonatomic) NSString *sipPassword;
-@property (strong, nonnull, nonatomic) NSString *sipDomain;
-@property (strong, nonnull, nonatomic) NSString *sipProxyServer;
-@property (strong, nonnull, nonatomic) NSString *sipAddress;
-@property (strong, nonnull, nonatomic) NSString *sipAuthRealm;
-@property (strong, nonnull, nonatomic) NSString *sipAuthScheme;
+/**
+ *  The username that should be used when authenticate on remote PBX.
+ */
+@property (strong, nonatomic) NSString * _Nonnull sipUsername;
+
+/**
+ *  The username that should be used when authenticate on remote PBX.
+ */
+@property (strong, nonatomic) NSString * _Nonnull sipPassword;
+
+/**
+ *  The domain where the PBX can be found.
+ */
+@property (strong, nonatomic) NSString * _Nonnull sipDomain;
+
+/**
+ *  The proxy address where to connect to.
+ */
+@property (strong, nonatomic) NSString * _Nonnull sipProxyServer;
+
+/**
+ *  The address which is a combination of sipUsername & sipDomain.
+ */
+@property (readonly, nonatomic) NSString * _Nonnull sipAddress;
+
+/**
+ *  The authentication realm.
+ *
+ *  Default: *
+ */
+@property (strong, nonatomic) NSString * _Nonnull sipAuthRealm;
+
+/**
+ *  The authentication scheme.
+ *
+ *  Default: digest
+ */
+@property (strong, nonatomic) NSString * _Nonnull sipAuthScheme;
+
+/**
+ *  If YES the account will be registered when added to the endpoint.
+ *
+ *  Default: NO
+ */
 @property (nonatomic) BOOL sipRegisterOnAdd;
+
+/**
+ *  If YES, the account presence will be published to the server where the account belongs.
+ */
 @property (nonatomic) BOOL sipPublishEnabled;
 
 @end

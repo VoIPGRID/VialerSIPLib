@@ -99,7 +99,7 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
 
     NSError *accountError;
     BOOL success = YES;
-    if (account.accountState == VSLAccountStateOffline) {
+    if (account.accountState == VSLAccountStateOffline || account.accountState == VSLAccountStateDisconnected) {
         success = [account registerAccount:&accountError];
     }
 

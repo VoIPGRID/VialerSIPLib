@@ -5,6 +5,9 @@
 
 @import UIKit;
 
-@interface VSLViewController : UIViewController
+#import <VialerSIPLib-iOS/VialerSIPLib.h>
+#import "VSLCallViewController.h"
 
+@interface VSLViewController : UIViewController <VSLCallViewControllerDelegate>
+@property (strong, nonatomic) VSLCall *call;
 @end

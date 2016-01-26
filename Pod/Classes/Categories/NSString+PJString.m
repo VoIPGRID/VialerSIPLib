@@ -7,6 +7,10 @@
 
 @implementation NSString (PJString)
 
+- (pj_str_t)pjString {
+    return pj_str((char *)[self cStringUsingEncoding:NSUTF8StringEncoding]);
+}
+
 + (NSString *)stringWithPJString:(pj_str_t)pjString {
     return [[NSString alloc] initWithBytes:pjString.ptr length:(NSUInteger)pjString.slen encoding:NSUTF8StringEncoding];
 }
@@ -29,15 +33,10 @@
     }
 
     if (![sipUri hasSuffix:domain]) {
-
         sipUri = [sipUri stringByPaddingToLength:[sipUri rangeOfString:@"@"].location withString:@"" startingAtIndex:0];
         sipUri = [NSString stringWithFormat:@"%@@%@", sipUri, domain];
     }
     return sipUri.pjString;
-}
-
-- (pj_str_t)pjString {
-    return pj_str((char *)[self cStringUsingEncoding:NSUTF8StringEncoding]);
 }
 
 @end

@@ -8,10 +8,12 @@
 #import <CocoaLumberJack/CocoaLumberjack.h>
 #import "Keys.h"
 #import "SipUser.h"
-#import <VialerSIPLib-iOS/VialerSIPLib.h>
+#import "VSLCallViewController.h"
 #import "VSLRingtone.h"
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+static NSString * const VSLViewControllerMakeCallSegue = @"MakeCallSegue";
+static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 
 @interface VSLViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *numberToCall;
@@ -35,28 +37,31 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 @property (weak, nonatomic) IBOutlet UIButton *onHoldButton;
 @property (weak, nonatomic) IBOutlet UILabel *numbersPressedLabel;
 
-@property (strong, nonatomic) VSLCall *call;
 @property (strong, nonatomic) VSLAccount *account;
 @property (strong, nonatomic) VSLRingtone *ringtone;
 @end
 
 @implementation VSLViewController
 
-// Overriding both setter and getter this is needed.
-@synthesize ringtone = _ringtone;
+#pragma mark - View lifecycle
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(handleEnteredBackground:) name: UIApplicationDidEnterBackgroundNotification object:nil];
 
     [VialerSIPLib sharedInstance].incomingCallBlock = ^(VSLCall * _Nonnull call) {
-        [call addObserver:self forKeyPath:@"callState" options:0 context:NULL];
-        [call addObserver:self forKeyPath:@"mediaState" options:0 context:NULL];
-        self.makeCallButton.enabled = NO;
-        self.call = call;
-        [self.ringtone start];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.call = call;
+            [self.ringtone start];
+        });
     };
+
+    if (self.call) {
+        [self updateUIForCall];
+    }
 }
+
+#pragma mark - Properties
 
 - (VSLAccount *)account {
     if (!_account) {
@@ -71,6 +76,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [_call removeObserver:self forKeyPath:@"mediaState"];
     }
     _call = call;
+    [self updateUIForCall];
+    [call addObserver:self forKeyPath:@"callState" options:0 context:NULL];
+    [call addObserver:self forKeyPath:@"mediaState" options:0 context:NULL];
 }
 
 - (VSLRingtone *)ringtone {
@@ -81,34 +89,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     return _ringtone;
 }
 
-- (IBAction)makeCall:(id)sender {
-    [self.account callNumber:self.numberToCall.text withCompletion:^(NSError *error, VSLCall *call) {
-        if (error) {
-            DDLogError(@"%@", error);
-        } else {
-            [UIDevice currentDevice].proximityMonitoringEnabled = YES;
-            self.call = call;
-            [self updateUIForCall];
-            [call addObserver:self forKeyPath:@"callState" options:0 context:NULL];
-            [call addObserver:self forKeyPath:@"mediaState" options:0 context:NULL];
-        }
-    }];
-}
+#pragma mark - Actions
 
-- (IBAction)acceptCall:(id)sender {
-    if (self.call) {
-        NSError *error;
-        [self.call answer:&error];
-        if (error) {
-            DDLogError(@"Error accepting call: %@", error);
-        } else {
-            [UIDevice currentDevice].proximityMonitoringEnabled = YES;
-            [self.ringtone stop];
-        }
-    }
-}
-
-- (IBAction)registerAccount:(id)sender {
+- (IBAction)registerAccount:(UIButton *)sender {
     [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
 
     SipUser *testUser = [[SipUser alloc] init];
@@ -127,37 +110,47 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 
-- (IBAction)endCall:(id)sender {
+- (IBAction)decline:(UIButton *)sender {
     NSError *error;
     [self.call hangup:&error];
-    [self.ringtone stop];
     self.numbersPressedLabel.text = @"";
     if (error) {
         DDLogError(@"Error hangup call: %@", error);
-    } else {
-        self.call = nil;
     }
 }
 
-- (IBAction)keypad:(id)sender {
-    self.keypadContainerView.hidden = !self.keypadContainerView.hidden;
+#pragma mark - Segues
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if ([identifier isEqualToString:VSLViewControllerAcceptCallSegue]) {
+        [self.ringtone stop];
+        NSError *error;
+        [self.call answer:&error];
+        if (error) {
+            DDLogError(@"Error accepting call: %@", error);
+            return NO;
+        }
+        [UIDevice currentDevice].proximityMonitoringEnabled = YES;
+        return YES;
+    }
+    return YES;
 }
 
-- (IBAction)muteCall:(id)sender {
-
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:VSLViewControllerMakeCallSegue]) {
+        VSLCallViewController *cvc = (VSLCallViewController *)segue.destinationViewController;
+        cvc.delegate = self;
+        cvc.account = self.account;
+        cvc.numberToCall = self.numberToCall.text;
+    } else if ([segue.identifier isEqualToString:VSLViewControllerAcceptCallSegue]) {
+        VSLCallViewController *cvc = (VSLCallViewController *)segue.destinationViewController;
+        cvc.delegate = self;
+        cvc.account = self.account;
+        cvc.call = self.call;
+    }
 }
 
-- (IBAction)callOnSpeaker:(id)sender {
-
-}
-
-- (IBAction)callOnHold:(id)sender {
-
-}
-
-- (IBAction)keyPadNumberPressed:(UIButton *)sender {
-    self.numbersPressedLabel.text = [NSString stringWithFormat:@"%@%@", self.numbersPressedLabel.text, sender.currentTitle];
-}
+#pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
 
@@ -188,16 +181,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     self.localUriLabel.text = self.call.localURI;
     self.remoteUriLabel.text = self.call.remoteURI;
     self.incomingLabel.text = self.call.incoming ? @"YES": @"NO";
-}
-
-- (void)setRingtone:(VSLRingtone *)ringtone {
-    if (_ringtone.isPlaying) {
-        [_ringtone stop];
-        _ringtone = ringtone;
-        [ringtone start];
-    } else {
-        _ringtone = ringtone;
-    }
 }
 
 - (void)handleEnteredBackground:(NSNotification *)notification {

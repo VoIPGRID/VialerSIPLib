@@ -11,6 +11,11 @@
 @interface NSString (PJString)
 
 /**
+ *  This returns a string for the pjsip library.
+ */
+@property (readonly) pj_str_t pjString;
+
+/**
  *  This will return a string which can be read by human eyes.
  *
  *  @param pjString pjString struct
@@ -33,10 +38,5 @@
  *
  */
 - (pj_str_t)sipUriWithDomain:(NSString *)domain;
-
-/**
- *  This returns a string for the pjsip library.
- */
-@property (readonly) pj_str_t pjString;
 
 @end
