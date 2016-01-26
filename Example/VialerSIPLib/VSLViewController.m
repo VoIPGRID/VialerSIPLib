@@ -28,6 +28,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 @property (weak, nonatomic) IBOutlet UILabel *accountStateLabel;
 @property (weak, nonatomic) IBOutlet UIButton *acceptCallButton;
 @property (weak, nonatomic) IBOutlet UIButton *makeCallButton;
+@property (weak, nonatomic) IBOutlet UIView *keypadContainerView;
+@property (weak, nonatomic) IBOutlet UIButton *keypadButton;
+@property (weak, nonatomic) IBOutlet UIButton *muteButton;
+@property (weak, nonatomic) IBOutlet UIButton *speakerButton;
+@property (weak, nonatomic) IBOutlet UIButton *onHoldButton;
+@property (weak, nonatomic) IBOutlet UILabel *numbersPressedLabel;
 
 @property (strong, nonatomic) VSLCall *call;
 @property (strong, nonatomic) VSLAccount *account;
@@ -125,11 +131,32 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSError *error;
     [self.call hangup:&error];
     [self.ringtone stop];
+    self.numbersPressedLabel.text = @"";
     if (error) {
         DDLogError(@"Error hangup call: %@", error);
     } else {
         self.call = nil;
     }
+}
+
+- (IBAction)keypad:(id)sender {
+    self.keypadContainerView.hidden = !self.keypadContainerView.hidden;
+}
+
+- (IBAction)muteCall:(id)sender {
+
+}
+
+- (IBAction)callOnSpeaker:(id)sender {
+
+}
+
+- (IBAction)callOnHold:(id)sender {
+
+}
+
+- (IBAction)keyPadNumberPressed:(UIButton *)sender {
+    self.numbersPressedLabel.text = [NSString stringWithFormat:@"%@%@", self.numbersPressedLabel.text, sender.currentTitle];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
