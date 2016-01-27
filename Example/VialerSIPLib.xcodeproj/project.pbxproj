@@ -26,7 +26,6 @@
 		F27386111C170862002C4CD1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F27386131C170862002C4CD1 /* Main.storyboard */; };
 		F27386181C170B3C002C4CD1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F273861A1C170B3C002C4CD1 /* LaunchScreen.storyboard */; };
 		F930F6C71C22F33600B8DBD0 /* SipUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F930F6C61C22F33600B8DBD0 /* SipUser.m */; };
-		F93260141C4FE47400BF6AC7 /* VSLRingtone.m in Sources */ = {isa = PBXBuildFile; fileRef = F93260131C4FE47400BF6AC7 /* VSLRingtone.m */; };
 		F951E38D1C56214300FA480F /* VialerSIPLibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F951E38C1C56214300FA480F /* VialerSIPLibTests.m */; };
 		F9906C211C3A85AC0044EA99 /* VSLAccountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */; };
 		F9906C231C3A85E80044EA99 /* VSLEndpointTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C221C3A85E80044EA99 /* VSLEndpointTests.m */; };
@@ -88,8 +87,6 @@
 		F27386191C170B3C002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F930F6C51C22F33600B8DBD0 /* SipUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SipUser.h; sourceTree = "<group>"; };
 		F930F6C61C22F33600B8DBD0 /* SipUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SipUser.m; sourceTree = "<group>"; };
-		F93260121C4FE47400BF6AC7 /* VSLRingtone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLRingtone.h; sourceTree = "<group>"; };
-		F93260131C4FE47400BF6AC7 /* VSLRingtone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLRingtone.m; sourceTree = "<group>"; };
 		F951E38C1C56214300FA480F /* VialerSIPLibTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VialerSIPLibTests.m; sourceTree = "<group>"; };
 		F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountTests.m; sourceTree = "<group>"; };
 		F9906C221C3A85E80044EA99 /* VSLEndpointTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLEndpointTests.m; sourceTree = "<group>"; };
@@ -169,8 +166,6 @@
 				6003F5A6195388D20070C39A /* VSLViewController.m */,
 				C4A169B11C57A1E5002E9331 /* VSLCallViewController.h */,
 				C4A169B21C57A1E5002E9331 /* VSLCallViewController.m */,
-				F93260121C4FE47400BF6AC7 /* VSLRingtone.h */,
-				F93260131C4FE47400BF6AC7 /* VSLRingtone.m */,
 				F27386131C170862002C4CD1 /* Main.storyboard */,
 				6003F5A8195388D20070C39A /* Assets.xcassets */,
 				F273861A1C170B3C002C4CD1 /* LaunchScreen.storyboard */,
@@ -486,7 +481,6 @@
 				6003F59E195388D20070C39A /* AppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* VSLViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				F93260141C4FE47400BF6AC7 /* VSLRingtone.m in Sources */,
 				F930F6C71C22F33600B8DBD0 /* SipUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

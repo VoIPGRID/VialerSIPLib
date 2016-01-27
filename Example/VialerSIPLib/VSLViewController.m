@@ -9,8 +9,8 @@
 #import <CocoaLumberJack/CocoaLumberjack.h>
 #import "Keys.h"
 #import "SipUser.h"
+#import <VialerSIPLib-iOS/VSLRingtone.h>
 #import "VSLCallViewController.h"
-#import "VSLRingtone.h"
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLViewControllerMakeCallSegue = @"MakeCallSegue";
@@ -203,7 +203,7 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
     VSLCall *call = (VSLCall *)notification.object;
 
     // Check state of current call.
-    if (self.call.callState != VSLCallStateDisconnected) {
+    if (self.call && self.call.callState != VSLCallStateDisconnected) {
         // Not able to accept this call, decline/hangup.
         [call hangup:nil];
     } else {

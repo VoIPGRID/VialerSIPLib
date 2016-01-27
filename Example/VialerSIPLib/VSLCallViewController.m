@@ -5,7 +5,7 @@
 
 #import <CocoaLumberJack/CocoaLumberjack.h>
 #import "VSLCallViewController.h"
-#import "VSLRingtone.h"
+#import <VialerSIPLib-iOS/VSLRingtone.h>
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
