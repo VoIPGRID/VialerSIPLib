@@ -10,8 +10,8 @@
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @interface VSLCallViewController ()
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *keypadNumbers;
 @property (weak, nonatomic) IBOutlet UILabel *numbersPressedLabel;
-@property (weak, nonatomic) IBOutletCollection(UIButton) NSArray *keypadNumbers;
 @end
 
 @implementation VSLCallViewController
@@ -71,6 +71,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (IBAction)keyPadNumberPressed:(UIButton *)sender {
     self.numbersPressedLabel.text = [NSString stringWithFormat:@"%@%@", self.numbersPressedLabel.text, sender.currentTitle];
+    NSError *error;
+    [self.call sendDTMF:sender.currentTitle error:&error];
+    if (error) {
+        DDLogError(@"Error sending DTMF signal: %@", error);
+    }
 }
 
 #pragma mark - KVO
@@ -81,8 +86,19 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateUIForCall];
             if (self.call.callState == VSLCallStateDisconnected) {
-                [self.call removeObserver:self forKeyPath:@"callState"];
-                [self.call removeObserver:self forKeyPath:@"mediaState"];
+                @try {
+                    [self.call removeObserver:self forKeyPath:@"callState"];
+                } @catch (NSException *exception) {
+                    DDLogInfo(@"Observer for keyPath callState was already removed. %@", exception);
+                }
+
+                @try {
+                    [self.call removeObserver:self forKeyPath:@"mediaState"];
+                } @catch (NSException *exception) {
+                    DDLogInfo(@"Observer for keyPath mediaState was already removed. %@", exception);
+                }
+
+
                 self.delegate.call = self.call;
                 [UIDevice currentDevice].proximityMonitoringEnabled = NO;
                 [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
