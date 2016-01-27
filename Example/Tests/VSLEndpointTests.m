@@ -3,8 +3,10 @@
 //  Copyright © 2016 Devhouse Spindle. All rights reserved.
 //
 
+#import <OCMock/OCMock.h>
 #import <XCTest/XCTest.h>
 #import <VialerSIPLib-iOS/VSLAccount.h>
+#import <VialerSIPLib-iOS/VSLAccountConfiguration.h>
 #import <VialerSIPLib-iOS/VSLEndpoint.h>
 
 @interface VSLEndpointTests : XCTestCase
@@ -36,6 +38,30 @@
     [self.endpoint removeAccount:account];
 
     XCTAssertFalse([self.endpoint.accounts containsObject:account], @"The account should have been removed from the array");
+}
+
+- (void)testNoAccountFoundGetAccountWithSiperUsernameReturnsNil {
+    [self.endpoint addAccount:[[VSLAccount alloc] init]];
+
+    VSLAccount *account = [self.endpoint getAccountWithSipUsername:@"42"];
+    XCTAssertNil(account, @"There should be no account found when the sip username is not found");
+
+    [self.endpoint removeAccount:account];
+}
+
+- (void)testAccountFoundFromGetAccountWithSipUsername {
+    VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
+    config.sipUsername = @"42";
+    config.sipDomain = @"sip.test.com";
+
+    VSLAccount *testAccount = [[VSLAccount alloc] init];
+    [testAccount configureWithAccountConfiguration:config error:nil];
+    [self.endpoint addAccount:testAccount];
+
+    VSLAccount *account = [self.endpoint getAccountWithSipUsername:@"42"];
+    XCTAssertEqualObjects(account, testAccount, @"There should be an account found.");
+
+    [self.endpoint removeAccount:testAccount];
 }
 
 @end
