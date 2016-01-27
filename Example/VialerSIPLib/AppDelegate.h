@@ -5,6 +5,8 @@
 
 @import UIKit;
 
+extern NSString * const AppDelegateIncominCallNotification;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

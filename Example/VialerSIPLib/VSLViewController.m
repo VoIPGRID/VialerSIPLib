@@ -5,6 +5,7 @@
 
 #import "VSLViewController.h"
 
+#import "AppDelegate.h"
 #import <CocoaLumberJack/CocoaLumberjack.h>
 #import "Keys.h"
 #import "SipUser.h"
@@ -45,16 +46,18 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 
 #pragma mark - View lifecycle
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(incomingCallNotification:) name:AppDelegateIncominCallNotification object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(handleEnteredBackground:) name: UIApplicationDidEnterBackgroundNotification object:nil];
-
-    [VialerSIPLib sharedInstance].incomingCallBlock = ^(VSLCall * _Nonnull call) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.call = call;
-            [self.ringtone start];
-        });
-    };
 
     if (self.call) {
         [self updateUIForCall];
@@ -193,6 +196,20 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
         } else {
             self.call = nil;
         }
+    }
+}
+
+- (void)incomingCallNotification:(NSNotification *)notification {
+    VSLCall *call = (VSLCall *)notification.object;
+
+    // Check state of current call.
+    if (self.call.callState != VSLCallStateDisconnected) {
+        // Not able to accept this call, decline/hangup.
+        [call hangup:nil];
+    } else {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        self.call = call;
+        [self.ringtone start];
     }
 }
 
