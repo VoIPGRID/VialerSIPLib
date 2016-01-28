@@ -31,12 +31,6 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 @property (weak, nonatomic) IBOutlet UILabel *accountStateLabel;
 @property (weak, nonatomic) IBOutlet UIButton *acceptCallButton;
 @property (weak, nonatomic) IBOutlet UIButton *makeCallButton;
-@property (weak, nonatomic) IBOutlet UIView *keypadContainerView;
-@property (weak, nonatomic) IBOutlet UIButton *keypadButton;
-@property (weak, nonatomic) IBOutlet UIButton *muteButton;
-@property (weak, nonatomic) IBOutlet UIButton *speakerButton;
-@property (weak, nonatomic) IBOutlet UIButton *onHoldButton;
-@property (weak, nonatomic) IBOutlet UILabel *numbersPressedLabel;
 
 @property (strong, nonatomic) VSLAccount *account;
 @property (strong, nonatomic) VSLRingtone *ringtone;
@@ -116,7 +110,6 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 - (IBAction)decline:(UIButton *)sender {
     NSError *error;
     [self.call hangup:&error];
-    self.numbersPressedLabel.text = @"";
     if (error) {
         DDLogError(@"Error hangup call: %@", error);
     }

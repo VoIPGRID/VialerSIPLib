@@ -305,4 +305,46 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
     }
 }
 
+- (void)sendDTMF:(NSString *)character error:(NSError *__autoreleasing  _Nullable *)error {
+    // Return if the call is not confirmed or when the call is on hold.
+    if (self.callState != VSLCallStateConfirmed || !self.onHold) {
+        return;
+    }
+
+    pj_status_t status;
+    pj_str_t digits = [character pjString];
+
+    // Try sending DTMF digits to remote using RFC 2833 payload format first.
+    status = pjsua_call_dial_dtmf((pjsua_call_id)self.callId, &digits);
+
+    if (status == PJ_SUCCESS) {
+        DDLogVerbose(@"Succesfull send character: %@ for DTMF for call %@", character, self);
+    } else {
+        // The RFC 2833 payload format did not work.
+        const pj_str_t kSIPINFO = pj_str("INFO");
+
+        for (NSUInteger i = 0; i < [character length]; ++i) {
+            pjsua_msg_data messageData;
+            pjsua_msg_data_init(&messageData);
+            messageData.content_type = pj_str("application/dtmf-relay");
+
+            NSString *messageBody = [NSString stringWithFormat:@"Signal=%C\r\nDuration=300", [character characterAtIndex:i]];
+            messageData.msg_body = [messageBody pjString];
+
+            status = pjsua_call_send_request((pjsua_call_id)self.callId, &kSIPINFO, &messageData);
+            if (status == PJ_SUCCESS) {
+                DDLogVerbose(@"Succesfull send character: %@ for DTMF for call %@", character, self);
+            } else {
+                if (error != NULL) {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey:NSLocalizedString(@"Could not send DTMF", nil),
+                                               NSLocalizedFailureReasonErrorKey:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", status)]
+                                               };
+                    *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotSendDTMF userInfo:userInfo];
+                }
+                DDLogError(@"Error error sending DTMF for call %@", self);
+            }
+        }
+    }
+}
+
 @end

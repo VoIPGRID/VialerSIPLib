@@ -30,7 +30,11 @@ typedef NS_ENUM(NSInteger, VSLCallErrors) {
     /**
      *  Unable to toggle hold call.
      */
-    VSLCallErrorCannotToggleHold
+    VSLCallErrorCannotToggleHold,
+    /**
+     *  Unable to send DTMF for call.
+     */
+    VSLCallErrorCannotSendDTMF,
 };
 
 /**
@@ -234,4 +238,11 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  */
 - (void)toggleHold:(NSError * _Nullable * _Nullable)error;
 
+/**
+ *  Send DTMF tone for this call with a character.
+ *
+ *  @param character character NSString the character for the DTMF.
+ *  @param error     error Pointer to an NSError pointer. Will be set to a NSError instance if cannot send DTMF for the call.
+ */
+- (void)sendDTMF:(NSString * _Nonnull)character error:(NSError * _Nullable * _Nullable)error;
 @end
