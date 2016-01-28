@@ -25,9 +25,10 @@ Pod::Spec.new do |s|
 	s.platform     		= :ios, '9.0'
 	s.requires_arc 		= true
 
-    s.source_files 		= "Pod/Classes/**/*.{h,m}"
+    s.preserve_paths        = "Pod/Classes/*"
+    s.source_files 		    = "Pod/Classes/**/*.{h,m}"
     s.public_header_files   = "Pod/Classes/**/*.h"
-
+    
 	s.dependency 'Vialer-pjsip-iOS'
 	s.dependency 'CocoaLumberjack', '~> 2.2'
 end
