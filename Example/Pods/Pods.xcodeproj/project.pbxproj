@@ -19,11 +19,11 @@
 		1586CD3BDB1E92D87A0E423AAC313FD4 /* OCMObserverRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E896BD68E8BAAE6C9956FC5DD6D775 /* OCMObserverRecorder.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1B7E21160BEF08CC76BA8C17E94E455A /* OCMLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6AEA25AD12C99843BCBCF0EE3A3961 /* OCMLocation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E6A591B3DEE6317BB014BD71A50B689 /* DDASLLogCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = 795F6A2EAA815246F49A4C90AE922824 /* DDASLLogCapture.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1F92B4248D59FEDB564A722BD1E9E991 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3997E5D2953ECDF377B85B234FDF550D /* Foundation.framework */; };
 		2061D0D3C975530A4D03F6E8265F4EDA /* VSLRingtone.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B389C27B46DD5FCBAB4EC9CFF8CB12E /* VSLRingtone.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		20C39DB909C33B491D60F23FA1D415C2 /* OCMRealObjectForwarder.m in Sources */ = {isa = PBXBuildFile; fileRef = B536A63D138A06A5392180B20BEA9421 /* OCMRealObjectForwarder.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		247E7FD232C80D23930D47BA62A73350 /* Pods-VialerSIPLib_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B67033F717EAADD2C3FB9A30165B7D34 /* Pods-VialerSIPLib_Example-dummy.m */; };
 		30A53F367FC48D498591CAFD117C9C0D /* VSLRingback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4517160E2D5B5CA8C4F127EC4594B67C /* VSLRingback.m */; };
+		30CB877AF99FD22FAE23CAF66D607E13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
 		3152811CD17686AA726713BFE3612206 /* OCMConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 05D51C5B5CFED258D92D56FB7D16913A /* OCMConstraint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		329D6BEA6B81CE2C982961DAA7D7BD4C /* VSLCall.h in Headers */ = {isa = PBXBuildFile; fileRef = 00099C24AEE42472F67A4637192D66BC /* VSLCall.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		33C4E9CA4B43CD4C468B338E2ED06860 /* OCMVerifier.h in Headers */ = {isa = PBXBuildFile; fileRef = C443C0C4427F6A0D5B52187CF246C26A /* OCMVerifier.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -44,6 +44,7 @@
 		5BF0AD69CA624AFBE91AA9F62D42BBCD /* HDLumberjackLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 550EC8EE63571B29F95199C4539BB659 /* HDLumberjackLogFormatter.m */; };
 		5D1F66A738B72B5D14D3D4E9898D242A /* VialerSIPLib-iOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A66EDF0AC6D69261011B4B4EB06C8049 /* VialerSIPLib-iOS-dummy.m */; };
 		5DCBA219BC81D9190F11EE56F93BB908 /* DDTTYLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 16F916980604D1D34A4C2B562B35A291 /* DDTTYLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5E279FED57021E3C50468564F86AA8A0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
 		5F04262019BBB326960E643861626099 /* OCMExceptionReturnValueProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D1838783D89B1124C5DCDAFA9CB047 /* OCMExceptionReturnValueProvider.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		6077EFC05DC2551A7F5A1CFAC0B90187 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A70BA85B42FF1083BE91458E88B352 /* DDAbstractDatabaseLogger.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		61A249E20B7FEA5D390782C38EE699B0 /* VSLEndpointConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4064D6AFF9B7BCFEEC258502E05BE7BD /* VSLEndpointConfiguration.m */; };
@@ -52,7 +53,7 @@
 		656479029A5A15463E080FD25F8903B2 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7792F12C5EAD3EAFFC1CB61F14C298 /* DDASLLogger.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		672FE514B7C1EB583AF6CEB2538025A7 /* OCMBoxedReturnValueProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B50F2B14E74468EF03B259CE3821792 /* OCMBoxedReturnValueProvider.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67E741D303696F9A1E863BC42E6A9C79 /* DDASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 5391916E61085C7001894BFD3536581C /* DDASLLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6B7B5E36FD6E87EA54ECF92D922E52F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3997E5D2953ECDF377B85B234FDF550D /* Foundation.framework */; };
+		6C70C49E2A31DFB0FF3837EB3E12451D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
 		6D2AD1DFA8F27BA0EBB3365A5AF7AC1B /* OCMExpectationRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BEB1D11981A41E11A83310EDC00CED9 /* OCMExpectationRecorder.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6DAEF151B35D00265D60C4AD34431DD9 /* DDContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7879FC3987BAD89C37D16DDED1991DFD /* DDContextFilterLogFormatter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		70AC31D0736F568C0386716176361D09 /* OCMInvocationMatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = E48494333F793D8943186A83AF04A282 /* OCMInvocationMatcher.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -61,7 +62,6 @@
 		7EE0FD33AB30006545874DEF02F9243E /* OCMNotificationPoster.m in Sources */ = {isa = PBXBuildFile; fileRef = 016B3473A79AD8208E14A36E251DCF6E /* OCMNotificationPoster.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7FFCEEC0036EC9E7A5D3BAD719B28D4A /* NSNotificationCenter+OCMAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = FFA8A2FE718455220DA707729B6D6991 /* NSNotificationCenter+OCMAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80491603DFC3981984107B1E762F79AD /* VSLRingtone.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC34B2E11D7A61B79F95D80F2214503 /* VSLRingtone.m */; };
-		829525655EE091F305CB64AF0B0CF147 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3997E5D2953ECDF377B85B234FDF550D /* Foundation.framework */; };
 		830B3A29668D59C62571A4CE4D3BAFCA /* OCMIndirectReturnValueProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 235038D952096664DE9DBE625C4181D5 /* OCMIndirectReturnValueProvider.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8650E201ACC3D4599F741009FF106110 /* VSLEndpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = F28A4EB8AB0E2BBD69B3B5B9A65E6892 /* VSLEndpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87AA263FA688A8E92C2B8ADEE72C98C6 /* OCMObserverRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = C4A999DC7C7E434BFDE0ACBEEF2D2B84 /* OCMObserverRecorder.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -77,18 +77,15 @@
 		9C195CB2280DCD3183057794B4504B22 /* OCMRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A4BC5A5F7AFEBA3C28B6B1651CBCFF1 /* OCMRecorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9DFB1378A337698012F7CE5D593DC04F /* DDASLLogCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F368C59E1585E0EE2F0DA02455E67B /* DDASLLogCapture.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		9ED6B48F0C000C83C89249483D3398A6 /* OCMFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D116643E91E08F719E7D262F90E967E /* OCMFunctions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		A1F43A7795C0152FA0C8A3E6757A242B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3997E5D2953ECDF377B85B234FDF550D /* Foundation.framework */; };
 		A2D0EE5602557677B5D9AB8D46F2F1AF /* DDLog+LOGV.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CD62C83462C144C81EF50C2C4422B58 /* DDLog+LOGV.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A34EF7C35E4E0657AFC8B4BA0B343867 /* CocoaLumberjack-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3828C4F069492275EAB28ACB41FEE1FA /* CocoaLumberjack-dummy.m */; };
 		A3A18FE4AF50D5B1C57596CA46F7EA42 /* HDLumberjackLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F163ABAEA9AC71536A0C6EC7D5AC925 /* HDLumberjackLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A425B4C6EAA79B2C9BB4F374180DC194 /* NSValue+OCMAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D72A3C00D8E57B42BA5BF57EE07A626 /* NSValue+OCMAdditions.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		A516CB608A827C4FEA550CB372854AF7 /* OCMReturnValueProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = D571247895513DA3822734378074CF6D /* OCMReturnValueProvider.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		AD672A92EF1A71CB35F77D51924A63D7 /* OCMInvocationStub.h in Headers */ = {isa = PBXBuildFile; fileRef = E5B0D6E2BBFD3EB57D9254CD3C087D53 /* OCMInvocationStub.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		AE6545072B660D87D58805341748446B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3997E5D2953ECDF377B85B234FDF550D /* Foundation.framework */; };
 		B28B82281F2A75B1A27E9B1B289B179D /* OCClassMockObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FA593F79D55887048014080475DF2B /* OCClassMockObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B36995CF7E36CC57C8C118EC5EC049A6 /* OCMock-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA1BB206556D1AE59BA61E5C30063CD /* OCMock-dummy.m */; };
 		B4D6973B3F74EB04E719BFCFCBF04C0B /* OCMInvocationStub.m in Sources */ = {isa = PBXBuildFile; fileRef = E63A83C57EF330C663E2BDF8FC5C6C8C /* OCMInvocationStub.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		B53AD2BBCA9DE3A3E5C5D15BFA17CAB7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3997E5D2953ECDF377B85B234FDF550D /* Foundation.framework */; };
 		BBCA69A708A7B3DD861FB839B3A251B3 /* DDLegacyMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 42C90A0764BE43487685DDE1A1D2FD19 /* DDLegacyMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BC7143B82E45DDE808B1D8E8F6970E41 /* OCMInvocationExpectation.h in Headers */ = {isa = PBXBuildFile; fileRef = CB597C008EBE0D7FF36A8449AB8EC4BA /* OCMInvocationExpectation.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		BF525D162B9ABC5DFA69FB7A8779F76E /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E4BD41388D24D183E3731D86A73097C /* DDTTYLogger.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -100,6 +97,7 @@
 		C55C0B0594D26DE09DEC7F161910A211 /* OCObserverMockObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CDE1B82A026079A7F7A26E8C137DD810 /* OCObserverMockObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C6DEDAD5B01946A2644F428020F881B6 /* OCObserverMockObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B04BFED28E74309B1A264CD7FBEC217 /* OCObserverMockObject.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		C796F27878B148315E4EB60535EEA4BE /* OCMLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DEA85939FC71643E718232FDFAC8D78 /* OCMLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C7DA0C032DA6D39C3447D2D9BD863D1B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
 		CB8B33BA12DD514B78166550065D08F2 /* VSLTransportConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = AB963835C7207F9873EBF2279618CD0E /* VSLTransportConfiguration.m */; };
 		CBB6BB497EC1A4C36506AD74ECDCD99F /* CocoaLumberjack.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B0673D5FFDAD7E63776E5195BA3633 /* CocoaLumberjack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC40C17D2E01DDDF48A7A8D50B8E92F8 /* OCMMacroState.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B97B95AE63AE258931E47A3091898B5 /* OCMMacroState.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -113,6 +111,7 @@
 		D5DA8CFFB5EEB05EC854EED1DC7D1AF4 /* NSError+VSLError.m in Sources */ = {isa = PBXBuildFile; fileRef = D475CF6AB189BA4E13E4CA5818BA2802 /* NSError+VSLError.m */; };
 		D70BDFA09F4803DCFEAD7AF5DFE21C6A /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 40108468F4D2F4847E1FF729EC7F5352 /* DDLog.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		D78D41AA2CEB6ED571503108CEC3DA15 /* OCMArg.h in Headers */ = {isa = PBXBuildFile; fileRef = D9A9132A9A3B7E39F652B7FE2404504D /* OCMArg.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D86F62CA5DFEB5481E009AF3C783B179 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
 		D9EA9C8052853B8962318FFD5A5551B6 /* OCMExceptionReturnValueProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F6EEBA162FE675AFB949A3948D7187 /* OCMExceptionReturnValueProvider.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DADACF239B30C047FA9304E5FDDA8B2E /* NSObject+OCMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF9C8C8D324B08D46608A91DA25D081 /* NSObject+OCMAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DE57384C891A85506CB91EA186D2D2B4 /* OCMArgAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 49463B994F019A64C28829E7684426D2 /* OCMArgAction.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -131,6 +130,7 @@
 		F0E9BE1709D8B3501A9E791E8D36FBED /* NSNotificationCenter+OCMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE3E7E05D08247AC414986E521BB16B /* NSNotificationCenter+OCMAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F3CE2020580250419800EC85C74968DB /* NSString+PJString.h in Headers */ = {isa = PBXBuildFile; fileRef = C7D23488332085EF9F4A04C7B17C3FAF /* NSString+PJString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5E8AED4FAE6E88972AF3085E7A0D49F /* VSLTransportConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 428055D8F3F3560FB79F3F841483AB4E /* VSLTransportConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F74B431D055124BE84DAD26F732D07B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
 		FB294C8C8DCC4EACB074C58C027C9723 /* OCMIndirectReturnValueProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 51EBB9453DA16FC420B1875D4247E5D2 /* OCMIndirectReturnValueProvider.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		FDFD77CF38AE5FDD235A02217B763809 /* OCMBlockCaller.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC9CA889B82A7D1630621DC1341099B /* OCMBlockCaller.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		FE6239BDE2049B920243DC0F907F57B9 /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = AB7FAED407B404DBE792CBF1984DD44B /* DDDispatchQueueLogFormatter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -230,7 +230,7 @@
 		38064020901C96F10BF253CECF65B7AC /* NSMethodSignature+OCMAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSMethodSignature+OCMAdditions.h"; path = "Source/OCMock/NSMethodSignature+OCMAdditions.h"; sourceTree = "<group>"; };
 		3828C4F069492275EAB28ACB41FEE1FA /* CocoaLumberjack-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaLumberjack-dummy.m"; sourceTree = "<group>"; };
 		393EB8131BD6F0600177B933952076D2 /* Pods-VialerSIPLib_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-VialerSIPLib_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		3997E5D2953ECDF377B85B234FDF550D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		40108468F4D2F4847E1FF729EC7F5352 /* DDLog.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDLog.m; path = Classes/DDLog.m; sourceTree = "<group>"; };
 		4064D6AFF9B7BCFEEC258502E05BE7BD /* VSLEndpointConfiguration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = VSLEndpointConfiguration.m; sourceTree = "<group>"; };
 		428055D8F3F3560FB79F3F841483AB4E /* VSLTransportConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = VSLTransportConfiguration.h; sourceTree = "<group>"; };
@@ -353,7 +353,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE6545072B660D87D58805341748446B /* Foundation.framework in Frameworks */,
+				D86F62CA5DFEB5481E009AF3C783B179 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,7 +361,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				829525655EE091F305CB64AF0B0CF147 /* Foundation.framework in Frameworks */,
+				F74B431D055124BE84DAD26F732D07B4 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,7 +369,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B53AD2BBCA9DE3A3E5C5D15BFA17CAB7 /* Foundation.framework in Frameworks */,
+				C7DA0C032DA6D39C3447D2D9BD863D1B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,7 +377,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F92B4248D59FEDB564A722BD1E9E991 /* Foundation.framework in Frameworks */,
+				5E279FED57021E3C50468564F86AA8A0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,7 +385,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B7B5E36FD6E87EA54ECF92D922E52F9 /* Foundation.framework in Frameworks */,
+				30CB877AF99FD22FAE23CAF66D607E13 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,7 +393,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1F43A7795C0152FA0C8A3E6757A242B /* Foundation.framework in Frameworks */,
+				6C70C49E2A31DFB0FF3837EB3E12451D /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,14 +420,6 @@
 				C7086203372CAD936F09C54D949F4A3B /* Support Files */,
 			);
 			path = CocoaLumberjack;
-			sourceTree = "<group>";
-		};
-		112C7921E3A497328D11F4930CBBC9CA /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				3997E5D2953ECDF377B85B234FDF550D /* Foundation.framework */,
-			);
-			name = iOS;
 			sourceTree = "<group>";
 		};
 		179E0F75DD1616BED4CA61CA2530057F /* Support Files */ = {
@@ -721,9 +713,17 @@
 		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				112C7921E3A497328D11F4930CBBC9CA /* iOS */,
+				BF6342C8B29F4CEEA088EFF7AB4DE362 /* iOS */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BF6342C8B29F4CEEA088EFF7AB4DE362 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		BF9B62F1E62EB0718BF94DBFAE1A4923 /* Pods-VialerSIPLib_Example */ = {
@@ -972,7 +972,7 @@
 		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
@@ -1154,14 +1154,11 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		041370FFE1DF48A1ED4D7CBE9A9B65AD /* Release */ = {
+		0B4528C448F3A62F33CB06077110E757 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D205D18BCBB953F724AC44C6B273F300 /* VialerSIPLib-iOS.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/VialerSIPLib-iOS/VialerSIPLib-iOS-prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1180,7 +1177,76 @@
 			};
 			name = Release;
 		};
-		2CE16AC72762C01C5DC595053F1F2EF4 /* Debug */ = {
+		2539C03DF46325DEB1B6D12C7BFB1EFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D510A3ADCB6BD07EE3A95B15A07C12AF /* OCMock.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/OCMock/OCMock-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"PJ_AUTOCONF=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		29EE37DD92DAED770D092BC550FE7B48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBBC797EB2D71EC096AD84E23FA4B9BC /* HDLumberjackLogFormatter.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/HDLumberjackLogFormatter/HDLumberjackLogFormatter-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"PJ_AUTOCONF=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		55417A76D0C428D8F163047584731AB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D205D18BCBB953F724AC44C6B273F300 /* VialerSIPLib-iOS.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/VialerSIPLib-iOS/VialerSIPLib-iOS-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"PJ_AUTOCONF=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		5CE5176205D06FF3FFE3DDDA9291E44B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1198,12 +1264,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_DEBUG=1",
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -1221,14 +1285,11 @@
 			};
 			name = Debug;
 		};
-		3CD6321AF3B5FD88B3CA5C4C2B9F8E14 /* Release */ = {
+		6617E6B87D54DB250036BD6CD21B2308 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A13CC8D9C206800751E7168132442250 /* Pods-VialerSIPLib_Example.release.xcconfig */;
+			baseConfigurationReference = EE63E9152F45568E90AAA53967E1885B /* Pods-VialerSIPLib_Tests.release.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"PJ_AUTOCONF=1",
@@ -1240,234 +1301,22 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
-		404D79DF8E07F8F43E56F434C591767A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = EBBC797EB2D71EC096AD84E23FA4B9BC /* HDLumberjackLogFormatter.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/HDLumberjackLogFormatter/HDLumberjackLogFormatter-prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"PJ_AUTOCONF=1",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		683BF20CBC7CC28163B71FB4B264BE3E /* Debug */ = {
+		72BE4A42B4F978796AC4FEB0A9384C2D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 91AE0333A8A27ACAC68C7DB4F5FB4DD3 /* CocoaLumberjack.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"PJ_AUTOCONF=1",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		6D71436561B9E5C86C57346BC28A957D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 18B1939CC048FCF5BB8D25D601515749 /* Pods-VialerSIPLib_Tests.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"PJ_AUTOCONF=1",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				MACH_O_TYPE = staticlib;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		7963E4A54BB664F9F73F9939729DA12A /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D510A3ADCB6BD07EE3A95B15A07C12AF /* OCMock.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/OCMock/OCMock-prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"PJ_AUTOCONF=1",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		7B5CDAA0C5971F6D345B51D9B7015701 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D510A3ADCB6BD07EE3A95B15A07C12AF /* OCMock.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/OCMock/OCMock-prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"PJ_AUTOCONF=1",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		87D617056A8705B0FF823A29D98B99CC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9EDC9685495010CE328C82C5496916B6 /* Pods-VialerSIPLib_Example.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"PJ_AUTOCONF=1",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				MACH_O_TYPE = staticlib;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		A53FD6055E32B4F0A4052950466D0E0C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = EBBC797EB2D71EC096AD84E23FA4B9BC /* HDLumberjackLogFormatter.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/HDLumberjackLogFormatter/HDLumberjackLogFormatter-prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"PJ_AUTOCONF=1",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		BD33B0DE1752197375BFD0578FA7B52F /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 91AE0333A8A27ACAC68C7DB4F5FB4DD3 /* CocoaLumberjack.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"PJ_AUTOCONF=1",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		C1011851FFE477DD640B03B5501434F6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D205D18BCBB953F724AC44C6B273F300 /* VialerSIPLib-iOS.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/VialerSIPLib-iOS/VialerSIPLib-iOS-prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"PJ_AUTOCONF=1",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = NO;
@@ -1481,7 +1330,7 @@
 			};
 			name = Debug;
 		};
-		C6544A1F1139551CE6C6C9B43404CFA3 /* Release */ = {
+		74857149DC1E0D599B8A01A78349A926 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1501,10 +1350,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_RELEASE=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1518,14 +1364,56 @@
 			};
 			name = Release;
 		};
-		E88ADE6C45B8EB16B85A992E6A249447 /* Release */ = {
+		90B2C90874516DB446B4D1725C4AF0BF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EE63E9152F45568E90AAA53967E1885B /* Pods-VialerSIPLib_Tests.release.xcconfig */;
+			baseConfigurationReference = 9EDC9685495010CE328C82C5496916B6 /* Pods-VialerSIPLib_Example.debug.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"PJ_AUTOCONF=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		9DB68E351D8DCA898E2AB87F838A5CAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBBC797EB2D71EC096AD84E23FA4B9BC /* HDLumberjackLogFormatter.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/HDLumberjackLogFormatter/HDLumberjackLogFormatter-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"PJ_AUTOCONF=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		AF2ED1DB1F922E516869F362333E2CC2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A13CC8D9C206800751E7168132442250 /* Pods-VialerSIPLib_Example.release.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"PJ_AUTOCONF=1",
@@ -1537,12 +1425,79 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
+		};
+		E2BC815B383EDC7252F142BECFF188BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 18B1939CC048FCF5BB8D25D601515749 /* Pods-VialerSIPLib_Tests.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"PJ_AUTOCONF=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		E31C4A560025D59EA9EA26325E79592E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 91AE0333A8A27ACAC68C7DB4F5FB4DD3 /* CocoaLumberjack.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"PJ_AUTOCONF=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		FF7853FB1E760B3B475A9BBB2013B4EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D510A3ADCB6BD07EE3A95B15A07C12AF /* OCMock.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/OCMock/OCMock-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"PJ_AUTOCONF=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1550,8 +1505,8 @@
 		0CF2A8CA5B64916B32E12805D49E1760 /* Build configuration list for PBXNativeTarget "HDLumberjackLogFormatter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				404D79DF8E07F8F43E56F434C591767A /* Debug */,
-				A53FD6055E32B4F0A4052950466D0E0C /* Release */,
+				29EE37DD92DAED770D092BC550FE7B48 /* Debug */,
+				9DB68E351D8DCA898E2AB87F838A5CAD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1559,8 +1514,8 @@
 		10542776D8ACCA3DA970BD708ACC2AF4 /* Build configuration list for PBXNativeTarget "OCMock" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7B5CDAA0C5971F6D345B51D9B7015701 /* Debug */,
-				7963E4A54BB664F9F73F9939729DA12A /* Release */,
+				FF7853FB1E760B3B475A9BBB2013B4EF /* Debug */,
+				2539C03DF46325DEB1B6D12C7BFB1EFB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1568,8 +1523,8 @@
 		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2CE16AC72762C01C5DC595053F1F2EF4 /* Debug */,
-				C6544A1F1139551CE6C6C9B43404CFA3 /* Release */,
+				5CE5176205D06FF3FFE3DDDA9291E44B /* Debug */,
+				74857149DC1E0D599B8A01A78349A926 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1577,8 +1532,8 @@
 		902BAB2FFCEF654F023A7FB69AB980C0 /* Build configuration list for PBXNativeTarget "Pods-VialerSIPLib_Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6D71436561B9E5C86C57346BC28A957D /* Debug */,
-				E88ADE6C45B8EB16B85A992E6A249447 /* Release */,
+				E2BC815B383EDC7252F142BECFF188BB /* Debug */,
+				6617E6B87D54DB250036BD6CD21B2308 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1586,8 +1541,8 @@
 		A45305840E1B07AF4A09AE5CB9424438 /* Build configuration list for PBXNativeTarget "VialerSIPLib-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C1011851FFE477DD640B03B5501434F6 /* Debug */,
-				041370FFE1DF48A1ED4D7CBE9A9B65AD /* Release */,
+				55417A76D0C428D8F163047584731AB9 /* Debug */,
+				0B4528C448F3A62F33CB06077110E757 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1595,8 +1550,8 @@
 		D8D96D6F5E6FB60CAC67B39C5120C417 /* Build configuration list for PBXNativeTarget "Pods-VialerSIPLib_Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				87D617056A8705B0FF823A29D98B99CC /* Debug */,
-				3CD6321AF3B5FD88B3CA5C4C2B9F8E14 /* Release */,
+				90B2C90874516DB446B4D1725C4AF0BF /* Debug */,
+				AF2ED1DB1F922E516869F362333E2CC2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1604,8 +1559,8 @@
 		E0C8BB684C9CCC379207FFA69ED0D571 /* Build configuration list for PBXNativeTarget "CocoaLumberjack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				683BF20CBC7CC28163B71FB4B264BE3E /* Debug */,
-				BD33B0DE1752197375BFD0578FA7B52F /* Release */,
+				72BE4A42B4F978796AC4FEB0A9384C2D /* Debug */,
+				E31C4A560025D59EA9EA26325E79592E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
