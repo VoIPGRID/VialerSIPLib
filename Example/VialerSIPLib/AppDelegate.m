@@ -8,8 +8,6 @@
 #import "SipUser.h"
 #import "Keys.h"
 #import <VialerSIPLib-iOS/VialerSIPLib.h>
-#import <VialerSIPLib-iOS/VSLEndpointConfiguration.h>
-#import <VialerSIPLib-iOS/VSLTransportConfiguration.h>
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 NSString * const AppDelegateIncominCallNotification = @"AppDelegateIncominCallNotification";

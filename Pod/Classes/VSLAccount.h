@@ -156,6 +156,16 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
  */
 - (void)removeCall:(VSLCall * _Nonnull)call;
 
+/**
+ *  Remove all calls connected to account.
+ */
+- (void)removeAllCalls;
+
+/**
+ *  Get the first call available to this account.
+ *
+ *  @return VSLCAll instance can also return nil.
+ */
 - (VSLCall * _Nullable)firstCall;
 
 @end

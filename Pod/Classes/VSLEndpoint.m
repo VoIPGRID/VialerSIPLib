@@ -55,8 +55,11 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
 #pragma mark - Lifecycle
 
 - (BOOL)startEndpointWithEndpointConfiguration:(VSLEndpointConfiguration  * _Nonnull)endpointConfiguration error:(NSError **)error {
-    // Do nothing if it's already started or being started.
-    if (self.state > VSLEndpointStopped) {
+    // Do nothing if it's already started.
+    if (self.state == VSLEndpointStarted) {
+        return YES;
+    } else if (self.state == VSLEndpointStarting) {
+        // Do nothing if the endpoint is currently in the progress of starting.
         return NO;
     }
 
@@ -189,6 +192,10 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
 
 - (void)destoryPJSUAInstance {
     DDLogInfo(@"PJSUA was already running destroying old instance.");
+
+    for (VSLAccount *account in self.accounts) {
+        [account removeAllCalls];
+    }
 
     if (!pj_thread_is_registered()) {
         pj_thread_desc aPJThreadDesc;

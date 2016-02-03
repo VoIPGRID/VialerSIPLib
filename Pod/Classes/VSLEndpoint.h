@@ -93,6 +93,11 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
 + (instancetype _Nonnull)sharedEndpoint;
 
 /**
+ *  This will remove the pjsua configuration.
+ */
+- (void)destoryPJSUAInstance;
+
+/**
  *  This will configure the endpoint with pjsua.
  *
  *  @param endpointConfiguration Instance of an end point configuration.

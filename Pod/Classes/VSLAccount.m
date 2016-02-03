@@ -242,9 +242,16 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 - (void)removeCall:(VSLCall *)call {
     [self.calls removeObject:call];
 
-    // All calls are ended, we unregister the account
+    // All calls are ended, we unregister the account.
     if ([self.calls count] == 0) {
         [self unregisterAccount:nil];
+    }
+}
+
+- (void)removeAllCalls {
+    for (VSLCall *call in self.calls) {
+        [call hangup:nil];
+        [self removeCall:call];
     }
 }
 
