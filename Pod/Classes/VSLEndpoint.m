@@ -218,6 +218,8 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     if (status != PJ_SUCCESS) {
         DDLogError(@"Error stopping SIP Endpoint");
     }
+
+    self.state = VSLEndpointStopped;
 }
 
 #pragma mark - Account functions
