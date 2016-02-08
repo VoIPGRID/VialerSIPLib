@@ -5,9 +5,8 @@
 
 #import <Foundation/Foundation.h>
 #import "VSLCall.h"
-
-@class VSLEndpointConfiguration;
-@class VSLTransportConfiguration;
+#import "VSLEndpointConfiguration.h"
+#import "VSLTransportConfiguration.h"
 
 /**
  *  Possible errors the VialerSIPLib can return.
@@ -119,4 +118,8 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 - (void)setIncomingCallBlock:(void(^ _Nonnull )(VSLCall * _Nonnull call))incomingCallBlock;
 
+/**
+ *  Remove the configured endpoint from PJSUA.
+ */
+- (void)removeEndpoint;
 @end

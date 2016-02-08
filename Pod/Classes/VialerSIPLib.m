@@ -11,7 +11,6 @@
 #import "VSLAccountConfiguration.h"
 #import "VSLCall.h"
 #import "VSLEndpoint.h"
-#import "VSLEndpointConfiguration.h"
 
 static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
 
@@ -53,6 +52,10 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
                          errorCode:VialerSIPLibErrorEndpointConfigurationFailed];
     }
     return success;
+}
+
+- (void)removeEndpoint {
+    [self.endpoint destoryPJSUAInstance];
 }
 
 - (VSLAccount *)createAccountWithSipUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser error:(NSError * _Nullable __autoreleasing *)error {
