@@ -16,8 +16,8 @@
 }
 
 - (NSString *)sipAddress {
-    if (self.sipUsername && self.sipDomain) {
-        return [NSString stringWithFormat:@"%@@%@", self.sipUsername, self.sipDomain];
+    if (self.sipAccount && self.sipDomain) {
+        return [NSString stringWithFormat:@"%@@%@", self.sipAccount, self.sipDomain];
     }
     return nil;
 }

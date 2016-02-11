@@ -31,11 +31,11 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 @protocol SIPEnabledUser <NSObject>
 /**
- *  The username that should be used when authenticate on remote PBX.
+ *  The sip account that should be used when authenticate on remote PBX.
  *
  *  @return NSString with the password.
  */
-- (NSString * _Nonnull)sipUsername;
+- (NSString * _Nonnull)sipAccount;
 /**
  *  The password that should be used when authenticate on remote PBX.
  *

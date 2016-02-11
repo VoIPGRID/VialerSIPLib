@@ -36,7 +36,7 @@
 
 - (void)testAccountHasNoErrorWhenDomainAndUsernameInConfig {
     VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
-    config.sipUsername = @"test";
+    config.sipAccount = @"test";
     config.sipDomain = @"sip.test.com";
 
     NSError *error;
@@ -49,7 +49,7 @@
 
 - (void)testAccountHasAValidAccountIdWhenConfigured {
     VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
-    config.sipUsername = @"test";
+    config.sipAccount = @"test";
     config.sipDomain = @"sip.test.com";
 
     NSError *error;
@@ -63,7 +63,7 @@
 
 - (void)testAccountHasACorrectConfigWhenProperlyConfigured {
     VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
-    config.sipUsername = @"test";
+    config.sipAccount = @"test";
     config.sipDomain = @"sip.test.com";
 
     [self.account configureWithAccountConfiguration:config error:nil];
@@ -74,7 +74,7 @@
 
 - (void)testAccountHasNoConfigWhenWrongConfigured {
     VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
-    config.sipUsername = @"1234";
+    config.sipAccount = @"1234";
 
     NSError *error = nil;
     [self.account configureWithAccountConfiguration:config error:&error];
@@ -118,7 +118,7 @@
 - (void)testAccountCanRegister {
     VSLEndpoint *endpoint = [VSLEndpoint sharedEndpoint];
     VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
-    config.sipUsername = @"test";
+    config.sipAccount = @"test";
     config.sipDomain = @"sip.test.com";
     [self.account configureWithAccountConfiguration:config error:nil];
 

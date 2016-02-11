@@ -92,7 +92,7 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
     [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
 
     SipUser *testUser = [[SipUser alloc] init];
-    testUser.sipUsername = KeysUsername;
+    testUser.sipAccount = KeysAccount;
     testUser.sipPassword = KeysPassword;
     testUser.sipDomain = KeysDomain;
     testUser.sipProxy = KeysProxy;

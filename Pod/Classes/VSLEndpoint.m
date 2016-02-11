@@ -250,9 +250,9 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     }
 }
 
-- (VSLAccount *)getAccountWithSipUsername:(NSString *)sipUsername {
+- (VSLAccount *)getAccountWithSipAccount:(NSString *)sipAccount {
     for (VSLAccount *account in self.accounts) {
-        if (account.accountConfiguration.sipUsername == sipUsername) {
+        if (account.accountConfiguration.sipAccount == sipAccount) {
             return account;
         }
     }
@@ -264,11 +264,11 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
 static void logCallBack(int level, const char *data, int len) {
     NSString *logString = [[NSString alloc] initWithUTF8String:data];
 
-    //Strip time stamp from the front
-    //TODO: check that the logmessage actually has a timestamp before removing.
+    // Strip time stamp from the front
+    // TODO: check that the logmessage actually has a timestamp before removing.
     logString = [logString substringFromIndex:13];
 
-    //The data obtained from the callback has a NewLine character at the end, remove it.
+    // The data obtained from the callback has a NewLine character at the end, remove it.
     unichar last = [logString characterAtIndex:[logString length] - 1];
     if ([[NSCharacterSet newlineCharacterSet] characterIsMember:last]) {
         logString = [logString substringToIndex:[logString length]-1];

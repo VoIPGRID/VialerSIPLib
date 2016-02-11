@@ -43,7 +43,7 @@ Add a user to the libary. The user can be of any class, as long the calls implem
 
 ```objective-c
     SipUser *testUser = [[SipUser alloc] init];
-    testUser.sipUsername = KeysUsername;
+    testUser.sipAccount = KeysAccount;
     testUser.sipPassword = KeysPassword;
     testUser.sipDomain = KeysDomain;
     testUser.sipProxy = KeysProxy;

@@ -18,7 +18,7 @@
 }
 
 - (void)testCanSetUsernameOnConfiguration {
-    XCTAssertNoThrow(self.configuration.sipUsername = @"1234", @"should be able to setup a username");
+    XCTAssertNoThrow(self.configuration.sipAccount = @"1234", @"should be able to setup a username");
 }
 
 - (void)testCanSetPasswordOnConfiguration {
@@ -39,12 +39,12 @@
 }
 
 - (void)testAddressShouldBeEmptyIfNoDomain {
-    self.configuration.sipUsername = @"1234";
+    self.configuration.sipAccount = @"1234";
     XCTAssertNil(self.configuration.sipAddress, @"there should be no address if there is no domain");
 }
 
 - (void)testAddressShouldBeCorrectIfUsernameAndDomainAreSet {
-    self.configuration.sipUsername = @"1234";
+    self.configuration.sipAccount= @"1234";
     self.configuration.sipDomain = @"sip.test.nl";
     XCTAssertEqualObjects(self.configuration.sipAddress, @"1234@sip.test.nl", @"the address should be correct if there is a domain and username");
 }

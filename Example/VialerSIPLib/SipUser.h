@@ -11,7 +11,7 @@
 
 @interface SipUser : NSObject <SIPEnabledUser>
 
-@property (strong, nonatomic) NSString *sipUsername;
+@property (strong, nonatomic) NSString *sipAccount;
 @property (strong, nonatomic) NSString *sipPassword;
 @property (strong, nonatomic) NSString *sipDomain;
 @property (strong, nonatomic) NSString *sipProxy;

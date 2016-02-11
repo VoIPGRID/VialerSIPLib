@@ -133,10 +133,10 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
 /**
  *  Returns an account if it is available.
  *
- *  @param sipUsername NSString the sip username you want to check.
+ *  @param sipAccount NSString the sip username you want to check.
  *
  *  @return VSLAccount instance of the account.
  */
-- (VSLAccount * _Nullable)getAccountWithSipUsername:(NSString * _Nonnull)sipUsername;
+- (VSLAccount * _Nullable)getAccountWithSipAccount:(NSString * _Nonnull)sipAccount;
 
 @end

@@ -8,12 +8,12 @@
 @interface VSLAccountConfiguration : NSObject
 
 /**
- *  The username that should be used when authenticate on remote PBX.
+ *  The account that should be used when authenticate on remote PBX.
  */
-@property (strong, nonatomic) NSString * _Nonnull sipUsername;
+@property (strong, nonatomic) NSString * _Nonnull sipAccount;
 
 /**
- *  The username that should be used when authenticate on remote PBX.
+ *  The password that should be used when authenticate on remote PBX.
  */
 @property (strong, nonatomic) NSString * _Nonnull sipPassword;
 
@@ -28,7 +28,7 @@
 @property (strong, nonatomic) NSString * _Nonnull sipProxyServer;
 
 /**
- *  The address which is a combination of sipUsername & sipDomain.
+ *  The address which is a combination of sipAccount & sipDomain.
  */
 @property (readonly, nonatomic) NSString * _Nonnull sipAddress;
 

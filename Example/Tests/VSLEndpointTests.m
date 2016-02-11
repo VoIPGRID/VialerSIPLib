@@ -43,22 +43,22 @@
 - (void)testNoAccountFoundGetAccountWithSiperUsernameReturnsNil {
     [self.endpoint addAccount:[[VSLAccount alloc] init]];
 
-    VSLAccount *account = [self.endpoint getAccountWithSipUsername:@"42"];
+    VSLAccount *account = [self.endpoint getAccountWithSipAccount:@"42"];
     XCTAssertNil(account, @"There should be no account found when the sip username is not found");
 
     [self.endpoint removeAccount:account];
 }
 
-- (void)testAccountFoundFromGetAccountWithSipUsername {
+- (void)testAccountFoundFromGetAccountWithSipAccount {
     VSLAccountConfiguration *config = [[VSLAccountConfiguration alloc] init];
-    config.sipUsername = @"42";
+    config.sipAccount = @"42";
     config.sipDomain = @"sip.test.com";
 
     VSLAccount *testAccount = [[VSLAccount alloc] init];
     [testAccount configureWithAccountConfiguration:config error:nil];
     [self.endpoint addAccount:testAccount];
 
-    VSLAccount *account = [self.endpoint getAccountWithSipUsername:@"42"];
+    VSLAccount *account = [self.endpoint getAccountWithSipAccount:@"42"];
     XCTAssertEqualObjects(account, testAccount, @"There should be an account found.");
 
     [self.endpoint removeAccount:testAccount];

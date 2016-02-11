@@ -60,7 +60,7 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
 
 - (VSLAccount *)createAccountWithSipUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser error:(NSError * _Nullable __autoreleasing *)error {
     VSLAccountConfiguration *accountConfiguration = [[VSLAccountConfiguration alloc] init];
-    accountConfiguration.sipUsername = sipUser.sipUsername;
+    accountConfiguration.sipAccount = sipUser.sipAccount;
     accountConfiguration.sipPassword = sipUser.sipPassword;
     accountConfiguration.sipDomain = sipUser.sipDomain;
     accountConfiguration.sipProxyServer = sipUser.sipProxy ? sipUser.sipProxy : @"";
@@ -82,7 +82,7 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
 }
 
 - (BOOL)registerAccount:(id<SIPEnabledUser> _Nonnull __autoreleasing)sipUser error:(NSError * _Nullable __autoreleasing *)error {
-    VSLAccount *account = [self.endpoint getAccountWithSipUsername:sipUser.sipUsername];
+    VSLAccount *account = [self.endpoint getAccountWithSipAccount:sipUser.sipAccount];
 
     if (!account) {
         NSError *accountConfigError;

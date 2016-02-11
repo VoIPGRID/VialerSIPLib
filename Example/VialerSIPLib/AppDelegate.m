@@ -28,7 +28,7 @@ NSString * const AppDelegateIncominCallNotification = @"AppDelegateIncominCallNo
         DDLogError(@"Failed to startup VialerSIPLib: %@", error);
     } else {
         SipUser *testUser = [[SipUser alloc] init];
-        testUser.sipUsername = KeysUsername;
+        testUser.sipAccount = KeysAccount;
         testUser.sipPassword = KeysPassword;
         testUser.sipDomain = KeysDomain;
         testUser.sipProxy = KeysProxy;
