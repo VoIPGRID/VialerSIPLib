@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
 @property (readwrite, nonatomic) BOOL muted;
 @property (readwrite, nonatomic) BOOL speaker;
 @property (readwrite, nonatomic) BOOL onHold;
+@property (strong, nonatomic) NSString *currentAudioSessionCategory;
 @end
 
 @implementation VSLCall
@@ -48,6 +49,20 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
 #pragma mark - Life Cycle
 
 + (instancetype)callNumber:(NSString *)number withAccount:(VSLAccount *)account error:(NSError * _Nullable __autoreleasing *)error {
+    NSError *audioSessionCategoryError;
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];
+
+    if (audioSessionCategoryError != NULL) {
+        DDLogInfo(@"Error setting the correct AVAudioSession category");
+        if (error != NULL) {
+            *error = [NSError VSLUnderlyingError:nil
+                         localizedDescriptionKey:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)
+                     localizedFailureReasonError:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)
+                                     errorDomain:VSLCallErrorDomain
+                                       errorCode:VSLCallErrorCannotCreateCall];
+        }
+        return nil;
+    }
     pj_str_t sipUri = [number sipUriWithDomain:account.accountConfiguration.sipDomain];
 
     // Create call settings.
