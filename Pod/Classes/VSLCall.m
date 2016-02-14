@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
     NSError *audioSessionCategoryError;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];
 
-    if (audioSessionCategoryError != NULL) {
+    if (audioSessionCategoryError) {
         DDLogInfo(@"Error setting the correct AVAudioSession category");
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
@@ -203,6 +203,20 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
     pj_status_t status;
 
     if (self.callId != PJSUA_INVALID_ID) {
+        NSError *audioSessionCategoryError;
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];
+        if (audioSessionCategoryError) {
+            DDLogInfo(@"Error setting the correct AVAudioSession category");
+            if (error != NULL) {
+                *error = [NSError VSLUnderlyingError:nil
+                             localizedDescriptionKey:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)
+                         localizedFailureReasonError:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)
+                                         errorDomain:VSLCallErrorDomain
+                                           errorCode:VSLCallErrorCannotCreateCall];
+            }
+            return NO;
+        }
+
         status = pjsua_call_answer((int)self.callId, PJSIP_SC_OK, NULL, NULL);
 
         if (status != PJ_SUCCESS) {

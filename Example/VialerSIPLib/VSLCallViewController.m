@@ -3,6 +3,7 @@
 //  Copyright © 2016 Devhouse Spindle. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
 #import <CocoaLumberJack/CocoaLumberjack.h>
 #import "VSLCallViewController.h"
 #import <VialerSIPLib-iOS/VSLRingtone.h>
@@ -12,6 +13,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 @interface VSLCallViewController ()
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *keypadNumbers;
 @property (weak, nonatomic) IBOutlet UILabel *numbersPressedLabel;
+@property (strong, nonatomic) NSString *currentAudioSessionCategory;
 @end
 
 @implementation VSLCallViewController
@@ -19,10 +21,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #pragma mark - properties
 
 - (void)setNumberToCall:(NSString *)numberToCall {
+    self.currentAudioSessionCategory = [AVAudioSession sharedInstance].category;
     [self.account callNumber:numberToCall withCompletion:^(NSError *error, VSLCall *call) {
         [UIDevice currentDevice].proximityMonitoringEnabled = YES;
         if (error) {
             DDLogError(@"%@", error);
+            NSError *setAudioSessionCategoryError;
+            [[AVAudioSession sharedInstance] setCategory:self.currentAudioSessionCategory error:&error];
+            if (setAudioSessionCategoryError) {
+                DDLogError(@"Error setting the audio session category: %@", setAudioSessionCategoryError);
+            }
         } else {
             self.call = call;
         }
@@ -38,6 +46,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [self updateUIForCall];
     [call addObserver:self forKeyPath:@"callState" options:0 context:NULL];
     [call addObserver:self forKeyPath:@"mediaState" options:0 context:NULL];
+    self.currentAudioSessionCategory = [AVAudioSession sharedInstance].category;
 }
 
 #pragma mark - Actions
@@ -64,8 +73,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSError *error;
     [self.call hangup:&error];
     self.numbersPressedLabel.text = @"";
+
     if (error) {
         DDLogError(@"Error hangup call: %@", error);
+    }
+
+    NSError *setAudioSessionCategoryError;
+    [[AVAudioSession sharedInstance] setCategory:self.currentAudioSessionCategory error:&setAudioSessionCategoryError];
+    if (setAudioSessionCategoryError) {
+        DDLogError(@"Error setting the audio session category: %@", setAudioSessionCategoryError);
     }
 }
 
@@ -97,7 +113,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                 } @catch (NSException *exception) {
                     DDLogInfo(@"Observer for keyPath mediaState was already removed. %@", exception);
                 }
-
 
                 self.delegate.call = self.call;
                 [UIDevice currentDevice].proximityMonitoringEnabled = NO;
