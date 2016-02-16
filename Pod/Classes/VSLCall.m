@@ -123,36 +123,40 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
 #pragma mark - Properties
 
 - (void)setCallState:(VSLCallState)callState {
-    _callState = callState;
+    if (_callState != callState) {
+        [self willChangeValueForKey:@"callState"];
+        _callState = callState;
+        [self didChangeValueForKey:@"callState"];
 
-    switch (_callState) {
-        case VSLCallStateNull: {
+        switch (_callState) {
+            case VSLCallStateNull: {
 
-        } break;
-        case VSLCallStateIncoming: {
+            } break;
+            case VSLCallStateIncoming: {
 
-        } break;
+            } break;
 
-        case VSLCallStateCalling: {
-            [self.ringback start];
-        } break;
+            case VSLCallStateCalling: {
+                [self.ringback start];
+            } break;
 
-        case VSLCallEarlyState: {
-            [self.ringback start];
-        } break;
+            case VSLCallEarlyState: {
+                [self.ringback start];
+            } break;
 
-        case VSLCallStateConnecting: {
+            case VSLCallStateConnecting: {
 
-        } break;
+            } break;
 
-        case VSLCallStateConfirmed: {
-            [self.ringback stop];
-        } break;
+            case VSLCallStateConfirmed: {
+                [self.ringback stop];
+            } break;
 
-        case VSLCallStateDisconnected: {
-            [self.ringback stop];
-            [self.account removeCall:self];
-        } break;
+            case VSLCallStateDisconnected: {
+                [self.ringback stop];
+                [self.account removeCall:self];
+            } break;
+        }
     }
 }
 
@@ -374,6 +378,12 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
             }
         }
     }
+}
+
+#pragma mark - KVO override
+
++ (BOOL)automaticallyNotifiesObserversOfCallState {
+    return NO;
 }
 
 @end
