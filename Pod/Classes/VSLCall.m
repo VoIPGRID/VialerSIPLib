@@ -340,7 +340,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
 
 - (void)sendDTMF:(NSString *)character error:(NSError *__autoreleasing  _Nullable *)error {
     // Return if the call is not confirmed or when the call is on hold.
-    if (self.callState != VSLCallStateConfirmed || !self.onHold) {
+    if (self.callState != VSLCallStateConfirmed || self.onHold) {
         return;
     }
 
