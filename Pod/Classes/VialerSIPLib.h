@@ -130,7 +130,7 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *
  *  @return VSCall instance of VSLCall of nil when not found.
  */
-- (VSLCall * _Nullable)getVSLCallWithId:(NSString * _Nonnull)callId withSipUser:(id<SIPEnabledUser> _Nonnull __autoreleasing)sipUser;
+- (VSLCall * _Nullable)getVSLCallWithId:(NSString * _Nonnull)callId withSipUser:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser;
 
 /**
  *  Remove the configured endpoint from PJSUA.
