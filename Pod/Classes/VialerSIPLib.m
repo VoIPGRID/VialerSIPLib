@@ -126,6 +126,22 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
     return YES;
 }
 
+- (VSLCall *)getVSLCallWithIdAndSipUser:(NSString *)callId withSipUser:(id<SIPEnabledUser> _Nonnull __autoreleasing)sipUser {
+    if (!callId) {
+        return nil;
+    }
+
+    VSLAccount *account = [self.endpoint getAccountWithSipAccount:sipUser.sipAccount];
+
+    if (!account) {
+        return nil;
+    }
+
+    VSLCall *call = [account lookupCall:[callId intValue]];
+
+    return call;
+}
+
 - (VSLAccount *)firstAccount {
     return [self.endpoint.accounts firstObject];
 }
