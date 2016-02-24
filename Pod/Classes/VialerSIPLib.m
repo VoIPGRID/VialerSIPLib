@@ -37,6 +37,13 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
     return _endpoint;
 }
 
+- (BOOL)endpointAvailable {
+    if (self.endpoint.state == VSLEndpointStarted) {
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL)configureLibraryWithEndPointConfiguration:(VSLEndpointConfiguration * _Nonnull)endpointConfiguration error:(NSError * _Nullable __autoreleasing *)error {
     // Make sure interrupts are handled by pjsip
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];

@@ -70,6 +70,11 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
 @interface VialerSIPLib : NSObject
 
 /**
+ *  If the endpoint is available to use.
+ */
+@property (readonly, nonatomic) BOOL endpointAvailable;
+
+/**
  * The shared instance for the sip library.
  */
 + (instancetype _Nonnull)sharedInstance;
