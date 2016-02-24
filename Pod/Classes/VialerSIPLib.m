@@ -126,7 +126,7 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
     return YES;
 }
 
-- (VSLCall *)getVSLCallWithIdAndSipUser:(NSString *)callId withSipUser:(id<SIPEnabledUser> _Nonnull __autoreleasing)sipUser {
+- (VSLCall *)getVSLCallWithId:(NSString *)callId andSipUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser {
     if (!callId) {
         return nil;
     }
