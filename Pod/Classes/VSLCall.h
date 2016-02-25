@@ -145,6 +145,16 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
 @property (readonly, nonatomic) NSString * _Nullable remoteURI;
 
 /**
+ *  The name of the caller.
+ */
+@property (readonly, nonatomic) NSString * _Nullable callerName;
+
+/**
+ *  The number of the caller.
+ */
+@property (readonly, nonatomic) NSString * _Nullable callerNumber;
+
+/**
  *  True if the call was incoming.
  */
 @property (readonly, getter=isIncoming) BOOL incoming;
@@ -245,4 +255,5 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  *  @param error     error Pointer to an NSError pointer. Will be set to a NSError instance if cannot send DTMF for the call.
  */
 - (void)sendDTMF:(NSString * _Nonnull)character error:(NSError * _Nullable * _Nullable)error;
+
 @end

@@ -107,21 +107,19 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
         }
     }
 
-    NSError *accountError;
-    BOOL success = YES;
     if (account.accountState == VSLAccountStateOffline || account.accountState == VSLAccountStateDisconnected) {
-        success = [account registerAccount:&accountError];
-    }
-
-    if (!success) {
-        if (error != nil) {
-            *error = [NSError VSLUnderlyingError:accountError
-               localizedDescriptionKey:NSLocalizedString(@"The registration of the account has failed.", nil)
-           localizedFailureReasonError:nil
-                           errorDomain:VialerSIPLibErrorDomain
-                             errorCode:VialerSIPLibErrorAccountRegistrationFailed];
+        NSError *accountError;
+        BOOL success = [account registerAccount:&accountError];
+        if (!success) {
+            if (error != nil) {
+                *error = [NSError VSLUnderlyingError:accountError
+                             localizedDescriptionKey:NSLocalizedString(@"The registration of the account has failed.", nil)
+                         localizedFailureReasonError:nil
+                                         errorDomain:VialerSIPLibErrorDomain
+                                           errorCode:VialerSIPLibErrorAccountRegistrationFailed];
+            }
+            return NO;
         }
-        return NO;
     }
     return YES;
 }

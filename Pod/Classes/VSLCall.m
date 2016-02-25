@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
 @property (readwrite, nonatomic) VSLMediaState mediaState;
 @property (readwrite, nonatomic) NSString *localURI;
 @property (readwrite, nonatomic) NSString *remoteURI;
+@property (readwrite, nonatomic) NSString *callerName;
+@property (readwrite, nonatomic) NSString *callerNumber;
 @property (readwrite, nonatomic) NSInteger callId;
 @property (readwrite, nonatomic) NSInteger accountId;
 @property (strong, nonatomic) VSLRingback *ringback;
@@ -180,6 +182,10 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
     self.lastStatusText = [NSString stringWithPJString:callInfo.last_status_text];
     self.localURI = [NSString stringWithPJString:callInfo.local_info];
     self.remoteURI = [NSString stringWithPJString:callInfo.remote_info];
+    NSDictionary *callerInfo = [self getCallerInfoFromRemoteUri:self.remoteURI];
+    self.callerName = callerInfo[@"caller_name"];
+    self.callerNumber = callerInfo[@"caller_number"];
+
 }
 
 - (void)callStateChanged:(pjsua_call_info)callInfo {
@@ -384,6 +390,82 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
 
 + (BOOL)automaticallyNotifiesObserversOfCallState {
     return NO;
+}
+
+#pragma mark - helper function
+
+/**
+ *  Get the caller_name and caller_number from a string
+ *
+ *  @param string the input string formatter like "name" <sip:42@sip.nl>
+ *
+ *  @return NSDictionary output like @{"caller_name: name, "caller_number": 42}.
+ */
+- (NSDictionary *)getCallerInfoFromRemoteUri:(NSString *)string {
+    NSString *callerName = nil;
+    NSString *callerNumber = nil;
+    NSString *callerHost;
+    NSString *destination;
+    NSRange delimterRange;
+    NSRange atSignRange;
+    NSRange semiColonRange;
+    // Create a character set which will be trimmed from the string.
+    NSMutableCharacterSet *charactersToTrim = [[NSCharacterSet whitespaceCharacterSet] mutableCopy];
+
+    if ([[NSPredicate predicateWithFormat:@"SELF MATCHES '.+\\\\s\\\\(.+\\\\)'"] evaluateWithObject:string]) {
+        /**
+         * This matches the remote_uri for a format of: "destination (display_name)
+         */
+
+        delimterRange = [string rangeOfString:@" (" options:NSBackwardsSearch];
+
+        // Create a character set which will be trimmed from the string.
+        // All in-line whitespace and double quotes.
+        [charactersToTrim addCharactersInString:@"\"()"];
+
+        callerName = [[string substringFromIndex:delimterRange.location] stringByTrimmingCharactersInSet:charactersToTrim];
+
+        destination = [string substringToIndex:delimterRange.location];
+
+        // Get the last part of the uri starting from @
+        atSignRange = [destination rangeOfString:@"@" options:NSBackwardsSearch];
+        callerHost = [destination substringToIndex: atSignRange.location];
+
+        // Get the telephone part starting from the :
+        semiColonRange = [callerHost rangeOfString:@":" options:NSBackwardsSearch];
+        callerNumber = [callerHost substringFromIndex:semiColonRange.location + 1];
+    } else if ([[NSPredicate predicateWithFormat:@"SELF MATCHES '.+\\\\s<.+>'"] evaluateWithObject:string]) {
+        /**
+         *  This matches the remote_uri format of: "display_name" <destination_address>
+         */
+
+        delimterRange = [string rangeOfString:@" <" options:NSBackwardsSearch];
+
+        // All in-line whitespace and double quotes.
+        [charactersToTrim addCharactersInString:@"\""];
+
+        // Get the caller_name from to where the first < is
+        // and also trimming the characters defined in charactersToTrim.
+        callerName = [[string substringToIndex:delimterRange.location] stringByTrimmingCharactersInSet:charactersToTrim];
+
+        // Get the second part of the uri starting from the <
+        NSRange destinationRange = NSMakeRange(delimterRange.location + 2,
+                                               ([string length] - (delimterRange.location + 2) - 1));
+        destination = [string substringWithRange: destinationRange];
+
+        // Get the last part of the uri starting from @
+        atSignRange = [destination rangeOfString:@"@" options:NSBackwardsSearch];
+        callerHost = [destination substringToIndex: atSignRange.location];
+
+        // Get the telephone part starting from the :
+        semiColonRange = [callerHost rangeOfString:@":" options:NSBackwardsSearch];
+        callerNumber = [callerHost substringFromIndex:semiColonRange.location + 1];
+    }
+
+    return @{
+             @"caller_name": callerName,
+             @"caller_number": callerNumber,
+             };
 }
 
 @end
