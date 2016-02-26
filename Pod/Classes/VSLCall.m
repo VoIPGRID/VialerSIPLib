@@ -402,8 +402,8 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
  *  @return NSDictionary output like @{"caller_name: name, "caller_number": 42}.
  */
 - (NSDictionary *)getCallerInfoFromRemoteUri:(NSString *)string {
-    NSString *callerName = nil;
-    NSString *callerNumber = nil;
+    NSString *callerName = @"";
+    NSString *callerNumber = @"";
     NSString *callerHost;
     NSString *destination;
     NSRange delimterRange;
@@ -456,6 +456,35 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
         // Get the last part of the uri starting from @
         atSignRange = [destination rangeOfString:@"@" options:NSBackwardsSearch];
         callerHost = [destination substringToIndex: atSignRange.location];
+
+        // Get the telephone part starting from the :
+        semiColonRange = [callerHost rangeOfString:@":" options:NSBackwardsSearch];
+        callerNumber = [callerHost substringFromIndex:semiColonRange.location + 1];
+    } else if ([[NSPredicate predicateWithFormat:@"SELF MATCHES '<.+\\\\>'"] evaluateWithObject:string]) {
+        /**
+         * This matches the remote_uri format of: <sip:42@test.nl>
+         */
+
+        // Get the second part of the uri starting from the <
+        NSRange destinationRange = NSMakeRange(1,
+                                               ([string length] - 2));
+        destination = [string substringWithRange: destinationRange];
+
+        // Get the last part of the uri starting from @
+        atSignRange = [destination rangeOfString:@"@" options:NSBackwardsSearch];
+        callerHost = [destination substringToIndex: atSignRange.location];
+
+        // Get the telephone part starting from the :
+        semiColonRange = [callerHost rangeOfString:@":" options:NSBackwardsSearch];
+        callerNumber = [callerHost substringFromIndex:semiColonRange.location + 1];
+    } else {
+        /**
+         * This matches the remote_uri format of: sip:42@test.nl
+         */
+
+        // Get the last part of the uri starting from @
+        atSignRange = [string rangeOfString:@"@" options:NSBackwardsSearch];
+        callerHost = [string substringToIndex: atSignRange.location];
 
         // Get the telephone part starting from the :
         semiColonRange = [callerHost rangeOfString:@":" options:NSBackwardsSearch];

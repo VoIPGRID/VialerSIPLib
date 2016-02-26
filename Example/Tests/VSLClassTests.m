@@ -40,4 +40,24 @@
     XCTAssert([dictionary[@"caller_number"] isEqualToString:@"42"], @"The caller_number needs to be 42");
 }
 
+- (void)testCallerNameNoDisplayNameInRemoteURI {
+    NSString *inputString = @"<sip:42@test.nl>";
+
+    VSLCall *call = [[VSLCall alloc] init];
+    NSDictionary *dictionary = [call getCallerInfoFromRemoteUri:inputString];
+
+    XCTAssert([dictionary[@"caller_name"] isEqualToString:@""], @"The caller_name needs to be empty");
+    XCTAssert([dictionary[@"caller_number"] isEqualToString:@"42"], @"The caller_number needs to be 42");
+}
+
+- (void)testCallerNameNoDisplayNameInRemoteURITwo {
+    NSString *inputString = @"sip:42@test.nl";
+
+    VSLCall *call = [[VSLCall alloc] init];
+    NSDictionary *dictionary = [call getCallerInfoFromRemoteUri:inputString];
+
+    XCTAssert([dictionary[@"caller_name"] isEqualToString:@""], @"The caller_name needs to be empty");
+    XCTAssert([dictionary[@"caller_number"] isEqualToString:@"42"], @"The caller_number needs to be 42");
+}
+
 @end
