@@ -27,7 +27,7 @@
 		F27386181C170B3C002C4CD1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F273861A1C170B3C002C4CD1 /* LaunchScreen.storyboard */; };
 		F930F6C71C22F33600B8DBD0 /* SipUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F930F6C61C22F33600B8DBD0 /* SipUser.m */; };
 		F951E38D1C56214300FA480F /* VialerSIPLibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F951E38C1C56214300FA480F /* VialerSIPLibTests.m */; };
-		F95AFD271C7F39BC005FC8CD /* VSLClassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F95AFD261C7F39BC005FC8CD /* VSLClassTests.m */; };
+		F95AFD271C7F39BC005FC8CD /* VSLCallTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F95AFD261C7F39BC005FC8CD /* VSLCallTests.m */; };
 		F9906C211C3A85AC0044EA99 /* VSLAccountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */; };
 		F9906C231C3A85E80044EA99 /* VSLEndpointTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C221C3A85E80044EA99 /* VSLEndpointTests.m */; };
 		F9906C251C3A87EB0044EA99 /* NSStringPlusPJStringTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C241C3A87EB0044EA99 /* NSStringPlusPJStringTests.m */; };
@@ -89,7 +89,7 @@
 		F930F6C51C22F33600B8DBD0 /* SipUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SipUser.h; sourceTree = "<group>"; };
 		F930F6C61C22F33600B8DBD0 /* SipUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SipUser.m; sourceTree = "<group>"; };
 		F951E38C1C56214300FA480F /* VialerSIPLibTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VialerSIPLibTests.m; sourceTree = "<group>"; };
-		F95AFD261C7F39BC005FC8CD /* VSLClassTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLClassTests.m; sourceTree = "<group>"; };
+		F95AFD261C7F39BC005FC8CD /* VSLCallTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLCallTests.m; sourceTree = "<group>"; };
 		F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountTests.m; sourceTree = "<group>"; };
 		F9906C221C3A85E80044EA99 /* VSLEndpointTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLEndpointTests.m; sourceTree = "<group>"; };
 		F9906C241C3A87EB0044EA99 /* NSStringPlusPJStringTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringPlusPJStringTests.m; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 				F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */,
 				F9906C221C3A85E80044EA99 /* VSLEndpointTests.m */,
 				F951E38C1C56214300FA480F /* VialerSIPLibTests.m */,
-				F95AFD261C7F39BC005FC8CD /* VSLClassTests.m */,
+				F95AFD261C7F39BC005FC8CD /* VSLCallTests.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -492,7 +492,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F95AFD271C7F39BC005FC8CD /* VSLClassTests.m in Sources */,
+				F95AFD271C7F39BC005FC8CD /* VSLCallTests.m in Sources */,
 				C424B50F1C3BDBD900178E52 /* VSLTransportConfigurationTests.m in Sources */,
 				F951E38D1C56214300FA480F /* VialerSIPLibTests.m in Sources */,
 				F9906C251C3A87EB0044EA99 /* NSStringPlusPJStringTests.m in Sources */,

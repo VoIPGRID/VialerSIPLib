@@ -164,8 +164,14 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
 /**
  *  Get the first call available to this account.
  *
- *  @return VSLCAll instance can also return nil.
+ *  @return VSLCall instance can also return nil.
  */
 - (VSLCall * _Nullable)firstCall;
 
+/**
+ *  Get the first active call available to this account.
+ *
+ *  @return VSLCall instance can also return nil.
+ */
+- (VSLCall * _Nullable)firstActiveCall;
 @end

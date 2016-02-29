@@ -263,4 +263,13 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     }
 }
 
+- (VSLCall *)firstActiveCall {
+    for (VSLCall * call in self.calls) {
+        if (call.callState > VSLCallStateNull && call.callState < VSLCallStateDisconnected) {
+            return call;
+        }
+    }
+    return nil;
+}
+
 @end

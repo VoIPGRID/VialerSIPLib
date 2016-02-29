@@ -1,9 +1,6 @@
 //
 //  VSLClassTests.m
-//  VialerSIPLib
-//
-//  Created by Redmer Loen on 25-02-16.
-//  Copyright © 2016 Harold. All rights reserved.
+//  Copyright © 2016 Devhouse Spindle. All rights reserved.
 //
 
 #import <OCMock/OCMock.h>
@@ -14,11 +11,11 @@
 - (NSDictionary * _Nonnull)getCallerInfoFromRemoteUri:(NSString * _Nonnull)string;
 @end
 
-@interface VSLClassTests : XCTestCase
+@interface VSLCallTests : XCTestCase
 
 @end
 
-@implementation VSLClassTests
+@implementation VSLCallTests
 
 - (void)testCallerNameCallerNumberOne {
     NSString *inputString = @"\"test\" <sip:42@test.nl>";
