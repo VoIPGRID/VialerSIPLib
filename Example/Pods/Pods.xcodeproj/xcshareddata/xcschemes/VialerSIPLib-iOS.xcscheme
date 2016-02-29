@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '8BAB1B02AF197B1D5795B51E'
+               BlueprintIdentifier = '3AB3CAFDEBEDA5AF2B8A7298B726914F'
                BlueprintName = 'VialerSIPLib-iOS'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libVialerSIPLib-iOS.a'>

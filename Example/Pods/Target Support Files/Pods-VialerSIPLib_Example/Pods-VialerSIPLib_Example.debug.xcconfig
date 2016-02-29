@@ -1,6 +1,7 @@
 FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Vialer-pjsip-iOS"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 PJ_AUTOCONF=1
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/CocoaLumberjack" "${PODS_ROOT}/Headers/Public/HDLumberjackLogFormatter" "${PODS_ROOT}/Headers/Public/OCMock" "${PODS_ROOT}/Headers/Public/Vialer-pjsip-iOS" "${PODS_ROOT}/Headers/Public/VialerSIPLib-iOS"
+LIBRARY_SEARCH_PATHS = $(inherited) "$CONFIGURATION_BUILD_DIR/CocoaLumberjack" "$CONFIGURATION_BUILD_DIR/HDLumberjackLogFormatter" "$CONFIGURATION_BUILD_DIR/VialerSIPLib-iOS"
 OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/CocoaLumberjack" -isystem "${PODS_ROOT}/Headers/Public/HDLumberjackLogFormatter" -isystem "${PODS_ROOT}/Headers/Public/OCMock" -isystem "${PODS_ROOT}/Headers/Public/Vialer-pjsip-iOS" -isystem "${PODS_ROOT}/Headers/Public/VialerSIPLib-iOS"
 OTHER_LDFLAGS = $(inherited) -ObjC -l"CocoaLumberjack" -l"HDLumberjackLogFormatter" -l"VialerSIPLib-iOS" -framework "AVFoundation" -framework "AudioToolbox" -framework "CFNetwork" -framework "VialerPJSIP"
 PODS_ROOT = ${SRCROOT}/Pods

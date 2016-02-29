@@ -152,10 +152,13 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
 
             case VSLCallStateConfirmed: {
                 [self.ringback stop];
+                // Register for the audio interruption notification to be able to restore the sip audio session after an interruption (incoming call/alarm....).
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:AVAudioSessionInterruptionNotification object:nil];
             } break;
 
             case VSLCallStateDisconnected: {
                 [self.ringback stop];
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
                 [self.account removeCall:self];
             } break;
         }
@@ -382,6 +385,31 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
                 }
                 DDLogError(@"Error error sending DTMF for call %@", self);
             }
+        }
+    }
+}
+
+/**
+ *  Function called on AVAudioSessionInterruptionNotification
+ *
+ *  The class registers for AVAudioSessionInterruptionNotification to be able to regain
+ *  audio after it has been interrupted by another call or other audio event.
+ *
+ *  @param notification The notification which lead to this function being invoked over GCD.
+ */
+- (void)audioInterruption:(NSNotification *)notification {
+    if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification]) {
+
+        NSInteger avInteruptionType = [[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] intValue];
+        if (avInteruptionType == AVAudioSessionInterruptionTypeBegan) {
+            [self toggleHold:nil];
+            pjsua_set_no_snd_dev();
+        } else if (avInteruptionType == AVAudioSessionInterruptionTypeEnded) {
+            [self toggleHold:nil];
+            // Resume audio
+            int capture_dev, playback_dev;
+            pjsua_get_snd_dev(&capture_dev, &playback_dev);
+            pjsua_set_snd_dev(capture_dev, playback_dev);
         }
     }
 }

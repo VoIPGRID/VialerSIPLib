@@ -66,20 +66,25 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
 }
 
 - (VSLAccount *)createAccountWithSipUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser error:(NSError * _Nullable __autoreleasing *)error {
-    VSLAccountConfiguration *accountConfiguration = [[VSLAccountConfiguration alloc] init];
-    accountConfiguration.sipAccount = sipUser.sipAccount;
-    accountConfiguration.sipPassword = sipUser.sipPassword;
-    accountConfiguration.sipDomain = sipUser.sipDomain;
-    accountConfiguration.sipProxyServer = sipUser.sipProxy ? sipUser.sipProxy : @"";
-    accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
+    VSLAccount *account = [self.endpoint getAccountWithSipAccount:sipUser.sipAccount];
 
-    VSLAccount *account = [[VSLAccount alloc] init];
+    if (!account) {
+        VSLAccountConfiguration *accountConfiguration = [[VSLAccountConfiguration alloc] init];
+        accountConfiguration.sipAccount = sipUser.sipAccount;
+        accountConfiguration.sipPassword = sipUser.sipPassword;
+        accountConfiguration.sipDomain = sipUser.sipDomain;
+        accountConfiguration.sipProxyServer = sipUser.sipProxy ? sipUser.sipProxy : @"";
+        accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
 
-    NSError *accountConfigError = nil;
-    [account configureWithAccountConfiguration:accountConfiguration error:&accountConfigError];
-    if (accountConfigError && error != NULL) {
-        *error = accountConfigError;
-        return nil;
+        account = [[VSLAccount alloc] init];
+
+        NSError *accountConfigError = nil;
+        [account configureWithAccountConfiguration:accountConfiguration error:&accountConfigError];
+        if (accountConfigError && error != NULL) {
+            *error = accountConfigError;
+            return nil;
+        }
+
     }
     return account;
 }

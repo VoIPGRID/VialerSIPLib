@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString * const KeysUsername = @"";
+static NSString * const KeysAccount = @"";
 static NSString * const KeysPassword = @"";
 static NSString * const KeysDomain = @"";
 static NSString * const KeysProxy = @"";
