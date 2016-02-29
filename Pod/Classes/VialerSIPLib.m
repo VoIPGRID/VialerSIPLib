@@ -144,4 +144,14 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
     return [self.endpoint.accounts firstObject];
 }
 
+- (BOOL)anotherCallInProgress:(VSLCall *)call {
+    VSLAccount *account = [self firstAccount];
+    VSLCall *activeCall = [account firstActiveCall];
+
+    if (call.callId != activeCall.callId) {
+        return YES;
+    }
+    return NO;
+}
+
 @end

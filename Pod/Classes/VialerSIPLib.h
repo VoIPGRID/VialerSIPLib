@@ -137,4 +137,14 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *  Remove the configured endpoint from PJSUA.
  */
 - (void)removeEndpoint;
+
+/**
+ *  This will check if there is another call in progress.
+ *
+ *  @param call VSLCall instance that you want to compare to.
+ *
+ *  @return BOOL YES if there is a call in progress.
+ */
+- (BOOL)anotherCallInProgress:(VSLCall * _Nonnull)call;
+
 @end
