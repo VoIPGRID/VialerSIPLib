@@ -24,6 +24,10 @@ typedef NS_ENUM(NSInteger, VSLCallErrors) {
      */
     VSLCallErrorCannotHangupCall,
     /**
+     *  Unable to decline call.
+     */
+    VSLCallErrorCannotDeclineCall,
+    /**
      *  Unable to toggle mute call.
      */
     VSLCallErrorCannotToggleMute,
@@ -217,6 +221,15 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  *  @return BOOL success of hanging up the call.
  */
 - (BOOL)hangup:(NSError * _Nullable * _Nullable)error;
+
+/**
+ *  This will decline the incoming call.
+ *
+ *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot decline the call.
+ *
+ *  @return BOOL success of declining up the call.
+ */
+- (BOOL)decline:(NSError * _Nullable * _Nullable)error;
 
 /**
  *  Toggle mute of the microphone for this call.

@@ -109,9 +109,9 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 
 - (IBAction)decline:(UIButton *)sender {
     NSError *error;
-    [self.call hangup:&error];
+    [self.call decline:&error];
     if (error) {
-        DDLogError(@"Error hangup call: %@", error);
+        DDLogError(@"Error declining the call: %@", error);
     }
 }
 
