@@ -62,7 +62,9 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
 }
 
 - (void)removeEndpoint {
-    [self.endpoint destoryPJSUAInstance];
+    if (self.endpointAvailable) {
+        [self.endpoint destoryPJSUAInstance];
+    }
 }
 
 - (VSLAccount *)createAccountWithSipUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser error:(NSError * _Nullable __autoreleasing *)error {

@@ -179,11 +179,13 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         pj_thread_t *pjThread;
         pj_status_t status = pj_thread_register(NULL, aPJThreadDesc, &pjThread);
         if (status != PJ_SUCCESS) {
-            *error = [NSError VSLUnderlyingError:nil
-               localizedDescriptionKey:NSLocalizedString(@"Could not create PJSIP thread", nil)
-           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                           errorDomain:VSLEndpointErrorDomain
-                             errorCode:VSLEndpointErrorCannotCreateThread];
+            if (error != NULL) {
+                *error = [NSError VSLUnderlyingError:nil
+                             localizedDescriptionKey:NSLocalizedString(@"Could not create PJSIP thread", nil)
+                         localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                         errorDomain:VSLEndpointErrorDomain
+                                           errorCode:VSLEndpointErrorCannotCreateThread];
+            }
             return NO;
         }
     }

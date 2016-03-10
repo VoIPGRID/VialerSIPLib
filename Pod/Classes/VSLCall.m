@@ -281,9 +281,9 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
     return YES;
 }
 
-- (void)toggleMute:(NSError *__autoreleasing  _Nullable *)error {
+- (BOOL)toggleMute:(NSError *__autoreleasing  _Nullable *)error {
     if (self.callState != VSLCallStateConfirmed) {
-        return;
+        return YES;
     }
 
     pjsua_call_info callInfo;
@@ -306,8 +306,10 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
                                        };
             *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotToggleMute userInfo:userInfo];
         }
+        return NO;
         DDLogError(@"Error toggle muting microphone in call %@", self);
     }
+    return YES;
 }
 
 - (void)toggleSpeaker {
@@ -322,9 +324,9 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
     DDLogVerbose(self.speaker ? @"Speaker modus activated": @"Speaker modus deactivated");
 }
 
-- (void)toggleHold:(NSError *__autoreleasing  _Nullable *)error {
+- (BOOL)toggleHold:(NSError *__autoreleasing  _Nullable *)error {
     if (self.callState != VSLCallStateConfirmed) {
-        return;
+        return YES;
     }
     pj_status_t status;
 
@@ -344,14 +346,16 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
                                        };
             *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotToggleHold userInfo:userInfo];
         }
+        return NO;
         DDLogError(@"Error toggle muting microphone in call %@", self);
     }
+    return YES;
 }
 
-- (void)sendDTMF:(NSString *)character error:(NSError *__autoreleasing  _Nullable *)error {
+- (BOOL)sendDTMF:(NSString *)character error:(NSError *__autoreleasing  _Nullable *)error {
     // Return if the call is not confirmed or when the call is on hold.
     if (self.callState != VSLCallStateConfirmed || self.onHold) {
-        return;
+        return YES;
     }
 
     pj_status_t status;
@@ -384,10 +388,12 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
                                                };
                     *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotSendDTMF userInfo:userInfo];
                 }
+                return NO;
                 DDLogError(@"Error error sending DTMF for call %@", self);
             }
         }
     }
+    return YES;
 }
 
 /**

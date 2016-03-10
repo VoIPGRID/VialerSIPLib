@@ -236,7 +236,7 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  *
  *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot toggle mute of the call.
  */
-- (void)toggleMute:(NSError * _Nullable * _Nullable)error;
+- (BOOL)toggleMute:(NSError * _Nullable * _Nullable)error;
 
 /**
  *  This will answer the incoming call.
@@ -259,7 +259,7 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  *
  *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot put call on hold.
  */
-- (void)toggleHold:(NSError * _Nullable * _Nullable)error;
+- (BOOL)toggleHold:(NSError * _Nullable * _Nullable)error;
 
 /**
  *  Send DTMF tone for this call with a character.
@@ -267,6 +267,6 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  *  @param character character NSString the character for the DTMF.
  *  @param error     error Pointer to an NSError pointer. Will be set to a NSError instance if cannot send DTMF for the call.
  */
-- (void)sendDTMF:(NSString * _Nonnull)character error:(NSError * _Nullable * _Nullable)error;
+- (BOOL)sendDTMF:(NSString * _Nonnull)character error:(NSError * _Nullable * _Nullable)error;
 
 @end
