@@ -166,6 +166,9 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     DDLogInfo(@"PJSIP Endpoint started succesfully");
     self.endpointConfiguration = endpointConfiguration;
     self.state = VSLEndpointStarted;
+
+    [self updateCodecs];
+
     return YES;
 }
 
@@ -259,6 +262,57 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     return nil;
 }
 
+#pragma mark - codecs
+
+- (void)updateCodecs {
+    if (self.state != VSLEndpointStarted) {
+        return;
+    }
+
+    const unsigned codecInfoSize = 64;
+    pjsua_codec_info codecInfo[codecInfoSize];
+    unsigned codecCount = codecInfoSize;
+    pj_status_t status = pjsua_enum_codecs(codecInfo, &codecCount);
+    if (status != PJ_SUCCESS) {
+        DDLogError(@"Error getting list of codecs");
+    } else {
+        for (NSUInteger i = 0; i < codecCount; i++) {
+            NSString *codecIdentifier = [NSString stringWithPJString:codecInfo[i].codec_id];
+            pj_uint8_t priority = [self priorityForCodec:codecIdentifier];
+            status = pjsua_codec_set_priority(&codecInfo[i].codec_id, priority);
+            if (status != PJ_SUCCESS) {
+                DDLogError(@"Error setting codec priority to the correct value");
+            }
+        }
+    }
+}
+
+- (pj_uint8_t)priorityForCodec:(NSString *)identifier {
+    static NSDictionary *priorities;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        priorities = @{
+                       // G711a
+                       @"PCMA/8000/1":      @210,
+                       // G722
+                       @"G722/16000/1":     @209,
+                       // iLBC
+                       @"iLBC/8000/1":      @208,
+                       // G711
+                       @"PCMU/8000/1":      @0,
+                       // Speex 8 kHz
+                       @"speex/8000/1":     @0,
+                       // Speex 16 kHz
+                       @"speex/16000/1":    @0,
+                       // Speex 32 kHz
+                       @"speex/32000/1":    @0,
+                       // GSM 8 kHZ
+                       @"GSM/8000/1":       @0,
+                       };
+    });
+    return (pj_uint8_t)[priorities[identifier] unsignedIntegerValue];
+}
+
 #pragma mark - PJSUA callbacks
 
 static void logCallBack(int level, const char *data, int len) {
@@ -349,8 +403,5 @@ static void onCallReplaced(pjsua_call_id old_call_id, pjsua_call_id new_call_id)
 static void onNatDetect(const pj_stun_nat_detect_result *res){
     DDLogVerbose(@"Updated natdetect");
 }
-
-# pragma mark - Utils
-
 
 @end
