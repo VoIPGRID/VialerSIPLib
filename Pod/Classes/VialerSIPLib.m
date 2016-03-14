@@ -13,6 +13,7 @@
 #import "VSLEndpoint.h"
 
 static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @interface VialerSIPLib()
 @property (strong, nonatomic) VSLEndpoint *endpoint;
@@ -84,9 +85,17 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
         [account configureWithAccountConfiguration:accountConfiguration error:&accountConfigError];
         if (accountConfigError && error != NULL) {
             *error = accountConfigError;
+            DDLogError(@"Account configuration error: %@", accountConfigError);
             return nil;
         }
-
+    } else {
+        NSError *registrationError;
+        [self registerAccount:sipUser error:&registrationError];
+        if (error != NULL) {
+            *error = registrationError;
+            DDLogError(@"Registration error: %@", registrationError);
+            return nil;
+        }
     }
     return account;
 }

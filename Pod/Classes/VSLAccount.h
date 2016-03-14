@@ -25,10 +25,6 @@ typedef NS_ENUM(NSInteger, VSLAccountErrors) {
      *  Unable to register the account
      */
     VSLAccountErrorRegistrationFailed,
-    /**
-     *  Unable to set the status of the account to online
-     */
-    VSLAccountErrorSettingOnlineStatus,
 };
 
 /**

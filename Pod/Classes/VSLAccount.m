@@ -145,21 +145,25 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 - (BOOL)registerAccount:(NSError * _Nullable __autoreleasing *)error {
     pj_status_t status;
+    pjsua_acc_info info;
+    pjsua_acc_get_info((int)self.accountId, &info);
 
-    status = pjsua_acc_set_registration((int)self.accountId, PJ_TRUE);
+    if (info.status != PJSIP_SC_TRYING) {
+        status = pjsua_acc_set_registration((int)self.accountId, PJ_TRUE);
 
-    if (status != PJ_SUCCESS) {
-        DDLogError(@"Account registration failed");
-        if (error != nil) {
-            *error = [NSError VSLUnderlyingError:nil
-               localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
-           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                           errorDomain:VSLAccountErrorDomain
-                             errorCode:VSLAccountErrorRegistrationFailed];
+        if (status != PJ_SUCCESS) {
+            DDLogError(@"Account registration failed");
+            if (error != nil) {
+                *error = [NSError VSLUnderlyingError:nil
+                             localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
+                         localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                         errorDomain:VSLAccountErrorDomain
+                                           errorCode:VSLAccountErrorRegistrationFailed];
+            }
+            return NO;
         }
-        return NO;
     }
-    DDLogInfo(@"Account (un)registered succesfully");
+    DDLogInfo(@"Account registered succesfully");
     return YES;
 }
 
