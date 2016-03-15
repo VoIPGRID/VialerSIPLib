@@ -91,7 +91,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     } else {
         NSError *registrationError;
         [self registerAccount:sipUser error:&registrationError];
-        if (error != NULL) {
+        if (registrationError && error != NULL) {
             *error = registrationError;
             DDLogError(@"Registration error: %@", registrationError);
             return nil;
