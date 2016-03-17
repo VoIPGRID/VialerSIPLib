@@ -18,9 +18,9 @@ NSString * const AppDelegateIncominCallNotification = @"AppDelegateIncominCallNo
     [self setupCocoaLumberjackLogging];
 
     VSLEndpointConfiguration *endpointConfiguration = [[VSLEndpointConfiguration alloc] init];
-    VSLTransportConfiguration *updTransportConfiguration = [VSLTransportConfiguration configurationWithTransportType:VSLTransportTypeUDP];
 
-    endpointConfiguration.transportConfigurations = @[updTransportConfiguration];
+    endpointConfiguration.transportConfigurations = @[[VSLTransportConfiguration configurationWithTransportType:VSLTransportTypeTCP],
+                                                      [VSLTransportConfiguration configurationWithTransportType:VSLTransportTypeUDP]];
 
     NSError *error;
     BOOL success = [[VialerSIPLib sharedInstance] configureLibraryWithEndPointConfiguration:endpointConfiguration error:&error];

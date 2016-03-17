@@ -203,6 +203,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
     self.mediaState = (VSLMediaState)mediaState;
 
     if (_mediaState == PJSUA_CALL_MEDIA_ACTIVE || _mediaState == PJSUA_CALL_MEDIA_REMOTE_HOLD) {
+        [self.ringback stop];
         pjsua_conf_connect(callInfo.conf_slot, 0);
         pjsua_conf_connect(0, callInfo.conf_slot);
     }
