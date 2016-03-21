@@ -88,14 +88,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             DDLogError(@"Account configuration error: %@", accountConfigError);
             return nil;
         }
-    } else {
-        NSError *registrationError;
-        [self registerAccount:sipUser error:&registrationError];
-        if (registrationError && error != NULL) {
-            *error = registrationError;
-            DDLogError(@"Registration error: %@", registrationError);
-            return nil;
-        }
     }
     return account;
 }
@@ -104,40 +96,22 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     [VSLEndpoint sharedEndpoint].incomingCallBlock = incomingCallBlock;
 }
 
-- (BOOL)registerAccount:(id<SIPEnabledUser> _Nonnull __autoreleasing)sipUser error:(NSError * _Nullable __autoreleasing *)error {
-    VSLAccount *account = [self.endpoint getAccountWithSipAccount:sipUser.sipAccount];
-
+- (void)registerAccountWithUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser withCompletion:(void (^)(BOOL, VSLAccount * _Nullable))completion {
+    NSError *accountConfigError;
+    VSLAccount *account = [self createAccountWithSipUser:sipUser error:&accountConfigError];
     if (!account) {
-        NSError *accountConfigError;
-        account = [self createAccountWithSipUser:sipUser error:&accountConfigError];
-        if (!account) {
-            if (error != nil) {
-                *error = [NSError VSLUnderlyingError:accountConfigError
-                   localizedDescriptionKey:NSLocalizedString(@"The configure the account has failed.", nil)
-               localizedFailureReasonError:nil
-                               errorDomain:VialerSIPLibErrorDomain
-                                 errorCode:VialerSIPLibErrorAccountConfigurationFailed];
-
-            }
-            return NO;
-        }
+        DDLogError(@"The configuration of the account has failed:\n%@", accountConfigError);
+        completion(NO, nil);
     }
 
-    if (account.accountState == VSLAccountStateOffline || account.accountState == VSLAccountStateDisconnected) {
-        NSError *accountError;
-        BOOL success = [account registerAccount:&accountError];
+    [account registerAccountWithCompletion:^(BOOL success, NSError * _Nullable error) {
         if (!success) {
-            if (error != nil) {
-                *error = [NSError VSLUnderlyingError:accountError
-                             localizedDescriptionKey:NSLocalizedString(@"The registration of the account has failed.", nil)
-                         localizedFailureReasonError:nil
-                                         errorDomain:VialerSIPLibErrorDomain
-                                           errorCode:VialerSIPLibErrorAccountRegistrationFailed];
-            }
-            return NO;
+            DDLogError(@"The registration of the account has failed.\n%@", error);
+            completion(NO, nil);
+        } else {
+            completion(YES, account);
         }
-    }
-    return YES;
+    }];
 }
 
 - (VSLCall *)getVSLCallWithId:(NSString *)callId andSipUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser {

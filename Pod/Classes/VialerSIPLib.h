@@ -20,10 +20,6 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
      *  Unable to configure the account.
      */
     VialerSIPLibErrorAccountConfigurationFailed,
-    /**
-     *  Unable to register the account.
-     */
-    VialerSIPLibErrorAccountRegistrationFailed,
 };
 
 /**
@@ -102,12 +98,11 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
 /**
  *  Register the account to the incoming sip proxy for incoming calls.
  *
- *  @param sipUser Instance that conforms to the SIPEnabledUser protocol.
- *  @param error   Pointer to NSError pointer. Will be set to a NSError instance if it can't register the user.
- *
- *  @return success of registration.
+ *  @param sipUser    Instance that conforms to the SIPEnabledUser protocol.
+ *  @param completion Completion block which will be executed when registration has completed or failed. 
+ *                    It will return the success of the registration and an account if registration was successfull.
  */
-- (BOOL)registerAccount:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser error:(NSError * _Nullable * _Nullable)error;
+- (void)registerAccountWithUser:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser withCompletion:(void (^_Nullable)(BOOL success, VSLAccount * _Nullable account))completion;
 
 /*
  *  This will return the first account that is available.

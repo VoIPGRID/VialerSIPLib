@@ -49,6 +49,14 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
     VSLAccountStateDisconnected,
 };
 
+/**
+ *  Completionblock that will be called after the account was registered.
+ *
+ *  @param success BOOL will indicate the success of the registration.
+ *  @param error   NSError instance with possible error. Can be nil.
+ */
+typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable error);
+
 @interface VSLAccount : NSObject
 
 /**
@@ -94,11 +102,9 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
 /**
  *  Register the account with pjsua.
  *
- *  @param error Pointer to NSError pointer. Will be set to a NSError instance if cannot register the account.
- *
- *  @return BOOL success of registration
+ *  @param completion RegistrationCompletionBlock, will be called with success of registration and possible error.
  */
-- (BOOL)registerAccount:(NSError * _Nullable * _Nullable)error;
+- (void)registerAccountWithCompletion:(_Nullable RegistrationCompletionBlock)completion;
 
 /**
  *  Unregister the account if registered.
@@ -125,7 +131,7 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
  *  The number that the sip library will call.
  *
  *  @param number     The phonenumber which will be called.
- *  @param completion Completion block which will be executed when evertything has been setup. May contain a outbound call or an error object.
+ *  @param completion Completion block which will be executed when everything has been setup. May contain a outbound call or an error object.
  */
 - (void)callNumber:(NSString * _Nonnull)number withCompletion:(void(^_Nonnull)(NSError * _Nullable error, VSLCall * _Nullable outboundCall))completion;
 

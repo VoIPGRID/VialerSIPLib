@@ -34,11 +34,13 @@ NSString * const AppDelegateIncominCallNotification = @"AppDelegateIncominCallNo
         testUser.sipProxy = KeysProxy;
         testUser.sipRegisterOnAdd = NO;
 
-        NSError *error;
-        [[VialerSIPLib sharedInstance] createAccountWithSipUser:testUser error:&error];
-        if (error) {
-            DDLogError(@"Failed to create Account: %@", error);
-        }
+        [[VialerSIPLib sharedInstance] registerAccountWithUser:testUser withCompletion:^(BOOL success, VSLAccount * _Nullable account) {
+            if (success) {
+                DDLogInfo(@"Account created and registered.");
+            } else {
+                DDLogError(@"Account couldn't be created.");
+            }
+        }];
         [self setupCallbackForVialerSIPLib];
     }
     return YES;

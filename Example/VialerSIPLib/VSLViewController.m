@@ -98,13 +98,13 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
     testUser.sipProxy = KeysProxy;
 
     NSError *error;
-    BOOL success = [[VialerSIPLib sharedInstance] registerAccount:testUser error:&error];
-
-    if (!success) {
-        if (error != NULL) {
-            DDLogError(@"%@", error);
+    [[VialerSIPLib sharedInstance] registerAccountWithUser:testUser withCompletion:^(BOOL success, VSLAccount * _Nullable account) {
+        if (!success) {
+            if (error != NULL) {
+                DDLogError(@"%@", error);
+            }
         }
-    }
+    }];
 }
 
 - (IBAction)decline:(UIButton *)sender {

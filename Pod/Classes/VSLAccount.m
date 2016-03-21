@@ -21,6 +21,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 @property (readwrite, nonnull, nonatomic) VSLAccountConfiguration *accountConfiguration;
 @property (strong, nonatomic) NSMutableArray *calls;
 @property (readwrite, nonatomic) VSLAccountState accountState;
+@property (copy, nonatomic) RegistrationCompletionBlock registrationCompletionBlock;
 @end
 
 @implementation VSLAccount
@@ -111,7 +112,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     pj_status_t status = pjsua_acc_add(&acc_cfg, PJ_TRUE, &accountId);
 
     if (status == PJ_SUCCESS) {
-        DDLogInfo(@"Account added succesfully");
+        DDLogVerbose(@"Account added succesfully");
         self.accountConfiguration = accountConfiguration;
         self.accountId = accountId;
         [[VSLEndpoint sharedEndpoint] addAccount:self];
@@ -143,28 +144,31 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     [[VSLEndpoint sharedEndpoint] removeAccount:self];
 }
 
-- (BOOL)registerAccount:(NSError * _Nullable __autoreleasing *)error {
+- (void)registerAccountWithCompletion:(RegistrationCompletionBlock)completion {
     pj_status_t status;
     pjsua_acc_info info;
     pjsua_acc_get_info((int)self.accountId, &info);
 
-    if (info.status != PJSIP_SC_TRYING) {
+    // If expires is not -1, there is a registration or registration is in progress.
+    if (info.expires == -1) {
         status = pjsua_acc_set_registration((int)self.accountId, PJ_TRUE);
 
         if (status != PJ_SUCCESS) {
             DDLogError(@"Account registration failed");
-            if (error != nil) {
-                *error = [NSError VSLUnderlyingError:nil
-                             localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
-                         localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                                         errorDomain:VSLAccountErrorDomain
-                                           errorCode:VSLAccountErrorRegistrationFailed];
-            }
-            return NO;
+            NSError *error = [NSError VSLUnderlyingError:nil
+                                 localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
+                             localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                             errorDomain:VSLAccountErrorDomain
+                                               errorCode:VSLAccountErrorRegistrationFailed];
+            completion(NO, error);
         }
     }
-    DDLogInfo(@"Account registered succesfully");
-    return YES;
+    // Check if account is connected, otherwise set completionblock.
+    if (self.accountState == VSLAccountStateConnected) {
+        completion(YES, nil);
+    } else {
+        self.registrationCompletionBlock = completion;
+    }
 }
 
 - (BOOL)unregisterAccount:(NSError * _Nullable __autoreleasing *)error {
@@ -187,7 +191,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         }
         return NO;
     }
-    DDLogInfo(@"Account unregistered succesfully");
+    DDLogVerbose(@"Account unregistered succesfully");
     return YES;
 }
 
@@ -203,11 +207,17 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         self.accountState = VSLAccountStateConnecting;
     } else if (PJSIP_IS_STATUS_IN_CLASS(code, 200)) {
         self.accountState = VSLAccountStateConnected;
+        // Registration is succesfull.
+        if (self.registrationCompletionBlock) {
+            DDLogVerbose(@"Account registered succesfully");
+            self.registrationCompletionBlock(YES, nil);
+            self.registrationCompletionBlock = nil;
+        }
     } else {
         self.accountState = VSLAccountStateDisconnected;
     }
 
-    DDLogInfo(@"Account state changed to: %ld", (long)self.accountState);
+    DDLogVerbose(@"Account state changed to: %ld", (long)self.accountState);
 }
 
 #pragma mark - Calling methods

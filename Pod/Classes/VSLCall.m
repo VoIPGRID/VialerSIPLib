@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];
 
     if (audioSessionCategoryError) {
-        DDLogInfo(@"Error setting the correct AVAudioSession category");
+        DDLogError(@"Error setting the correct AVAudioSession category");
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
                          localizedDescriptionKey:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)
@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
     pj_status_t status = pjsua_call_make_call((int)account.accountId, &sipUri, &callSetting, NULL, NULL, &callIdentifier);
 
     if (status != PJ_SUCCESS) {
-        DDLogInfo(@"Error creating call");
+        DDLogError(@"Error creating call");
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
                localizedDescriptionKey:NSLocalizedString(@"Could not setup call", nil)
@@ -87,7 +87,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
         }
         return nil;
     }
-    DDLogInfo(@"Created call");
+    DDLogVerbose(@"Created call");
     VSLCall *call = [VSLCall callWithId:callIdentifier andAccountId:account.accountId];
     [account addCall:call];
     return call;
@@ -139,7 +139,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
             } break;
 
             case VSLCallStateCalling: {
-                [self.ringback start];
+
             } break;
 
             case VSLCallEarlyState: {
@@ -220,7 +220,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
         NSError *audioSessionCategoryError;
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];
         if (audioSessionCategoryError) {
-            DDLogInfo(@"Error setting the correct AVAudioSession category");
+            DDLogError(@"Error setting the correct AVAudioSession category");
             if (error != NULL) {
                 *error = [NSError VSLUnderlyingError:nil
                              localizedDescriptionKey:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)

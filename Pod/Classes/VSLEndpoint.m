@@ -63,7 +63,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         return NO;
     }
 
-    DDLogInfo(@"Creating new PJSIP Endpoint instance.");
+    DDLogVerbose(@"Creating new PJSIP Endpoint instance.");
     self.state = VSLEndpointStarting;
 
     // Create PJSUA on the main thread to make all subsequent calls from the main
@@ -163,7 +163,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         }
         return NO;
     }
-    DDLogInfo(@"PJSIP Endpoint started succesfully");
+    DDLogVerbose(@"PJSIP Endpoint started succesfully");
     self.endpointConfiguration = endpointConfiguration;
     self.state = VSLEndpointStarted;
 
@@ -196,7 +196,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
 }
 
 - (void)destoryPJSUAInstance {
-    DDLogInfo(@"PJSUA was already running destroying old instance.");
+    DDLogVerbose(@"PJSUA was already running destroying old instance.");
 
     for (VSLAccount *account in self.accounts) {
         [account removeAllCalls];
@@ -374,8 +374,8 @@ static void onRegState(pjsua_acc_id acc_id) {
 }
 
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
-    DDLogInfo(@"Incoming call");
-    DDLogInfo(@"AccountID: %d", acc_id);
+    DDLogVerbose(@"Incoming call");
+    DDLogVerbose(@"AccountID: %d", acc_id);
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
 
