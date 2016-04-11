@@ -73,10 +73,10 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         self.state = VSLEndpointStopped;
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
-               localizedDescriptionKey:NSLocalizedString(@"Could not create PJSIP Enpoint instance", nil)
-           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                           errorDomain:VSLEndpointErrorDomain
-                             errorCode:VSLEndpointErrorCannotCreatePJSUA];
+                         localizedDescriptionKey:NSLocalizedString(@"Could not create PJSIP Enpoint instance", nil)
+                     localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                     errorDomain:VSLEndpointErrorDomain
+                                       errorCode:VSLEndpointErrorCannotCreatePJSUA];
         }
         return NO;
     }
@@ -121,10 +121,10 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         [self destoryPJSUAInstance];
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
-               localizedDescriptionKey:NSLocalizedString(@"Could not initialize Endpoint.", nil)
-           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                           errorDomain:VSLEndpointErrorDomain
-                             errorCode:VSLEndpointErrorCannotInitPJSUA];
+                         localizedDescriptionKey:NSLocalizedString(@"Could not initialize Endpoint.", nil)
+                     localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                     errorDomain:VSLEndpointErrorDomain
+                                       errorCode:VSLEndpointErrorCannotInitPJSUA];
         }
         return NO;
     }
@@ -141,10 +141,10 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         if (status != PJ_SUCCESS) {
             if (error != NULL) {
                 *error = [NSError VSLUnderlyingError:nil
-                   localizedDescriptionKey:NSLocalizedString(@"Could not add transport configuration", nil)
-               localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                               errorDomain:VSLEndpointErrorDomain
-                                 errorCode:VSLEndpointErrorCannotAddTransportConfiguration];
+                             localizedDescriptionKey:NSLocalizedString(@"Could not add transport configuration", nil)
+                         localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                         errorDomain:VSLEndpointErrorDomain
+                                           errorCode:VSLEndpointErrorCannotAddTransportConfiguration];
             }
             return NO;
         }
@@ -156,10 +156,10 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         [self destoryPJSUAInstance];
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
-               localizedDescriptionKey:NSLocalizedString(@"Could not start PJSIP Endpoint", nil)
-           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                           errorDomain:VSLEndpointErrorDomain
-                             errorCode:VSLEndpointErrorCannotStartPJSUA];
+                         localizedDescriptionKey:NSLocalizedString(@"Could not start PJSIP Endpoint", nil)
+                     localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                     errorDomain:VSLEndpointErrorDomain
+                                       errorCode:VSLEndpointErrorCannotStartPJSUA];
         }
         return NO;
     }
@@ -393,11 +393,15 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
     DDLogVerbose(@"Incoming call");
     DDLogVerbose(@"AccountID: %d", acc_id);
 
+    pj_status_t status = pjsua_call_answer(call_id, PJSIP_SC_RINGING, NULL, NULL);
+    if (status != PJ_SUCCESS) {
+        DDLogWarn(@"Error %@ while sending status code %@", status ,PJSIP_SC_RINGING);
+    }
+
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
 
     if (account) {
-
-        VSLCall *call = [VSLCall callWithId:call_id andAccountId:acc_id];
+        VSLCall *call = [[VSLCall alloc] initWithCallId:call_id accountId:acc_id];
         if (call) {
             [account addCall:call];
 

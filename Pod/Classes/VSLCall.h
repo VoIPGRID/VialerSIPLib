@@ -190,14 +190,14 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
 + (instancetype _Nullable)callNumber:(NSString * _Nonnull)number withAccount:(VSLAccount * _Nonnull)account error:(NSError * _Nullable * _Nullable)error;
 
 /**
- *  This will create a call instance and with the given accountId.
+ *  This will create a call instance with the given accountId.
  *
  *  @param callId    The id of the call.
  *  @param accountId The id of the account to which the call should be added.
  *
  *  @return VSLCall instance
  */
-+ (instancetype _Nullable)callWithId:(NSInteger)callId andAccountId:(NSInteger)accountId;
+- (instancetype _Nullable)initWithCallId:(NSUInteger)callId accountId:(NSInteger)accountId;
 
 /**
  *  This will change the callState of the call.

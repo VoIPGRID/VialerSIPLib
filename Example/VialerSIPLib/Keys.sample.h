@@ -13,4 +13,6 @@ static NSString * const KeysPassword = @"";
 static NSString * const KeysDomain = @"";
 static NSString * const KeysProxy = @"";
 
+static NSString * const KeysNumberToCall = @"";
+
 #endif /* Keys_h */
