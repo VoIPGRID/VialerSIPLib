@@ -32,6 +32,9 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 @property (weak, nonatomic) IBOutlet UIButton *acceptCallButton;
 @property (weak, nonatomic) IBOutlet UIButton *makeCallButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *registerAccountButton;
+@property (weak, nonatomic) IBOutlet UIButton *unRegisterAccountButton;
+
 @property (strong, nonatomic) VSLAccount *account;
 @property (strong, nonatomic) VSLRingtone *ringtone;
 @end
@@ -60,13 +63,6 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 
 #pragma mark - Properties
 
-- (VSLAccount *)account {
-    if (!_account) {
-        _account = [[VialerSIPLib sharedInstance] firstAccount];
-    }
-    return _account;
-}
-
 - (void)setCall:(VSLCall *)call {
     if (_call) {
         [_call removeObserver:self forKeyPath:@"callState"];
@@ -89,8 +85,6 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 #pragma mark - Actions
 
 - (IBAction)registerAccount:(UIButton *)sender {
-    [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
-
     SipUser *testUser = [[SipUser alloc] init];
     testUser.sipAccount = KeysAccount;
     testUser.sipPassword = KeysPassword;
@@ -103,8 +97,26 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
             if (error != NULL) {
                 DDLogError(@"%@", error);
             }
+        } else {
+            self.account = account;
+            [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
+            [self toggleAccountRegistrationButtons];
         }
     }];
+}
+
+- (IBAction)unRegisterAccount:(id)sender {
+    [self.account unregisterAccount:nil];
+    [self.account removeObserver:self forKeyPath:@"accountState"];
+    self.account = nil;
+    [self toggleAccountRegistrationButtons];
+}
+
+- (void)toggleAccountRegistrationButtons {
+    self.registerAccountButton.hidden = !self.registerAccountButton.isHidden;
+    self.unRegisterAccountButton.hidden = !self.unRegisterAccountButton.isHidden;
+    DDLogWarn(@"RegisterButton hidden: %@ DeRegisterButton hidden: %@",
+              self.registerAccountButton.isHidden ? @"YES" : @"NO ", self.unRegisterAccountButton.isHidden ? @"YES" : @"NO");
 }
 
 - (IBAction)decline:(UIButton *)sender {
