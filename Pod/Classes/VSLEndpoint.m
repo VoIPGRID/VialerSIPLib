@@ -395,7 +395,7 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
 
     pj_status_t status = pjsua_call_answer(call_id, PJSIP_SC_RINGING, NULL, NULL);
     if (status != PJ_SUCCESS) {
-        DDLogWarn(@"Error %@ while sending status code %@", status ,PJSIP_SC_RINGING);
+        DDLogWarn(@"Error %d while sending status code PJSIP_SC_RINGING", status);
     }
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];

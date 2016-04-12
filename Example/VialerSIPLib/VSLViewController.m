@@ -100,6 +100,7 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
             }
         } else {
             self.account = account;
+            NSLog(@"%@", account);
             [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
             [self toggleAccountRegistrationButtons];
         }
