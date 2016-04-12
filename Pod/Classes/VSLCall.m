@@ -70,10 +70,10 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
         DDLogError(@"Error creating call");
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
-               localizedDescriptionKey:NSLocalizedString(@"Could not setup call", nil)
-           localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                           errorDomain:VSLCallErrorDomain
-                             errorCode:VSLCallErrorCannotCreateCall];
+                         localizedDescriptionKey:NSLocalizedString(@"Could not setup call", nil)
+                     localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                     errorDomain:VSLCallErrorDomain
+                                       errorCode:VSLCallErrorCannotCreateCall];
         }
         return nil;
     }
@@ -95,12 +95,12 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
     pjsua_call_info callInfo;
     pj_status_t status = pjsua_call_get_info((pjsua_call_id)callId, &callInfo);
     if (status == PJ_SUCCESS) {
-        [self updateCallInfo:callInfo];
         if (callInfo.state == VSLCallStateIncoming) {
             self.incoming = YES;
         } else {
             self.incoming = NO;
         }
+        [self updateCallInfo:callInfo];
     }
     return self;
 }
@@ -118,7 +118,10 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 
             } break;
             case VSLCallStateIncoming: {
-
+                pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_RINGING, NULL, NULL);
+                if (status != PJ_SUCCESS) {
+                    DDLogWarn(@"Error %d while sending status code PJSIP_SC_RINGING", status);
+                }
             } break;
 
             case VSLCallStateCalling: {
@@ -126,7 +129,9 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
             } break;
 
             case VSLCallEarlyState: {
-                [self.ringback start];
+                if (!self.incoming) {
+                    [self.ringback start];
+                }
             } break;
 
             case VSLCallStateConnecting: {
@@ -504,12 +509,12 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
         // Get the last part of the uri starting from @
         atSignRange = [string rangeOfString:@"@" options:NSBackwardsSearch];
         callerHost = [string substringToIndex: atSignRange.location];
-
+        
         // Get the telephone part starting from the :
         semiColonRange = [callerHost rangeOfString:@":" options:NSBackwardsSearch];
         callerNumber = [callerHost substringFromIndex:semiColonRange.location + 1];
     }
-
+    
     return @{
              @"caller_name": callerName,
              @"caller_number": callerNumber,
