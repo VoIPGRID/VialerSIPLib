@@ -317,7 +317,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
 
 #pragma mark - PJSUA callbacks
 
-static void logCallBack(int level, const char *data, int len) {
+static void logCallBack(int logLevel, const char *data, int len) {
     NSString *logString = [[NSString alloc] initWithUTF8String:data];
 
     // Strip time stamp from the front
@@ -330,7 +330,23 @@ static void logCallBack(int level, const char *data, int len) {
         logString = [logString substringToIndex:[logString length]-1];
     }
 
-    DDLogVerbose(@"Level:%i %@", level, logString);
+    switch (logLevel) {
+        case 1:
+            DDLogError(@"%@", logString);
+            break;
+        case 2:
+            DDLogWarn(@"%@", logString);
+            break;
+        case 3:
+            DDLogInfo(@"%@", logString);
+            break;
+        case 4:
+            DDLogDebug(@"%@", logString);
+            break;
+        default:
+            DDLogVerbose(@"%@", logString);
+            break;
+    }
 }
 
 static void onCallState(pjsua_call_id callId, pjsip_event *event) {

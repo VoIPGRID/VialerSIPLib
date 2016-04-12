@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="1zH-0T-yRt">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="1zH-0T-yRt">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -32,6 +32,18 @@
                                 <state key="normal" title="Register account"/>
                                 <connections>
                                     <action selector="registerAccount:" destination="whP-gf-Uak" eventType="touchUpInside" id="UgB-Ri-fuh"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="9U2-gy-qme" userLabel="Unregister account">
+                                <rect key="frame" x="20" y="66" width="181" height="40"/>
+                                <color key="backgroundColor" red="1" green="0.43529412150000002" blue="0.81176471709999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="SJZ-EG-3cM"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="75" id="TG4-T5-Nib"/>
+                                </constraints>
+                                <state key="normal" title="Unegister account"/>
+                                <connections>
+                                    <action selector="unRegisterAccount:" destination="whP-gf-Uak" eventType="touchUpInside" id="tIT-8E-PsR"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3xH-vN-eUP">
@@ -218,11 +230,13 @@
                             <constraint firstItem="MeO-gB-roH" firstAttribute="top" secondItem="bgR-AW-Sr3" secondAttribute="bottom" constant="8" symbolic="YES" id="8yt-P9-qr9"/>
                             <constraint firstAttribute="trailingMargin" secondItem="xXv-tM-Cny" secondAttribute="trailing" id="9wN-B1-akv"/>
                             <constraint firstItem="3xH-vN-eUP" firstAttribute="top" secondItem="xXv-tM-Cny" secondAttribute="bottom" constant="8" id="BEA-FI-uEH"/>
+                            <constraint firstItem="9U2-gy-qme" firstAttribute="trailing" secondItem="T5d-40-82a" secondAttribute="trailing" id="Bgg-JP-jVk"/>
                             <constraint firstItem="T5d-40-82a" firstAttribute="top" secondItem="xXv-tM-Cny" secondAttribute="bottom" constant="8" id="Cu6-R6-APh"/>
                             <constraint firstItem="g5F-1b-bvJ" firstAttribute="leading" secondItem="Laj-4b-Kue" secondAttribute="leading" id="H0U-OY-5ik"/>
                             <constraint firstItem="nzD-Bi-E3K" firstAttribute="leading" secondItem="3xH-vN-eUP" secondAttribute="trailing" constant="8" id="I8T-aw-8kg"/>
                             <constraint firstItem="5nR-GB-zYv" firstAttribute="top" secondItem="WN0-R2-ldk" secondAttribute="bottom" constant="7" id="IZI-SE-vyG"/>
                             <constraint firstAttribute="leadingMargin" secondItem="i5w-9a-NvN" secondAttribute="leading" id="IoX-Xe-0Os"/>
+                            <constraint firstItem="9U2-gy-qme" firstAttribute="top" secondItem="T5d-40-82a" secondAttribute="top" id="JCQ-kW-fXN"/>
                             <constraint firstItem="Kaa-ER-yDL" firstAttribute="trailing" secondItem="fTW-ou-yrD" secondAttribute="trailing" id="JcU-G3-pcw"/>
                             <constraint firstItem="5nR-GB-zYv" firstAttribute="leading" secondItem="g5F-1b-bvJ" secondAttribute="leading" id="Jvo-xU-dUS"/>
                             <constraint firstItem="fTW-ou-yrD" firstAttribute="baseline" secondItem="t20-bC-4c4" secondAttribute="baseline" id="MVs-Dt-HyM"/>
@@ -244,7 +258,7 @@
                             <constraint firstAttribute="leadingMargin" secondItem="T5d-40-82a" secondAttribute="leading" id="XZq-vt-W5m"/>
                             <constraint firstItem="IE7-XU-Jwr" firstAttribute="baseline" secondItem="5nR-GB-zYv" secondAttribute="baseline" id="YAC-7Y-Gwa"/>
                             <constraint firstItem="Uao-LP-Ls8" firstAttribute="baseline" secondItem="g5F-1b-bvJ" secondAttribute="baseline" id="YUj-Qk-Ipa"/>
-                            <constraint firstItem="3xH-vN-eUP" firstAttribute="width" secondItem="nzD-Bi-E3K" secondAttribute="width" id="YqX-yv-0Gv"/>
+                            <constraint firstItem="3xH-vN-eUP" firstAttribute="width" secondItem="nzD-Bi-E3K" secondAttribute="width" constant="1" id="YqX-yv-0Gv"/>
                             <constraint firstItem="nDg-xJ-n9u" firstAttribute="trailing" secondItem="Zhn-oC-LuC" secondAttribute="trailing" id="Yy5-Hd-8IH"/>
                             <constraint firstItem="zzj-if-tAH" firstAttribute="leading" secondItem="WN0-R2-ldk" secondAttribute="leading" id="ZBf-6x-Eiw"/>
                             <constraint firstItem="bgR-AW-Sr3" firstAttribute="baseline" secondItem="Zhn-oC-LuC" secondAttribute="baseline" id="aoV-gF-706"/>
@@ -257,13 +271,15 @@
                             <constraint firstAttribute="trailingMargin" secondItem="nzD-Bi-E3K" secondAttribute="trailing" id="jpi-bP-fwT"/>
                             <constraint firstItem="mC3-hZ-5QM" firstAttribute="leading" secondItem="Laj-4b-Kue" secondAttribute="leading" id="k14-Po-U2p"/>
                             <constraint firstItem="Hyc-ly-qdH" firstAttribute="trailing" secondItem="fTW-ou-yrD" secondAttribute="trailing" id="kfs-op-zJZ"/>
-                            <constraint firstItem="T5d-40-82a" firstAttribute="width" secondItem="3xH-vN-eUP" secondAttribute="width" id="mTu-ct-txv"/>
+                            <constraint firstItem="T5d-40-82a" firstAttribute="width" secondItem="3xH-vN-eUP" secondAttribute="width" constant="-1" id="mTu-ct-txv"/>
                             <constraint firstItem="5nR-GB-zYv" firstAttribute="leading" secondItem="WN0-R2-ldk" secondAttribute="leading" id="psq-Fy-eiY"/>
+                            <constraint firstItem="9U2-gy-qme" firstAttribute="bottom" secondItem="T5d-40-82a" secondAttribute="bottom" id="qcV-tF-dbN"/>
                             <constraint firstItem="ovi-vY-0HD" firstAttribute="baseline" secondItem="mC3-hZ-5QM" secondAttribute="baseline" id="rJN-Hj-CYf"/>
                             <constraint firstItem="cor-N8-hZU" firstAttribute="trailing" secondItem="Hyc-ly-qdH" secondAttribute="trailing" id="rlu-u4-Fl4"/>
                             <constraint firstItem="ovi-vY-0HD" firstAttribute="trailing" secondItem="owe-SM-E4V" secondAttribute="trailing" id="ryE-GE-fja"/>
                             <constraint firstItem="owe-SM-E4V" firstAttribute="baseline" secondItem="Laj-4b-Kue" secondAttribute="baseline" id="sEE-Hi-Roi"/>
                             <constraint firstItem="owe-SM-E4V" firstAttribute="trailing" secondItem="Uao-LP-Ls8" secondAttribute="trailing" id="to4-Bg-gie"/>
+                            <constraint firstItem="9U2-gy-qme" firstAttribute="leading" secondItem="T5d-40-82a" secondAttribute="leading" id="uma-ui-keI"/>
                             <constraint firstItem="zzj-if-tAH" firstAttribute="baseline" secondItem="Hyc-ly-qdH" secondAttribute="baseline" id="xgI-x5-k8f"/>
                         </constraints>
                     </view>
@@ -282,7 +298,9 @@
                         <outlet property="makeCallButton" destination="i5w-9a-NvN" id="eYG-bb-ey8"/>
                         <outlet property="mediaStateLabel" destination="nDg-xJ-n9u" id="oOP-5p-x8V"/>
                         <outlet property="numberToCall" destination="xXv-tM-Cny" id="0zb-WZ-t7i"/>
+                        <outlet property="registerAccountButton" destination="T5d-40-82a" id="UbT-2z-KHK"/>
                         <outlet property="remoteUriLabel" destination="Uao-LP-Ls8" id="gOQ-T9-ABt"/>
+                        <outlet property="unRegisterAccountButton" destination="9U2-gy-qme" id="CDt-9H-a3K"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tc2-Qw-aMS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -330,7 +348,7 @@
                                     <action selector="toggleMuteCall:" destination="8ME-OA-J4F" eventType="touchUpInside" id="wn5-1Y-sxs"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ina-b4-MZI">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ina-b4-MZI">
                                 <rect key="frame" x="213" y="20" width="180" height="30"/>
                                 <color key="backgroundColor" red="0.069930719040000006" green="1" blue="0.192635271" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Keypad"/>

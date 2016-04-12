@@ -42,6 +42,10 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     return _calls;
 }
 
+- (BOOL)isAccountValid {
+    return [[NSNumber numberWithInt:pjsua_acc_is_valid(self.accountId)] boolValue];
+}
+
 - (NSInteger)registrationStatus {
     if (self.accountId == PJSUA_INVALID_ID) {
         return 0;
@@ -147,7 +151,12 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 - (void)registerAccountWithCompletion:(RegistrationCompletionBlock)completion {
     pj_status_t status;
     pjsua_acc_info info;
+
+    DDLogInfo(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
+
     pjsua_acc_get_info((int)self.accountId, &info);
+
+    DDLogVerbose(@"%d", info.id);
 
     // If expires is not -1, there is a registration or registration is in progress.
     if (info.expires == -1) {
@@ -169,6 +178,18 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     } else {
         self.registrationCompletionBlock = completion;
     }
+}
+
+- (NSString *)description {
+    NSMutableString *info = [[NSMutableString alloc] init];
+    [info appendFormat:@"ID: %@\n", self.accountId];
+    [info appendFormat:@"State: %@\n", self.accountState];
+    [info appendFormat:@"Registered: %@",self.isRegistered ? @"YES" : @"NO"];
+    [info appendFormat:@"Registration Status: %@\n", self.registrationStatus];
+    [info appendFormat:@"Registration Expires: %@", self.registrationExpiresTime];
+    [info appendFormat:@"Account valid %@\n", self.isAccountValid ? @"YES": @"NO"];
+
+    return info;
 }
 
 - (BOOL)unregisterAccount:(NSError * _Nullable __autoreleasing *)error {
