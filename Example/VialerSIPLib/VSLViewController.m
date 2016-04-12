@@ -45,6 +45,7 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.numberToCall.text = KeysNumberToCall;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(incomingCallNotification:) name:AppDelegateIncominCallNotification object:nil];
 }
 

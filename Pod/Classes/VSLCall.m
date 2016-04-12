@@ -15,16 +15,6 @@
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 
-/**
- *  The sip status codes.
- */
-typedef NS_ENUM(NSInteger, VSLStatusCodes) {
-    /**
-     *  Busy here.
-     */
-    VSLStatusCodesBusyHere = PJSIP_SC_BUSY_HERE,
-};
-
 @interface VSLCall()
 @property (readwrite, nonatomic) VSLCallState callState;
 @property (readwrite, nonatomic) NSString *callStateText;
@@ -88,15 +78,8 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
         return nil;
     }
     DDLogVerbose(@"Created call");
-    VSLCall *call = [VSLCall callWithId:callIdentifier andAccountId:account.accountId];
+    VSLCall *call = [[self alloc] initWithCallId:callIdentifier accountId:account.accountId];
     [account addCall:call];
-    return call;
-}
-
-+ (instancetype)callWithId:(NSInteger)callId andAccountId:(NSInteger)accountId {
-    DDLogVerbose(@"Creating call");
-
-    VSLCall *call = [[VSLCall alloc] initWithCallId:callId accountId:accountId];
     return call;
 }
 
@@ -249,7 +232,7 @@ typedef NS_ENUM(NSInteger, VSLStatusCodes) {
 }
 
 - (BOOL)decline:(NSError *__autoreleasing  _Nullable *)error {
-    pj_status_t status = pjsua_call_answer((int)self.callId, VSLStatusCodesBusyHere, NULL, NULL);
+    pj_status_t status = pjsua_call_answer((int)self.callId, PJSIP_SC_BUSY_HERE, NULL, NULL);
     if (status != PJ_SUCCESS) {
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
