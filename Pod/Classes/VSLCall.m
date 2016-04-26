@@ -37,6 +37,9 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 @property (readwrite, nonatomic) BOOL speaker;
 @property (readwrite, nonatomic) BOOL onHold;
 @property (strong, nonatomic) NSString *currentAudioSessionCategory;
+@property (nonatomic) BOOL connected;
+@property (nonatomic) BOOL userDidHangUp;
+@property (strong, nonatomic) AVAudioPlayer *disconnectedSoundPlayer;
 @end
 
 @implementation VSLCall
@@ -142,6 +145,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
             } break;
 
             case VSLCallStateConfirmed: {
+                self.connected = YES;
                 [self.ringback stop];
                 // Register for the audio interruption notification to be able to restore the sip audio session after an interruption (incoming call/alarm....).
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:AVAudioSessionInterruptionNotification object:nil];
@@ -152,6 +156,9 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                 [self.ringback stop];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDisconnectedNotification object:nil];
+                if (self.connected && !self.userDidHangUp) {
+                    [self.disconnectedSoundPlayer play];
+                }
                 [self.account removeCall:self];
             } break;
         }
@@ -167,6 +174,20 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
         _ringback = [[VSLRingback alloc] init];
     }
     return _ringback;
+}
+
+- (AVAudioPlayer *)disconnectedSoundPlayer {
+    if (!_disconnectedSoundPlayer) {
+        NSBundle *podBundle = [NSBundle bundleForClass:self.classForCoder];
+        NSBundle *vialerBundle = [NSBundle bundleWithURL:[podBundle URLForResource:@"VialerSIPLib-iOS" withExtension:@"bundle"]];
+        NSURL *disconnectedSound = [vialerBundle URLForResource:@"disconnected" withExtension:@"wav"];
+        NSAssert(disconnectedSound, @"No sound available");
+        NSError *error;
+        _disconnectedSoundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:disconnectedSound error:&error];
+        _disconnectedSoundPlayer.volume = 1.0f;
+        [_disconnectedSoundPlayer prepareToPlay];
+    }
+    return _disconnectedSoundPlayer;
 }
 
 #pragma mark - Callback methods
@@ -260,6 +281,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 - (BOOL)hangup:(NSError * _Nullable __autoreleasing *)error {
     if (self.callId != PJSUA_INVALID_ID) {
         if (self.callState != VSLCallStateDisconnected) {
+            self.userDidHangUp = YES;
             pj_status_t status = pjsua_call_hangup((int)self.callId, 0, NULL, NULL);
             if (status != PJ_SUCCESS) {
                 if (error != NULL) {
