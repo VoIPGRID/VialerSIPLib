@@ -1,6 +1,6 @@
 {
   "name": "VialerSIPLib-iOS",
-  "version": "0.0.18",
+  "version": "0.0.22",
   "summary": "Vialer SIP Library for iOS",
   "description": "Objective-C wrapper around PJSIP",
   "homepage": "https://www.wearespindle.com",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/VoIPGRID/VialerSIPLib-iOS.git",
-    "tag": "0.0.18"
+    "tag": "0.0.22"
   },
   "social_media_url": "https://twitter.com/wearespindle",
   "platforms": {

@@ -15,6 +15,9 @@
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 
+NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
+NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
+
 @interface VSLCall()
 @property (readwrite, nonatomic) VSLCallState callState;
 @property (readwrite, nonatomic) NSString *callStateText;
@@ -142,11 +145,13 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
                 [self.ringback stop];
                 // Register for the audio interruption notification to be able to restore the sip audio session after an interruption (incoming call/alarm....).
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:AVAudioSessionInterruptionNotification object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallConnectedNotification object:nil];
             } break;
 
             case VSLCallStateDisconnected: {
                 [self.ringback stop];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDisconnectedNotification object:nil];
                 [self.account removeCall:self];
             } break;
         }
@@ -173,10 +178,11 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
     self.lastStatusText = [NSString stringWithPJString:callInfo.last_status_text];
     self.localURI = [NSString stringWithPJString:callInfo.local_info];
     self.remoteURI = [NSString stringWithPJString:callInfo.remote_info];
-    NSDictionary *callerInfo = [self getCallerInfoFromRemoteUri:self.remoteURI];
-    self.callerName = callerInfo[@"caller_name"];
-    self.callerNumber = callerInfo[@"caller_number"];
-
+    if (self.remoteURI) {
+        NSDictionary *callerInfo = [self getCallerInfoFromRemoteUri:self.remoteURI];
+        self.callerName = callerInfo[@"caller_name"];
+        self.callerNumber = callerInfo[@"caller_number"];
+    }
 }
 
 - (void)callStateChanged:(pjsua_call_info)callInfo {

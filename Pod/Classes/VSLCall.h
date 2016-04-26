@@ -8,6 +8,15 @@
 #import <VialerPJSIP/pjsua.h>
 
 /**
+ *  Notification that will be posted when a phonecall is connected.
+ */
+extern NSString * _Nonnull const VSLCallConnectedNotification;
+/**
+ *  Notification that will be posted when a phonecall is disconnected.
+ */
+extern NSString * _Nonnull const VSLCallDisconnectedNotification;
+
+/**
  *  The posible errors VSLCall can return.
  */
 typedef NS_ENUM(NSInteger, VSLCallErrors) {

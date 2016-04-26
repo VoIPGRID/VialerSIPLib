@@ -11,7 +11,7 @@ PODS:
     - CocoaLumberjack
   - OCMock (3.2.2)
   - Vialer-pjsip-iOS (0.0.6)
-  - VialerSIPLib-iOS (0.0.18):
+  - VialerSIPLib-iOS (0.0.22):
     - CocoaLumberjack (~> 2.2)
     - Vialer-pjsip-iOS
 
@@ -36,8 +36,8 @@ SPEC CHECKSUMS:
   HDLumberjackLogFormatter: c8d6015a1041ced2ff4720dbb0b8991bccb9f1ab
   OCMock: 18c9b7e67d4c2770e95bb77a9cc1ae0c91fe3835
   Vialer-pjsip-iOS: 63c7bb430ddbe564c5914e59018637bcf7cbe608
-  VialerSIPLib-iOS: e8cd0561f0d84343f705abddf8ac0fbdeee5694a
+  VialerSIPLib-iOS: 261a04cda68f2c62fe2d5d58926747f82599f6ee
 
 PODFILE CHECKSUM: 12edd0a3949a449e3cd39843afc9b28b56623238
 
-COCOAPODS: 1.0.0.beta.6
+COCOAPODS: 1.0.0.beta.8
