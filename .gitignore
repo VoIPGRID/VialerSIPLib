@@ -1,3 +1,13 @@
+# Own additions to the .gitignore
+#####
+# Ignoring own private constant files
+Example/VialerSIPLib/Keys.h
+
+# COCOAPODS:
+Example/Pods/
+!Podfile
+!Podfile.lock
+
 #########################
 # .gitignore file for Xcode4 and Xcode5 Source projects
 #
@@ -212,7 +222,4 @@ xcuserdata/
 # -- UNVERIFIED: c.f. http://stackoverflow.com/a/50283/153422
 #
 #tm_build_errors
-
-# To speed up development progress, use Keys.h to store private sip details
-Example/VialerSIPLib/Keys.h
 

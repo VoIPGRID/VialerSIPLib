@@ -1,1 +1,0 @@
-../../../../Vialer-pjsip-iOS/VialerPJSIP.framework/Versions/A/Headers/pjsip_auth.h

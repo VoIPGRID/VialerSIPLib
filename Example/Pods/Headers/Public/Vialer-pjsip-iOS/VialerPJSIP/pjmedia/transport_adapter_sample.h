@@ -1,1 +1,0 @@
-../../../../../Vialer-pjsip-iOS/VialerPJSIP.framework/Versions/A/Headers/pjmedia/transport_adapter_sample.h

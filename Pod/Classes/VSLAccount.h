@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, VSLAccountErrors) {
      */
     VSLAccountErrorRegistrationFailed,
 };
+#define VSLAccountErrorsString(VSLAccountErrors) [@[@"VSLAccountErrorCannotConfigureAccount", @"VSLAccountErrorFailedCallingNumber", @"VSLAccountErrorRegistrationFailed"] objectAtIndex:VSLAccountErrors]
 
 /**
  *  Possible states for an account.
@@ -48,6 +49,7 @@ typedef NS_ENUM(NSInteger, VSLAccountState) {
      */
     VSLAccountStateDisconnected,
 };
+#define VSLAccountStateString(VSLAccountState) [@[@"VSLAccountStateOffline", @"VSLAccountStateConnecting", @"VSLAccountStateConnected", @"VSLAccountStateDisconnected"] objectAtIndex:VSLAccountState]
 
 /**
  *  Completionblock that will be called after the account was registered.

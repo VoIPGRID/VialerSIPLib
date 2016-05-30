@@ -49,6 +49,8 @@ typedef NS_ENUM(NSInteger, VSLCallErrors) {
      */
     VSLCallErrorCannotSendDTMF,
 };
+#define VSLCallErrorsString(VSLCallErrors) [@[@"VSLCallErrorCannotCreateThread", @"VSLCallErrorCannotCreateCall", @"VSLCallErrorCannotHangupCall", @"VSLCallErrorCannotDeclineCall", @"VSLCallErrorCannotToggleMute", @"VSLCallErrorCannotToggleHold", @"VSLCallErrorCannotSendDTMF"] objectAtIndex:VSLCallErrors]
+
 
 /**
  *  The states which a call can have.
@@ -83,6 +85,8 @@ typedef NS_ENUM(NSInteger, VSLCallState) {
      */
     VSLCallStateDisconnected = PJSIP_INV_STATE_DISCONNECTED,
 };
+#define VSLCallStateString(VSLCallState) [@[@"VSLCallStateNull", @"VSLCallStateCalling", @"VSLCallStateIncoming", @"VSLCallEarlyState", @"VSLCallStateConnecting", @"VSLCallStateConfirmed", @"VSLCallStateDisconnected"] objectAtIndex:VSLCallState]
+
 
 /**
  *  The states which the media can have.
@@ -92,10 +96,6 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
      *  There is no media.
      */
     VSLMediaStateNone = PJSUA_CALL_MEDIA_NONE,
-    /**
-     *  There is an error with the media.
-     */
-    VSLMediaStateError = PJSUA_CALL_MEDIA_ERROR,
     /**
      *  The media is active.
      */
@@ -107,8 +107,14 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
     /**
      *  The media is remote on hold.
      */
-    VSLMediaStateRemoteHold = PJSUA_CALL_MEDIA_REMOTE_HOLD
+    VSLMediaStateRemoteHold = PJSUA_CALL_MEDIA_REMOTE_HOLD,
+    /**
+     *  There is an error with the media.
+     */
+    VSLMediaStateError = PJSUA_CALL_MEDIA_ERROR,
 };
+#define VSLMediaStateString(VSLMediaState) [@[@"VSLMediaStateNone", @"VSLMediaStateActive", @"VSLMediaStateLocalHold", @"VSLMediaStateRemoteHold", @"VSLMediaStateError"] objectAtIndex:VSLMediaState]
+
 
 @interface VSLCall : NSObject
 

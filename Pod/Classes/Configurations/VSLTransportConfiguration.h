@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger, VSLTransportType) {
      */
     VSLTransportTypeTCP6 = PJSIP_TRANSPORT_TCP6
 };
+#define VSLTransportTypeString(VSLTransportType) [@[@"VSLTransportTypeUDP" ,@"VSLTransportTypeTCP", @"VSLTransportTypeTCP6"] objectAtIndex:VSLTransportType]
 
 @interface VSLTransportConfiguration : NSObject
 /**

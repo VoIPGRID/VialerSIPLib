@@ -1,1 +1,0 @@
-../../../../../../Vialer-pjsip-iOS/VialerPJSIP.framework/Versions/A/Headers/pj/compat/os_win32_wince.h

@@ -35,6 +35,14 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 #pragma mark - Properties
 
+- (void)setAccountState:(VSLAccountState)accountState {
+    if (_accountState != accountState) {
+        DDLogDebug(@"AccountState will change from %@(%ld) to %@(%ld)", VSLAccountStateString(_accountState),
+                   (long)_accountState, VSLAccountStateString(accountState), (long)accountState);
+        _accountState = accountState;
+    }
+}
+
 - (NSMutableArray *)calls {
     if (!_calls) {
         _calls = [NSMutableArray array];
@@ -183,7 +191,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 - (NSString *)description {
     NSMutableString *info = [[NSMutableString alloc] init];
     [info appendFormat:@"ID: %d\n", (pjsua_acc_id)self.accountId];
-    [info appendFormat:@"State: %d\n", (int)self.accountState];
+    [info appendFormat:@"State: %@(%d)\n", VSLAccountStateString(self.accountState), (int)self.accountState];
     [info appendFormat:@"Registered: %@\n",self.isRegistered ? @"YES" : @"NO"];
     [info appendFormat:@"Registration Status: %d\n", (int)self.registrationStatus];
     [info appendFormat:@"Registration Expires: %d\n", (int)self.registrationExpiresTime];
@@ -237,8 +245,6 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     } else {
         self.accountState = VSLAccountStateDisconnected;
     }
-
-    DDLogVerbose(@"Account state changed to: %ld", (long)self.accountState);
 }
 
 #pragma mark - Calling methods

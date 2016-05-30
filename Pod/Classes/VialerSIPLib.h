@@ -21,6 +21,7 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
      */
     VialerSIPLibErrorAccountConfigurationFailed,
 };
+#define VialerSIPLibErrorsString(VialerSIPLibErrors) [@[@"VialerSIPLibErrorEndpointConfigurationFailed", @"VialerSIPLibErrorAccountConfigurationFailed"] objectAtIndex:VialerSIPLibErrors]
 
 /**
  *  The protocol which needs to be implemented in order to use the library.
