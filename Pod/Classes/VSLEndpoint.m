@@ -8,6 +8,7 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
+#import "Reachability.h"
 #import "VSLCall.h"
 #import "VSLTransportConfiguration.h"
 
@@ -21,13 +22,19 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
 static void onCallMediaState(pjsua_call_id call_id);
 static void onCallTransferStatus(pjsua_call_id call_id, int st_code, const pj_str_t *st_text, pj_bool_t final, pj_bool_t *p_cont);
 static void onCallReplaced(pjsua_call_id old_call_id, pjsua_call_id new_call_id);
-static void onRegState(pjsua_acc_id acc_id);
+static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info);
+static void onRegStarted2(pjsua_acc_id acc_id, pjsua_reg_info *info);
 static void onNatDetect(const pj_stun_nat_detect_result *res);
+static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info);
+
+static pjsip_transport *the_transport;
 
 @interface VSLEndpoint()
 @property (strong, nonatomic) VSLEndpointConfiguration *endpointConfiguration;
 @property (strong, nonatomic) NSArray *accounts;
 @property (assign) pj_pool_t *pjPool;
+@property (assign) BOOL shouldReregisterAfterUnregister;
+@property (strong, nonatomic) Reachability *networkMonitor;
 @end
 
 @implementation VSLEndpoint
@@ -52,6 +59,31 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     return _accounts;
 }
 
+- (void)setState:(VSLEndpointState)state {
+    if (_state != state) {
+        _state = state;
+        switch (_state) {
+            case VSLEndpointStopped: {
+                @try {
+                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallConnectedNotification object:nil];
+                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallDisconnectedNotification object:nil];
+                } @catch (NSException *exception) {
+
+                }
+                break;
+            }
+            case VSLEndpointStarting: {
+                break;
+            }
+            case VSLEndpointStarted: {
+                [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(startNetworkMonitoring) name:VSLCallConnectedNotification object:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopNetworkMonitoring) name:VSLCallDisconnectedNotification object:nil];
+                break;
+            }
+        }
+    }
+}
+
 #pragma mark - Lifecycle
 
 - (BOOL)startEndpointWithEndpointConfiguration:(VSLEndpointConfiguration  * _Nonnull)endpointConfiguration error:(NSError **)error {
@@ -63,7 +95,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         return NO;
     }
 
-    DDLogVerbose(@"Creating new PJSIP Endpoint instance.");
+    DDLogDebug(@"Creating new PJSIP Endpoint instance.");
     self.state = VSLEndpointStarting;
 
     // Create PJSUA on the main thread to make all subsequent calls from the main
@@ -105,8 +137,10 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     endpointConfig.cb.on_call_state = &onCallState;
     endpointConfig.cb.on_call_transfer_status = &onCallTransferStatus;
     endpointConfig.cb.on_call_replaced = &onCallReplaced;
-    endpointConfig.cb.on_reg_state = &onRegState;
+    endpointConfig.cb.on_reg_state2 = &onRegState2;
+    endpointConfig.cb.on_reg_started2 = &onRegStarted2;
     endpointConfig.cb.on_nat_detect = &onNatDetect;
+    endpointConfig.cb.on_transport_state = &onTransportState;
     endpointConfig.max_calls = (unsigned int)endpointConfiguration.maxCalls;
 
     // Configure the media information for the endpoint.
@@ -163,7 +197,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         }
         return NO;
     }
-    DDLogVerbose(@"PJSIP Endpoint started succesfully");
+    DDLogInfo(@"PJSIP Endpoint started succesfully");
     self.endpointConfiguration = endpointConfiguration;
     self.state = VSLEndpointStarted;
 
@@ -196,7 +230,8 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
 }
 
 - (void)destoryPJSUAInstance {
-    DDLogVerbose(@"PJSUA was already running destroying old instance.");
+    DDLogDebug(@"PJSUA was already running destroying old instance.");
+    [self stopNetworkMonitoring];
 
     for (VSLAccount *account in self.accounts) {
         [account removeAllCalls];
@@ -208,7 +243,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
         pj_status_t status = pj_thread_register(NULL, aPJThreadDesc, &pjThread);
 
         if (status != PJ_SUCCESS) {
-            NSLog(@"Error registering thread at PJSUA");
+            DDLogError(@"Error registering thread at PJSUA");
         }
     }
 
@@ -221,7 +256,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
     pj_status_t status = pjsua_destroy();
 
     if (status != PJ_SUCCESS) {
-        DDLogError(@"Error stopping SIP Endpoint");
+        DDLogWarn(@"Error stopping SIP Endpoint");
     }
 
     self.state = VSLEndpointStopped;
@@ -379,19 +414,52 @@ static void onCallMediaState(pjsua_call_id call_id) {
     }
 }
 
-static void onRegState(pjsua_acc_id acc_id) {
-    DDLogVerbose(@"Updated regState");
+/**
+ *  We need to keep track of the current TCP transport in combination with
+ *  a network monitor to be able to handle network/ip address changes.
+ *  http://trac.pjsip.org/repos/wiki/IPAddressChange#iphone
+ */
+static void onRegStarted2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
+    DDLogVerbose(@"onRegStarted2");
+    pjsip_regc_info regc_info;
+    pjsip_regc_get_info(info->regc, &regc_info);
+
+    if (the_transport != regc_info.transport) {
+        releaseStoredTransport();
+        /* Save transport instance so that we can close it later when
+         * new IP address is detected.
+         */
+        DDLogInfo(@"Saving transport");
+        the_transport = regc_info.transport;
+        pjsip_transport_add_ref(the_transport);
+    }
+}
+
+static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
+    DDLogVerbose(@"onRegState2");
+    struct pjsip_regc_cbparam *rp = info->cbparam;
+
+    if (rp->code/100 == 2 && rp->expiration > 0 && rp->contact_cnt > 0) {
+        // TCP tranport already saved in onRegStarted
+    } else {
+        releaseStoredTransport();
+    }
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
-
     if (account) {
         [account accountStateChanged];
     }
 }
 
+static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info) {
+    DDLogVerbose(@"onTransportState");
+    if (state == PJSIP_TP_STATE_DISCONNECTED && the_transport == tp) {
+        releaseStoredTransport();
+    }
+}
+
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
-    DDLogVerbose(@"Incoming call");
-    DDLogVerbose(@"AccountID: %d", acc_id);
+    DDLogVerbose(@"Incoming call for Account: %d", acc_id);
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
     if (account) {
@@ -405,6 +473,104 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
         }
     }
 }
+/**
+ *  Release the current TCP transport.
+ */
+static void releaseStoredTransport() {
+    if (the_transport) {
+        DDLogDebug(@"Releasing transport");
+        pjsip_transport_dec_ref(the_transport);
+        the_transport = NULL;
+    }
+}
+
+/**
+ *  Shutsdown the current TCP transport.
+ *
+ *  @return YES if succesfull
+ */
+- (BOOL)shutdownTransport {
+    pj_status_t status;
+
+    if (the_transport) {
+        status = pjsip_transport_shutdown(the_transport);
+        DDLogInfo(@"Shuting down transport");
+        if (status != PJ_SUCCESS) {
+            DDLogWarn(@"Transport shutdown error");
+            return NO;
+        }
+        releaseStoredTransport();
+    }
+    return YES;
+}
+
+#pragma mark - Reachability detection
+
+- (Reachability *)reachability {
+    if (!_networkMonitor) {
+        _networkMonitor = [Reachability reachabilityWithHostName:@"sipproxy.voipgrid.nl"];
+    }
+    return _networkMonitor;
+}
+
+/**
+ *  Start the network monitor which will inform us about a network change so we can bring down
+ *  and reinitialize the TCP transport.
+ */
+- (void)startNetworkMonitoring {
+    DDLogVerbose(@"Starting network monitor");
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(internetConnectionChanged:) name:kReachabilityChangedNotification object:nil];
+    [self.reachability startNotifier];
+}
+
+/**
+ *  Stop the network monitor. The monitor will only be stopped when there are no active calls
+ *  found for any account.
+ */
+- (void)stopNetworkMonitoring {
+    BOOL activeCallForAnyAccount = NO;
+    // Try to find an account which has an active call.
+    for (VSLAccount *account in self.accounts) {
+        if ([account firstActiveCall]) {
+            activeCallForAnyAccount = YES;
+            break;
+        }
+    }
+
+    // If there is no active call anymore for any account, stop the reachability monitoring
+    if (!activeCallForAnyAccount) {
+        DDLogVerbose(@"No active calls for any account, stoping network monitor");
+        @try {
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+        } @catch (NSException *exception) {
+            DDLogWarn(@"Exception on removing the reachability change notification.");
+        }
+        [self.reachability stopNotifier];
+    }
+}
+
+/**
+ *  Register account again if network has changed connection.
+ *
+ *  To prevent registration to quickly or to often, we wait for a second before actually sending the registration.
+ *  This is needed because switching to or between mobile networks can happen multiple times in a short time.
+ *
+ *  @param notification The notification which lead to this function being invoked over GCD.
+ */
+- (void)internetConnectionChanged:(NSNotification *)notification {
+    DDLogDebug(@"Network changed");
+    if (self.state == VSLEndpointStarted) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            DDLogInfo(@"Network change detected");
+
+            if ([self shutdownTransport]) {
+                for (VSLAccount *account in self.accounts) {
+                    [account reregisterAccount];
+                }
+            }
+        });
+    }
+}
 
 //TODO: implement these
 
@@ -413,11 +579,16 @@ static void onCallTransferStatus(pjsua_call_id call_id, int st_code, const pj_st
 }
 
 static void onCallReplaced(pjsua_call_id old_call_id, pjsua_call_id new_call_id) {
-    DDLogVerbose(@"call replaced");
+    DDLogVerbose(@"Call replaced");
 }
 
 static void onNatDetect(const pj_stun_nat_detect_result *res){
-    DDLogVerbose(@"Updated natdetect");
+    if (res->status != PJ_SUCCESS) {
+        DDLogWarn(@"NAT detection failed %@", res->status ? @"YES" : @"NO");
+    } else {
+        DDLogDebug(@"NAT detected as %s", res->nat_type_name);
+    }
 }
+
 
 @end

@@ -10,15 +10,17 @@ PODS:
   - HDLumberjackLogFormatter (2.0.0):
     - CocoaLumberjack
   - OCMock (3.3)
+  - Reachability (3.2)
   - Vialer-pjsip-iOS (0.0.7)
-  - VialerSIPLib-iOS (0.0.25):
+  - VialerSIPLib-iOS (0.0.26):
     - CocoaLumberjack (~> 2.2)
+    - Reachability
     - Vialer-pjsip-iOS
 
 DEPENDENCIES:
   - HDLumberjackLogFormatter (from `https://hd-apps@bitbucket.org/hd-apps/hdlumberjacklogformatter.git`)
   - OCMock
-  - Vialer-pjsip-iOS
+  - Reachability
   - VialerSIPLib-iOS (from `../`)
 
 EXTERNAL SOURCES:
@@ -36,9 +38,10 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   HDLumberjackLogFormatter: c8d6015a1041ced2ff4720dbb0b8991bccb9f1ab
   OCMock: d68685bde31f69cb61d518dcb39269080c78b5ed
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   Vialer-pjsip-iOS: f56c29e0b34e40410acef67afeaa8c23e775ac16
-  VialerSIPLib-iOS: ad776a2524eb48d37c8a1c875f928f3c5f76a31d
+  VialerSIPLib-iOS: 5edd81226cde58758f80fac5647d2a81ad0cefb7
 
-PODFILE CHECKSUM: 815560d42f03b67c1faeee038b77360110a385ff
+PODFILE CHECKSUM: 016e0b692b7d707e0cda729a91abfee08ca8f827
 
 COCOAPODS: 1.0.1

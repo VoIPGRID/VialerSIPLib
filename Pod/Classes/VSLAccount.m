@@ -22,6 +22,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 @property (strong, nonatomic) NSMutableArray *calls;
 @property (readwrite, nonatomic) VSLAccountState accountState;
 @property (copy, nonatomic) RegistrationCompletionBlock registrationCompletionBlock;
+@property (assign) BOOL shouldReregister;
 @end
 
 @implementation VSLAccount
@@ -124,7 +125,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     pj_status_t status = pjsua_acc_add(&acc_cfg, PJ_TRUE, &accountId);
 
     if (status == PJ_SUCCESS) {
-        DDLogVerbose(@"Account added succesfully");
+        DDLogInfo(@"Account added succesfully");
         self.accountConfiguration = accountConfiguration;
         self.accountId = accountId;
         [[VSLEndpoint sharedEndpoint] addAccount:self];
@@ -160,7 +161,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     pj_status_t status;
     pjsua_acc_info info;
 
-    DDLogInfo(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
+    DDLogDebug(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
 
     pjsua_acc_get_info((pjsua_acc_id)self.accountId, &info);
 
@@ -220,8 +221,15 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         }
         return NO;
     }
-    DDLogVerbose(@"Account unregistered succesfully");
+    DDLogInfo(@"Account unregistered succesfully");
     return YES;
+}
+
+- (void)reregisterAccount {
+    if (self.calls.count > 0) {
+        self.shouldReregister = YES;
+        [self unregisterAccount:nil];
+    }
 }
 
 - (void)accountStateChanged {
@@ -232,6 +240,15 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
     if (code == 0 || accountInfo.expires == -1) {
         self.accountState = VSLAccountStateDisconnected;
+        if (self.shouldReregister) {
+            [self registerAccountWithCompletion:^(BOOL success, NSError * _Nullable error) {
+                if (success) {
+                    DDLogInfo(@"Account was re-registerd after a sucessfull unregister.");
+                    self.shouldReregister = NO;
+                    [self reinviteActiveCalls];
+                }
+            }];
+        }
     } else if (PJSIP_IS_STATUS_IN_CLASS(code, 100) || PJSIP_IS_STATUS_IN_CLASS(code, 300)) {
         self.accountState = VSLAccountStateConnecting;
     } else if (PJSIP_IS_STATUS_IN_CLASS(code, 200)) {
@@ -307,13 +324,35 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     }
 }
 
+- (NSArray <VSLCall *> *)allActiveCalls {
+    NSMutableArray *activeCalls = [[NSMutableArray alloc] init];
+    for (VSLCall *call in self.calls) {
+        if (call.callState > VSLCallStateNull && call.callState < VSLCallStateDisconnected) {
+            [activeCalls addObject:call];
+        }
+    }
+
+    if ([activeCalls count]) {
+        return activeCalls;
+    } else {
+        return nil;
+    }
+}
+
 - (VSLCall *)firstActiveCall {
-    for (VSLCall * call in self.calls) {
+    for (VSLCall *call in [self allActiveCalls]) {
         if (call.callState > VSLCallStateNull && call.callState < VSLCallStateDisconnected) {
             return call;
         }
     }
     return nil;
+}
+
+- (void)reinviteActiveCalls {
+    DDLogDebug(@"Reinviting calls");
+    for (VSLCall *call in [self allActiveCalls]) {
+        [call reinvite];
+    }
 }
 
 @end

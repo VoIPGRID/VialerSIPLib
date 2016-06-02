@@ -120,6 +120,12 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
 - (BOOL)unregisterAccount:(NSError * _Nullable * _Nullable)error;
 
 /**
+ *  Will unregister the account and will re-register the account once the account
+ *  state reaches "unregistered".
+ */
+- (void) reregisterAccount;
+
+/**
  *  This will remove the account from the Endpoint and will also de-register the account from the server.
  */
 - (void)removeAccount;
@@ -178,4 +184,5 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  *  @return VSLCall instance can also return nil.
  */
 - (VSLCall * _Nullable)firstActiveCall;
+
 @end
