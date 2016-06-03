@@ -122,12 +122,12 @@
     config.sipDomain = @"sip.test.com";
     [self.account configureWithAccountConfiguration:config error:nil];
 
-    NSError *error;
-    XCTAssertTrue([self.account registerAccount:&error], @"It should be possible to register an account");
-    XCTAssertNil(error, @"There should be no error when registering an account");
-    XCTAssertEqual([endpoint.accounts count], 1, @"There should be one account.");
-    [endpoint removeAccount:self.account];
-    XCTAssertEqual([endpoint.accounts count], 0, @"There should be no account.");
+    [self.account registerAccountWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        XCTAssertNil(error, @"There should be no error when registering an account");
+        XCTAssertEqual([endpoint.accounts count], 1, @"There should be one account.");
+        [endpoint removeAccount:self.account];
+        XCTAssertEqual([endpoint.accounts count], 0, @"There should be no account.");
+    }];
 }
 
 @end

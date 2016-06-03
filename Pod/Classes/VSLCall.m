@@ -116,6 +116,8 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 - (void)setCallState:(VSLCallState)callState {
     if (_callState != callState) {
         [self willChangeValueForKey:@"callState"];
+        DDLogDebug(@"CallState will change from %@(%ld) to %@(%ld)", VSLCallStateString(_callState),
+                   (long)_callState, VSLCallStateString(callState), (long)callState);
         _callState = callState;
         [self didChangeValueForKey:@"callState"];
 
@@ -165,6 +167,14 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     }
 }
 
+- (void)setMediaState:(VSLMediaState)mediaState {
+    if (_mediaState != mediaState) {
+        DDLogDebug(@"MediaState will change from %@(%ld) to %@(%ld)", VSLMediaStateString(_mediaState),
+                   (long)_mediaState, VSLMediaStateString(mediaState), (long)mediaState);
+        _mediaState = mediaState;
+    }
+}
+
 - (VSLAccount *)account {
     return [[VSLEndpoint sharedEndpoint] lookupAccount:self.accountId];
 }
@@ -207,13 +217,11 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 }
 
 - (void)callStateChanged:(pjsua_call_info)callInfo {
-    DDLogVerbose(@"Updated callState: %d", callInfo.state);
     [self updateCallInfo:callInfo];
     self.callState = (VSLCallState)callInfo.state;
 }
 
 - (void)mediaStateChanged:(pjsua_call_info)callInfo  {
-    DDLogVerbose(@"Updated mediaState: %d", callInfo.state);
     pjsua_call_media_status mediaState = callInfo.media_status;
     self.mediaState = (VSLMediaState)mediaState;
 

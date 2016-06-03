@@ -17,7 +17,11 @@
 
 - (void)setUp {
     [super setUp];
-    self.endpoint = [VSLEndpoint sharedEndpoint];
+    self.endpoint = [[VSLEndpoint alloc] init];
+}
+
+- (void)tearDown {
+    self.endpoint = nil;
 }
 
 - (void)testEndpointHasOnDefaultNoAccounts {

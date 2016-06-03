@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger, VSLEndpointError) {
      */
     VSLEndpointErrorCannotCreateThread
 };
+#define VSLEndpointErrorString(VSLEndpointError) [@[@"VSLEndpointErrorCannotCreatePJSUA", @"VSLEndpointErrorCannotInitPJSUA", @"VSLEndpointErrorCannotAddTransportConfiguration", @"VSLEndpointErrorCannotStartPJSUA", @"VSLEndpointErrorCannotCreateThread"] objectAtIndex:VSLEndpointError]
 
 /**
  *  Possible states for the Endpoint.
@@ -54,6 +55,7 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
      */
     VSLEndpointStarted
 };
+#define VSLEndpointStateString(VSLEndpointState) [@[@"VSLEndpointStopped", @"VSLEndpointStarting", @"VSLEndpointStarted"] objectAtIndex:VSLEndpointState]
 
 
 @interface VSLEndpoint : NSObject
