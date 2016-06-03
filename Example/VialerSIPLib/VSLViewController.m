@@ -10,6 +10,7 @@
 #import "Keys.h"
 #import "SipUser.h"
 #import <VialerSIPLib-iOS/VSLRingtone.h>
+#import <VialerSIPLib-iOS/VSLEndpoint.h>
 #import "VSLCallViewController.h"
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -30,13 +31,15 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 @property (weak, nonatomic) IBOutlet UILabel *incomingLabel;
 @property (weak, nonatomic) IBOutlet UILabel *accountStateLabel;
 @property (weak, nonatomic) IBOutlet UIButton *acceptCallButton;
+@property (weak, nonatomic) IBOutlet UIButton *declineCallButton;
 @property (weak, nonatomic) IBOutlet UIButton *makeCallButton;
+@property (weak, nonatomic) IBOutlet UIButton *iLBCButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *registerAccountButton;
-@property (weak, nonatomic) IBOutlet UIButton *unRegisterAccountButton;
 
 @property (strong, nonatomic) VSLAccount *account;
 @property (strong, nonatomic) VSLRingtone *ringtone;
+@property (nonatomic) BOOL useILBC;
 @end
 
 @implementation VSLViewController
@@ -85,40 +88,36 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 
 #pragma mark - Actions
 
-- (IBAction)registerAccount:(UIButton *)sender {
-    SipUser *testUser = [[SipUser alloc] init];
-    testUser.sipAccount = KeysAccount;
-    testUser.sipPassword = KeysPassword;
-    testUser.sipDomain = KeysDomain;
-    testUser.sipProxy = KeysProxy;
-
-    NSError *error;
-    [[VialerSIPLib sharedInstance] registerAccountWithUser:testUser withCompletion:^(BOOL success, VSLAccount * _Nullable account) {
-        if (!success) {
-            if (error != NULL) {
-                DDLogError(@"%@", error);
-            }
-        } else {
-            self.account = account;
-            NSLog(@"%@", account);
-            [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
-            [self toggleAccountRegistrationButtons];
+- (IBAction)toggleRegisterAccount:(UIButton *)sender {
+    if (self.account) {
+        if([self.account unregisterAccount:nil]) {
+            [self.account removeObserver:self forKeyPath:@"accountState"];
+            self.account = nil;
+            [self updateUIForCall];
         }
-    }];
-}
+    } else {
+        self.registerAccountButton.enabled = NO;
+        SipUser *testUser = [[SipUser alloc] init];
+        testUser.sipAccount = KeysAccount;
+        testUser.sipPassword = KeysPassword;
+        testUser.sipDomain = KeysDomain;
+        testUser.sipProxy = KeysProxy;
 
-- (IBAction)unRegisterAccount:(id)sender {
-    [self.account unregisterAccount:nil];
-    [self.account removeObserver:self forKeyPath:@"accountState"];
-    self.account = nil;
-    [self toggleAccountRegistrationButtons];
-}
-
-- (void)toggleAccountRegistrationButtons {
-    self.registerAccountButton.hidden = !self.registerAccountButton.isHidden;
-    self.unRegisterAccountButton.hidden = !self.unRegisterAccountButton.isHidden;
-    DDLogWarn(@"RegisterButton hidden: %@ DeRegisterButton hidden: %@",
-              self.registerAccountButton.isHidden ? @"YES" : @"NO ", self.unRegisterAccountButton.isHidden ? @"YES" : @"NO");
+        NSError *error;
+        [[VialerSIPLib sharedInstance] registerAccountWithUser:testUser withCompletion:^(BOOL success, VSLAccount * _Nullable account) {
+            self.registerAccountButton.enabled = YES;
+            [self updateUIForCall];
+            if (!success) {
+                if (error != NULL) {
+                    DDLogError(@"%@", error);
+                }
+            } else {
+                self.account = account;
+                NSLog(@"%@", account);
+                [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
+            }
+        }];
+    }
 }
 
 - (IBAction)decline:(UIButton *)sender {
@@ -127,6 +126,14 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
     if (error) {
         DDLogError(@"Error declining the call: %@", error);
     }
+}
+
+- (IBAction)toggleILBC:(UIButton *)sender {
+    self.useILBC = !self.useILBC;
+    [[VSLEndpoint sharedEndpoint] onlyUseIlbc:self.useILBC];
+
+    DDLogInfo(self.useILBC ? @"YES": @"NO");
+    [self.iLBCButton setTitle:(self.useILBC ? @"Turn off iLBC" : @"Use iLBC") forState:UIControlStateNormal];
 }
 
 #pragma mark - Segues
@@ -170,12 +177,13 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
             if (self.call.callState == VSLCallStateDisconnected) {
                 [UIDevice currentDevice].proximityMonitoringEnabled = NO;
                 [self.ringtone stop];
+                [self updateUIForCall];
             }
         });
     }
     if (object == self.account) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.accountStateLabel.text = [NSString stringWithFormat:@"%ld", (long)self.account.accountState];
+            [self updateUIForCall];
         });
     }
 }
@@ -191,6 +199,12 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
     self.localUriLabel.text = self.call.localURI;
     self.remoteUriLabel.text = self.call.remoteURI;
     self.incomingLabel.text = self.call.incoming ? @"YES": @"NO";
+
+    self.acceptCallButton.enabled = self.call && self.call.callState != VSLCallStateDisconnected ? YES: NO;
+    self.declineCallButton.enabled = self.call && self.call.callState != VSLCallStateDisconnected ? YES: NO;
+
+    [self.registerAccountButton setTitle:self.account.isRegistered ? @"Unregister" : @"Register" forState:UIControlStateNormal];
+    self.accountStateLabel.text = [NSString stringWithFormat:@"%ld", (long)self.account.accountState];
 }
 
 - (void)handleEnteredBackground:(NSNotification *)notification {

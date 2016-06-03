@@ -35,6 +35,7 @@ static pjsip_transport *the_transport;
 @property (assign) pj_pool_t *pjPool;
 @property (assign) BOOL shouldReregisterAfterUnregister;
 @property (strong, nonatomic) Reachability *networkMonitor;
+@property (nonatomic) BOOL onlyUseILBC;
 @end
 
 @implementation VSLEndpoint
@@ -301,9 +302,19 @@ static pjsip_transport *the_transport;
 
 #pragma mark - codecs
 
-- (void)updateCodecs {
-    if (self.state != VSLEndpointStarted) {
+- (void)onlyUseILBC:(BOOL)activate {
+    if (self.onlyUseILBC == activate) {
         return;
+    }
+    self.onlyUseILBC = activate;
+    if (![self updateCodecs]) {
+        self.onlyUseILBC = !activate;
+    }
+}
+
+- (BOOL)updateCodecs {
+    if (self.state != VSLEndpointStarted) {
+        return NO;
     }
 
     const unsigned codecInfoSize = 64;
@@ -312,6 +323,7 @@ static pjsip_transport *the_transport;
     pj_status_t status = pjsua_enum_codecs(codecInfo, &codecCount);
     if (status != PJ_SUCCESS) {
         DDLogError(@"Error getting list of codecs");
+        return NO;
     } else {
         for (NSUInteger i = 0; i < codecCount; i++) {
             NSString *codecIdentifier = [NSString stringWithPJString:codecInfo[i].codec_id];
@@ -319,15 +331,36 @@ static pjsip_transport *the_transport;
             status = pjsua_codec_set_priority(&codecInfo[i].codec_id, priority);
             if (status != PJ_SUCCESS) {
                 DDLogError(@"Error setting codec priority to the correct value");
+                return NO;
             }
         }
     }
+    return YES;
 }
 
 - (pj_uint8_t)priorityForCodec:(NSString *)identifier {
-    static NSDictionary *priorities;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    NSDictionary *priorities;
+    if (self.onlyUseILBC) {
+        priorities = @{
+                       // G711a
+                       @"PCMA/8000/1":      @0,
+                       // G722
+                       @"G722/16000/1":     @0,
+                       // iLBC
+                       @"iLBC/8000/1":      @210,
+                       // G711
+                       @"PCMU/8000/1":      @0,
+                       // Speex 8 kHz
+                       @"speex/8000/1":     @0,
+                       // Speex 16 kHz
+                       @"speex/16000/1":    @0,
+                       // Speex 32 kHz
+                       @"speex/32000/1":    @0,
+                       // GSM 8 kHZ
+                       @"GSM/8000/1":       @0,
+                       };
+
+    } else {
         priorities = @{
                        // G711a
                        @"PCMA/8000/1":      @210,
@@ -346,7 +379,7 @@ static pjsip_transport *the_transport;
                        // GSM 8 kHZ
                        @"GSM/8000/1":       @0,
                        };
-    });
+    }
     return (pj_uint8_t)[priorities[identifier] unsignedIntegerValue];
 }
 

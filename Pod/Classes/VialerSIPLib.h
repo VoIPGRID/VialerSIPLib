@@ -143,4 +143,11 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 - (BOOL)anotherCallInProgress:(VSLCall * _Nonnull)call;
 
+/**
+ *  Call this method to limit the codecs to only iLBC.
+ *
+ *  @param activate BOOL, if YES, only iLBC will be used.
+ */
+- (void)onlyUseIlbc:(BOOL)activate;
+
 @end
