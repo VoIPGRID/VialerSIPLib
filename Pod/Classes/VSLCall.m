@@ -143,7 +143,6 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
             } break;
 
             case VSLCallStateConnecting: {
-
             } break;
 
             case VSLCallStateConfirmed: {
@@ -198,6 +197,13 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
         [_disconnectedSoundPlayer prepareToPlay];
     }
     return _disconnectedSoundPlayer;
+}
+
+- (void)reinvite {
+    if (self.callState > VSLCallStateNull && self.callState < VSLCallStateDisconnected) {
+        pjsua_call_reinvite((pjsua_call_id)self.callId, PJSUA_CALL_UPDATE_CONTACT, NULL);
+        DDLogDebug(@"Reinvite sent");
+    }
 }
 
 #pragma mark - Callback methods

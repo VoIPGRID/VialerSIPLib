@@ -5,10 +5,8 @@ platform :ios, '9.0'
 #use_frameworks! #!! Do not enable, causes an error about "target has transitive dependencies that include static binaries.... "
 
 def pods_for_all_targets
-    pod 'Vialer-pjsip-iOS'
-    # To force the use of a specific version of the Vialer-pjsip pod, you can specify a branch as below:
-    # pod 'Vialer-pjsip-iOS', :git => 'https://github.com/VoIPGRID/Vialer-pjsip-iOS.git', :branch => 'feature/PJSIP-2.5'
     pod 'VialerSIPLib-iOS', :path => '../'
+    pod 'Reachability'
 end
 
 target 'VialerSIPLib_Example' do

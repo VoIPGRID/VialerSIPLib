@@ -284,4 +284,9 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  */
 - (BOOL)sendDTMF:(NSString * _Nonnull)character error:(NSError * _Nullable * _Nullable)error;
 
+/**
+ *  Will re-invite call.
+ */
+- (void)reinvite;
+
 @end
