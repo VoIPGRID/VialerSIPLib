@@ -9,7 +9,7 @@
 /**
  *  Notification that will be posted when an IP address change is detected.
  */
-extern NSString * const IPAddressMonitorChangedNotification;
+extern NSString * _Nonnull const IPAddressMonitorChangedNotification;
 
 @interface IPAddressMonitor : NSObject
 

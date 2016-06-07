@@ -21,8 +21,6 @@ static NSString * const IPAddressMonitorAddressIPv6 = @"ipv6";
 
 NSString * const IPAddressMonitorChangedNotification = @"IPAddressMonitorChangedNotification";
 
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-
 @interface IPAddressMonitor()
 
 @property (strong, nonatomic) NSString *host;
