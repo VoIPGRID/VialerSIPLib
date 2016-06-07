@@ -20,7 +20,7 @@ extern NSString * _Nonnull const IPAddressMonitorChangedNotification;
  *
  *  @return IPAddressMonitor instance.
  */
-- (IPAddressMonitor *)initWithHost:(NSString *_Nonnull)host;
+- (IPAddressMonitor * _Nullable)initWithHost:(NSString *_Nonnull)host;
 
 /**
  *  This will start the monitoring of the IP address.
