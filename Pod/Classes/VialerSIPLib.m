@@ -146,7 +146,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 }
 
 - (void)onlyUseIlbc:(BOOL)activate {
-    [self.endpoint onlyUseIlbc:activate];
+    [self.endpoint onlyUseILBC:activate];
 }
 
 @end

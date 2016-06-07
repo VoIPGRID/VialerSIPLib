@@ -348,7 +348,7 @@
                                     <action selector="toggleMuteCall:" destination="8ME-OA-J4F" eventType="touchUpInside" id="wn5-1Y-sxs"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ina-b4-MZI">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ina-b4-MZI">
                                 <rect key="frame" x="213" y="20" width="180" height="30"/>
                                 <color key="backgroundColor" red="0.069930719040000006" green="1" blue="0.192635271" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Keypad"/>

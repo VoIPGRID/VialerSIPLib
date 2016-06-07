@@ -6,9 +6,9 @@
 #import "VSLEndpoint.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import "IPAddressMonitor.h"
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
-#import "Reachability.h"
 #import "VSLCall.h"
 #import "VSLTransportConfiguration.h"
 
@@ -34,7 +34,7 @@ static pjsip_transport *the_transport;
 @property (strong, nonatomic) NSArray *accounts;
 @property (assign) pj_pool_t *pjPool;
 @property (assign) BOOL shouldReregisterAfterUnregister;
-@property (strong, nonatomic) Reachability *networkMonitor;
+@property (strong, nonatomic) IPAddressMonitor *ipAddressMonitor;
 @property (nonatomic) BOOL onlyUseILBC;
 @end
 
@@ -83,6 +83,25 @@ static pjsip_transport *the_transport;
             }
         }
     }
+}
+
+- (IPAddressMonitor *)ipAddressMonitor {
+    if (!_ipAddressMonitor) {
+        VSLAccount *activeAccount;
+        for (VSLAccount *account in self.accounts) {
+            if ([account firstActiveCall]) {
+                activeAccount = account;
+                break;
+            }
+        }
+
+        NSString *reachabilityServer = @"sipproxy.voipgrid.nl";
+        if (activeAccount) {
+            reachabilityServer = activeAccount.accountConfiguration.sipProxyServer;
+        }
+        _ipAddressMonitor = [[IPAddressMonitor alloc] initWithHost:reachabilityServer];
+    }
+    return _ipAddressMonitor;
 }
 
 #pragma mark - Lifecycle
@@ -539,21 +558,14 @@ static void releaseStoredTransport() {
 
 #pragma mark - Reachability detection
 
-- (Reachability *)reachability {
-    if (!_networkMonitor) {
-        _networkMonitor = [Reachability reachabilityWithHostName:@"sipproxy.voipgrid.nl"];
-    }
-    return _networkMonitor;
-}
-
 /**
  *  Start the network monitor which will inform us about a network change so we can bring down
  *  and reinitialize the TCP transport.
  */
 - (void)startNetworkMonitoring {
     DDLogVerbose(@"Starting network monitor");
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(internetConnectionChanged:) name:kReachabilityChangedNotification object:nil];
-    [self.reachability startNotifier];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:IPAddressMonitorChangedNotification object:nil];
+    [self.ipAddressMonitor startMonitoring];
 }
 
 /**
@@ -572,13 +584,14 @@ static void releaseStoredTransport() {
 
     // If there is no active call anymore for any account, stop the reachability monitoring
     if (!activeCallForAnyAccount) {
-        DDLogVerbose(@"No active calls for any account, stoping network monitor");
+        DDLogVerbose(@"No active calls for any account, stopping network monitor");
         @try {
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:IPAddressMonitorChangedNotification object:nil];
         } @catch (NSException *exception) {
             DDLogWarn(@"Exception on removing the reachability change notification.");
         }
-        [self.reachability stopNotifier];
+        [self.ipAddressMonitor stopMonitoring];
+        self.ipAddressMonitor = nil;
     }
 }
 
@@ -590,18 +603,14 @@ static void releaseStoredTransport() {
  *
  *  @param notification The notification which lead to this function being invoked over GCD.
  */
-- (void)internetConnectionChanged:(NSNotification *)notification {
-    DDLogDebug(@"Network changed");
+- (void)ipAddressChanged:(NSNotification *)notification {
+    DDLogInfo(@"network changed");
     if (self.state == VSLEndpointStarted) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            DDLogInfo(@"Network change detected");
-
-            if ([self shutdownTransport]) {
-                for (VSLAccount *account in self.accounts) {
-                    [account reregisterAccount];
-                }
+        if ([self shutdownTransport]) {
+            for (VSLAccount *account in self.accounts) {
+                [account reregisterAccount];
             }
-        });
+        }
     }
 }
 

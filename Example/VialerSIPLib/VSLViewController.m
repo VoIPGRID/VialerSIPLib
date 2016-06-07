@@ -130,7 +130,7 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 
 - (IBAction)toggleILBC:(UIButton *)sender {
     self.useILBC = !self.useILBC;
-    [[VSLEndpoint sharedEndpoint] onlyUseIlbc:self.useILBC];
+    [[VSLEndpoint sharedEndpoint] onlyUseILBC:self.useILBC];
 
     DDLogInfo(self.useILBC ? @"YES": @"NO");
     [self.iLBCButton setTitle:(self.useILBC ? @"Turn off iLBC" : @"Use iLBC") forState:UIControlStateNormal];
