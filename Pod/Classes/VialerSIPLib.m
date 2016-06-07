@@ -78,6 +78,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         accountConfiguration.sipDomain = sipUser.sipDomain;
         accountConfiguration.sipProxyServer = sipUser.sipProxy ? sipUser.sipProxy : @"";
         accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
+        accountConfiguration.dropCallOnRegistrationFailure = YES;
 
         account = [[VSLAccount alloc] init];
 

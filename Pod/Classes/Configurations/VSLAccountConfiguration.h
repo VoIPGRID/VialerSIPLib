@@ -58,4 +58,9 @@
  */
 @property (nonatomic) BOOL sipPublishEnabled;
 
+/**
+ *  If YES all current calls will be hungup when a registation failure is detected.
+ */
+@property (nonatomic) BOOL dropCallOnRegistrationFailure;
+
 @end

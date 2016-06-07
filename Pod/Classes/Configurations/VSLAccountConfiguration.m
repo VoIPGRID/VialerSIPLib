@@ -11,6 +11,7 @@
     if (self = [super init]) {
         self.sipAuthRealm = @"*";
         self.sipAuthScheme = @"digest";
+        self.dropCallOnRegistrationFailure = NO;
     }
     return self;
 }
