@@ -141,4 +141,11 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
  */
 - (VSLAccount * _Nullable)getAccountWithSipAccount:(NSString * _Nonnull)sipAccount;
 
+/**
+ *  Call this method to limit the codecs to only iLBC.
+ *
+ *  @param activate BOOL, if YES, only iLBC will be used.
+ */
+- (void)onlyUseILBC:(BOOL)activate;
+
 @end
