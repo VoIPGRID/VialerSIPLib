@@ -77,4 +77,10 @@
  *  @return BOOL
  */
 -(BOOL)hasTCPConfiguration;
+
+/**
+ * Optional user agent string (default empty). If it's empty, no
+ * User-Agent header will be sent with outgoing requests.
+ */
+@property (strong, nonatomic) NSString *userAgent;
 @end

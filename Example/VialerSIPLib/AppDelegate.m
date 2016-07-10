@@ -18,7 +18,7 @@ NSString * const AppDelegateIncominCallNotification = @"AppDelegateIncominCallNo
     [self setupCocoaLumberjackLogging];
 
     VSLEndpointConfiguration *endpointConfiguration = [[VSLEndpointConfiguration alloc] init];
-
+    endpointConfiguration.userAgent = @"SIPLib-Example";
     endpointConfiguration.transportConfigurations = @[[VSLTransportConfiguration configurationWithTransportType:VSLTransportTypeTCP],
                                                       [VSLTransportConfiguration configurationWithTransportType:VSLTransportTypeUDP]];
 
