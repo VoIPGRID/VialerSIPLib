@@ -75,7 +75,6 @@ static int const VSLRingbackInterval = 4000;
 }
 
 -(void)dealloc {
-    pjsua_conf_remove_port((int)self.ringbackSlot);
     pjmedia_port_destroy(self.ringbackPort);
 }
 

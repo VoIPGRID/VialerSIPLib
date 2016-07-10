@@ -9,7 +9,6 @@
 #import "NSError+VSLError.h"
 #import "VSLAccount.h"
 #import "VSLAccountConfiguration.h"
-#import "VSLCall.h"
 #import "VSLEndpoint.h"
 
 static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";

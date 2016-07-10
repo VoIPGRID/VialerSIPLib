@@ -23,6 +23,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 @property (readwrite, nonatomic) VSLAccountState accountState;
 @property (copy, nonatomic) RegistrationCompletionBlock registrationCompletionBlock;
 @property (assign) BOOL shouldReregister;
+@property (assign) BOOL registrationInProgress;
 @end
 
 @implementation VSLAccount
@@ -159,18 +160,21 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 }
 
 - (void)registerAccountWithCompletion:(RegistrationCompletionBlock)completion {
-    pj_status_t status;
-    pjsua_acc_info info;
-
     DDLogDebug(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
 
+    pjsua_acc_info info;
     pjsua_acc_get_info((pjsua_acc_id)self.accountId, &info);
 
-    DDLogVerbose(@"%d", info.id);
+    // If pjsua_acc_info.expires == -1 the account has a registration but, as it turns out,
+    // this is not a valid check whether there is a registration in progress or not, at least,
+    // not wit a connection loss. So, to track a registration in progress, an ivar is used.
+    if (!self.registrationInProgress && info.expires == -1) {
+        self.registrationInProgress = YES;
+        DDLogVerbose(@"Sending registration for account: %@", self.accountId);
 
-    // If expires is not -1, there is a registration or registration is in progress.
-    if (info.expires == -1) {
+        pj_status_t status;
         status = pjsua_acc_set_registration((pjsua_acc_id)self.accountId, PJ_TRUE);
+        self.registrationInProgress = NO;
 
         if (status != PJ_SUCCESS) {
             DDLogError(@"Account registration failed");
@@ -181,7 +185,10 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
                                                errorCode:VSLAccountErrorRegistrationFailed];
             completion(NO, error);
         }
+    } else {
+        DDLogVerbose(@"VSLAccount registered or registration in progress, cannot sent another registration");
     }
+
     // Check if account is connected, otherwise set completionblock.
     if (self.accountState == VSLAccountStateConnected) {
         completion(YES, nil);
@@ -247,6 +254,9 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
                     DDLogInfo(@"Account was re-registerd after a sucessfull unregister.");
                     self.shouldReregister = NO;
                     [self reinviteActiveCalls];
+                } else {
+                    DDLogWarn(@"Unable to re-register account");
+                    self.shouldReregister = NO;
                 }
             }];
         }
