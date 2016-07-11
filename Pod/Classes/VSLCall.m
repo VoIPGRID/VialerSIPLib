@@ -15,6 +15,9 @@
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 
+// Time interval between stats calculation.
+static NSTimeInterval const VSLCallStatsInterval = .1;
+
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
 NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
 
@@ -40,6 +43,13 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 @property (nonatomic) BOOL connected;
 @property (nonatomic) BOOL userDidHangUp;
 @property (strong, nonatomic) AVAudioPlayer *disconnectedSoundPlayer;
+
+/**
+ *  Stats
+ */
+@property (readwrite, nonatomic) float totalMBsUsed;
+@property (readwrite, nonatomic) float R;
+@property (readwrite, nonatomic) float MOS;
 @end
 
 @implementation VSLCall
@@ -154,6 +164,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
             } break;
 
             case VSLCallStateDisconnected: {
+                [self calculateStats];
                 [self.ringback stop];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDisconnectedNotification object:nil];
@@ -184,6 +195,8 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     }
     return _ringback;
 }
+
+#pragma mark - Actions
 
 - (AVAudioPlayer *)disconnectedSoundPlayer {
     if (!_disconnectedSoundPlayer) {
@@ -561,6 +574,87 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
              @"caller_name": callerName,
              @"caller_number": callerNumber,
              };
+}
+
+#pragma mark - Stats
+
+- (void)calculateStats {
+    [self calculateMOS];
+    [self calculateTotalMBsUsed];
+}
+
+- (float)calculateTotalMBsUsed {
+    pj_status_t status = PJ_SUCCESS;
+    pjsua_stream_stat stat;
+    status = pjsua_call_get_stream_stat((pjsua_call_id)self.callId, 0, &stat);
+    if (status == PJ_SUCCESS) {
+        self.totalMBsUsed = (stat.rtcp.rx.bytes + stat.rtcp.tx.bytes) / 1024.0 / 1024.0;
+    } else {
+        DDLogWarn(@"No data");
+    }
+    return self.totalMBsUsed;
+}
+
+/**
+ *  This will calculate the current MOS value of the call.
+ *
+ *  Credits to: https://www.pingman.com/kb/article/how-is-mos-calculated-in-pingplotter-pro-50.html
+ */
+- (float)calculateR {
+    pj_status_t status = PJ_SUCCESS;
+    pjsua_stream_stat stat;
+    status = pjsua_call_get_stream_stat((pjsua_call_id)self.callId, 0, &stat);
+    if (status == PJ_SUCCESS) {
+
+        // Number of packets send and received.
+        float rxPackets = stat.rtcp.rx.pkt;
+        float txPackets = stat.rtcp.tx.pkt;
+
+        // Average Jitter in miliseconds
+        float rxJitter = (float)stat.rtcp.rx.jitter.mean / 1000;
+        float txJitter = (float)stat.rtcp.tx.jitter.mean / 1000;
+
+        // Round Trip Time in miliseconds.
+        float averageRoundTripTime = stat.rtcp.rtt.mean / 1000.0f;
+
+        // If there is no Round Trip Time information in rtcp packets we estimate value.
+        if (averageRoundTripTime == 0) {
+            averageRoundTripTime = 20.0; // Guess from Bob after logging of some calls.
+        }
+
+        // Take the average latency, add jitter, but double the impact to latency
+        // then add 10 for protocol latencies
+        float effectiveLatency = averageRoundTripTime + rxJitter * 2 + 10;
+
+        // Implement a basic curve - deduct 4 for the R value at 160ms of latency
+        // (round trip).  Anything over that gets a much more agressive deduction.
+        float R;
+        if (effectiveLatency < 160) {
+            R = 93.2 - (effectiveLatency / 40);
+        } else {
+            R = 93.2 - (effectiveLatency - 120) / 10;
+        }
+
+        // Percentage package loss (100 = 100% loss - 0 = 0% loss)
+        float rxPacketLoss = rxPackets == 0 ? 100.0 : (((float)stat.rtcp.rx.loss) / (float)(rxPackets + stat.rtcp.rx.loss)) * 100.0;
+
+        // Now, let's deduct 2.5 R values per percentage of packet loss.
+        self.R = R - (rxPacketLoss * 2.5);
+    } else {
+        DDLogWarn(@"No R");
+    }
+    return self.R;
+}
+
+- (float)calculateMOS {
+    // Convert the R into an MOS value.
+    float R = [self calculateR];
+    if (R > 0) {
+        self.MOS = 1 + 0.035 * R + .000007 * R * (R - 60) * (100 - R);
+    } else {
+        DDLogWarn(@"No MOS");
+    }
+    return self.MOS;
 }
 
 @end

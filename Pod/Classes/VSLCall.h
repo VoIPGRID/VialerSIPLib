@@ -118,6 +118,8 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
 
 @interface VSLCall : NSObject
 
+#pragma mark - Properties
+
 /**
 *  The callId which a call receives when it is created.
 */
@@ -192,6 +194,44 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  *  True if the call is on hold locally.
  */
 @property (readonly, nonatomic) BOOL onHold;
+
+#pragma mark - Stats
+
+/**
+ *  Calculated amount of data transferred (Receiving & Transmitting).
+ */
+@property (readonly, nonatomic) float totalMBsUsed;
+
+/**
+ *  Calculated R score of the call.
+ *
+ *  R score is a way to calculate the quality of a phone call.
+ *
+ *  Ranges 0 to 93.2, where 0 is very bad quality and 93.2 is best quality possible.
+ */
+@property (readonly, nonatomic) float R;
+
+/**
+ *  Calculated MOS score of the call.
+ *
+ *  Based on Mean Opinion Score for calls, see: https://en.wikipedia.org/wiki/Mean_opinion_score
+ *  Ranges from 1 to 4.4 (slighty different than on wiki). Translates to:
+ *
+ *  MOS     Quality     Impairment
+ *  5       Excellent	Imperceptible
+ *  4       Good        Perceptible but not annoying
+ *  3       Fair        Slightly annoying
+ *  2       Poor        Annoying
+ *  1       Bad         Very annoying
+ */
+@property (readonly, nonatomic) float MOS;
+
+/**
+ *  Calculate MOS score & data use of call.
+ */
+- (void)calculateStats;
+
+#pragma mark - Methods
 
 /**
  *  This will setup a call to the given number and attached to the account.

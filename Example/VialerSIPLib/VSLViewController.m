@@ -30,6 +30,9 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 @property (weak, nonatomic) IBOutlet UILabel *remoteUriLabel;
 @property (weak, nonatomic) IBOutlet UILabel *incomingLabel;
 @property (weak, nonatomic) IBOutlet UILabel *accountStateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dataUseLabel;
+@property (weak, nonatomic) IBOutlet UILabel *rLabel;
+@property (weak, nonatomic) IBOutlet UILabel *mosLabel;
 @property (weak, nonatomic) IBOutlet UIButton *acceptCallButton;
 @property (weak, nonatomic) IBOutlet UIButton *declineCallButton;
 @property (weak, nonatomic) IBOutlet UIButton *makeCallButton;
@@ -89,7 +92,7 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 #pragma mark - Actions
 
 - (IBAction)toggleRegisterAccount:(UIButton *)sender {
-    if (self.account) {
+    if (self.account && self.account.isRegistered) {
         if([self.account unregisterAccount:nil]) {
             [self.account removeObserver:self forKeyPath:@"accountState"];
             self.account = nil;
@@ -105,17 +108,19 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 
         NSError *error;
         [[VialerSIPLib sharedInstance] registerAccountWithUser:testUser withCompletion:^(BOOL success, VSLAccount * _Nullable account) {
-            self.registerAccountButton.enabled = YES;
-            [self updateUIForCall];
-            if (!success) {
-                if (error != NULL) {
-                    DDLogError(@"%@", error);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.registerAccountButton.enabled = YES;
+                if (!success) {
+                    if (error != NULL) {
+                        DDLogError(@"%@", error);
+                    }
+                } else {
+                    self.account = account;
+                    NSLog(@"%@", account);
+                    [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
                 }
-            } else {
-                self.account = account;
-                NSLog(@"%@", account);
-                [self.account addObserver:self forKeyPath:@"accountState" options:0 context:NULL];
-            }
+                [self updateUIForCall];
+            });
         }];
     }
 }
@@ -170,22 +175,13 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-
-    if (object == self.call) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateUIForCall];
-            if (self.call.callState == VSLCallStateDisconnected) {
-                [UIDevice currentDevice].proximityMonitoringEnabled = NO;
-                [self.ringtone stop];
-                [self updateUIForCall];
-            }
-        });
-    }
-    if (object == self.account) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateUIForCall];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (object == self.call && self.call.callState == VSLCallStateDisconnected) {
+            [UIDevice currentDevice].proximityMonitoringEnabled = NO;
+            [self.ringtone stop];
+        }
+        [self updateUIForCall];
+    });
 }
 
 - (void)updateUIForCall {
@@ -203,8 +199,11 @@ static NSString * const VSLViewControllerAcceptCallSegue = @"AcceptCallSegue";
     self.acceptCallButton.enabled = self.call && self.call.callState != VSLCallStateDisconnected ? YES: NO;
     self.declineCallButton.enabled = self.call && self.call.callState != VSLCallStateDisconnected ? YES: NO;
 
-    [self.registerAccountButton setTitle:self.account.isRegistered ? @"Unregister" : @"Register" forState:UIControlStateNormal];
+    [self.registerAccountButton setTitle:(self.account && self.account.isRegistered) ? @"Unregister" : @"Register" forState:UIControlStateNormal];
     self.accountStateLabel.text = [NSString stringWithFormat:@"%ld", (long)self.account.accountState];
+    self.dataUseLabel.text = [NSString stringWithFormat:@"%.3f MB", self.call.totalMBsUsed];
+    self.rLabel.text = [NSString stringWithFormat:@"%.1f", self.call.R];
+    self.mosLabel.text = [NSString stringWithFormat:@"%.1f", self.call.MOS];
 }
 
 - (void)handleEnteredBackground:(NSNotification *)notification {
