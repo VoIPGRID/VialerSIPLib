@@ -162,6 +162,7 @@ static pjsip_transport *the_transport;
     endpointConfig.cb.on_nat_detect = &onNatDetect;
     endpointConfig.cb.on_transport_state = &onTransportState;
     endpointConfig.max_calls = (unsigned int)endpointConfiguration.maxCalls;
+    endpointConfig.user_agent = endpointConfiguration.userAgent.pjString;
 
     // Configure the media information for the endpoint.
     pjsua_media_config mediaConfig;
