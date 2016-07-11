@@ -170,7 +170,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     // not wit a connection loss. So, to track a registration in progress, an ivar is used.
     if (!self.registrationInProgress && info.expires == -1) {
         self.registrationInProgress = YES;
-        DDLogVerbose(@"Sending registration for account: %@", self.accountId);
+        DDLogVerbose(@"Sending registration for account: %@", [NSNumber numberWithInteger:self.accountId]);
 
         pj_status_t status;
         status = pjsua_acc_set_registration((pjsua_acc_id)self.accountId, PJ_TRUE);
