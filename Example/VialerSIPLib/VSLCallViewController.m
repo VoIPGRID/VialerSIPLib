@@ -10,10 +10,18 @@
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
+static const NSTimeInterval statsInterval = 1.0;
+
 @interface VSLCallViewController ()
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *keypadNumbers;
 @property (weak, nonatomic) IBOutlet UILabel *numbersPressedLabel;
 @property (strong, nonatomic) NSString *currentAudioSessionCategory;
+@property (weak, nonatomic) IBOutlet UILabel *dataLabel;
+@property (weak, nonatomic) IBOutlet UILabel *rLabel;
+@property (weak, nonatomic) IBOutlet UILabel *mosLabel;
+@property (weak, nonatomic) IBOutlet UILabel *callTimeLabel;
+@property (strong, nonatomic) NSTimer * statsTimer;
+@property (strong, nonatomic) NSDate * startDateCall;
 @end
 
 @implementation VSLCallViewController
@@ -43,10 +51,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         [_call removeObserver:self forKeyPath:@"mediaState"];
     }
     _call = call;
-    [self updateUIForCall];
     [call addObserver:self forKeyPath:@"callState" options:0 context:NULL];
     [call addObserver:self forKeyPath:@"mediaState" options:0 context:NULL];
     self.currentAudioSessionCategory = [AVAudioSession sharedInstance].category;
+    self.statsTimer = [NSTimer scheduledTimerWithTimeInterval:statsInterval target:self selector:@selector(getStats) userInfo:nil repeats:YES];
 }
 
 #pragma mark - Actions
@@ -94,14 +102,27 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     }
 }
 
+- (void)getStats {
+    if (self.call.callState == VSLCallStateConfirmed) {
+        [self.call calculateStats];
+        self.dataLabel.text = [NSString stringWithFormat:@"%.3f MB", self.call.totalMBsUsed];
+        self.rLabel.text = [NSString stringWithFormat:@"%.1f", self.call.R];
+        self.mosLabel.text = [NSString stringWithFormat:@"%.1f", self.call.MOS];
+        self.callTimeLabel.text = [NSString stringWithFormat:@"%.0f", -[self.startDateCall timeIntervalSinceNow]];
+    }
+}
+
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
 
     if (object == self.call) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateUIForCall];
+            if (self.call.callState == VSLCallStateConfirmed) {
+                self.startDateCall = [NSDate date];
+            }
             if (self.call.callState == VSLCallStateDisconnected) {
+                [self.statsTimer invalidate];
                 @try {
                     [self.call removeObserver:self forKeyPath:@"callState"];
                 } @catch (NSException *exception) {
@@ -120,10 +141,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             }
         });
     }
-}
-
-- (void)updateUIForCall {
-
 }
 
 @end
