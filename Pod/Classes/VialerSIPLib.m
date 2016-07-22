@@ -5,14 +5,14 @@
 
 #import "VialerSIPLib.h"
 
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "Constants.h"
+#import <CocoaLumberJack/CocoaLumberjack.h>
 #import "NSError+VSLError.h"
 #import "VSLAccount.h"
 #import "VSLAccountConfiguration.h"
 #import "VSLEndpoint.h"
 
 static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @interface VialerSIPLib()
 @property (strong, nonatomic) VSLEndpoint *endpoint;
@@ -132,6 +132,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (VSLAccount *)firstAccount {
     return [self.endpoint.accounts firstObject];
+}
+
+- (NSArray *)accounts {
+    return self.endpoint.accounts;
 }
 
 - (BOOL)anotherCallInProgress:(VSLCall *)call {

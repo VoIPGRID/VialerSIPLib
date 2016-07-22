@@ -7,7 +7,6 @@
 #import "IPAddressMonitor.h"
 
 #include <arpa/inet.h>
-#import <CocoaLumberjack/CocoaLumberjack.h>
 #include <ifaddrs.h>
 #include <net/if.h>
 #import "Reachability.h"

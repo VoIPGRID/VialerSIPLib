@@ -71,7 +71,7 @@ typedef NS_ENUM(NSInteger, VSLCallState) {
     /**
      *  After response with To tag.
      */
-    VSLCallEarlyState = PJSIP_INV_STATE_EARLY,
+    VSLCallStateEarly = PJSIP_INV_STATE_EARLY,
     /**
      *  After 2xx is sent/received.
      */
@@ -85,7 +85,7 @@ typedef NS_ENUM(NSInteger, VSLCallState) {
      */
     VSLCallStateDisconnected = PJSIP_INV_STATE_DISCONNECTED,
 };
-#define VSLCallStateString(VSLCallState) [@[@"VSLCallStateNull", @"VSLCallStateCalling", @"VSLCallStateIncoming", @"VSLCallEarlyState", @"VSLCallStateConnecting", @"VSLCallStateConfirmed", @"VSLCallStateDisconnected"] objectAtIndex:VSLCallState]
+#define VSLCallStateString(VSLCallState) [@[@"VSLCallStateNull", @"VSLCallStateCalling", @"VSLCallStateIncoming", @"VSLCallStateEarly", @"VSLCallStateConnecting", @"VSLCallStateConfirmed", @"VSLCallStateDisconnected"] objectAtIndex:VSLCallState]
 
 
 /**
@@ -115,6 +115,13 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
 };
 #define VSLMediaStateString(VSLMediaState) [@[@"VSLMediaStateNone", @"VSLMediaStateActive", @"VSLMediaStateLocalHold", @"VSLMediaStateRemoteHold", @"VSLMediaStateError"] objectAtIndex:VSLMediaState]
 
+typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
+    VSLCallTransferStateUnkown,
+    VSLCallTransferStateInitialized,
+    VSLCallTransferStateTrying = PJSIP_SC_TRYING,
+    VSLCallTransferStateAccepted = PJSIP_SC_OK,
+};
+#define VSLCallTransferStateString(VSLCallTransferState) [@[@"VSLCallTransferStateUnkown", @"VSLCallTransferStateInitialized", @"VSLCallTransferStateTrying", @"VSLCallTransferStateAccepted"] objectAtIndex:VSLCallTransferState]
 
 @interface VSLCall : NSObject
 
@@ -129,6 +136,11 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  * The accountId the call belongs to.
  */
 @property (readonly, nonatomic) NSInteger accountId;
+
+/**
+ *  The VSLAccount the call belongs to.
+ */
+@property (readonly, nonatomic) VSLAccount * _Nonnull account;
 
 /**
  *  The state in which the call currently has.
@@ -194,6 +206,11 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  *  True if the call is on hold locally.
  */
 @property (readonly, nonatomic) BOOL onHold;
+
+/**
+ *  The statie in which the transfer of the call currently is.
+ */
+@property (readonly, nonatomic) VSLCallTransferState transferStatus;
 
 #pragma mark - Stats
 
@@ -323,6 +340,24 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
  *  @param error     error Pointer to an NSError pointer. Will be set to a NSError instance if cannot send DTMF for the call.
  */
 - (BOOL)sendDTMF:(NSString * _Nonnull)character error:(NSError * _Nullable * _Nullable)error;
+
+/**
+ *  Transfer the call to the given VSLCall.
+ *
+ *  @param secondCall VSLCall this call should be transferred to.
+ *
+ *  @return BOOL success of the call transfer.
+ */
+- (BOOL)transferToCall:(VSLCall * _Nonnull)secondCall;
+
+/**
+ *  This will change the transferStatus of the call.
+ *
+ *  @param statusCode The status code of the transfer state.
+ *  @param text       The description of the transfer state.
+ *  @param final      BOOL indictating this is the last update of the transfer state.
+ */
+- (void)callTransferStatusChangedWithStatusCode:(NSInteger)statusCode statusText:(NSString * _Nullable)text final:(BOOL)final;
 
 /**
  *  Will re-invite call.

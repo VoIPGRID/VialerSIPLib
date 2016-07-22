@@ -5,14 +5,13 @@
 
 #import "VSLEndpoint.h"
 
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "Constants.h"
+#import <CocoaLumberJack/CocoaLumberjack.h>
 #import "IPAddressMonitor.h"
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
 #import "VSLCall.h"
 #import "VSLTransportConfiguration.h"
-
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 static NSString * const VSLEndpointErrorDomain = @"VialerSIPLib.VSLEndpoint.error";
 
@@ -311,6 +310,17 @@ static pjsip_transport *the_transport;
     }
 }
 
+- (VSLCall *)lookupCall:(NSInteger)callId {
+
+    for (VSLAccount *account in self.accounts) {
+        VSLCall *call = [account lookupCall:callId];
+        if (call) {
+            return call;
+        }
+    }
+    return nil;
+}
+
 - (VSLAccount *)getAccountWithSipAccount:(NSString *)sipAccount {
     for (VSLAccount *account in self.accounts) {
         if (account.accountConfiguration.sipAccount == sipAccount) {
@@ -526,6 +536,14 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
         }
     }
 }
+
+static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_str_t *statusText, pj_bool_t final, pj_bool_t *continueNotifications) {
+    VSLCall *call = [[VSLEndpoint sharedEndpoint] lookupCall:callId];
+    if (call) {
+        [call callTransferStatusChangedWithStatusCode:statusCode statusText:[NSString stringWithPJString:*statusText] final:final == 1];
+    }
+}
+
 /**
  *  Release the current TCP transport.
  */
@@ -616,10 +634,6 @@ static void releaseStoredTransport() {
 }
 
 //TODO: implement these
-
-static void onCallTransferStatus(pjsua_call_id call_id, int st_code, const pj_str_t *st_text, pj_bool_t final, pj_bool_t *p_cont) {
-    DDLogVerbose(@"Updated transfer");
-}
 
 static void onCallReplaced(pjsua_call_id old_call_id, pjsua_call_id new_call_id) {
     DDLogVerbose(@"Call replaced");

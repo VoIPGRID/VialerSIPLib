@@ -5,7 +5,8 @@
 
 #import "VSLAccount.h"
 
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "Constants.h"
+#import <CocoaLumberJack/CocoaLumberjack.h>
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
 #import <VialerPJSIP/pjsua.h>
@@ -13,7 +14,6 @@
 #import "VSLEndpoint.h"
 #import "VSLEndpointConfiguration.h"
 
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSUInteger const VSLAccountRegistrationTimeoutInSeconds = 800;
 static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 

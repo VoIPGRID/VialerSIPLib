@@ -2,6 +2,7 @@
 #####
 # Ignoring own private constant files
 Example/VialerSIPLib/Keys.h
+Example/VialerSIPLib/Keys.swift
 
 # COCOAPODS:
 Example/Pods/

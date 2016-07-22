@@ -8,11 +8,11 @@
 
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
+#import "Constants.h"
 #import <CocoaLumberJack/CocoaLumberjack.h>
 #import <UIKit/UIKit.h>
 
 static NSUInteger const VialerSIPLibVibrateDuration = 1;
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @interface VSLRingtone()
 

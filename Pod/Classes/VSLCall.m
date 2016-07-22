@@ -15,9 +15,6 @@
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 
-// Time interval between stats calculation.
-static NSTimeInterval const VSLCallStatsInterval = .1;
-
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
 NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
 
@@ -43,6 +40,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 @property (nonatomic) BOOL connected;
 @property (nonatomic) BOOL userDidHangUp;
 @property (strong, nonatomic) AVAudioPlayer *disconnectedSoundPlayer;
+@property (readwrite, nonatomic) VSLCallTransferState transferStatus;
 
 /**
  *  Stats
@@ -146,7 +144,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
             } break;
 
-            case VSLCallEarlyState: {
+            case VSLCallStateEarly: {
                 if (!self.incoming) {
                     [self.ringback start];
                 }
@@ -212,6 +210,31 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     return _disconnectedSoundPlayer;
 }
 
+- (BOOL)transferToCall:(VSLCall *)secondCall {
+    pj_status_t success = pjsua_call_xfer_replaces((pjsua_call_id)self.callId, (pjsua_call_id)secondCall.callId, 0, nil);
+
+    if (success == PJ_SUCCESS) {
+        self.transferStatus = VSLCallTransferStateInitialized;
+        return YES;
+    }
+    return NO;
+}
+
+- (void)callTransferStatusChangedWithStatusCode:(NSInteger)statusCode statusText:(NSString *)text final:(BOOL)final {
+    switch (statusCode) {
+        case PJSIP_SC_TRYING:
+            self.transferStatus = VSLCallTransferStateTrying;
+            DDLogDebug(@"Trying transfer");
+            break;
+        case PJSIP_SC_OK:
+            self.transferStatus = VSLCallTransferStateAccepted;
+            [self hangup:nil];
+            break;
+        default:
+            break;
+    }
+}
+
 - (void)reinvite {
     if (self.callState > VSLCallStateNull && self.callState < VSLCallStateDisconnected) {
         pjsua_call_reinvite((pjsua_call_id)self.callId, PJSUA_CALL_UPDATE_CONTACT, NULL);
@@ -237,7 +260,6 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
 - (void)callStateChanged:(pjsua_call_info)callInfo {
     [self updateCallInfo:callInfo];
-    self.callState = (VSLCallState)callInfo.state;
 }
 
 - (void)mediaStateChanged:(pjsua_call_info)callInfo  {
@@ -563,13 +585,17 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
         // Get the last part of the uri starting from @
         atSignRange = [string rangeOfString:@"@" options:NSBackwardsSearch];
-        callerHost = [string substringToIndex: atSignRange.location];
-        
-        // Get the telephone part starting from the :
-        semiColonRange = [callerHost rangeOfString:@":" options:NSBackwardsSearch];
-        callerNumber = [callerHost substringFromIndex:semiColonRange.location + 1];
+        if (atSignRange.location != NSNotFound) {
+            callerHost = [string substringToIndex: atSignRange.location];
+
+            // Get the telephone part starting from the :
+            semiColonRange = [callerHost rangeOfString:@":" options:NSBackwardsSearch];
+            if (semiColonRange.location != NSNotFound) {
+                callerNumber = [callerHost substringFromIndex:semiColonRange.location + 1];
+            }
+        }
     }
-    
+
     return @{
              @"caller_name": callerName,
              @"caller_number": callerNumber,
@@ -606,13 +632,8 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     status = pjsua_call_get_stream_stat((pjsua_call_id)self.callId, 0, &stat);
     if (status == PJ_SUCCESS) {
 
-        // Number of packets send and received.
-        float rxPackets = stat.rtcp.rx.pkt;
-        float txPackets = stat.rtcp.tx.pkt;
-
         // Average Jitter in miliseconds
         float rxJitter = (float)stat.rtcp.rx.jitter.mean / 1000;
-        float txJitter = (float)stat.rtcp.tx.jitter.mean / 1000;
 
         // Round Trip Time in miliseconds.
         float averageRoundTripTime = stat.rtcp.rtt.mean / 1000.0f;
@@ -635,6 +656,9 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
             R = 93.2 - (effectiveLatency - 120) / 10;
         }
 
+        // Number of packets send and received.
+        float rxPackets = stat.rtcp.rx.pkt;
+        
         // Percentage package loss (100 = 100% loss - 0 = 0% loss)
         float rxPacketLoss = rxPackets == 0 ? 100.0 : (((float)stat.rtcp.rx.loss) / (float)(rxPackets + stat.rtcp.rx.loss)) * 100.0;
 

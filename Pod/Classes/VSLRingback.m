@@ -5,12 +5,11 @@
 
 #import "VSLRingback.h"
 
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "Constants.h"
+#import <CocoaLumberJack/CocoaLumberjack.h>
 #import <VialerPJSIP/pjsua.h>
 #import "VSLEndpoint.h"
 #import "NSString+PJString.h"
-
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 static int const VSLRingbackChannelCount = 1;
 static int const VSLRingbackRingbackCount = 1;

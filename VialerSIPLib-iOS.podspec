@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
                                   DESC
 
 	s.homepage         	= "https://www.wearespindle.com"
-	s.license          	= 'MIT'
+	s.license          	= 'GNU GPL v3'
 	s.author           	= {"Devhouse Spindle" => "hello@wearespindle.com"}
 
 	s.source           	= {:git => "https://github.com/VoIPGRID/VialerSIPLib-iOS.git", :tag => s.version.to_s}

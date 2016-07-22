@@ -7,26 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08C17AD4A6FB272C99B93C8C /* libPods-VialerSIPLib_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE403109C970947593883272 /* libPods-VialerSIPLib_Example.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
-		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
-		6003F59E195388D20070C39A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* AppDelegate.m */; };
-		6003F5A7195388D20070C39A /* VSLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* VSLViewController.m */; };
 		6003F5A9195388D20070C39A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Assets.xcassets */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		A81C0CFB27B17F8D9C9F0198 /* libPods-VialerSIPLib_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D7F94B88E45158D8672D50F /* libPods-VialerSIPLib_Example.a */; };
-		AEB53732C18628B04D4E3A1D /* libPods-VialerSIPLib_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E1950940D0F1966843339451 /* libPods-VialerSIPLib_Tests.a */; };
+		8B18CE9F869B50CD7040BEA2 /* libPods-VialerSIPLib_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B7086A8098C821C73E69454 /* libPods-VialerSIPLib_Tests.a */; };
+		C4021B691D426D5B003560F6 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C4021B681D426D5B003560F6 /* .gitignore */; };
+		C4021B6B1D426F22003560F6 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4021B6A1D426F22003560F6 /* Keys.swift */; };
 		C424B50B1C3BD27500178E52 /* VSLAccountConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50A1C3BD27500178E52 /* VSLAccountConfigurationTests.m */; };
 		C424B50D1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50C1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m */; };
 		C424B50F1C3BDBD900178E52 /* VSLTransportConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50E1C3BDBD900178E52 /* VSLTransportConfigurationTests.m */; };
-		C4A169B31C57A1E5002E9331 /* VSLCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A169B21C57A1E5002E9331 /* VSLCallViewController.m */; };
+		C43C515E1D40A46000F8B793 /* VSLKeypadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43C515D1D40A46000F8B793 /* VSLKeypadViewController.swift */; };
+		C4441B721D424F8100C98E49 /* DDLogWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = C4441B711D424F8100C98E49 /* DDLogWrapper.m */; };
+		C44F26421D3F5B7D00A5A406 /* VSLSecondCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F26411D3F5B7D00A5A406 /* VSLSecondCallViewController.swift */; };
+		C44F26441D3F985B00A5A406 /* VSLTransferInProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F26431D3F985B00A5A406 /* VSLTransferInProgressViewController.swift */; };
+		C44F26461D3FB63600A5A406 /* VSLMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F26451D3FB63600A5A406 /* VSLMainViewController.swift */; };
+		C44F26481D3FBFCF00A5A406 /* VSLMakeCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F26471D3FBFCF00A5A406 /* VSLMakeCallViewController.swift */; };
+		C44F264A1D3FC71D00A5A406 /* VSLCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F26491D3FC71D00A5A406 /* VSLCallViewController.swift */; };
+		C44F264C1D3FD33F00A5A406 /* VSLIncomingCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F264B1D3FD33F00A5A406 /* VSLIncomingCallViewController.swift */; };
+		C457E49D1D3D070D0005D4B4 /* VSLTransferCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C457E49C1D3D070D0005D4B4 /* VSLTransferCallViewController.swift */; };
+		C48B488E1D421CB100AB2875 /* SipUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48B488D1D421CB100AB2875 /* SipUser.swift */; };
+		C48B48901D42228900AB2875 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48B488F1D42228900AB2875 /* AppDelegate.swift */; };
+		C48B48921D4239E300AB2875 /* GlobalQueues.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48B48911D4239E300AB2875 /* GlobalQueues.swift */; };
 		F27386111C170862002C4CD1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F27386131C170862002C4CD1 /* Main.storyboard */; };
 		F27386181C170B3C002C4CD1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F273861A1C170B3C002C4CD1 /* LaunchScreen.storyboard */; };
-		F930F6C71C22F33600B8DBD0 /* SipUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F930F6C61C22F33600B8DBD0 /* SipUser.m */; };
 		F951E38D1C56214300FA480F /* VialerSIPLibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F951E38C1C56214300FA480F /* VialerSIPLibTests.m */; };
 		F95AFD271C7F39BC005FC8CD /* VSLCallTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F95AFD261C7F39BC005FC8CD /* VSLCallTests.m */; };
 		F9906C211C3A85AC0044EA99 /* VSLAccountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */; };
@@ -46,55 +55,62 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0D7F94B88E45158D8672D50F /* libPods-VialerSIPLib_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		555FE9440D336D571055A915 /* Pods-VialerSIPLib_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		5C38727764D742A3399DE284 /* Pods-VialerSIPLib_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.release.xcconfig"; sourceTree = "<group>"; };
+		294D89E701148C481B997434 /* Pods-VialerSIPLib_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.release.xcconfig"; sourceTree = "<group>"; };
+		399A30CB76654512E216C9C5 /* Pods-VialerSIPLib_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		5B7086A8098C821C73E69454 /* libPods-VialerSIPLib_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D24E0A5A14D1689830035B2 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		5E93D9F5879C0B35A7DB5C32 /* Pods-VialerSIPLib_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* VialerSIPLib_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VialerSIPLib_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6003F595195388D20070C39A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6003F599195388D20070C39A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6003F59C195388D20070C39A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		6003F59D195388D20070C39A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		6003F5A5195388D20070C39A /* VSLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSLViewController.h; sourceTree = "<group>"; };
-		6003F5A6195388D20070C39A /* VSLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VSLViewController.m; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6003F5AE195388D20070C39A /* VialerSIPLib_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VialerSIPLib_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
-		6A1B1722761FC24740312A89 /* Pods-VialerSIPLib_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		751644FF6D649E93790619BF /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		A67D0ECC0E7FFC23557DA1C5 /* Pods-VialerSIPLib_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		C4021B681D426D5B003560F6 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
+		C4021B6A1D426F22003560F6 /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		C424B5001C3BAD2E00178E52 /* Keys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keys.h; sourceTree = "<group>"; };
 		C424B50A1C3BD27500178E52 /* VSLAccountConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountConfigurationTests.m; sourceTree = "<group>"; };
 		C424B50C1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLEndpointConfigurationTests.m; sourceTree = "<group>"; };
 		C424B50E1C3BDBD900178E52 /* VSLTransportConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLTransportConfigurationTests.m; sourceTree = "<group>"; };
 		C42858231C4FC1F600BAF52C /* Classes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Classes.md; path = ../Documentation/Classes.md; sourceTree = "<group>"; };
+		C43C515D1D40A46000F8B793 /* VSLKeypadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = VSLKeypadViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C4441B701D424F8100C98E49 /* DDLogWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLogWrapper.h; sourceTree = "<group>"; };
+		C4441B711D424F8100C98E49 /* DDLogWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLogWrapper.m; sourceTree = "<group>"; };
+		C44F26411D3F5B7D00A5A406 /* VSLSecondCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = VSLSecondCallViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C44F26431D3F985B00A5A406 /* VSLTransferInProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSLTransferInProgressViewController.swift; sourceTree = "<group>"; };
+		C44F26451D3FB63600A5A406 /* VSLMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSLMainViewController.swift; sourceTree = "<group>"; };
+		C44F26471D3FBFCF00A5A406 /* VSLMakeCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSLMakeCallViewController.swift; sourceTree = "<group>"; };
+		C44F26491D3FC71D00A5A406 /* VSLCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = VSLCallViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C44F264B1D3FD33F00A5A406 /* VSLIncomingCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = VSLIncomingCallViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C457E49B1D3D070D0005D4B4 /* VialerSIPLib_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VialerSIPLib_Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		C457E49C1D3D070D0005D4B4 /* VSLTransferCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSLTransferCallViewController.swift; sourceTree = "<group>"; };
 		C48736131C4F897D00604413 /* GettingStarted.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = GettingStarted.md; path = ../Documentation/GettingStarted.md; sourceTree = "<group>"; };
 		C48736161C4F904100604413 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../Documentation/README.md; sourceTree = "<group>"; };
 		C48736181C4F912C00604413 /* Middleware.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Middleware.md; path = ../Documentation/Middleware.md; sourceTree = "<group>"; };
 		C487361A1C4F91BC00604413 /* Goals.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Goals.md; path = ../Documentation/Goals.md; sourceTree = "<group>"; };
 		C487361C1C4F927300604413 /* Pjsip.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Pjsip.md; path = ../Documentation/Pjsip.md; sourceTree = "<group>"; };
 		C487361E1C4F96B200604413 /* Credits.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = Credits.md; path = ../Documentation/Credits.md; sourceTree = "<group>"; };
-		C4A169B11C57A1E5002E9331 /* VSLCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLCallViewController.h; sourceTree = "<group>"; };
-		C4A169B21C57A1E5002E9331 /* VSLCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLCallViewController.m; sourceTree = "<group>"; };
-		E1950940D0F1966843339451 /* libPods-VialerSIPLib_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C48B488D1D421CB100AB2875 /* SipUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SipUser.swift; sourceTree = "<group>"; };
+		C48B488F1D42228900AB2875 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C48B48911D4239E300AB2875 /* GlobalQueues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalQueues.swift; sourceTree = "<group>"; };
+		C4A6D7661D5A12720014A4FB /* Keys.swift.example */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Keys.swift.example; sourceTree = "<group>"; };
+		EE403109C970947593883272 /* libPods-VialerSIPLib_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F27386101C16EE96002C4CD1 /* VialerSIPLib-iOS.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = "VialerSIPLib-iOS.podspec"; path = "../VialerSIPLib-iOS.podspec"; sourceTree = "<group>"; };
 		F27386121C170862002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F27386191C170B3C002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		F930F6C51C22F33600B8DBD0 /* SipUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SipUser.h; sourceTree = "<group>"; };
-		F930F6C61C22F33600B8DBD0 /* SipUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SipUser.m; sourceTree = "<group>"; };
 		F951E38C1C56214300FA480F /* VialerSIPLibTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VialerSIPLibTests.m; sourceTree = "<group>"; };
 		F95AFD261C7F39BC005FC8CD /* VSLCallTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLCallTests.m; sourceTree = "<group>"; };
 		F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountTests.m; sourceTree = "<group>"; };
 		F9906C221C3A85E80044EA99 /* VSLEndpointTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLEndpointTests.m; sourceTree = "<group>"; };
 		F9906C241C3A87EB0044EA99 /* NSStringPlusPJStringTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringPlusPJStringTests.m; sourceTree = "<group>"; };
 		F9D9EE551C51058800E10546 /* ringtone.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ringtone.wav; sourceTree = "<group>"; };
-		F9D9EE5A1C510F9C00E10546 /* mute.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = mute.caf; sourceTree = "<group>"; };
+		FE5B792FC0731D4BAFC9CC90 /* Pods-VialerSIPLib_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,7 +121,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				A81C0CFB27B17F8D9C9F0198 /* libPods-VialerSIPLib_Example.a in Frameworks */,
+				08C17AD4A6FB272C99B93C8C /* libPods-VialerSIPLib_Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,7 +132,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				AEB53732C18628B04D4E3A1D /* libPods-VialerSIPLib_Tests.a in Frameworks */,
+				8B18CE9F869B50CD7040BEA2 /* libPods-VialerSIPLib_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,7 +147,7 @@
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				9B8B010E276748BC62601AEC /* Pods */,
+				6195CBB280A597D048247655 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -151,8 +167,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				0D7F94B88E45158D8672D50F /* libPods-VialerSIPLib_Example.a */,
-				E1950940D0F1966843339451 /* libPods-VialerSIPLib_Tests.a */,
+				EE403109C970947593883272 /* libPods-VialerSIPLib_Example.a */,
+				5B7086A8098C821C73E69454 /* libPods-VialerSIPLib_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -160,21 +176,13 @@
 		6003F593195388D20070C39A /* Example for VialerSIPLib */ = {
 			isa = PBXGroup;
 			children = (
-				6003F59C195388D20070C39A /* AppDelegate.h */,
-				6003F59D195388D20070C39A /* AppDelegate.m */,
-				F930F6C51C22F33600B8DBD0 /* SipUser.h */,
-				F930F6C61C22F33600B8DBD0 /* SipUser.m */,
-				6003F5A5195388D20070C39A /* VSLViewController.h */,
-				6003F5A6195388D20070C39A /* VSLViewController.m */,
-				C4A169B11C57A1E5002E9331 /* VSLCallViewController.h */,
-				C4A169B21C57A1E5002E9331 /* VSLCallViewController.m */,
+				C48B488F1D42228900AB2875 /* AppDelegate.swift */,
+				C4021B651D426C7A003560F6 /* Controllers */,
+				C4021B6C1D426FC4003560F6 /* Utils */,
 				F27386131C170862002C4CD1 /* Main.storyboard */,
 				6003F5A8195388D20070C39A /* Assets.xcassets */,
 				F273861A1C170B3C002C4CD1 /* LaunchScreen.storyboard */,
-				6003F595195388D20070C39A /* Info.plist */,
-				C424B5001C3BAD2E00178E52 /* Keys.h */,
 				F9D9EE551C51058800E10546 /* ringtone.wav */,
-				F9D9EE5A1C510F9C00E10546 /* mute.caf */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
 			name = "Example for VialerSIPLib";
@@ -184,7 +192,8 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				6003F599195388D20070C39A /* main.m */,
+				6003F595195388D20070C39A /* Info.plist */,
+				C457E49B1D3D070D0005D4B4 /* VialerSIPLib_Example-Bridging-Header.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -212,6 +221,7 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
+				C4021B681D426D5B003560F6 /* .gitignore */,
 				F27386101C16EE96002C4CD1 /* VialerSIPLib-iOS.podspec */,
 				5D24E0A5A14D1689830035B2 /* README.md */,
 				751644FF6D649E93790619BF /* LICENSE */,
@@ -220,15 +230,44 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		9B8B010E276748BC62601AEC /* Pods */ = {
+		6195CBB280A597D048247655 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A67D0ECC0E7FFC23557DA1C5 /* Pods-VialerSIPLib_Example.debug.xcconfig */,
-				5C38727764D742A3399DE284 /* Pods-VialerSIPLib_Example.release.xcconfig */,
-				555FE9440D336D571055A915 /* Pods-VialerSIPLib_Tests.debug.xcconfig */,
-				6A1B1722761FC24740312A89 /* Pods-VialerSIPLib_Tests.release.xcconfig */,
+				5E93D9F5879C0B35A7DB5C32 /* Pods-VialerSIPLib_Example.debug.xcconfig */,
+				294D89E701148C481B997434 /* Pods-VialerSIPLib_Example.release.xcconfig */,
+				399A30CB76654512E216C9C5 /* Pods-VialerSIPLib_Tests.debug.xcconfig */,
+				FE5B792FC0731D4BAFC9CC90 /* Pods-VialerSIPLib_Tests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		C4021B651D426C7A003560F6 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C44F26451D3FB63600A5A406 /* VSLMainViewController.swift */,
+				C44F26471D3FBFCF00A5A406 /* VSLMakeCallViewController.swift */,
+				C44F26491D3FC71D00A5A406 /* VSLCallViewController.swift */,
+				C457E49C1D3D070D0005D4B4 /* VSLTransferCallViewController.swift */,
+				C44F26411D3F5B7D00A5A406 /* VSLSecondCallViewController.swift */,
+				C44F264B1D3FD33F00A5A406 /* VSLIncomingCallViewController.swift */,
+				C43C515D1D40A46000F8B793 /* VSLKeypadViewController.swift */,
+				C44F26431D3F985B00A5A406 /* VSLTransferInProgressViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		C4021B6C1D426FC4003560F6 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				C48B488D1D421CB100AB2875 /* SipUser.swift */,
+				C48B48911D4239E300AB2875 /* GlobalQueues.swift */,
+				C424B5001C3BAD2E00178E52 /* Keys.h */,
+				C4021B6A1D426F22003560F6 /* Keys.swift */,
+				C4A6D7661D5A12720014A4FB /* Keys.swift.example */,
+				C4441B701D424F8100C98E49 /* DDLogWrapper.h */,
+				C4441B711D424F8100C98E49 /* DDLogWrapper.m */,
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 		C424B5061C3BD1B700178E52 /* Categories */ = {
@@ -326,6 +365,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = VSL;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Harold;
 				TargetAttributes = {
@@ -366,6 +406,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4021B691D426D5B003560F6 /* .gitignore in Resources */,
 				F27386181C170B3C002C4CD1 /* LaunchScreen.storyboard in Resources */,
 				F27386111C170862002C4CD1 /* Main.storyboard in Resources */,
 				F9D9EE561C51058800E10546 /* ringtone.wav in Resources */,
@@ -481,11 +522,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4A169B31C57A1E5002E9331 /* VSLCallViewController.m in Sources */,
-				6003F59E195388D20070C39A /* AppDelegate.m in Sources */,
-				6003F5A7195388D20070C39A /* VSLViewController.m in Sources */,
-				6003F59A195388D20070C39A /* main.m in Sources */,
-				F930F6C71C22F33600B8DBD0 /* SipUser.m in Sources */,
+				C48B48901D42228900AB2875 /* AppDelegate.swift in Sources */,
+				C43C515E1D40A46000F8B793 /* VSLKeypadViewController.swift in Sources */,
+				C48B48921D4239E300AB2875 /* GlobalQueues.swift in Sources */,
+				C44F26441D3F985B00A5A406 /* VSLTransferInProgressViewController.swift in Sources */,
+				C4021B6B1D426F22003560F6 /* Keys.swift in Sources */,
+				C44F26421D3F5B7D00A5A406 /* VSLSecondCallViewController.swift in Sources */,
+				C44F26481D3FBFCF00A5A406 /* VSLMakeCallViewController.swift in Sources */,
+				C44F264A1D3FC71D00A5A406 /* VSLCallViewController.swift in Sources */,
+				C44F26461D3FB63600A5A406 /* VSLMainViewController.swift in Sources */,
+				C44F264C1D3FD33F00A5A406 /* VSLIncomingCallViewController.swift in Sources */,
+				C457E49D1D3D070D0005D4B4 /* VSLTransferCallViewController.swift in Sources */,
+				C4441B721D424F8100C98E49 /* DDLogWrapper.m in Sources */,
+				C48B488E1D421CB100AB2875 /* SipUser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -617,44 +666,51 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A67D0ECC0E7FFC23557DA1C5 /* Pods-VialerSIPLib_Example.debug.xcconfig */;
+			baseConfigurationReference = 5E93D9F5879C0B35A7DB5C32 /* Pods-VialerSIPLib_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/VialerSIPLib/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.voipgrid.VialerSIPLib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "VialerSIPLib/VialerSIPLib_Example-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C38727764D742A3399DE284 /* Pods-VialerSIPLib_Example.release.xcconfig */;
+			baseConfigurationReference = 294D89E701148C481B997434 /* Pods-VialerSIPLib_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/VialerSIPLib/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.voipgrid.VialerSIPLib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "VialerSIPLib/VialerSIPLib_Example-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 555FE9440D336D571055A915 /* Pods-VialerSIPLib_Tests.debug.xcconfig */;
+			baseConfigurationReference = 399A30CB76654512E216C9C5 /* Pods-VialerSIPLib_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -673,7 +729,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6A1B1722761FC24740312A89 /* Pods-VialerSIPLib_Tests.release.xcconfig */;
+			baseConfigurationReference = FE5B792FC0731D4BAFC9CC90 /* Pods-VialerSIPLib_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

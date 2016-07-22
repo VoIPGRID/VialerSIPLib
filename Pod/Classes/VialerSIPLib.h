@@ -32,19 +32,19 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *
  *  @return NSString with the password.
  */
-- (NSString * _Nonnull)sipAccount;
+@property (readonly, nonatomic) NSString * _Nonnull sipAccount;
 /**
  *  The password that should be used when authenticate on remote PBX.
  *
  *  @return NSString with the password.
  */
-- (NSString * _Nonnull)sipPassword;
+@property (readonly, nonatomic) NSString * _Nonnull sipPassword;
 /**
  *  The domain where the PBX can be found.
  *
  *  @return NSString with the domain.
  */
-- (NSString * _Nonnull)sipDomain;
+@property (readonly, nonatomic) NSString * _Nonnull sipDomain;
 @optional
 /**
  *  When set to YES, the account will be registered on configuration.
@@ -53,7 +53,7 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *
  *  @return BOOL is registration should happen.
  */
-- (BOOL)sipRegisterOnAdd;
+@property (readonly, nonatomic) BOOL sipRegisterOnAdd;
 /**
  *  The proxy address where to connect to.
  *
@@ -61,7 +61,7 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *
  *  @return NSString with the proxy Address.
  */
-- (NSString * _Nonnull)sipProxy;
+@property (readonly, nonatomic) NSString * _Nonnull sipProxy;
 @end
 
 @interface VialerSIPLib : NSObject
@@ -111,6 +111,8 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *  @return VSLAccount instance or null.
  */
 - (VSLAccount * _Nullable)firstAccount;
+
+- (NSArray * _Nullable)accounts;
 
 /**
  *  Set the incoming call block for a incoming call.
