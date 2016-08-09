@@ -1,3 +1,14 @@
+# Own additions to the .gitignore
+#####
+# Ignoring own private constant files
+Example/VialerSIPLib/Keys.h
+Example/VialerSIPLib/Keys.swift
+
+# COCOAPODS:
+Example/Pods/
+!Podfile
+!Podfile.lock
+
 #########################
 # .gitignore file for Xcode4 and Xcode5 Source projects
 #
@@ -192,13 +203,14 @@ xcuserdata/
 # c.f. http://guides.cocoapods.org/using/using-cocoapods.html#what-is-a-podfilelock
 # c.f. http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
 #
-#!Podfile.lock
+!Podfile.lock
 #
 # RUBY:
 #
 # c.f. http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
 #
 #!Gemfile.lock
+.ruby-version
 #
 # IDEA:
 #
@@ -211,3 +223,4 @@ xcuserdata/
 # -- UNVERIFIED: c.f. http://stackoverflow.com/a/50283/153422
 #
 #tm_build_errors
+

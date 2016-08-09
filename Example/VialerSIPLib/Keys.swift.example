@@ -1,0 +1,14 @@
+//
+//  Keys.swift
+//  Copyright © 2016 Devhouse Spindle. All rights reserved.
+//
+
+struct Keys {
+    struct SIP {
+        static let Account = ""
+        static let Password = ""
+        static let Domain = ""
+        static let Proxy = ""
+    }
+    static let NumberToCall = ""
+}
