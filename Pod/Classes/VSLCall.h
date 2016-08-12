@@ -118,10 +118,11 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
 typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
     VSLCallTransferStateUnkown,
     VSLCallTransferStateInitialized,
-    VSLCallTransferStateTrying = PJSIP_SC_TRYING,
-    VSLCallTransferStateAccepted = PJSIP_SC_OK,
+    VSLCallTransferStateTrying,
+    VSLCallTransferStateAccepted,
+    VSLCallTransferStateRejected,
 };
-#define VSLCallTransferStateString(VSLCallTransferState) [@[@"VSLCallTransferStateUnkown", @"VSLCallTransferStateInitialized", @"VSLCallTransferStateTrying", @"VSLCallTransferStateAccepted"] objectAtIndex:VSLCallTransferState]
+#define VSLCallTransferStateString(VSLCallTransferState) [@[@"VSLCallTransferStateUnkown", @"VSLCallTransferStateInitialized", @"VSLCallTransferStateTrying", @"VSLCallTransferStateAccepted", @"VSLCallTransferStateRejected"] objectAtIndex:VSLCallTransferState]
 
 @interface VSLCall : NSObject
 
@@ -218,6 +219,8 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  *  Calculated amount of data transferred (Receiving & Transmitting).
  */
 @property (readonly, nonatomic) float totalMBsUsed;
+
+@property (readonly, nonatomic) NSTimeInterval connectDuration;
 
 /**
  *  Calculated R score of the call.
@@ -357,7 +360,7 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  *  @param text       The description of the transfer state.
  *  @param final      BOOL indictating this is the last update of the transfer state.
  */
-- (void)callTransferStatusChangedWithStatusCode:(NSInteger)statusCode statusText:(NSString * _Nullable)text final:(BOOL)final;
+- (void)callTransferStatusChangedWithStatusCode:(NSInteger)statusCode statusText:(NSString * _Nullable)text final:(BOOL)final continueNotifications:(BOOL * _Nonnull)continueNotifications;
 
 /**
  *  Will re-invite call.

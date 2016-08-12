@@ -12,7 +12,10 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
     // MARK: - Configuration
 
     private struct Configuration {
-        static let UnwindTime = 2.0
+        struct Timing {
+            static let UnwindTime = 2.0
+            static let connectDurationInterval = 1.0
+        }
         struct Segues {
             static let UnwindToMakeCall = "UnwindToMakeCallSegue"
             static let ShowKeypad = "ShowKeypadSegue"
@@ -28,17 +31,21 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         }
     }
 
+    var connectDurationTimer: NSTimer?
+
     // MARK: - Lifecycle
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         updateUI()
+        startConnectDurationTimer()
         activeCall?.addObserver(self, forKeyPath: "callState", options: .New, context: &myContext)
         activeCall?.addObserver(self, forKeyPath: "onHold", options: .New, context: &myContext)
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        connectDurationTimer?.invalidate()
         activeCall?.removeObserver(self, forKeyPath: "callState")
         activeCall?.removeObserver(self, forKeyPath: "onHold")
     }
@@ -64,7 +71,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         if let call = activeCall where call.callState == .Confirmed {
             do {
                 try call.toggleMute()
-                muteButton.setTitle(call.muted ? "Muted" : "Mute", forState: .Normal)
+                updateUI()
             } catch let error {
                 DDLogWrapper.logError("Error muting call: \(error)")
             }
@@ -74,7 +81,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
     @IBAction func speakerButtonPressed(sender: UIButton) {
         if let call = activeCall {
             call.toggleSpeaker()
-            speakerButton.setTitle(call.speaker ? "On Speaker" : "Speaker", forState: .Normal)
+            updateUI()
         } else {
             speakerButton.setTitle("Speaker", forState: .Normal)
         }
@@ -84,7 +91,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         if let call = activeCall where call.callState == .Confirmed {
             do {
                 try call.toggleHold()
-                holdButton.setTitle(call.onHold ? "On Hold" : "Hold", forState: .Normal)
+                updateUI()
             } catch let error {
                 DDLogWrapper.logError("Error holding call: \(error)")
             }
@@ -156,22 +163,25 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
             case .Early: fallthrough
             case .Connecting:
                 // Speaker & hangup can be enabled
-                muteButton?.enabled = !call.onHold
-                keypadButton?.enabled = !call.onHold
+                muteButton?.enabled = false
+                keypadButton?.enabled = false
                 transferButton?.enabled = false
                 holdButton?.enabled = false
                 hangupButton?.enabled = true
                 speakerButton?.enabled = true
+                speakerButton?.setTitle(call.speaker ? "On Speaker" : "Speaker", forState: .Normal)
             case .Confirmed:
                 // All buttons enabled
                 muteButton?.enabled = !call.onHold
+                muteButton?.setTitle(call.muted ? "Muted" : "Mute", forState: .Normal)
                 keypadButton?.enabled = !call.onHold
                 transferButton?.enabled = true
                 holdButton?.enabled = true
+                holdButton?.setTitle(call.onHold ? "On Hold" : "Hold", forState: .Normal)
                 hangupButton?.enabled = true
                 speakerButton?.enabled = true
+                speakerButton?.setTitle(call.speaker ? "On Speaker" : "Speaker", forState: .Normal)
             }
-            // TODO: update buttons
         }
     }
 
@@ -194,9 +204,23 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         case .Connecting:
             statusLabel?.text = "Connecting..."
         case .Confirmed:
-            statusLabel?.text = call.onHold ? "ON HOLD" : "Connected (counter?)"
+            if call.onHold {
+                statusLabel?.text = "ON HOLD"
+            } else {
+                let dateComponentsFormatter = NSDateComponentsFormatter()
+                dateComponentsFormatter.zeroFormattingBehavior = .Pad
+                dateComponentsFormatter.allowedUnits = [.Minute, .Second]
+                statusLabel?.text = "\(dateComponentsFormatter.stringFromTimeInterval(call.connectDuration)!)"
+            }
         case .Disconnected:
             statusLabel?.text = "Disconnected"
+            connectDurationTimer?.invalidate()
+        }
+    }
+
+    private func startConnectDurationTimer() {
+        if connectDurationTimer == nil || !connectDurationTimer!.valid {
+            connectDurationTimer = NSTimer.scheduledTimerWithTimeInterval(Configuration.Timing.connectDurationInterval, target: self, selector: #selector(updateUI), userInfo: nil, repeats: true)
         }
     }
 
@@ -218,7 +242,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if context == &myContext {
             if let call = object as? VSLCall where call.callState == .Disconnected {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(Configuration.UnwindTime * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(Configuration.Timing.UnwindTime * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                     self.performSegueWithIdentifier(Configuration.Segues.UnwindToMakeCall, sender: nil)
                 }
             }

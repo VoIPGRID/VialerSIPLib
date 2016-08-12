@@ -14,6 +14,7 @@ class VSLTransferInProgressViewController: UIViewController {
     struct Configuration {
         struct Segues {
             static let UnwindToMainViewController = "UnwindToMainViewControllerSegue"
+            static let UnwindToSecondCallViewController = "UnwindToSecondCallViewControllerSegue"
         }
         static let UnwindTiming = 2.0
     }
@@ -38,9 +39,7 @@ class VSLTransferInProgressViewController: UIViewController {
         super.viewWillAppear(animated)
         updateUI()
         firstCall?.addObserver(self, forKeyPath: "transferStatus", options: .New, context: &myContext)
-        if let call = firstCall where call.transferStatus == .Accepted {
-            prepareForDismissing()
-        }
+        checkIfViewCanBeDismissed()
     }
 
     override func viewWillDisappear(animated: Bool) {
@@ -71,6 +70,8 @@ class VSLTransferInProgressViewController: UIViewController {
                 statusLabel.text = "Transfer in progress to"
             case .Accepted:
                 statusLabel.text = "Successfully connected with"
+            case .Rejected:
+                statusLabel.text = "Transfer rejected for"
             }
         }
 
@@ -88,9 +89,21 @@ class VSLTransferInProgressViewController: UIViewController {
     }
 
     private func dismissView() {
-        self.performSegueWithIdentifier(Configuration.Segues.UnwindToMainViewController, sender: nil)
+        // Rewind one step if transfer was rejected.
+        if firstCall?.callState == .Disconnected && secondCall?.callState == .Disconnected {
+            performSegueWithIdentifier(Configuration.Segues.UnwindToMainViewController, sender: nil)
+        } else if firstCall?.transferStatus == .Rejected {
+            performSegueWithIdentifier(Configuration.Segues.UnwindToSecondCallViewController, sender: nil)
+        } else {
+            performSegueWithIdentifier(Configuration.Segues.UnwindToMainViewController, sender: nil)
+        }
     }
 
+    private func checkIfViewCanBeDismissed() {
+        if let call = firstCall where call.transferStatus == .Accepted || call.transferStatus == .Rejected {
+            prepareForDismissing()
+        }
+    }
     // MARK: - KVO
 
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -99,9 +112,7 @@ class VSLTransferInProgressViewController: UIViewController {
                 dispatch_async(GlobalMainQueue) {
                     self.updateUI()
                 }
-                if let call = object as? VSLCall where call.transferStatus == .Accepted {
-                    prepareForDismissing()
-                }
+                checkIfViewCanBeDismissed()
             }
         } else {
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
