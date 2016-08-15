@@ -194,6 +194,18 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     return _ringback;
 }
 
+- (NSTimeInterval)connectDuration {
+    // Check if call was ever connected before.
+    if (self.callId == PJSUA_INVALID_ID) {
+        return 0;
+    }
+
+    pjsua_call_info callInfo;
+    pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
+
+    return callInfo.connect_duration.sec;
+}
+
 #pragma mark - Actions
 
 - (AVAudioPlayer *)disconnectedSoundPlayer {
@@ -211,6 +223,11 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 }
 
 - (BOOL)transferToCall:(VSLCall *)secondCall {
+    NSError *error;
+    if (!self.onHold && ![self toggleHold:&error]) {
+        DDLogError(@"Error holding call: %@", error);
+        return NO;
+    }
     pj_status_t success = pjsua_call_xfer_replaces((pjsua_call_id)self.callId, (pjsua_call_id)secondCall.callId, 0, nil);
 
     if (success == PJ_SUCCESS) {
@@ -221,17 +238,12 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 }
 
 - (void)callTransferStatusChangedWithStatusCode:(NSInteger)statusCode statusText:(NSString *)text final:(BOOL)final {
-    switch (statusCode) {
-        case PJSIP_SC_TRYING:
-            self.transferStatus = VSLCallTransferStateTrying;
-            DDLogDebug(@"Trying transfer");
-            break;
-        case PJSIP_SC_OK:
-            self.transferStatus = VSLCallTransferStateAccepted;
-            [self hangup:nil];
-            break;
-        default:
-            break;
+    if (statusCode == PJSIP_SC_TRYING) {
+        self.transferStatus = VSLCallTransferStateTrying;
+    } else if (statusCode / 100 == 2) {
+        self.transferStatus = VSLCallTransferStateAccepted;
+    } else {
+        self.transferStatus = VSLCallTransferStateRejected;
     }
 }
 
