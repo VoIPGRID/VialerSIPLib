@@ -1218,8 +1218,8 @@
                         <outlet property="firstCallNumberLabel" destination="8Vs-NO-oXd" id="oGa-HL-7EV"/>
                         <outlet property="secondCallNumberLabel" destination="V7q-3y-JH6" id="nh6-mV-1Ga"/>
                         <outlet property="transferStatusLabel" destination="iuT-Sk-lVp" id="5RE-oc-BCS"/>
-                        <segue destination="uh8-L6-fnF" kind="unwind" identifier="UnwindToMainViewControllerSegue" unwindAction="unwindToMainViewController:" id="Pbd-GL-Ee7"/>
                         <segue destination="uh8-L6-fnF" kind="unwind" identifier="UnwindToSecondCallViewControllerSegue" unwindAction="unwindToSecondCallViewController:" id="lWe-1F-nSN"/>
+                        <segue destination="uh8-L6-fnF" kind="unwind" identifier="UnwindToCallViewControllerSegue" unwindAction="unwindToMainViewController:" id="5Mb-id-5wX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Lm-Sp-H40" userLabel="First Responder" sceneMemberID="firstResponder"/>
