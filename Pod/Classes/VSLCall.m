@@ -242,6 +242,12 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
         self.transferStatus = VSLCallTransferStateTrying;
     } else if (statusCode / 100 == 2) {
         self.transferStatus = VSLCallTransferStateAccepted;
+        // After successfull transfer, end the call.
+        NSError *error;
+        [self hangup:&error];
+        if (error) {
+            DDLogError(@"Error hangup call: %@", error);
+        }
     } else {
         self.transferStatus = VSLCallTransferStateRejected;
     }

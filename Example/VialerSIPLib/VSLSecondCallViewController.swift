@@ -57,7 +57,6 @@ class VSLSecondCallViewController: VSLCallViewController {
             let secondCall = activeCall where firstCall.callState == .Confirmed else { return }
 
         if firstCall.transferToCall(secondCall) {
-            UIDevice.currentDevice().proximityMonitoringEnabled = false
             performSegueWithIdentifier(Configuration.Segues.TransferInProgress, sender: nil)
         }
     }
@@ -157,10 +156,6 @@ class VSLSecondCallViewController: VSLCallViewController {
         if context == &myContext {
             dispatch_async(GlobalMainQueue) {
                 self.updateUI()
-                if let call = self.firstCall where call.transferStatus != .Unkown  {
-                     // If the transfer is in progress perform the segue.
-                     self.performSegueWithIdentifier(Configuration.Segues.TransferInProgress, sender: nil)
-                }
             }
         } else {
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
