@@ -13,7 +13,7 @@ class VSLTransferInProgressViewController: UIViewController {
 
     struct Configuration {
         struct Segues {
-            static let UnwindToMainViewController = "UnwindToMainViewControllerSegue"
+            static let UnwindToCallViewController = "UnwindToCallViewControllerSegue"
             static let UnwindToSecondCallViewController = "UnwindToSecondCallViewControllerSegue"
         }
         static let UnwindTiming = 2.0
@@ -90,12 +90,10 @@ class VSLTransferInProgressViewController: UIViewController {
 
     private func dismissView() {
         // Rewind one step if transfer was rejected.
-        if firstCall?.callState == .Disconnected && secondCall?.callState == .Disconnected {
-            performSegueWithIdentifier(Configuration.Segues.UnwindToMainViewController, sender: nil)
-        } else if firstCall?.transferStatus == .Rejected {
+        if firstCall?.transferStatus == .Rejected {
             performSegueWithIdentifier(Configuration.Segues.UnwindToSecondCallViewController, sender: nil)
         } else {
-            performSegueWithIdentifier(Configuration.Segues.UnwindToMainViewController, sender: nil)
+            performSegueWithIdentifier(Configuration.Segues.UnwindToCallViewController, sender: nil)
         }
     }
 
