@@ -23,30 +23,10 @@ These are the goals of our library.
 - Respond to the VoIP push notification
 
 
-#### Roadmap v1.0 - MVP
+#### Roadmap
 
-##### Must have
-- Configure & create endpoint (Done)
-- Configure & create account (Done)
-- Add account to endpoint (Done)
-- Make outgoing call (Done)
-- Register account
-- Accept incoming call
-- Unregister account
-- End call (Done)
-- Callback possibility when receiving incoming call
 - Clear Readme on how to use the library
 - Automatic documentation of code
-
-##### Should have
-- Hold call
-- Mute call
-- Speaker modus
-
-##### Could have
-- DTMF tones
-
-##### Won’t have
 - Bluetooth
-- Transfer calls
 - Presence
+- Rewrite lib to Swift

@@ -31,7 +31,7 @@ For more information on how to get started, read the [Getting Started Guide](Doc
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-Rename `Keys.sample.h` from the Example/VialerSIPLib directory to Keys.h and add your personal credentials. You can now run a the library with a very basic UI.
+Rename `Keys.sample.swift` from the Example/VialerSIPLib directory to Keys.swift and add your personal credentials. You can now run a the library with a very basic UI.
 
 #### Documentation
 
