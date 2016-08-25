@@ -100,7 +100,7 @@
 		C48B48911D4239E300AB2875 /* GlobalQueues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalQueues.swift; sourceTree = "<group>"; };
 		C4A6D7661D5A12720014A4FB /* Keys.swift.example */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Keys.swift.example; sourceTree = "<group>"; };
 		EE403109C970947593883272 /* libPods-VialerSIPLib_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F27386101C16EE96002C4CD1 /* VialerSIPLib-iOS.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = "VialerSIPLib-iOS.podspec"; path = "../VialerSIPLib-iOS.podspec"; sourceTree = "<group>"; };
+		F27386101C16EE96002C4CD1 /* VialerSIPLib.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = VialerSIPLib.podspec; path = ../VialerSIPLib.podspec; sourceTree = "<group>"; };
 		F27386121C170862002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F27386191C170B3C002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F951E38C1C56214300FA480F /* VialerSIPLibTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VialerSIPLibTests.m; sourceTree = "<group>"; };
@@ -221,7 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				C4021B681D426D5B003560F6 /* .gitignore */,
-				F27386101C16EE96002C4CD1 /* VialerSIPLib-iOS.podspec */,
+				F27386101C16EE96002C4CD1 /* VialerSIPLib.podspec */,
 				5D24E0A5A14D1689830035B2 /* README.md */,
 				751644FF6D649E93790619BF /* LICENSE */,
 				C48736151C4F901600604413 /* Documentation */,
