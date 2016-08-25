@@ -1,6 +1,5 @@
-_Getting started with the VialerSIPLib._
-
-***
+Getting started with the VialerSIPLib (W.I.P.)
+==============================================
 
 There are 3 steps to getting started with the library.
 

@@ -1,5 +1,5 @@
 #
-# Be sure to run `pod lib lint VialerSIPLib.podspec' to ensure this is a
+# Be sure to run `pod lib lint VialerSIPLib.podspec --use-libraries' to ensure this is a
 # valid spec and remove all comments before submitting the spec.
 #
 # Any lines starting with a # are optional, but encouraged
@@ -8,18 +8,18 @@
 #
 
 Pod::Spec.new do |s|
-	s.name             	= "VialerSIPLib-iOS"
-	s.version          	= "0.0.37"
+	s.name             	= "VialerSIPLib"
+	s.version          	= "1.0.0"
 	s.summary          	= "Vialer SIP Library for iOS"
 	s.description      	= <<-DESC
-                                    Objective-C wrapper around PJSIP
+                                    Objective-C wrapper around PJSIP.
                                   DESC
 
-	s.homepage         	= "https://www.wearespindle.com"
+	s.homepage         	= "https://github.com/VoIPGRID/VialerSIPLib"
 	s.license          	= 'GNU GPL v3'
 	s.author           	= {"Devhouse Spindle" => "hello@wearespindle.com"}
 
-	s.source           	= {:git => "https://github.com/VoIPGRID/VialerSIPLib-iOS.git", :tag => s.version.to_s}
+	s.source           	= {:git => "https://github.com/VoIPGRID/VialerSIPLib.git", :tag => s.version.to_s}
 	s.social_media_url 	= "https://twitter.com/wearespindle"
 
 	s.platform     		= :ios, '9.0'
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
 	s.source_files 		= "Pod/Classes/**/*.{h,m}"
 	s.public_header_files   = "Pod/Classes/**/*.h"
 
-        s.resource_bundles  = { 'VialerSIPLib-iOS' => 'Pod/Resources/*.wav' }
+        s.resource_bundles  = { 'VialerSIPLib' => 'Pod/Resources/*.wav' }
 
 	s.dependency 'Vialer-pjsip-iOS'
 	s.dependency 'CocoaLumberjack', '~> 2.2'
