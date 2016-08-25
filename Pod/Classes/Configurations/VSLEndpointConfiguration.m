@@ -6,7 +6,6 @@
 #import "VSLEndpointConfiguration.h"
 
 #import <VialerPJSIP/pjsua.h>
-#import <VialerPJSIP/pj/file_io.h>
 #import "VSLTransportConfiguration.h"
 
 static NSUInteger const VSLEndpointConfigurationMaxCalls = 4;
