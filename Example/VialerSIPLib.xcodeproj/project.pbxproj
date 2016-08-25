@@ -74,7 +74,6 @@
 		751644FF6D649E93790619BF /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		C4021B681D426D5B003560F6 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
 		C4021B6A1D426F22003560F6 /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
-		C424B5001C3BAD2E00178E52 /* Keys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keys.h; sourceTree = "<group>"; };
 		C424B50A1C3BD27500178E52 /* VSLAccountConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountConfigurationTests.m; sourceTree = "<group>"; };
 		C424B50C1C3BD89C00178E52 /* VSLEndpointConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLEndpointConfigurationTests.m; sourceTree = "<group>"; };
 		C424B50E1C3BDBD900178E52 /* VSLTransportConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLTransportConfigurationTests.m; sourceTree = "<group>"; };
@@ -261,7 +260,6 @@
 			children = (
 				C48B488D1D421CB100AB2875 /* SipUser.swift */,
 				C48B48911D4239E300AB2875 /* GlobalQueues.swift */,
-				C424B5001C3BAD2E00178E52 /* Keys.h */,
 				C4021B6A1D426F22003560F6 /* Keys.swift */,
 				C4A6D7661D5A12720014A4FB /* Keys.swift.example */,
 				C4441B701D424F8100C98E49 /* DDLogWrapper.h */,
