@@ -211,7 +211,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 - (AVAudioPlayer *)disconnectedSoundPlayer {
     if (!_disconnectedSoundPlayer) {
         NSBundle *podBundle = [NSBundle bundleForClass:self.classForCoder];
-        NSBundle *vialerBundle = [NSBundle bundleWithURL:[podBundle URLForResource:@"VialerSIPLib-iOS" withExtension:@"bundle"]];
+        NSBundle *vialerBundle = [NSBundle bundleWithURL:[podBundle URLForResource:@"VialerSIPLib" withExtension:@"bundle"]];
         NSURL *disconnectedSound = [vialerBundle URLForResource:@"disconnected" withExtension:@"wav"];
         NSAssert(disconnectedSound, @"No sound available");
         NSError *error;
