@@ -88,6 +88,12 @@ static int const VSLRingbackInterval = 4000;
     if (self.isPlaying) {
         pjsua_conf_disconnect((int)self.ringbackSlot, 0);
         self.isPlaying = NO;
+
+        // Destory the conference port otherwise the maximum number of ports will reached and pjsip will crash.
+        pj_status_t status = pjsua_conf_remove_port((int)self.ringbackSlot);
+        if (status != PJ_SUCCESS) {
+            DDLogWarn(@"Error removing the port!");
+        }
     }
 }
 
