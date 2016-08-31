@@ -10,7 +10,7 @@ PODS:
   - OCMock (3.3.1)
   - Reachability (3.2)
   - Vialer-pjsip-iOS (1.0)
-  - VialerSIPLib (1.0.2):
+  - VialerSIPLib (1.0.0):
     - CocoaLumberjack (~> 2.2)
     - Reachability
     - Vialer-pjsip-iOS
@@ -30,7 +30,7 @@ SPEC CHECKSUMS:
   OCMock: f3f61e6eaa16038c30caa5798c5e49d3307b6f22
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   Vialer-pjsip-iOS: 7313b19c4c2fa228a419f697a95aff1c17e649f3
-  VialerSIPLib: 652e35d94cf269c8137bae18209c4041f919044f
+  VialerSIPLib: da5b84129f8f15c92697617be2167d33712bda42
 
 PODFILE CHECKSUM: 0f7b04fb045caf39ed7c2486524959b2d2be90e8
 
