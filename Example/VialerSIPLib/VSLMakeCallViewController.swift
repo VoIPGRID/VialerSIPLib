@@ -9,7 +9,7 @@ class VSLMakeCallViewController: UIViewController {
 
     // MARK: - Configuration
 
-    private struct Configuration {
+    fileprivate struct Configuration {
         struct Segues {
             static let UnwindToMainViewController = "UnwindToMainViewControllerSegue"
             static let ShowCallViewController = "ShowCallViewControllerSegue"
@@ -21,11 +21,11 @@ class VSLMakeCallViewController: UIViewController {
     var account: VSLAccount?
     var call: VSLCall?
 
-    private var number: String {
+    fileprivate var number: String {
         set {
             numberToDialLabel?.text = newValue
-            callButton?.enabled = newValue != ""
-            deleteButton?.enabled = newValue != ""
+            callButton?.isEnabled = newValue != ""
+            deleteButton?.isEnabled = newValue != ""
         }
         get {
             return numberToDialLabel.text!
@@ -34,8 +34,8 @@ class VSLMakeCallViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    override func viewWillAppear(animated: Bool) {
-        UIDevice.currentDevice().proximityMonitoringEnabled = false
+    override func viewWillAppear(_ animated: Bool) {
+        UIDevice.current.isProximityMonitoringEnabled = false
         updateUI()
     }
 
@@ -52,55 +52,55 @@ class VSLMakeCallViewController: UIViewController {
 
     // MARK: - Actions
 
-    @IBAction func backButtonPressed(sender: UIBarButtonItem) {
-        performSegueWithIdentifier(Configuration.Segues.UnwindToMainViewController, sender: nil)
+    @IBAction func backButtonPressed(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
     }
 
-    @IBAction func keypadButtonPressed(sender: UIButton) {
+    @IBAction func keypadButtonPressed(_ sender: UIButton) {
         number = number + sender.currentTitle!
     }
 
-    @IBAction func deleteButtonPressed(sender: UIButton) {
-        number = number.substringToIndex(number.endIndex.advancedBy(-1))
+    @IBAction func deleteButtonPressed(_ sender: UIButton) {
+        number = number.substring(to: number.characters.index(number.endIndex, offsetBy: -1))
     }
 
-    @IBAction func callButtonPressed(sender: UIButton) {
-        self.callButton.enabled = false
-        UIDevice.currentDevice().proximityMonitoringEnabled = true
-        if let account = account where account.isRegistered {
+    @IBAction func callButtonPressed(_ sender: UIButton) {
+        self.callButton.isEnabled = false
+        UIDevice.current.isProximityMonitoringEnabled = true
+        if let account = account, account.isRegistered {
             setupCall()
         } else {
-            VialerSIPLib.sharedInstance().registerAccountWithUser(SipUser()) { (success, account) in
-                if let account = account where success {
+            VialerSIPLib.sharedInstance().registerAccount(with: SipUser()) { (success, account) in
+                if let account = account, success {
                     self.account = account
                     self.setupCall()
                 } else {
-                    UIDevice.currentDevice().proximityMonitoringEnabled = false
+                    UIDevice.current.isProximityMonitoringEnabled = false
                 }
             }
         }
     }
 
-    private func setupCall() {
+    fileprivate func setupCall() {
         self.account?.callNumber(number) { (error, call) in
             self.call = call
-            dispatch_async(GlobalMainQueue) {
-                self.performSegueWithIdentifier(Configuration.Segues.ShowCallViewController, sender: nil)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: Configuration.Segues.ShowCallViewController, sender: nil)
             }
         }
     }
 
     func updateUI() {
-        callButton?.enabled = number != ""
-        deleteButton?.enabled = number != ""
+        callButton?.isEnabled = number != ""
+        deleteButton?.isEnabled = number != ""
     }
 
     // MARK: - Segues
 
-    @IBAction func unwindToMakeCallViewController(segue: UIStoryboardSegue) {}
+    @IBAction func unwindToMakeCallViewController(_ segue: UIStoryboardSegue) {}
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let callViewController = segue.destinationViewController as? VSLCallViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let callViewController = segue.destination as? VSLCallViewController {
             callViewController.activeCall = call
         }
     }

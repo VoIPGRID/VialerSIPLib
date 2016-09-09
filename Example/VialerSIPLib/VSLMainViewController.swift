@@ -11,7 +11,7 @@ class VSLMainViewController: UIViewController {
 
     // MARK: - Configuration
 
-    private struct Configuration {
+    fileprivate struct Configuration {
         struct Segues {
             static let ShowIncomingCall = "ShowIncomingCallSegue"
         }
@@ -19,28 +19,28 @@ class VSLMainViewController: UIViewController {
 
     // MARK: - Properties
 
-    private var account: VSLAccount? {
+    fileprivate var account: VSLAccount? {
         didSet {
             updateUI()
         }
     }
 
-    private var incomingCall: VSLCall?
+    fileprivate var incomingCall: VSLCall?
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(incomingCallNotification(_:)), name: AppDelegate.Configuration.Notifications.IncomingCall, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(incomingCallNotification(_:)), name: NSNotification.Name(rawValue: AppDelegate.Configuration.Notifications.IncomingCall), object: nil)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        account?.addObserver(self, forKeyPath: "accountState", options: .New, context: &myContext)
+        account?.addObserver(self, forKeyPath: "accountState", options: .new, context: &myContext)
         updateUI()
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         account?.removeObserver(self, forKeyPath: "accountState")
     }
@@ -51,8 +51,8 @@ class VSLMainViewController: UIViewController {
 
     // MARK: - Actions
 
-    @IBAction func registerAccountButtonPressed(sender: UIButton) {
-        if let _ = account where account!.isRegistered {
+    @IBAction func registerAccountButtonPressed(_ sender: UIButton) {
+        if let _ = account, account!.isRegistered {
             try! account!.unregisterAccount()
             account?.removeObserver(self, forKeyPath: "accountState")
             account = nil
@@ -63,50 +63,50 @@ class VSLMainViewController: UIViewController {
 
     // MARK: - Helper functions
 
-    private func updateUI() {
-        dispatch_async(GlobalMainQueue) {
+    fileprivate func updateUI() {
+        DispatchQueue.main.async {
             if let account = self.account {
-                self.registerAccountButton.setTitle(account.isRegistered ? "Unregister" : "Register", forState: .Normal)
+                self.registerAccountButton.setTitle(account.isRegistered ? "Unregister" : "Register", for: UIControlState())
             }  else {
-                self.registerAccountButton.setTitle("Register", forState: .Normal)
+                self.registerAccountButton.setTitle("Register", for: UIControlState())
             }
         }
     }
 
-    private func registerAccountWithCompletion(completion: (() -> ())? = nil) {
-        registerAccountButton.enabled = false
-        VialerSIPLib.sharedInstance().registerAccountWithUser(SipUser()) { (succes, account) in
+    fileprivate func registerAccountWithCompletion(_ completion: (() -> ())? = nil) {
+        registerAccountButton.isEnabled = false
+        VialerSIPLib.sharedInstance().registerAccount(with: SipUser()) { (succes, account) in
             self.account = account
-            self.account!.addObserver(self, forKeyPath: "accountState", options: .New, context: &myContext)
-            dispatch_async(GlobalMainQueue) {
-                self.registerAccountButton.enabled = true
+            self.account!.addObserver(self, forKeyPath: "accountState", options: .new, context: &myContext)
+            DispatchQueue.main.async {
+                self.registerAccountButton.isEnabled = true
             }
         }
     }
 
     // MARK: - Segues
 
-    @IBAction func unwindToMainViewController(segue: UIStoryboardSegue) {}
+    @IBAction func unwindToMainViewController(_ segue: UIStoryboardSegue) {}
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let account = account, let makeCallVC = segue.destinationViewController as? VSLMakeCallViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let account = account, let makeCallVC = segue.destination as? VSLMakeCallViewController {
             makeCallVC.account = account
-        } else if let call = incomingCall, let incomingCallVC = segue.destinationViewController as? VSLIncomingCallViewController {
+        } else if let call = incomingCall, let incomingCallVC = segue.destination as? VSLIncomingCallViewController {
             incomingCallVC.call = call
         }
     }
 
     // MARK: - KVO
 
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if let account = object as? VSLAccount where account == self.account {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if let account = object as? VSLAccount, account == self.account {
             updateUI()
         }
     }
 
     // MARK: - NSNotificationCenter
 
-    func incomingCallNotification(notification: NSNotification) {
+    func incomingCallNotification(_ notification: Notification) {
 
         if let call = notification.object as? VSLCall, let accounts =  VialerSIPLib.sharedInstance().accounts() as? [VSLAccount] {
             // When there is another call active, decline incoming call.
@@ -118,8 +118,8 @@ class VSLMainViewController: UIViewController {
             }
             // Show incoming call view.
             self.incomingCall = call
-            dispatch_async(GlobalMainQueue) {
-                self.performSegueWithIdentifier(Configuration.Segues.ShowIncomingCall, sender: nil)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: Configuration.Segues.ShowIncomingCall, sender: nil)
             }
         }
     }

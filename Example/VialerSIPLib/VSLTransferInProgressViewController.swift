@@ -35,14 +35,14 @@ class VSLTransferInProgressViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateUI()
-        firstCall?.addObserver(self, forKeyPath: "transferStatus", options: .New, context: &myContext)
+        firstCall?.addObserver(self, forKeyPath: "transferStatus", options: .new, context: &myContext)
         checkIfViewCanBeDismissed()
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         firstCall?.removeObserver(self, forKeyPath: "transferStatus")
     }
@@ -55,7 +55,7 @@ class VSLTransferInProgressViewController: UIViewController {
 
     // MARK: - Actions
 
-    @IBAction func backButtonPressed(sender: UIBarButtonItem) {
+    @IBAction func backButtonPressed(_ sender: UIBarButtonItem) {
         self.dismissView()
     }
 
@@ -63,14 +63,14 @@ class VSLTransferInProgressViewController: UIViewController {
         if let call = firstCall, let label = firstCallNumberLabel, let statusLabel = transferStatusLabel {
             label.text = call.callerNumber!
             switch call.transferStatus {
-            case .Unkown: fallthrough
-            case .Initialized:
+            case .unkown: fallthrough
+            case .initialized:
                 statusLabel.text = "Transfer requested for"
-            case .Trying:
+            case .trying:
                 statusLabel.text = "Transfer in progress to"
-            case .Accepted:
+            case .accepted:
                 statusLabel.text = "Successfully connected with"
-            case .Rejected:
+            case .rejected:
                 statusLabel.text = "Transfer rejected for"
             }
         }
@@ -80,40 +80,40 @@ class VSLTransferInProgressViewController: UIViewController {
         }
     }
 
-    private func prepareForDismissing() {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(Configuration.UnwindTiming * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-            dispatch_async(GlobalMainQueue) {
+    fileprivate func prepareForDismissing() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(Configuration.UnwindTiming * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
+            DispatchQueue.main.async {
                 self.dismissView()
             }
         }
     }
 
-    private func dismissView() {
+    fileprivate func dismissView() {
         // Rewind one step if transfer was rejected.
-        if firstCall?.transferStatus == .Rejected {
-            performSegueWithIdentifier(Configuration.Segues.UnwindToSecondCallViewController, sender: nil)
+        if firstCall?.transferStatus == .rejected {
+            performSegue(withIdentifier: Configuration.Segues.UnwindToSecondCallViewController, sender: nil)
         } else {
-            performSegueWithIdentifier(Configuration.Segues.UnwindToCallViewController, sender: nil)
+            performSegue(withIdentifier: Configuration.Segues.UnwindToCallViewController, sender: nil)
         }
     }
 
-    private func checkIfViewCanBeDismissed() {
-        if let call = firstCall where call.transferStatus == .Accepted || call.transferStatus == .Rejected {
+    fileprivate func checkIfViewCanBeDismissed() {
+        if let call = firstCall, call.transferStatus == .accepted || call.transferStatus == .rejected {
             prepareForDismissing()
         }
     }
     // MARK: - KVO
 
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &myContext {
             if keyPath == "transferStatus" {
-                dispatch_async(GlobalMainQueue) {
+                DispatchQueue.main.async {
                     self.updateUI()
                 }
                 checkIfViewCanBeDismissed()
             }
         } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 }

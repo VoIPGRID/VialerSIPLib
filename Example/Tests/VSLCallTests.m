@@ -5,7 +5,7 @@
 
 #import <OCMock/OCMock.h>
 #import <XCTest/XCTest.h>
-#import <VialerSIPLib-iOS/VSLCall.h>
+#import <VialerSIPLib/VSLCall.h>
 
 @interface VSLCall()
 - (NSDictionary * _Nonnull)getCallerInfoFromRemoteUri:(NSString * _Nonnull)string;
