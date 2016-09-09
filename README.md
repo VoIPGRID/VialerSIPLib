@@ -43,11 +43,11 @@ We want to be clear on what we will build and what progress we're making. Please
 
 #### Authors
 
-Devhouse Spindle, hello@wearespindle.com
+Devhouse Spindle, vialersiplib@wearespindle.com
 
 For more credits & contributions, please see [Credits & Documentation](Documentation/Credits.md).
 
-We would really like to have you involved in the project. Please contact us at hello@wearespindle.com, or create a pull request.
+We would really like to have you involved in the project. Please contact us at vialersiplib@wearespindle.com, or create a pull request.
 
 #### License
 

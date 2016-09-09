@@ -5,9 +5,9 @@
 
 #import <OCMock/OCMock.h>
 #import <XCTest/XCTest.h>
-#import <VialerSIPLib-iOS/VSLCall.h>
-#import <VialerSIPLib-iOS/VSLEndpoint.h>
-#import <VialerSIPLib-iOS/VialerSIPLib.h>
+#import <VialerSIPLib/VSLCall.h>
+#import <VialerSIPLib/VSLEndpoint.h>
+#import <VialerSIPLib/VialerSIPLib.h>
 
 @interface VialerSIPLibTests : XCTestCase
 

@@ -5,8 +5,8 @@
 
 #import <OCMock/OCMock.h>
 #import <VialerPJSIP/pjsua.h>
-#import <VialerSIPLib-iOS/VSLAccount.h>
-#import <VialerSIPLib-iOS/VSLEndpoint.h>
+#import <VialerSIPLib/VSLAccount.h>
+#import <VialerSIPLib/VSLEndpoint.h>
 #import <XCTest/XCTest.h>
 
 @interface VSLAccountTests : XCTestCase

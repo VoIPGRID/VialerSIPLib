@@ -4,7 +4,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <VialerSIPLib-iOS/NSString+PJString.h>
+#import <VialerSIPLib/NSString+PJString.h>
 
 @interface NSStringPlusPJStringTests : XCTestCase
 

@@ -11,7 +11,7 @@ class VSLSecondCallViewController: VSLCallViewController {
 
     // MARK: - Configuration
 
-    private struct Configuration {
+    fileprivate struct Configuration {
         struct Segues {
             static let TransferInProgress = "TransferInProgressSegue"
             static let UnwindToFirstCall = "UnwindToFirstCallSegue"
@@ -29,16 +29,16 @@ class VSLSecondCallViewController: VSLCallViewController {
 
     // MARK: - Lifecycle
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateUI()
-        stopObservingAfterCheckCallStates()
-        firstCall?.addObserver(self, forKeyPath: "callState", options: .New, context: &myContext)
-        firstCall?.addObserver(self, forKeyPath: "onHold", options: .New, context: &myContext)
-        firstCall?.addObserver(self, forKeyPath: "transferStatus", options: .New, context: &myContext)
+        _ = stopObservingAfterCheckCallStates()
+        firstCall?.addObserver(self, forKeyPath: "callState", options: .new, context: &myContext)
+        firstCall?.addObserver(self, forKeyPath: "onHold", options: .new, context: &myContext)
+        firstCall?.addObserver(self, forKeyPath: "transferStatus", options: .new, context: &myContext)
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         firstCall?.removeObserver(self, forKeyPath: "callState")
         firstCall?.removeObserver(self, forKeyPath: "onHold")
@@ -52,38 +52,38 @@ class VSLSecondCallViewController: VSLCallViewController {
 
     // MARK: - Actions
 
-    @IBAction override func transferButtonPressed(sender: UIButton) {
-        guard let firstCall = firstCall where firstCall.callState == .Confirmed,
-            let secondCall = activeCall where firstCall.callState == .Confirmed else { return }
+    @IBAction override func transferButtonPressed(_ sender: UIButton) {
+        guard let firstCall = firstCall, firstCall.callState == .confirmed,
+            let secondCall = activeCall, firstCall.callState == .confirmed else { return }
 
-        if firstCall.transferToCall(secondCall) {
-            performSegueWithIdentifier(Configuration.Segues.TransferInProgress, sender: nil)
+        if firstCall.transfer(to: secondCall) {
+            performSegue(withIdentifier: Configuration.Segues.TransferInProgress, sender: nil)
         }
     }
 
     override func endCall() {
-        if let call = activeCall where call.callState != .Null {
+        if let call = activeCall, call.callState != .null {
             do {
                 try call.hangup()
-                self.performSegueWithIdentifier(Configuration.Segues.UnwindToFirstCall, sender: nil)
+                self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
             } catch let error {
                 DDLogWrapper.logError("Couldn't hangup call: \(error)")
             }
         }
     }
 
-    @IBAction func cancelButtonPressed(sender: UIBarButtonItem) {
+    @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
 
         // Hangup active Call if it is not disconnected.
-        if let call = activeCall where call.callState != .Disconnected {
+        if let call = activeCall, call.callState != .disconnected {
             do {
                 try call.hangup()
-                self.performSegueWithIdentifier(Configuration.Segues.UnwindToFirstCall, sender: nil)
+                self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
             } catch let error {
                 DDLogWrapper.logError("Couldn't hangup call: \(error)")
             }
         } else {
-            self.performSegueWithIdentifier(Configuration.Segues.UnwindToFirstCall, sender: nil)
+            self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
         }
     }
 
@@ -97,30 +97,30 @@ class VSLSecondCallViewController: VSLCallViewController {
         }
 
         // Only enable transferButton if both calls are confirmed.
-        transferButton?.enabled = activeCall?.callState == .Confirmed && firstCall?.callState == .Confirmed
+        transferButton?.isEnabled = activeCall?.callState == .confirmed && firstCall?.callState == .confirmed
     }
 
     /**
-     Check the current state of the calls and perform segue if appropriate. 
-     
+     Check the current state of the calls and perform segue if appropriate.
+
      If one of the calls is disconnected, go back to screen with one call active.
      If both calls are disconnected, return to main screen.
 
      - returns: Bool if the observing should propagate to super class.
      */
-    private func stopObservingAfterCheckCallStates() -> Bool {
+    fileprivate func stopObservingAfterCheckCallStates() -> Bool {
         // If the first call is disconnected and the second call is in progress, unwind to CallViewController.
         // In prepare the second call will be set as the activeCall.
         guard let firstCall = firstCall, let activeCall = activeCall else { return false }
 
-        if (firstCall.callState != .Disconnected && activeCall.callState == .Disconnected) || (firstCall.callState == .Disconnected && activeCall.callState != .Disconnected)  {
-            dispatch_async(GlobalMainQueue) {
-                self.performSegueWithIdentifier(Configuration.Segues.UnwindToFirstCall, sender: nil)
+        if (firstCall.callState != .disconnected && activeCall.callState == .disconnected) || (firstCall.callState == .disconnected && activeCall.callState != .disconnected)  {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
             }
             return true
-        } else if (firstCall.callState == .Disconnected && activeCall.callState == .Disconnected) {
-            dispatch_async(GlobalMainQueue) {
-                self.performSegueWithIdentifier(Configuration.Segues.UnwindToMainView, sender: nil)
+        } else if (firstCall.callState == .disconnected && activeCall.callState == .disconnected) {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: Configuration.Segues.UnwindToMainView, sender: nil)
             }
             return true
         }
@@ -129,36 +129,36 @@ class VSLSecondCallViewController: VSLCallViewController {
 
     // MARK: - Segues
 
-    @IBAction func unwindToSecondCallViewController(segue: UIStoryboardSegue) {}
+    @IBAction func unwindToSecondCallViewController(_ segue: UIStoryboardSegue) {}
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let transferInProgressVC = segue.destinationViewController as? VSLTransferInProgressViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let transferInProgressVC = segue.destination as? VSLTransferInProgressViewController {
             transferInProgressVC.firstCall = firstCall
             transferInProgressVC.secondCall = activeCall
-        } else if let callVC = segue.destinationViewController as? VSLCallViewController {
+        } else if let callVC = segue.destination as? VSLCallViewController {
             // The first call was disconnected, but second call in progress, so show second call as active call.
-            if let call = firstCall where call.callState == .Disconnected {
+            if let call = firstCall, call.callState == .disconnected {
                 callVC.activeCall = activeCall
             }
         }else {
-            super.prepareForSegue(segue, sender: sender)
+            super.prepare(for: segue, sender: sender)
         }
     }
 
     // MARK: - KVO
 
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
 
         if stopObservingAfterCheckCallStates() {
             return
         }
 
         if context == &myContext {
-            dispatch_async(GlobalMainQueue) {
+            DispatchQueue.main.async {
                 self.updateUI()
             }
         } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 }
