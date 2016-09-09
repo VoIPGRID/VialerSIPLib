@@ -19,20 +19,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Lifecycle
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         DDLogWrapper.setup()
         setupVialerEndpoint()
         return true
     }
 
-    private func setupVialerEndpoint() {
+    fileprivate func setupVialerEndpoint() {
         let endpointConfiguration = VSLEndpointConfiguration()
         endpointConfiguration.userAgent = "VialerSIPLib Example App"
         endpointConfiguration.transportConfigurations = [VSLTransportConfiguration(transportType: .TCP)!, VSLTransportConfiguration(transportType: .UDP)!]
         do {
-            try VialerSIPLib.sharedInstance().configureLibraryWithEndPointConfiguration(endpointConfiguration)
-            VialerSIPLib.sharedInstance().setIncomingCallBlock{ (call) in
-                NSNotificationCenter.defaultCenter().postNotificationName(Configuration.Notifications.IncomingCall, object: call)
+            try VialerSIPLib.sharedInstance().configureLibrary(withEndPointConfiguration: endpointConfiguration)
+            VialerSIPLib.sharedInstance().setIncomingCall{ (call) in
+                NotificationCenter.default.post(name: Notification.Name(rawValue: Configuration.Notifications.IncomingCall), object: call)
             }
         } catch let error {
             DDLogWrapper.logError("Error setting up VialerSIPLib: \(error)")

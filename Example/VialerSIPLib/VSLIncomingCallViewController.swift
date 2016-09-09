@@ -11,7 +11,7 @@ class VSLIncomingCallViewController: UIViewController {
 
     // MARK: - Configuration
 
-    private struct Configuration {
+    fileprivate struct Configuration {
         struct Segues {
             static let UnwindToMainViewController = "UnwindToMainViewControllerSegue"
             static let ShowCall = "ShowCallSegue"
@@ -21,13 +21,13 @@ class VSLIncomingCallViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateUI()
-        call?.addObserver(self, forKeyPath: "callState", options: .New, context: &myContext)
+        call?.addObserver(self, forKeyPath: "callState", options: .new, context: &myContext)
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         call?.removeObserver(self, forKeyPath: "callState")
     }
@@ -41,7 +41,7 @@ class VSLIncomingCallViewController: UIViewController {
     }
 
     lazy var ringtone: VSLRingtone = {
-        let fileUrl = NSBundle.mainBundle().URLForResource("ringtone", withExtension: "wav")!
+        let fileUrl = Bundle.main.url(forResource: "ringtone", withExtension: "wav")!
         return VSLRingtone.init(ringtonePath: fileUrl)!
     }()
 
@@ -54,48 +54,48 @@ class VSLIncomingCallViewController: UIViewController {
 
     // MARK: - Actions
 
-    @IBAction func declineButtonPressed(sender: UIButton) {
+    @IBAction func declineButtonPressed(_ sender: UIButton) {
         try! call?.hangup()
-        performSegueWithIdentifier(Configuration.Segues.UnwindToMainViewController, sender: nil)
+        performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
     }
 
-    @IBAction func acceptButtonPressed(sender: UIButton) {
-        if let call = call where call.callState == .Incoming {
+    @IBAction func acceptButtonPressed(_ sender: UIButton) {
+        if let call = call, call.callState == .incoming {
             do {
                 try call.answer()
-                performSegueWithIdentifier(Configuration.Segues.ShowCall, sender: nil)
+                performSegue(withIdentifier: Configuration.Segues.ShowCall, sender: nil)
             } catch let error {
                 DDLogWrapper.logError("error answering call: \(error)")
             }
         }
     }
 
-    private func updateUI() {
+    fileprivate func updateUI() {
         if let call = call {
             numberLabel?.text = call.callerNumber
             switch call.callState {
-            case .Incoming:
+            case .incoming:
                 statusLabel?.text = "Incoming call"
-            case .Connecting:
+            case .connecting:
                 statusLabel?.text = "Connecting"
-            case .Confirmed:
+            case .confirmed:
                 statusLabel?.text = "Connected"
-            case .Disconnected:
+            case .disconnected:
                 statusLabel?.text = "Disconnected"
-            case .Null: fallthrough
-            case .Calling: fallthrough
-            case .Early:
+            case .null: fallthrough
+            case .calling: fallthrough
+            case .early:
                 statusLabel?.text = "Invalid"
             }
 
-            if call.callState == .Incoming {
-                declineButton?.enabled = true
-                acceptButton?.enabled = true
+            if call.callState == .incoming {
+                declineButton?.isEnabled = true
+                acceptButton?.isEnabled = true
                 ringtone.start()
             } else {
                 ringtone.stop()
-                declineButton?.enabled = false
-                acceptButton?.enabled = false
+                declineButton?.isEnabled = false
+                acceptButton?.isEnabled = false
             }
         } else {
             numberLabel?.text = ""
@@ -105,27 +105,27 @@ class VSLIncomingCallViewController: UIViewController {
 
     // MARK: - Segues
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let callViewController = segue.destinationViewController as? VSLCallViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let callViewController = segue.destination as? VSLCallViewController {
             callViewController.activeCall = call
         }
     }
 
     // MARK: - KVO
 
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &myContext {
-            dispatch_async(GlobalMainQueue) {
+            DispatchQueue.main.async {
                 self.updateUI()
             }
 
-            if let call = object as? VSLCall where call.callState == .Disconnected {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(Configuration.UnwindTime * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                    self.performSegueWithIdentifier(Configuration.Segues.UnwindToMainViewController, sender: nil)
+            if let call = object as? VSLCall , call.callState == .disconnected {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(Configuration.UnwindTime * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
+                    self.performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
                 }
             }
         } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 }

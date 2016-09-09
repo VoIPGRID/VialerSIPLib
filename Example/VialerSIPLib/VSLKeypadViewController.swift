@@ -33,13 +33,13 @@ class VSLKeypadViewController: UIViewController {
 
     // MARK: Lifecycle
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateUI()
-        call?.addObserver(self, forKeyPath: "callState", options: .New, context: &myContext)
+        call?.addObserver(self, forKeyPath: "callState", options: .new, context: &myContext)
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         call?.removeObserver(self, forKeyPath: "callState")
     }
@@ -55,12 +55,12 @@ class VSLKeypadViewController: UIViewController {
 
     // MARK: - Actions
 
-    @IBAction func backButtonPressed(sender: UIBarButtonItem) {
+    @IBAction func backButtonPressed(_ sender: UIBarButtonItem) {
         delegate?.dismissKeypadViewController()
     }
 
-    @IBAction func keypadNumberPressed(sender: AnyObject) {
-        if let call = call where call.callState == .Confirmed, let button = sender as? UIButton {
+    @IBAction func keypadNumberPressed(_ sender: AnyObject) {
+        if let call = call, call.callState == .confirmed, let button = sender as? UIButton {
             do {
                 try call.sendDTMF(button.currentTitle!)
                 dtmfSent = dtmfSent + button.currentTitle!
@@ -70,7 +70,7 @@ class VSLKeypadViewController: UIViewController {
         }
     }
 
-    private func updateUI() {
+    fileprivate func updateUI() {
         if let call = call, let label = numberLabel {
             label.text = call.callerNumber
         } else {
@@ -80,13 +80,13 @@ class VSLKeypadViewController: UIViewController {
 
     // MARK: - KVO
 
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if context == &myContext , let call = object as? VSLCall where call.callState == .Disconnected {
-            dispatch_async(GlobalMainQueue) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if context == &myContext , let call = object as? VSLCall , call.callState == .disconnected {
+            DispatchQueue.main.async {
                 self.delegate?.dismissKeypadViewController()
             }
         } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 }

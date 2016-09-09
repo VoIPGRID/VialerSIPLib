@@ -5,7 +5,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AVFoundation/AVAudioPlayer.h>
+@import AVFoundation;
 
 @interface VSLRingtone : NSObject
 
@@ -19,7 +19,7 @@
  *
  *  @return compiler error.
  */
--(instancetype _Nullable) init __attribute__((unavailable("init not available. Use initWithRingtonePath instead.")));
+-(instancetype _Nonnull) init __attribute__((unavailable("init not available. Use initWithRingtonePath instead.")));
 
 /**
  *  The init to set an own ringtone file.
