@@ -123,11 +123,12 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
 - (void)setCallState:(VSLCallState)callState {
     if (_callState != callState) {
-        [self willChangeValueForKey:@"callState"];
+        NSString *stringFromCallStateProperty = NSStringFromSelector(@selector(callState));
+        [self willChangeValueForKey:stringFromCallStateProperty];
         DDLogDebug(@"CallState will change from %@(%ld) to %@(%ld)", VSLCallStateString(_callState),
                    (long)_callState, VSLCallStateString(callState), (long)callState);
         _callState = callState;
-        [self didChangeValueForKey:@"callState"];
+        [self didChangeValueForKey:stringFromCallStateProperty];
 
         switch (_callState) {
             case VSLCallStateNull: {
@@ -172,6 +173,15 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                 [self.account removeCall:self];
             } break;
         }
+    }
+}
+
+- (void)setTransferStatus:(VSLCallTransferState)transferStatus {
+    if (_transferStatus != transferStatus) {
+        NSString *stringFromTranferStatusProperty = NSStringFromSelector(@selector(transferStatus));
+        [self willChangeValueForKey:stringFromTranferStatusProperty];
+        _transferStatus = transferStatus;
+        [self didChangeValueForKey:stringFromTranferStatusProperty];
     }
 }
 
@@ -508,6 +518,10 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 #pragma mark - KVO override
 
 + (BOOL)automaticallyNotifiesObserversOfCallState {
+    return NO;
+}
+
++ (BOOL)automaticallyNotifiesObserversOfTransferStatus {
     return NO;
 }
 
