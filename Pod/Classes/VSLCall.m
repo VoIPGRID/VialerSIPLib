@@ -41,6 +41,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 @property (nonatomic) BOOL userDidHangUp;
 @property (strong, nonatomic) AVAudioPlayer *disconnectedSoundPlayer;
 @property (readwrite, nonatomic) VSLCallTransferState transferStatus;
+@property (readwrite, nonatomic) NSTimeInterval lastSeenConnectDuration;
 
 /**
  *  Stats
@@ -123,11 +124,11 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
 - (void)setCallState:(VSLCallState)callState {
     if (_callState != callState) {
-        [self willChangeValueForKey:@"callState"];
+        NSString *stringFromCallStateProperty = NSStringFromSelector(@selector(callState));
+        [self willChangeValueForKey:stringFromCallStateProperty];
         DDLogDebug(@"CallState will change from %@(%ld) to %@(%ld)", VSLCallStateString(_callState),
                    (long)_callState, VSLCallStateString(callState), (long)callState);
         _callState = callState;
-        [self didChangeValueForKey:@"callState"];
 
         switch (_callState) {
             case VSLCallStateNull: {
@@ -172,6 +173,16 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                 [self.account removeCall:self];
             } break;
         }
+        [self didChangeValueForKey:stringFromCallStateProperty];
+    }
+}
+
+- (void)setTransferStatus:(VSLCallTransferState)transferStatus {
+    if (_transferStatus != transferStatus) {
+        NSString *stringFromTranferStatusProperty = NSStringFromSelector(@selector(transferStatus));
+        [self willChangeValueForKey:stringFromTranferStatusProperty];
+        _transferStatus = transferStatus;
+        [self didChangeValueForKey:stringFromTranferStatusProperty];
     }
 }
 
@@ -202,8 +213,15 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
     pjsua_call_info callInfo;
     pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
+    NSTimeInterval latestConnecDuration = callInfo.connect_duration.sec;
 
-    return callInfo.connect_duration.sec;
+    // Workaround for callInfo.connect_duration being 0 at end of call
+    if (latestConnecDuration > self.lastSeenConnectDuration) {
+        self.lastSeenConnectDuration = latestConnecDuration;
+        return latestConnecDuration;
+    } else {
+        return self.lastSeenConnectDuration;
+    }
 }
 
 #pragma mark - Actions
@@ -508,6 +526,10 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 #pragma mark - KVO override
 
 + (BOOL)automaticallyNotifiesObserversOfCallState {
+    return NO;
+}
+
++ (BOOL)automaticallyNotifiesObserversOfTransferStatus {
     return NO;
 }
 
