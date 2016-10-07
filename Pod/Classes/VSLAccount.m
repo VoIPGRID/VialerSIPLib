@@ -5,10 +5,12 @@
 
 #import "VSLAccount.h"
 
+@import CallKit;
 #import "Constants.h"
 #import <CocoaLumberJack/CocoaLumberjack.h>
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
+#import "VSLCallManager.h"
 #import <VialerPJSIP/pjsua.h>
 #import "VSLCall.h"
 #import "VSLEndpoint.h"
@@ -19,7 +21,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 @interface VSLAccount()
 @property (readwrite, nonnull, nonatomic) VSLAccountConfiguration *accountConfiguration;
-@property (strong, nonatomic) NSMutableArray *calls;
+@property (weak, nonatomic) VSLCallManager* callManager;
 @property (readwrite, nonatomic) VSLAccountState accountState;
 @property (copy, nonatomic) RegistrationCompletionBlock registrationCompletionBlock;
 @property (assign) BOOL shouldReregister;
@@ -28,9 +30,17 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 @implementation VSLAccount
 
-- (instancetype)init {
+- (instancetype)initPrivate {
     if (self = [super init]) {
         self.accountId = PJSUA_INVALID_ID;
+    }
+    return self;
+}
+
+// This should not be needed, Account should not have a reference to callManager
+-(instancetype)initWithCallManager:(VSLCallManager * _Nonnull)callManager {
+    if (self = [self initPrivate]) {
+        self.callManager = callManager;
     }
     return self;
 }
@@ -43,13 +53,6 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
                    (long)_accountState, VSLAccountStateString(accountState), (long)accountState);
         _accountState = accountState;
     }
-}
-
-- (NSMutableArray *)calls {
-    if (!_calls) {
-        _calls = [NSMutableArray array];
-    }
-    return _calls;
 }
 
 - (BOOL)isAccountValid {
@@ -197,16 +200,16 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     }
 }
 
-- (NSString *)description {
-    NSMutableString *info = [[NSMutableString alloc] init];
-    [info appendFormat:@"ID: %d\n", (pjsua_acc_id)self.accountId];
-    [info appendFormat:@"State: %@(%d)\n", VSLAccountStateString(self.accountState), (int)self.accountState];
-    [info appendFormat:@"Registered: %@\n",self.isRegistered ? @"YES" : @"NO"];
-    [info appendFormat:@"Registration Status: %d\n", (int)self.registrationStatus];
-    [info appendFormat:@"Registration Expires: %d\n", (int)self.registrationExpiresTime];
-    [info appendFormat:@"Account valid %@\n", self.isAccountValid ? @"YES": @"NO"];
+- (NSString *)debugDescription {
+    NSMutableString *desc = [[NSMutableString alloc] initWithFormat:@"%@\n", self];
+    [desc appendFormat:@"\t ID: %d\n", (pjsua_acc_id)self.accountId];
+    [desc appendFormat:@"\t State: %@(%d)\n", VSLAccountStateString(self.accountState), (int)self.accountState];
+    [desc appendFormat:@"\t Registered: %@\n",self.isRegistered ? @"YES" : @"NO"];
+    [desc appendFormat:@"\t Registration Status: %d\n", (int)self.registrationStatus];
+    [desc appendFormat:@"\t Registration Expires: %d\n", (int)self.registrationExpiresTime];
+    [desc appendFormat:@"\t Account valid %@\n", self.isAccountValid ? @"YES": @"NO"];
 
-    return info;
+    return desc;
 }
 
 - (BOOL)unregisterAccount:(NSError * _Nullable __autoreleasing *)error {
@@ -234,7 +237,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 }
 
 - (void)reregisterAccount {
-    if (self.calls.count > 0) {
+    if ([[self.callManager callsForAccount:self] count] > 0) {
         self.shouldReregister = YES;
         [self unregisterAccount:nil];
     }
@@ -277,93 +280,45 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 #pragma mark - Calling methods
 
-- (void)callNumber:(NSString *)number withCompletion:(void (^)(NSError * _Nullable, VSLCall * _Nullable))completion {
-    NSError *callNumberError;
-    VSLCall *call = [VSLCall callNumber:number withAccount:self error:&callNumberError];
-    if (callNumberError) {
-        NSError *error = [NSError VSLUnderlyingError:callNumberError
-                   localizedDescriptionKey:NSLocalizedString(@"The call couldn't be setup.", nil)
-               localizedFailureReasonError:nil
-                               errorDomain:VSLAccountErrorDomain
-                                 errorCode:VSLAccountErrorFailedCallingNumber];
-        completion(error, nil);
-    } else {
-        completion(nil, call);
-    }
+- (void)callNumber:(NSString *)number completion:(void(^)(VSLCall *call, NSError *error))completion {
+    [self.callManager startCallToNumber:number forAccount:self completion:completion];
 }
 
 - (void)addCall:(VSLCall *)call {
-    [self.calls addObject:call];
+    [self.callManager addCall:call];
 }
 
 - (VSLCall *)lookupCall:(NSInteger)callId {
-    NSUInteger callIndex = [self.calls indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        VSLCall *call = (VSLCall *)obj;
-        if (call.callId == callId && call.callId != PJSUA_INVALID_ID) {
-            return YES;
-        }
-        return NO;
-    }];
+    return [self.callManager callWithCallId:callId];
+}
 
-    if (callIndex != NSNotFound) {
-        return [self.calls objectAtIndex:callIndex];
-    }
-    return nil;
+- (VSLCall *)lookupCallWithUUID:(NSUUID *)uuid {
+    return [self.callManager callWithUUID:uuid];
 }
 
 - (void)removeCall:(VSLCall *)call {
-    [self.calls removeObject:call];
+    [self.callManager removeCall:call];
 
-    // All calls are ended, we unregister the account.
-    if ([self.calls count] == 0) {
+    // All calls are ended, we will unregister the account.
+    if ([[self.callManager callsForAccount:self] count] == 0) {
         [self unregisterAccount:nil];
     }
 }
 
 - (void)removeAllCalls {
-    for (VSLCall *call in self.calls) {
-        [call hangup:nil];
-        [self removeCall:call];
-    }
+    [self.callManager endAllCallsForAccount:self];
 }
 
 - (VSLCall *)firstCall {
-    if (self.calls.count > 0) {
-        return self.calls[0];
-    } else {
-        return nil;
-    }
-}
-
-- (NSArray <VSLCall *> *)allActiveCalls {
-    NSMutableArray *activeCalls = [[NSMutableArray alloc] init];
-    for (VSLCall *call in self.calls) {
-        if (call.callState > VSLCallStateNull && call.callState < VSLCallStateDisconnected) {
-            [activeCalls addObject:call];
-        }
-    }
-
-    if ([activeCalls count]) {
-        return activeCalls;
-    } else {
-        return nil;
-    }
+    return [self.callManager firstCallForAccount:self];
 }
 
 - (VSLCall *)firstActiveCall {
-    for (VSLCall *call in [self allActiveCalls]) {
-        if (call.callState > VSLCallStateNull && call.callState < VSLCallStateDisconnected) {
-            return call;
-        }
-    }
-    return nil;
+    return [self.callManager firstActiveCallForAccount:self];
 }
 
 - (void)reinviteActiveCalls {
-    DDLogDebug(@"Reinviting calls");
-    for (VSLCall *call in [self allActiveCalls]) {
-        [call reinvite];
-    }
+    [self.callManager reinviteActiveCallsForAccount:self];
 }
 
 @end

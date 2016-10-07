@@ -90,6 +90,7 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
 }
 
 - (void)configureAudioSessionBeforeRingtoneIsPlayed {
+    DDLogVerbose(@"Configuring Audio before playing ringtone");
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
 
     // Set the audio session category. The category that is set repects the silent switch.
@@ -124,6 +125,7 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
 }
 
 - (void)configureAudioSessionAfterRingtoneStopped {
+    DDLogVerbose(@"Configuring Audio after ringtone has stoped");
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
 
     // Set the audio session category. The category that is set is able to handle VoIP calls.

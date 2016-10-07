@@ -62,7 +62,7 @@ private var myContext = 0
     @IBAction override func callButtonPressed(_ sender: UIButton) {
         UIDevice.current.isProximityMonitoringEnabled = true
         if let number = numberToDialLabel.text, number != "" {
-            currentCall?.account.callNumber(number) { (error, call) in
+            currentCall?.account!.callNumber(number) { (call, error) in
                 self.newCall = call
                 self.performSegue(withIdentifier: Configuration.Segues.SecondCallActive, sender: nil)
             }

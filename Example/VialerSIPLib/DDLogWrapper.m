@@ -5,7 +5,9 @@
 
 #import "DDLogWrapper.h"
 
+@import UIKit;
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import "SPLumberjackLogFormatter.h"
 
 // Definition of the current log level
 #ifdef DEBUG
@@ -17,19 +19,18 @@ static const int ddLogLevel = DDLogLevelWarning;
 @implementation DDLogWrapper
 
 + (void)setup {
-    //Add the Terminal and TTY(XCode console) loggers to CocoaLumberjack (simulate the default NSLog behaviour)
+    SPLumberjackLogFormatter *logFormatter = [[SPLumberjackLogFormatter alloc] init];
+
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"10" options:NSNumericSearch] == NSOrderedAscending) {
+        DDTTYLogger *ttyLogger = [DDTTYLogger sharedInstance];
+        [ttyLogger setLogFormatter:logFormatter];
+        [DDLog addLogger:ttyLogger];
+    }
+
+    //Add a logger to CocoaLumberjack, the DDASL logger simulate the default NSLog behaviour.
     DDASLLogger *aslLogger = [DDASLLogger sharedInstance];
+    aslLogger.logFormatter = logFormatter;
     [DDLog addLogger:aslLogger];
-
-    DDTTYLogger *ttyLogger = [DDTTYLogger sharedInstance];
-    ttyLogger.colorsEnabled = YES;
-
-    //Give INFO a color
-    UIColor *pink = [UIColor colorWithRed:(255/255.0) green:(58/255.0) blue:(159/255.0) alpha:1.0];
-    [ttyLogger setForegroundColor:[UIColor lightGrayColor] backgroundColor:nil forFlag:DDLogFlagVerbose];
-    [ttyLogger setForegroundColor:[UIColor darkGrayColor] backgroundColor:nil forFlag:DDLogFlagDebug];
-    [ttyLogger setForegroundColor:pink backgroundColor:nil forFlag:DDLogFlagInfo];
-    [DDLog addLogger:ttyLogger];
 }
 
 + (void)logVerbose:(NSString *)message {

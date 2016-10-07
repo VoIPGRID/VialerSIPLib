@@ -14,35 +14,66 @@ class VSLMainViewController: UIViewController {
     fileprivate struct Configuration {
         struct Segues {
             static let ShowIncomingCall = "ShowIncomingCallSegue"
+            static let DirectlyShowActiveCallControllerSegue = "DirectlyShowActiveCallControllerSegue"
         }
     }
 
     // MARK: - Properties
 
-    fileprivate var account: VSLAccount? {
-        didSet {
-            updateUI()
+    fileprivate var account: VSLAccount {
+        get {
+            return AppDelegate.shared.account
         }
     }
 
-    fileprivate var incomingCall: VSLCall?
+    fileprivate var activeCall: VSLCall?
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(incomingCallNotification(_:)), name: NSNotification.Name(rawValue: AppDelegate.Configuration.Notifications.IncomingCall), object: nil)
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        account?.addObserver(self, forKeyPath: "accountState", options: .new, context: &myContext)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(incomingCallNotification(_:)),
+                                               name: NSNotification.Name(rawValue: AppDelegate.Configuration.Notifications.IncomingCall),
+                                               object: nil)
+        // If we are CallKit compatible
+        if #available(iOS 10.0, *) {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(directlyShowActiveCallController(_:)),
+                                                   name: NSNotification.Name(rawValue: CallKitProviderDelegateOutboundCallStarted),
+                                                   object: nil)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(directlyShowActiveCallController(_:)),
+                                                   name: NSNotification.Name(rawValue: CallKitProviderDelegateInboundCallAccepted),
+                                                   object: nil)
+        }
+
+        account.addObserver(self, forKeyPath: "accountState", options: .new, context: &myContext)
         updateUI()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        account?.removeObserver(self, forKeyPath: "accountState")
+        account.removeObserver(self, forKeyPath: "accountState")
+
+        NotificationCenter.default.removeObserver(self,
+                                                  name:NSNotification.Name(rawValue: AppDelegate.Configuration.Notifications.IncomingCall),
+                                                  object: nil)
+
+        if #available(iOS 10.0, *) {
+            NotificationCenter.default.removeObserver(self,
+                                                      name: NSNotification.Name(rawValue: CallKitProviderDelegateOutboundCallStarted),
+                                                      object: nil)
+            NotificationCenter.default.removeObserver(self,
+                                                      name: NSNotification.Name(rawValue: CallKitProviderDelegateInboundCallAccepted),
+                                                      object: nil)
+        }
     }
 
     // MARK: - Outlets
@@ -52,12 +83,10 @@ class VSLMainViewController: UIViewController {
     // MARK: - Actions
 
     @IBAction func registerAccountButtonPressed(_ sender: UIButton) {
-        if let _ = account, account!.isRegistered {
-            try! account!.unregisterAccount()
-            account?.removeObserver(self, forKeyPath: "accountState")
-            account = nil
+        if account.isRegistered {
+            try! account.unregisterAccount()
         } else {
-            registerAccountWithCompletion()
+            registerAccount()
         }
     }
 
@@ -65,19 +94,14 @@ class VSLMainViewController: UIViewController {
 
     fileprivate func updateUI() {
         DispatchQueue.main.async {
-            if let account = self.account {
-                self.registerAccountButton.setTitle(account.isRegistered ? "Unregister" : "Register", for: UIControlState())
-            }  else {
-                self.registerAccountButton.setTitle("Register", for: UIControlState())
-            }
+            self.registerAccountButton.setTitle(self.account.isRegistered ? "Unregister" : "Register", for: UIControlState())
         }
     }
 
-    fileprivate func registerAccountWithCompletion(_ completion: (() -> ())? = nil) {
+    fileprivate func registerAccount() {
         registerAccountButton.isEnabled = false
-        VialerSIPLib.sharedInstance().registerAccount(with: SipUser()) { (succes, account) in
-            self.account = account
-            self.account!.addObserver(self, forKeyPath: "accountState", options: .new, context: &myContext)
+
+        account.register{ (success, error) in
             DispatchQueue.main.async {
                 self.registerAccountButton.isEnabled = true
             }
@@ -89,9 +113,13 @@ class VSLMainViewController: UIViewController {
     @IBAction func unwindToMainViewController(_ segue: UIStoryboardSegue) {}
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let account = account, let makeCallVC = segue.destination as? VSLMakeCallViewController {
+        if let callViewController = segue.destination as? VSLCallViewController {
+            callViewController.activeCall = activeCall
+
+        } else if let makeCallVC = segue.destination as? VSLMakeCallViewController {
             makeCallVC.account = account
-        } else if let call = incomingCall, let incomingCallVC = segue.destination as? VSLIncomingCallViewController {
+
+        } else if let call = activeCall, let incomingCallVC = segue.destination as? VSLIncomingCallViewController {
             incomingCallVC.call = call
         }
     }
@@ -107,20 +135,26 @@ class VSLMainViewController: UIViewController {
     // MARK: - NSNotificationCenter
 
     func incomingCallNotification(_ notification: Notification) {
+        guard let call = notification.userInfo?[VSLNotificationUserInfoCallKey] as? VSLCall else { return }
+        // When there is another call active, decline incoming call.
+        if call != account.firstActiveCall() {
+            try! call.hangup()
+            return
+        }
+        // Show incoming call view.
+        activeCall = call
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: Configuration.Segues.ShowIncomingCall, sender: nil)
+        }
+    }
 
-        if let call = notification.object as? VSLCall, let accounts =  VialerSIPLib.sharedInstance().accounts() as? [VSLAccount] {
-            // When there is another call active, decline incoming call.
-            for account in accounts {
-                if call != account.firstActiveCall() {
-                    try! call.hangup()
-                    return
-                }
-            }
-            // Show incoming call view.
-            self.incomingCall = call
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: Configuration.Segues.ShowIncomingCall, sender: nil)
-            }
+    // When an outbound call is requested trough CallKit, show the VSLCallViewController directly.
+    func directlyShowActiveCallController(_ notification: Notification) {
+        guard let call = notification.userInfo?[VSLNotificationUserInfoCallKey] as? VSLCall else { return }
+        activeCall = call
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: Configuration.Segues.DirectlyShowActiveCallControllerSegue, sender: nil)
         }
     }
 }
+

@@ -7,9 +7,11 @@
 #import <XCTest/XCTest.h>
 #import <VialerSIPLib/VSLAccount.h>
 #import <VialerSIPLib/VSLAccountConfiguration.h>
+#import <VialerSIPLib/VSLCallManager.h>
 #import <VialerSIPLib/VSLEndpoint.h>
 
 @interface VSLEndpointTests : XCTestCase
+@property (strong, nonatomic) id callManagerMock;
 @property (strong, nonatomic) VSLEndpoint *endpoint;
 @end
 
@@ -18,10 +20,14 @@
 - (void)setUp {
     [super setUp];
     self.endpoint = [[VSLEndpoint alloc] init];
+    self.callManagerMock = OCMStrictClassMock([VSLCallManager class]);
 }
 
 - (void)tearDown {
     self.endpoint = nil;
+    [self.callManagerMock stopMocking];
+    self.callManagerMock = nil;
+    [super tearDown];
 }
 
 - (void)testEndpointHasOnDefaultNoAccounts {
@@ -30,14 +36,14 @@
 }
 
 - (void)testEndpointWithAddedAccountShouldHaveTheAccount {
-    VSLAccount *account = [[VSLAccount alloc] init];
+    VSLAccount *account = [[VSLAccount alloc] initWithCallManager:self.callManagerMock];
     [self.endpoint addAccount:account];
 
     XCTAssertTrue([self.endpoint.accounts containsObject:account], @"The account should have been added to the array");
 }
 
 - (void)testCanRemoveAddedAccount {
-    VSLAccount *account = [[VSLAccount alloc] init];
+    VSLAccount *account = [[VSLAccount alloc] initWithCallManager:self.callManagerMock];
     [self.endpoint addAccount:account];
     [self.endpoint removeAccount:account];
 
@@ -45,7 +51,7 @@
 }
 
 - (void)testNoAccountFoundGetAccountWithSiperUsernameReturnsNil {
-    [self.endpoint addAccount:[[VSLAccount alloc] init]];
+    [self.endpoint addAccount:[[VSLAccount alloc] initWithCallManager:self.callManagerMock]];
 
     VSLAccount *account = [self.endpoint getAccountWithSipAccount:@"42"];
     XCTAssertNil(account, @"There should be no account found when the sip username is not found");
@@ -58,7 +64,7 @@
     config.sipAccount = @"42";
     config.sipDomain = @"sip.test.com";
 
-    VSLAccount *testAccount = [[VSLAccount alloc] init];
+    VSLAccount *testAccount = [[VSLAccount alloc] initWithCallManager:self.callManagerMock];
     [testAccount configureWithAccountConfiguration:config error:nil];
     [self.endpoint addAccount:testAccount];
 

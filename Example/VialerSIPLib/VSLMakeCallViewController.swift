@@ -18,8 +18,10 @@ class VSLMakeCallViewController: UIViewController {
 
     // MARK: - Properties
 
-    var account: VSLAccount?
+    var account: VSLAccount!
+
     var call: VSLCall?
+    var callManager: VSLCallManager!
 
     fileprivate var number: String {
         set {
@@ -33,6 +35,10 @@ class VSLMakeCallViewController: UIViewController {
     }
 
     // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        callManager = VialerSIPLib.sharedInstance().callManager
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         UIDevice.current.isProximityMonitoringEnabled = false
@@ -66,26 +72,25 @@ class VSLMakeCallViewController: UIViewController {
 
     @IBAction func callButtonPressed(_ sender: UIButton) {
         self.callButton.isEnabled = false
-        UIDevice.current.isProximityMonitoringEnabled = true
-        if let account = account, account.isRegistered {
+        if account.isRegistered {
             setupCall()
         } else {
-            VialerSIPLib.sharedInstance().registerAccount(with: SipUser()) { (success, account) in
-                if let account = account, success {
-                    self.account = account
-                    self.setupCall()
-                } else {
-                    UIDevice.current.isProximityMonitoringEnabled = false
-                }
+            account.register { (success, error) in
+                self.setupCall()
+
             }
         }
     }
 
     fileprivate func setupCall() {
-        self.account?.callNumber(number) { (error, call) in
-            self.call = call
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: Configuration.Segues.ShowCallViewController, sender: nil)
+        self.callManager.startCall(toNumber: number, for: account ) { (call, error) in
+            if error != nil {
+                DDLogWrapper.logError("Could not start call")
+            } else {
+                self.call = call
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: Configuration.Segues.ShowCallViewController, sender: nil)
+                }
             }
         }
     }
@@ -96,8 +101,6 @@ class VSLMakeCallViewController: UIViewController {
     }
 
     // MARK: - Segues
-
-    @IBAction func unwindToMakeCallViewController(_ segue: UIStoryboardSegue) {}
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let callViewController = segue.destination as? VSLCallViewController {

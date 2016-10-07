@@ -19,7 +19,15 @@ class VSLIncomingCallViewController: UIViewController {
         static let UnwindTime = 2.0
     }
 
+    // MARK: - Properties
+    var callManager: VSLCallManager!
+
     // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        callManager = VialerSIPLib.sharedInstance().callManager
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -61,11 +69,13 @@ class VSLIncomingCallViewController: UIViewController {
 
     @IBAction func acceptButtonPressed(_ sender: UIButton) {
         if let call = call, call.callState == .incoming {
-            do {
-                try call.answer()
-                performSegue(withIdentifier: Configuration.Segues.ShowCall, sender: nil)
-            } catch let error {
-                DDLogWrapper.logError("error answering call: \(error)")
+
+            callManager.answer(call) { error in
+                if error != nil {
+                    DDLogWrapper.logError("error answering call: \(error)")
+                } else {
+                    self.performSegue(withIdentifier: Configuration.Segues.ShowCall, sender: nil)
+                }
             }
         }
     }

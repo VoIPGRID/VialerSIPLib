@@ -27,10 +27,7 @@ static int const VSLRingbackInterval = 4000;
 @implementation VSLRingback
 
 -(instancetype)init {
-
-    self = [super init];
-
-    if (!self) {
+    if (!(self = [super init])) {
         return nil;
     }
 

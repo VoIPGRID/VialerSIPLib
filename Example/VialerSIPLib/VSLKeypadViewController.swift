@@ -22,6 +22,8 @@ class VSLKeypadViewController: UIViewController {
     }
     var delegate: VSLKeypadViewControllerDelegate?
 
+    var callManager: VSLCallManager!
+
     var dtmfSent: String {
         set {
             dtmfLabel.text = newValue
@@ -32,6 +34,11 @@ class VSLKeypadViewController: UIViewController {
     }
 
     // MARK: Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        callManager = VialerSIPLib.sharedInstance().callManager
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -60,12 +67,14 @@ class VSLKeypadViewController: UIViewController {
     }
 
     @IBAction func keypadNumberPressed(_ sender: AnyObject) {
-        if let call = call, call.callState == .confirmed, let button = sender as? UIButton {
-            do {
-                try call.sendDTMF(button.currentTitle!)
-                dtmfSent = dtmfSent + button.currentTitle!
-            } catch let error {
+        guard let call = call, call.callState == .confirmed, let button = sender as? UIButton else { return }
+        callManager.sendDTMF(for: call, character: button.currentTitle!) { error in
+            if error != nil {
                 DDLogWrapper.logError("Error sending DTMF: \(error)")
+            } else {
+                DispatchQueue.main.async {
+                    self.dtmfSent = self.dtmfSent + button.currentTitle!
+                }
             }
         }
     }
