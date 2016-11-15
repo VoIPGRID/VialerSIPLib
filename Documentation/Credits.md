@@ -40,3 +40,9 @@ We're proud off the work we do at Devhouse Spindle. We love to create open sourc
 - Redmer Loen (https://github.com/spindleredmer)
 - Harold Dijkstra (https://github.com/r3b3l)
 - Bob Voorneveld (https://github.com/bobvoorneveld)
+
+##### Github users
+
+We think it is amazing that others are using our library to bring PJSIP to their projects. Every contribution that is made to the project deserves credits. These are the people that have contributed:
+
+- Smolskyaleksey (https://github.com/smolskyaleksey)
