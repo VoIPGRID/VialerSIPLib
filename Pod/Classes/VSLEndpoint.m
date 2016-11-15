@@ -323,7 +323,7 @@ static pjsip_transport *the_transport;
 
 - (VSLAccount *)getAccountWithSipAccount:(NSString *)sipAccount {
     for (VSLAccount *account in self.accounts) {
-        if (account.accountConfiguration.sipAccount == sipAccount) {
+        if ([account.accountConfiguration.sipAccount isEqualToString:sipAccount]) {
             return account;
         }
     }
