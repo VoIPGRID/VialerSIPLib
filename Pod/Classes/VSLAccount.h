@@ -4,10 +4,9 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "VSLAccountConfiguration.h"
 
-@class VSLCall;
+@class VSLCall, VSLCallManager;
 
 /**
  *  Possible errors the account can return.
@@ -92,6 +91,18 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
 @property (readonly, nonatomic) VSLAccountConfiguration * _Nonnull accountConfiguration;
 
 /**
+ * This init is not available.
+ */
+-(instancetype _Nonnull)init __attribute__((unavailable("init not available")));
+
+/**
+ * Designated initializer
+ *
+ * @param callManager A instance of VSLCallManager.
+ */
+-(instancetype _Nonnull)initWithCallManager:(VSLCallManager * _Nonnull)callManager;
+
+/**
  *  This will configure the account on the endpoint.
  *
  *  @param accountConfiguration Instance of the VSLAccountConfiguration.
@@ -141,14 +152,14 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  *  @param number     The phonenumber which will be called.
  *  @param completion Completion block which will be executed when everything has been setup. May contain a outbound call or an error object.
  */
-- (void)callNumber:(NSString * _Nonnull)number withCompletion:(void(^_Nonnull)(NSError * _Nullable error, VSLCall * _Nullable outboundCall))completion;
+- (void)callNumber:(NSString * _Nonnull)number completion:(void(^_Nonnull)(VSLCall * _Nullable call, NSError * _Nullable error))completion;
 
 /**
  *  This will add the call to the account.
  *
  *  @param call The call instance that should be added.
  */
-- (void)addCall:(VSLCall * _Nonnull)call;
+- (void)addCall:(VSLCall * _Nonnull)call __attribute__((unavailable("Deprecated, use VSLCallManager -addCall: instead")));
 
 /**
  *  This will check if there is a call present on this account given the callId.
@@ -164,7 +175,7 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  *
  *  @param call VSLCall instance that should be removed from the account.
  */
-- (void)removeCall:(VSLCall * _Nonnull)call;
+- (void)removeCall:(VSLCall * _Nonnull)call __attribute__((unavailable("Deprecated, use VSLCallManager -removeCall: instead")));;
 
 /**
  *  Remove all calls connected to account.

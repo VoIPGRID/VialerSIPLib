@@ -13,9 +13,11 @@
 #import "VSLEndpoint.h"
 
 static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
+ NSString * const VSLNotificationUserInfoCallKey = @"VSLNotificationUserInfoCallKey";
 
 @interface VialerSIPLib()
 @property (strong, nonatomic) VSLEndpoint *endpoint;
+@property (strong, nonatomic) VSLCallManager *callManager;
 @end
 
 @implementation VialerSIPLib
@@ -30,6 +32,15 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
     return sharedInstance;
 }
 
++ (BOOL)callKitAvailable {
+    // Check if Callkit is available by checking the CallKit classes used
+    if ([CXAction class] && [CXTransaction class] && [CXCall class]) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 - (VSLEndpoint *)endpoint {
     if (!_endpoint) {
         _endpoint = [VSLEndpoint sharedEndpoint];
@@ -42,6 +53,13 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
         return YES;
     }
     return NO;
+}
+
+- (VSLCallManager *)callManager {
+    if (!_callManager) {
+        _callManager = [[VSLCallManager alloc] init];
+    }
+    return _callManager;
 }
 
 - (BOOL)configureLibraryWithEndPointConfiguration:(VSLEndpointConfiguration * _Nonnull)endpointConfiguration error:(NSError * _Nullable __autoreleasing *)error {
@@ -79,7 +97,7 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
         accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
         accountConfiguration.dropCallOnRegistrationFailure = YES;
 
-        account = [[VSLAccount alloc] init];
+        account = [[VSLAccount alloc] initWithCallManager:self.callManager];
 
         NSError *accountConfigError = nil;
         [account configureWithAccountConfiguration:accountConfiguration error:&accountConfigError];

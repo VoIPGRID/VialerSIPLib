@@ -4,9 +4,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSLCallManager.h"
 #import "VSLCall.h"
 #import "VSLEndpointConfiguration.h"
 #import "VSLTransportConfiguration.h"
+#import "CallKitProviderDelegate.h"
+
+
+/**
+ *  Key to be used for retreiving a Call object out of NSNotification user info dict.
+ */
+extern NSString * __nonnull const VSLNotificationUserInfoCallKey;
 
 /**
  *  Possible errors the VialerSIPLib can return.
@@ -71,10 +79,21 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 @property (readonly, nonatomic) BOOL endpointAvailable;
 
+/*
+ *  The callManager used by the Lib.
+ */
+@property (readonly, nonatomic) VSLCallManager * _Nonnull callManager;
+
 /**
- * The shared instance for the sip library.
+ *  The shared instance for the sip library.
  */
 + (instancetype _Nonnull)sharedInstance;
+
+/**
+ *  Classbased function to check if CallKit can be used
+ *  @return BOOL true if the iOS version support CallKit, otherwise false.
+ **/
++ (BOOL)callKitAvailable;
 
 /**
  *  This will configure the basic Endpoint to use with pjsip.
@@ -112,6 +131,9 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 - (VSLAccount * _Nullable)firstAccount;
 
+/*
+ *  @return Returns all accounts registerd with the EndPoint
+ */
 - (NSArray * _Nullable)accounts;
 
 /**

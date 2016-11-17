@@ -10,7 +10,9 @@
 #import "IPAddressMonitor.h"
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
+#import "VialerSIPLib.h"
 #import "VSLCall.h"
+#import "VSLCallManager.h"
 #import "VSLTransportConfiguration.h"
 
 static NSString * const VSLEndpointErrorDomain = @"VialerSIPLib.VSLEndpoint.error";
@@ -35,6 +37,7 @@ static pjsip_transport *the_transport;
 @property (assign) BOOL shouldReregisterAfterUnregister;
 @property (strong, nonatomic) IPAddressMonitor *ipAddressMonitor;
 @property (nonatomic) BOOL onlyUseILBC;
+@property (weak, nonatomic) VSLCallManager *callManager;
 @end
 
 @implementation VSLEndpoint
@@ -82,6 +85,10 @@ static pjsip_transport *the_transport;
             }
         }
     }
+}
+
+- (VSLCallManager *)callManager {
+    return [[VialerSIPLib sharedInstance] callManager];
 }
 
 - (IPAddressMonitor *)ipAddressMonitor {
@@ -217,6 +224,9 @@ static pjsip_transport *the_transport;
         }
         return NO;
     }
+
+    pjsua_set_no_snd_dev();
+
     DDLogInfo(@"PJSIP Endpoint started succesfully");
     self.endpointConfiguration = endpointConfiguration;
     self.state = VSLEndpointStarted;
@@ -267,16 +277,15 @@ static pjsip_transport *the_transport;
         }
     }
 
+    // Destroy PJSUA.
+    pj_status_t status = pjsua_destroy();
+    if (status != PJ_SUCCESS) {
+        DDLogWarn(@"Error stopping SIP Endpoint");
+    }
+
     if (self.pjPool != NULL) {
         pj_pool_release([self pjPool]);
         self.pjPool = NULL;
-    }
-
-    // Destroy PJSUA.
-    pj_status_t status = pjsua_destroy();
-
-    if (status != PJ_SUCCESS) {
-        DDLogWarn(@"Error stopping SIP Endpoint");
     }
 
     self.state = VSLEndpointStopped;
@@ -448,8 +457,6 @@ static void logCallBack(int logLevel, const char *data, int len) {
 }
 
 static void onCallState(pjsua_call_id callId, pjsip_event *event) {
-    DDLogVerbose(@"Updated callState");
-
     pjsua_call_info callInfo;
     pjsua_call_get_info(callId, &callInfo);
 
@@ -458,19 +465,21 @@ static void onCallState(pjsua_call_id callId, pjsip_event *event) {
         VSLCall *call = [account lookupCall:callId];
         if (call) {
             [call callStateChanged:callInfo];
+        } else {
+            DDLogWarn(@"Received updated CallState(%@) for UNKNOWN call(uuid:%@ | id:%d)", VSLCallStateString(callInfo.state) , call.uuid.UUIDString, callId);
+
         }
     }
 }
 
 static void onCallMediaState(pjsua_call_id call_id) {
-    DDLogVerbose(@"Updated mediastate");
-
     pjsua_call_info callInfo;
     pjsua_call_get_info(call_id, &callInfo);
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
     if (account) {
         VSLCall *call = [account lookupCall:call_id];
+        DDLogVerbose(@"Received MediaState update for call:%@", call.uuid.UUIDString);
         if (call) {
             [call mediaStateChanged:callInfo];
         }
@@ -522,18 +531,19 @@ static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, c
 }
 
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
-    DDLogVerbose(@"Incoming call for Account: %d", acc_id);
-
-    VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
+    VSLEndpoint *endpoint = [VSLEndpoint sharedEndpoint];
+    VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
-        VSLCall *call = [[VSLCall alloc] initWithCallId:call_id accountId:acc_id];
+        DDLogInfo(@"Detected inbound call(%d) for account:%d", call_id, acc_id);
+        VSLCall *call = [[VSLCall alloc] initInboundCallWithCallId:call_id account:account];
         if (call) {
-            [account addCall:call];
-
+            [[[VialerSIPLib sharedInstance] callManager] addCall:call];
             if ([VSLEndpoint sharedEndpoint].incomingCallBlock) {
                 [VSLEndpoint sharedEndpoint].incomingCallBlock(call);
             }
         }
+    } else {
+        DDLogWarn(@"Could not accept incoming call. No account found with ID:%d", acc_id);
     }
 }
 

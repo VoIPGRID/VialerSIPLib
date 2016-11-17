@@ -31,8 +31,7 @@ NSString * const IPAddressMonitorChangedNotification = @"IPAddressMonitorChanged
 @implementation IPAddressMonitor
 
 - (IPAddressMonitor *)initWithHost:(NSString *)host {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         self.host = host;
     }
     return self;

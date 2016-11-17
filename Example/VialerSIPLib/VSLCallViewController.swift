@@ -17,13 +17,14 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
             static let connectDurationInterval = 1.0
         }
         struct Segues {
-            static let UnwindToMakeCall = "UnwindToMakeCallSegue"
+            static let UnwindToMainViewController = "UnwindToMainViewControllerSegue"
             static let ShowKeypad = "ShowKeypadSegue"
             static let SetupTransfer = "SetupTransferSegue"
         }
     }
 
     // MARK: - Properties
+    var callManager: VSLCallManager!
 
     var activeCall: VSLCall? {
         didSet {
@@ -34,6 +35,11 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
     var connectDurationTimer: Timer?
 
     // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        callManager = VialerSIPLib.sharedInstance().callManager
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -68,32 +74,33 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
     }
 
     @IBAction func muteButtonPressed(_ sender: UIButton) {
-        if let call = activeCall, call.callState == .confirmed {
-            do {
-                try call.toggleMute()
-                updateUI()
-            } catch let error {
+        guard let call = activeCall, call.callState != .disconnected else { return }
+
+        callManager.toggleMute(for: call) { error in
+            if error != nil {
                 DDLogWrapper.logError("Error muting call: \(error)")
+            }
+            DispatchQueue.main.async {
+                self.updateUI()
             }
         }
     }
 
     @IBAction func speakerButtonPressed(_ sender: UIButton) {
-        if let call = activeCall {
-            call.toggleSpeaker()
-            updateUI()
-        } else {
-            speakerButton.setTitle("Speaker", for: UIControlState())
-        }
+        guard let call = activeCall else { return }
+        call.toggleSpeaker()
+        updateUI()
     }
 
     @IBAction func holdButtonPressed(_ sender: UIButton) {
-        if let call = activeCall, call.callState == .confirmed {
-            do {
-                try call.toggleHold()
-                updateUI()
-            } catch let error {
+        guard let call = activeCall, call.callState != .disconnected else { return }
+
+        callManager.toggleHold(for: call) { error in
+            if error != nil {
                 DDLogWrapper.logError("Error holding call: \(error)")
+            }
+            DispatchQueue.main.async {
+                self.updateUI()
             }
         }
     }
@@ -105,83 +112,80 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
     }
 
     @IBAction func transferButtonPressed(_ sender: UIButton) {
-        if let call = activeCall, call.callState == .confirmed {
-            // If the call is on hold, perform segue, otherwise, try put on hold before segue.
-            if call.onHold {
-                performSegue(withIdentifier: Configuration.Segues.SetupTransfer, sender: nil)
-            } else {
-                do {
-                    try call.toggleHold()
-                    performSegue(withIdentifier: Configuration.Segues.SetupTransfer, sender: nil)
-                } catch let error {
-                    DDLogWrapper.logError("Error holding current call: \(error)")
-                }
+        guard let call = activeCall, call.callState == .confirmed else { return }
+
+        // If the call is on hold, perform segue, otherwise, try put on hold before segue.
+        if call.onHold {
+            performSegue(withIdentifier: Configuration.Segues.SetupTransfer, sender: nil)
+            return
+        }
+
+        callManager.toggleHold(for: call) { error in
+            if error != nil {
+                DDLogWrapper.logError("Error holding current call: \(error)")
+                return
+            }
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: Configuration.Segues.SetupTransfer, sender: nil)
             }
         }
     }
 
     @IBAction func backButtonPressed(_ sender: UIBarButtonItem) {
-        if let call = activeCall, call.callState != .disconnected {
-            do {
-                try call.hangup()
-                performSegue(withIdentifier: Configuration.Segues.UnwindToMakeCall, sender: nil)
-            } catch let error {
-                DDLogWrapper.logError("error hanging up call: \(error)")
-            }
-        } else {
+        guard let call = activeCall, call.callState != .disconnected else { return }
+
+        callManager.end(call) { error in
             self.navigationController?.dismiss(animated: true, completion: nil)
         }
     }
 
     func endCall() {
-        if let call = activeCall, call.callState != .disconnected {
-            do {
-                try call.hangup()
-                self.performSegue(withIdentifier: Configuration.Segues.UnwindToMakeCall, sender: nil)
-            } catch let error {
-                DDLogWrapper.logError("Couldn't hangup call: \(error)")
+        guard let call = activeCall, call.callState != .disconnected else { return }
+
+        callManager.end(call) { error in
+            if error != nil {
+                DDLogWrapper.logError("error hanging up call(\(call.uuid.uuidString)): \(error)")
             }
         }
     }
 
     func updateUI() {
-        if let call = activeCall {
-            updateLabels(call: call, statusLabel: statusLabel, numberLabel: numberLabel)
+        guard let call = activeCall else { return }
+        updateLabels(call: call, statusLabel: statusLabel, numberLabel: numberLabel)
 
-            switch call.callState {
-            case .incoming: fallthrough
-            case .null: fallthrough
-            case .disconnected:
-                // No Buttons enabled
-                muteButton?.isEnabled = false
-                keypadButton?.isEnabled = false
-                transferButton?.isEnabled = false
-                holdButton?.isEnabled = false
-                hangupButton?.isEnabled = false
-                speakerButton?.isEnabled = false
-            case .calling: fallthrough
-            case .early: fallthrough
-            case .connecting:
-                // Speaker & hangup can be enabled
-                muteButton?.isEnabled = false
-                keypadButton?.isEnabled = false
-                transferButton?.isEnabled = false
-                holdButton?.isEnabled = false
-                hangupButton?.isEnabled = true
-                speakerButton?.isEnabled = true
-                speakerButton?.setTitle(call.speaker ? "On Speaker" : "Speaker", for: UIControlState())
-            case .confirmed:
-                // All buttons enabled
-                muteButton?.isEnabled = !call.onHold
-                muteButton?.setTitle(call.muted ? "Muted" : "Mute", for: UIControlState())
-                keypadButton?.isEnabled = !call.onHold
-                transferButton?.isEnabled = true
-                holdButton?.isEnabled = true
-                holdButton?.setTitle(call.onHold ? "On Hold" : "Hold", for: UIControlState())
-                hangupButton?.isEnabled = true
-                speakerButton?.isEnabled = true
-                speakerButton?.setTitle(call.speaker ? "On Speaker" : "Speaker", for: UIControlState())
-            }
+        switch call.callState {
+        case .incoming: fallthrough
+        case .null: fallthrough
+        case .disconnected:
+            // No Buttons enabled
+            muteButton?.isEnabled = false
+            keypadButton?.isEnabled = false
+            transferButton?.isEnabled = false
+            holdButton?.isEnabled = false
+            hangupButton?.isEnabled = false
+            speakerButton?.isEnabled = false
+        case .calling: fallthrough
+        case .early: fallthrough
+        case .connecting:
+            // Speaker & hangup can be enabled
+            muteButton?.isEnabled = false
+            keypadButton?.isEnabled = false
+            transferButton?.isEnabled = false
+            holdButton?.isEnabled = false
+            hangupButton?.isEnabled = true
+            speakerButton?.isEnabled = true
+            speakerButton?.setTitle(call.speaker ? "On Speaker" : "Speaker", for: UIControlState())
+        case .confirmed:
+            // All buttons enabled
+            muteButton?.isEnabled = !call.onHold
+            muteButton?.setTitle(call.muted ? "Muted" : "Mute", for: UIControlState())
+            keypadButton?.isEnabled = !call.onHold
+            transferButton?.isEnabled = true
+            holdButton?.isEnabled = true
+            holdButton?.setTitle(call.onHold ? "On Hold" : "Hold", for: UIControlState())
+            hangupButton?.isEnabled = true
+            speakerButton?.isEnabled = true
+            speakerButton?.setTitle(call.speaker ? "On Speaker" : "Speaker", for: UIControlState())
         }
     }
 
@@ -243,7 +247,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         if context == &myContext {
             if let call = object as? VSLCall, call.callState == .disconnected {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(Configuration.Timing.UnwindTime * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
-                    self.performSegue(withIdentifier: Configuration.Segues.UnwindToMakeCall, sender: nil)
+                    self.performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
                 }
             }
             DispatchQueue.main.async {

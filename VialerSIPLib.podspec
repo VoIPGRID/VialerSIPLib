@@ -28,9 +28,9 @@ Pod::Spec.new do |s|
 	s.source_files 		= "Pod/Classes/**/*.{h,m}"
 	s.public_header_files   = "Pod/Classes/**/*.h"
 
-    s.resource_bundles  = { 'VialerSIPLib' => 'Pod/Resources/*.wav' }
+	s.resource_bundles  = { 'VialerSIPLib' => 'Pod/Resources/*.wav' }
 
 	s.dependency 'Vialer-pjsip-iOS'
-	s.dependency 'CocoaLumberjack', '~> 2.2'
+	s.dependency 'CocoaLumberjack'
         s.dependency 'Reachability'
 end

@@ -6,10 +6,12 @@
 #import <OCMock/OCMock.h>
 #import <VialerPJSIP/pjsua.h>
 #import <VialerSIPLib/VSLAccount.h>
+#import <VialerSIPLib/VSLCallManager.h>
 #import <VialerSIPLib/VSLEndpoint.h>
 #import <XCTest/XCTest.h>
 
 @interface VSLAccountTests : XCTestCase
+@property (strong, nonatomic) id callManagerMock;
 @property (strong, nonatomic) VSLAccount *account;
 @end
 
@@ -17,7 +19,15 @@
 
 - (void)setUp {
     [super setUp];
-    self.account = [[VSLAccount alloc] init];
+    self.callManagerMock = OCMStrictClassMock([VSLCallManager class]);
+    self.account = [[VSLAccount alloc] initWithCallManager:self.callManagerMock];
+}
+
+- (void)tearDown {
+    self.account = nil;
+    [self.callManagerMock stopMocking];
+    self.callManagerMock = nil;
+    [super tearDown];
 }
 
 - (void)testAccountHasDefaultInvalidAccountId {

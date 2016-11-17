@@ -5,3 +5,4 @@
 #import "DDLogWrapper.h"
 #import <VialerSIPLib/VialerSIPLib.h>
 #import <VialerSIPLib/VSLRingtone.h>
+#import <VialerSIPLib/CallKitProviderDelegate.h>
