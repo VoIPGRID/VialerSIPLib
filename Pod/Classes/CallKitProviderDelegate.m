@@ -48,8 +48,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     CXProviderConfiguration *providerConfiguration = [[CXProviderConfiguration alloc]
                                                       initWithLocalizedName:NSLocalizedString(appname, nil)];
 
-    providerConfiguration.maximumCallGroups = 1;
-    providerConfiguration.maximumCallsPerCallGroup = 2;
+    providerConfiguration.maximumCallGroups = 2;
+    providerConfiguration.maximumCallsPerCallGroup = 1;
     providerConfiguration.supportsVideo = false;
 
     providerConfiguration.supportedHandleTypes = [NSSet setWithObject:[NSNumber numberWithInt:CXHandleTypePhoneNumber]];
@@ -188,6 +188,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         DDLogError(@"Could not hold call(%@). Error: %@", call.uuid.UUIDString, holdError);
         [action fail];
     } else {
+        if (call.onHold) {
+            [self.callManager.audioController deactivateAudioSession];
+        }
         [action fulfill];
     }
 }
