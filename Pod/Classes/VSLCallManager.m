@@ -5,6 +5,7 @@
 //
 
 #import "VSLCallManager.h"
+
 @import CallKit;
 #import "Constants.h"
 #import <CocoaLumberJack/CocoaLumberjack.h>
@@ -147,10 +148,9 @@
     if ([VialerSIPLib callKitAvailable]) {
         CXAction *toggleHoldAction = [[CXSetHeldCallAction alloc] initWithCallUUID:call.uuid onHold:!call.onHold];
         [self requestCallKitAction:toggleHoldAction completion:completion];
-
     } else {
         NSError *holdError;
-        [call toggleMute:&holdError];
+        [call toggleHold:&holdError];
         if (holdError) {
             DDLogError(@"Could not hold call (%@). Error: %@", call.uuid.UUIDString, holdError);
             completion(holdError);

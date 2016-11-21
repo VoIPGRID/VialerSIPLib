@@ -54,7 +54,9 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
 }
 
 - (void)activateAudioSession {
+    DDLogDebug(@"Activating audiosession");
     [self checkCurrentThreadIsRegisteredWithPJSUA];
+    pjsua_set_no_snd_dev();
     pj_status_t status;
     status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
     if (status != PJ_SUCCESS) {
@@ -63,6 +65,7 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
 }
 
 - (void)deactivateAudioSession {
+    DDLogDebug(@"Deactivating audiosession");
     [self checkCurrentThreadIsRegisteredWithPJSUA];
     pjsua_set_no_snd_dev();
 }

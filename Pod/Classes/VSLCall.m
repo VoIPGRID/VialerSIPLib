@@ -310,7 +310,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     DDLogVerbose(@"Media State Changed from %@ to %@", VSLMediaStateString(self.mediaState), VSLMediaStateString((VSLMediaState)mediaState));
     self.mediaState = (VSLMediaState)mediaState;
 
-    if (_mediaState == PJSUA_CALL_MEDIA_ACTIVE || _mediaState == PJSUA_CALL_MEDIA_REMOTE_HOLD) {
+    if (self.mediaState == VSLMediaStateActive || self.mediaState == VSLMediaStateRemoteHold) {
         [self.ringback stop];
         pjsua_conf_connect(callInfo.conf_slot, 0);
         pjsua_conf_connect(0, callInfo.conf_slot);
@@ -450,7 +450,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
             *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotToggleHold userInfo:userInfo];
         }
         return NO;
-        DDLogError(@"Error toggle muting microphone in call %@", self.uuid.UUIDString);
+        DDLogError(@"Error toggle holding in call %@", self.uuid.UUIDString);
     }
     return YES;
 }
