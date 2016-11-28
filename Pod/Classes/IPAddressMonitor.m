@@ -7,9 +7,12 @@
 #import "IPAddressMonitor.h"
 
 #include <arpa/inet.h>
+#import <CocoaLumberJack/CocoaLumberjack.h>
+#import "Constants.h"
 #include <ifaddrs.h>
 #include <net/if.h>
 #import "Reachability.h"
+
 
 
 static NSString * const IPAddressMonitorIOSCellular = @"pdp_ip0";
@@ -63,11 +66,8 @@ NSString * const IPAddressMonitorChangedNotification = @"IPAddressMonitorChanged
 #pragma mark - Notifications
 
 - (void)internetConnectionChanged:(NSNotification *)notification {
-    NSString *newIPAddress = [self getIPAddress:YES];
-    if (![self.currentIPAddress isEqualToString:newIPAddress]) {
-        self.currentIPAddress = newIPAddress;
-        [[NSNotificationCenter defaultCenter] postNotificationName:IPAddressMonitorChangedNotification object:nil];
-    }
+    DDLogDebug(@"Internet connection changed");
+    [[NSNotificationCenter defaultCenter] postNotificationName:IPAddressMonitorChangedNotification object:nil];
 }
 
 #pragma mark - Utils
