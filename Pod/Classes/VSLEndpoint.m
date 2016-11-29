@@ -466,7 +466,7 @@ static void onCallState(pjsua_call_id callId, pjsip_event *event) {
         if (call) {
             [call callStateChanged:callInfo];
         } else {
-            DDLogWarn(@"Received updated CallState(%@) for UNKNOWN call(uuid:%@ | id:%d)", VSLCallStateString(callInfo.state) , call.uuid.UUIDString, callId);
+            DDLogWarn(@"Received updated CallState(%@) for UNKNOWN call(id: %d)", VSLCallStateString(callInfo.state) , callId);
 
         }
     }

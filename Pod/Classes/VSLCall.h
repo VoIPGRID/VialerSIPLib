@@ -237,6 +237,8 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  */
 @property (readonly) BOOL userDidHangUp;
 
+@property (readonly) BOOL connected;
+
 #pragma mark - Stats
 
 /**

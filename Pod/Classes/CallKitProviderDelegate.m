@@ -230,14 +230,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             break;
 
         case VSLCallStateCalling:
+            if (!call.isIncoming) {
+                [self.provider reportOutgoingCallWithUUID:call.uuid
+                                  startedConnectingAtDate:[NSDate date]];
+            }
             break;
 
         case VSLCallStateIncoming:
             break;
 
         case VSLCallStateEarly:
+            if (!call.isIncoming) {
+                [self.provider reportOutgoingCallWithUUID:call.uuid
+                                  startedConnectingAtDate:[NSDate date]];
+            }
             break;
-
         case VSLCallStateConnecting:
             if (!call.isIncoming) {
                 [self.provider reportOutgoingCallWithUUID:call.uuid
@@ -253,7 +260,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             break;
 
         case VSLCallStateDisconnected:
-            if (!call.userDidHangUp) {
+            if (!call.connected) {
+                [self.provider reportCallWithUUID:call.uuid
+                                      endedAtDate:[NSDate date]
+                                           reason:CXCallEndedReasonUnanswered];
+            } else if (!call.userDidHangUp) {
                 [self.provider reportCallWithUUID:call.uuid
                                       endedAtDate:[NSDate date]
                                            reason:CXCallEndedReasonRemoteEnded];
