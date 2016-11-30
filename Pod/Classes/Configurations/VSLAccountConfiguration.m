@@ -12,6 +12,8 @@
         self.sipAuthRealm = @"*";
         self.sipAuthScheme = @"digest";
         self.dropCallOnRegistrationFailure = NO;
+        self.mediaStunType = VSLStunUseRetryOnFailure;
+        self.sipStunType = VSLStunUseDefault;
     }
     return self;
 }

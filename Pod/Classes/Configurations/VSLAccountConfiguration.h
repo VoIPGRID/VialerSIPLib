@@ -4,6 +4,31 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <VialerPJSIP/pjsua-lib/pjsua.h>
+
+/**
+ *  The available stun to configure.
+ */
+typedef NS_ENUM(NSUInteger, VSLStunUse) {
+    /**
+     * Follow the default setting in the global \a pjsua_config.
+     */
+    VSLStunUseDefault = PJSUA_STUN_USE_DEFAULT,
+    /**
+     * Disable STUN. If STUN is not enabled in the global \a pjsua_config,
+     * this setting has no effect.
+     */
+    VSLStunUseDisable = PJSUA_STUN_USE_DISABLED,
+    /**
+     * Retry other STUN servers if the STUN server selected during
+     * startup (#pjsua_init()) or after calling #pjsua_update_stun_servers()
+     * is unavailable during runtime. This setting is valid only for
+     * account's media STUN setting and if the call is using UDP media
+     * transport.
+     */
+    VSLStunUseRetryOnFailure = PJSUA_STUN_RETRY_ON_FAILURE
+};
+
 
 @interface VSLAccountConfiguration : NSObject
 
@@ -62,5 +87,15 @@
  *  If YES all current calls will be hungup when a registation failure is detected.
  */
 @property (nonatomic) BOOL dropCallOnRegistrationFailure;
+
+/**
+ *  The stum type that should be used.
+ */
+@property (nonatomic) VSLStunUse sipStunType;
+
+/**
+ *  The media stun type that should be used.
+ */
+@property (nonatomic) VSLStunUse mediaStunType;
 
 @end
