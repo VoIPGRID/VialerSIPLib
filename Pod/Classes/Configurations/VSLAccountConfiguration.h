@@ -89,7 +89,7 @@ typedef NS_ENUM(NSUInteger, VSLStunUse) {
 @property (nonatomic) BOOL dropCallOnRegistrationFailure;
 
 /**
- *  The stum type that should be used.
+ *  The stun type that should be used.
  */
 @property (nonatomic) VSLStunUse sipStunType;
 
