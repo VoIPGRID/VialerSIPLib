@@ -9,7 +9,6 @@
 #import <CocoaLumberJack/CocoaLumberjack.h>
 #import "NSError+VSLError.h"
 #import "VSLAccount.h"
-#import "VSLAccountConfiguration.h"
 #import "VSLEndpoint.h"
 
 static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
@@ -96,6 +95,13 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
         accountConfiguration.sipProxyServer = sipUser.sipProxy ? sipUser.sipProxy : @"";
         accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
         accountConfiguration.dropCallOnRegistrationFailure = YES;
+        
+        if ([sipUser respondsToSelector:@selector(mediaStunType)]) {
+            accountConfiguration.mediaStunType = sipUser.mediaStunType;
+        }
+        if ([sipUser respondsToSelector:@selector(sipStunType)]) {
+            accountConfiguration.sipStunType = sipUser.sipStunType;
+        }
 
         account = [[VSLAccount alloc] initWithCallManager:self.callManager];
 

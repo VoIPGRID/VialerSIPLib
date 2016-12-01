@@ -4,6 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSLAccountConfiguration.h"
 #import "VSLCallManager.h"
 #import "VSLCall.h"
 #import "VSLEndpointConfiguration.h"
@@ -70,6 +71,21 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *  @return NSString with the proxy Address.
  */
 @property (readonly, nonatomic) NSString * _Nonnull sipProxy;
+
+/**
+ * Control the use of STUN for the SIP signaling.
+ *
+ * Default: PJSUA_STUN_USE_DEFAULT
+ */
+@property (nonatomic) VSLStunUse sipStunType;
+
+/**
+ * Control the use of STUN for the media transports.
+ *
+ * Default: PJSUA_STUN_RETRY_ON_FAILURE
+ */
+@property (nonatomic) VSLStunUse mediaStunType;
+
 @end
 
 @interface VialerSIPLib : NSObject
