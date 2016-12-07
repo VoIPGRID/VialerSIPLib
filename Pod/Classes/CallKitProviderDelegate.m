@@ -261,6 +261,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
         case VSLCallStateDisconnected:
             if (!call.connected) {
+                [self.provider reportOutgoingCallWithUUID:call.uuid
+                                          connectedAtDate:[NSDate date]];
                 [self.provider reportCallWithUUID:call.uuid
                                       endedAtDate:[NSDate date]
                                            reason:CXCallEndedReasonUnanswered];
