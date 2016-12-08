@@ -9,6 +9,9 @@ Example/Pods/
 !Podfile
 !Podfile.lock
 
+# XCODE
+*.xcscmblueprint
+
 #########################
 # .gitignore file for Xcode4 and Xcode5 Source projects
 #

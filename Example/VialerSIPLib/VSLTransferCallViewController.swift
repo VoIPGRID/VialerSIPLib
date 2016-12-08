@@ -61,10 +61,16 @@ private var myContext = 0
 
     @IBAction override func callButtonPressed(_ sender: UIButton) {
         UIDevice.current.isProximityMonitoringEnabled = true
-        if let number = numberToDialLabel.text, number != "" {
-            currentCall?.account.callNumber(number) { (error, call) in
+        guard let number = numberToDialLabel.text, number != "" else { return }
+
+        callManager.startCall(toNumber: number, for: currentCall!.account! ) { (call, error) in
+            if error != nil {
+                DDLogWrapper.logError("Could not start second call: \(error)")
+            } else {
                 self.newCall = call
-                self.performSegue(withIdentifier: Configuration.Segues.SecondCallActive, sender: nil)
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: Configuration.Segues.SecondCallActive, sender: nil)
+                }
             }
         }
     }

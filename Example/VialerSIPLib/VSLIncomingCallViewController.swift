@@ -19,7 +19,15 @@ class VSLIncomingCallViewController: UIViewController {
         static let UnwindTime = 2.0
     }
 
+    // MARK: - Properties
+    var callManager: VSLCallManager!
+
     // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        callManager = VialerSIPLib.sharedInstance().callManager
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -55,51 +63,57 @@ class VSLIncomingCallViewController: UIViewController {
     // MARK: - Actions
 
     @IBAction func declineButtonPressed(_ sender: UIButton) {
-        try! call?.hangup()
-        performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
+        guard let call = call else { return }
+        callManager.end(call) { error in
+            if error != nil {
+                DDLogWrapper.logError("cannot decline call: \(error)")
+            } else {
+                self.performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
+            }
+        }
     }
 
     @IBAction func acceptButtonPressed(_ sender: UIButton) {
-        if let call = call, call.callState == .incoming {
-            do {
-                try call.answer()
-                performSegue(withIdentifier: Configuration.Segues.ShowCall, sender: nil)
-            } catch let error {
+        guard let call = call, call.callState == .incoming else { return }
+        callManager.answer(call) { error in
+            if error != nil {
                 DDLogWrapper.logError("error answering call: \(error)")
+            } else {
+                self.performSegue(withIdentifier: Configuration.Segues.ShowCall, sender: nil)
             }
         }
     }
 
     fileprivate func updateUI() {
-        if let call = call {
-            numberLabel?.text = call.callerNumber
-            switch call.callState {
-            case .incoming:
-                statusLabel?.text = "Incoming call"
-            case .connecting:
-                statusLabel?.text = "Connecting"
-            case .confirmed:
-                statusLabel?.text = "Connected"
-            case .disconnected:
-                statusLabel?.text = "Disconnected"
-            case .null: fallthrough
-            case .calling: fallthrough
-            case .early:
-                statusLabel?.text = "Invalid"
-            }
-
-            if call.callState == .incoming {
-                declineButton?.isEnabled = true
-                acceptButton?.isEnabled = true
-                ringtone.start()
-            } else {
-                ringtone.stop()
-                declineButton?.isEnabled = false
-                acceptButton?.isEnabled = false
-            }
-        } else {
+        guard let call = call else {
             numberLabel?.text = ""
             statusLabel?.text = ""
+            return
+        }
+        numberLabel?.text = call.callerNumber
+        switch call.callState {
+        case .incoming:
+            statusLabel?.text = "Incoming call"
+        case .connecting:
+            statusLabel?.text = "Connecting"
+        case .confirmed:
+            statusLabel?.text = "Connected"
+        case .disconnected:
+            statusLabel?.text = "Disconnected"
+        case .null: fallthrough
+        case .calling: fallthrough
+        case .early:
+            statusLabel?.text = "Invalid"
+        }
+
+        if call.callState == .incoming {
+            declineButton?.isEnabled = true
+            acceptButton?.isEnabled = true
+            ringtone.start()
+        } else {
+            ringtone.stop()
+            declineButton?.isEnabled = false
+            acceptButton?.isEnabled = false
         }
     }
 

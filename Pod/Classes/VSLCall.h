@@ -8,13 +8,22 @@
 #import <VialerPJSIP/pjsua.h>
 
 /**
+ *  Notification which is posted when the call's state changes.
+ *  The call for which the state changed can be found in the
+ *  notifications user info dict.
+ */
+extern NSString * _Nonnull const VSLCallStateChangedNotification;
+
+/**
  *  Notification that will be posted when a phonecall is connected.
  */
-extern NSString * _Nonnull const VSLCallConnectedNotification;
+extern NSString * _Nonnull const VSLCallConnectedNotification DEPRECATED_MSG_ATTRIBUTE("Deprecated, listen for VSLCallStateChangedNotification instead");
+
 /**
- *  Notification that will be posted when a phonecall is disconnected.
+ *  Notification that will be posted when a phonecall is disconnected locally.
  */
-extern NSString * _Nonnull const VSLCallDisconnectedNotification;
+extern NSString * _Nonnull const VSLCallDisconnectedNotification DEPRECATED_MSG_ATTRIBUTE("Deprecated, listen for VSLCallStateChangedNotification instead");
+
 
 /**
  *  The posible errors VSLCall can return.
@@ -28,6 +37,10 @@ typedef NS_ENUM(NSInteger, VSLCallErrors) {
      *  Unable to create call.
      */
     VSLCallErrorCannotCreateCall,
+    /**
+     *  Unable to answer an incoming call.
+     */
+    VSLCallErrorCannotAnswerCall,
     /**
      *  Unable to hangup call.
      */
@@ -49,7 +62,7 @@ typedef NS_ENUM(NSInteger, VSLCallErrors) {
      */
     VSLCallErrorCannotSendDTMF,
 };
-#define VSLCallErrorsString(VSLCallErrors) [@[@"VSLCallErrorCannotCreateThread", @"VSLCallErrorCannotCreateCall", @"VSLCallErrorCannotHangupCall", @"VSLCallErrorCannotDeclineCall", @"VSLCallErrorCannotToggleMute", @"VSLCallErrorCannotToggleHold", @"VSLCallErrorCannotSendDTMF"] objectAtIndex:VSLCallErrors]
+#define VSLCallErrorsString(VSLCallErrors) [@[@"VSLCallErrorCannotCreateThread", @"VSLCallErrorCannotCreateCall", @"VSLCallErrorCannotAnswerCall", @"VSLCallErrorCannotHangupCall", @"VSLCallErrorCannotDeclineCall", @"VSLCallErrorCannotToggleMute", @"VSLCallErrorCannotToggleHold", @"VSLCallErrorCannotSendDTMF"] objectAtIndex:VSLCallErrors]
 
 
 /**
@@ -129,19 +142,19 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
 #pragma mark - Properties
 
 /**
-*  The callId which a call receives when it is created.
-*/
+ *  The callId which a incoming call receives from PJSIP when it is created.
+ */
 @property (readonly, nonatomic) NSInteger callId;
 
 /**
- * The accountId the call belongs to.
+ *  All created calls get an unique ID.
  */
-@property (readonly, nonatomic) NSInteger accountId;
+@property (readonly, nonatomic) NSUUID * _Nonnull uuid;
 
 /**
  *  The VSLAccount the call belongs to.
  */
-@property (readonly, nonatomic) VSLAccount * _Nonnull account;
+@property (readonly, weak, nonatomic) VSLAccount * _Nullable account;
 
 /**
  *  The state in which the call currently has.
@@ -213,6 +226,19 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  */
 @property (readonly, nonatomic) VSLCallTransferState transferStatus;
 
+/**
+ *  For an outbound call, this property is set and indicates the number
+ *  that will be called/dialed when -startWithCompletion is invoked.
+ */
+@property (readonly, strong) NSString * _Nonnull numberToCall;
+
+/*
+ * Property is true when the call was hungup locally.
+ */
+@property (readonly) BOOL userDidHangUp;
+
+@property (readonly) BOOL connected;
+
 #pragma mark - Stats
 
 /**
@@ -220,6 +246,9 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  */
 @property (readonly, nonatomic) float totalMBsUsed;
 
+/**
+ *  The connection duration of the call.
+ */
 @property (readonly, nonatomic) NSTimeInterval connectDuration;
 
 /**
@@ -246,14 +275,22 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  */
 @property (readonly, nonatomic) float MOS;
 
+#pragma mark - Methods
+
 /**
  *  Calculate MOS score & data use of call.
  */
 - (void)calculateStats;
 
-#pragma mark - Methods
+/**
+ * This init is not available.
+ */
+-  (instancetype _Nonnull)init __attribute__((unavailable("Init is not available")));
 
 /**
+ *  Deprecated function. You should init an outbound call using -initOutboundCallWithNumberToCall
+ *  and start the call using -startWithCompletion.
+ *
  *  This will setup a call to the given number and attached to the account.
  *
  *  @param number  The number that should be called.
@@ -262,17 +299,27 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  *
  *  @return VSLCall instance
  */
-+ (instancetype _Nullable)callNumber:(NSString * _Nonnull)number withAccount:(VSLAccount * _Nonnull)account error:(NSError * _Nullable * _Nullable)error;
++ (instancetype _Nullable)callNumber:(NSString * _Nonnull)number withAccount:(VSLAccount * _Nonnull)account error:(NSError * _Nullable * _Nullable)error __attribute__((unavailable("Deprecated, use -startWithCompletion instead")));
 
 /**
- *  This will create a call instance with the given accountId.
+ *  When PJSIP receives an incoming call, this initializer is called.
  *
- *  @param callId    The id of the call.
- *  @param accountId The id of the account to which the call should be added.
+ *  @param callId The call ID generated by PJSIP.
  *
  *  @return VSLCall instance
  */
-- (instancetype _Nullable)initWithCallId:(NSUInteger)callId accountId:(NSInteger)accountId;
+- (instancetype _Nullable)initInboundCallWithCallId:(NSUInteger)callId account:(VSLAccount * _Nonnull)account;
+- (instancetype _Nullable)initWithCallId:(NSUInteger)callId accountId:(NSInteger)accountId __attribute__((unavailable("Deprecated, use -initWithCallID: andAccount: instead")));
+
+/*
+ *  Init an outbound call.
+ *
+ *  @param number The number to call (when invoking -startWithCompletion).
+ *  @param account The VSLAccount for which this call is created.
+ *
+ *  @return VSLCall instance.
+ */
+- (instancetype _Nullable)initOutboundCallWithNumberToCall:(NSString * _Nonnull)number account:(VSLAccount * _Nonnull)account;
 
 /**
  *  This will change the callState of the call.
@@ -287,6 +334,15 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  *  @param callInfo pjsip callInfo
  */
 - (void)mediaStateChanged:(pjsua_call_info)callInfo;
+
+/**
+ *  Start the call. The number that will be called is the number provided when the call was created using
+ *  -initWithNumbertoCall
+ *
+ *  @param completion A completion block called when the call is started. The block has an error
+ *  parameter which contains an error when the outbound call fails, otherwise Nil.
+ */
+- (void)startWithCompletion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
 
 /**
  *  This will end the call.
@@ -316,11 +372,14 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
 /**
  *  This will answer the incoming call.
  *
- *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot answer the call.
+ *  @param completion A completion block called when sucessfully answering the call. The block has an error
+ *  parameter which contains an error when answering the call fails, otherwise Nil.
  *
- *  @return BOOL success of answering the call.
+ *  @warning Do not user this function directly, user VSLCallManager -anserCall: completion: otherwise the
+ *  audio session is not activated.
  */
-- (BOOL)answer:(NSError * _Nullable * _Nullable)error;
+- (void)answerWithCompletion:(void (^ _Nullable)(NSError * _Nullable error))completion;
+- (BOOL)answer:(NSError * _Nullable * _Nullable)error __attribute__((unavailable("Deprecated, use VSLCallManager -answerCall: completion: instead")));
 
 /**
  *  Toggle speaker mode of the call.
@@ -356,9 +415,9 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
 /**
  *  This will change the transferStatus of the call.
  *
- *  @param statusCode               The status code of the transfer state.
- *  @param text                     The description of the transfer state.
- *  @param final                    BOOL indictating this is the last update of the transfer state.
+ *  @param statusCode The status code of the transfer state.
+ *  @param text The description of the transfer state.
+ *  @param final BOOL indictating this is the last update of the transfer state.
  */
 - (void)callTransferStatusChangedWithStatusCode:(NSInteger)statusCode statusText:(NSString * _Nullable)text final:(BOOL)final;
 

@@ -9,12 +9,17 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
+#import "VSLAudioController.h"
 #import "VSLEndpoint.h"
 #import "VSLRingback.h"
+#import "VialerSIPLib.h"
+#import "VialerUtils.h"
+
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 
+NSString * const VSLCallStateChangedNotification = @"VSLCallStateChangedNotification";
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
 NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
 
@@ -29,10 +34,9 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 @property (readwrite, nonatomic) NSString *callerName;
 @property (readwrite, nonatomic) NSString *callerNumber;
 @property (readwrite, nonatomic) NSInteger callId;
-@property (readwrite, nonatomic) NSInteger accountId;
-@property (strong, nonatomic) VSLRingback *ringback;
+@property (readwrite, nonatomic) NSUUID *uuid;
 @property (readwrite, nonatomic) BOOL incoming;
-@property (strong, nonatomic) VSLAccount *account;
+@property (strong, nonatomic) VSLRingback *ringback;
 @property (readwrite, nonatomic) BOOL muted;
 @property (readwrite, nonatomic) BOOL speaker;
 @property (readwrite, nonatomic) BOOL onHold;
@@ -42,7 +46,8 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 @property (strong, nonatomic) AVAudioPlayer *disconnectedSoundPlayer;
 @property (readwrite, nonatomic) VSLCallTransferState transferStatus;
 @property (readwrite, nonatomic) NSTimeInterval lastSeenConnectDuration;
-
+@property (strong, nonatomic) NSString *numberToCall;
+@property (weak, nonatomic) VSLAccount *account;
 /**
  *  Stats
  */
@@ -55,78 +60,50 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
 #pragma mark - Life Cycle
 
-+ (instancetype)callNumber:(NSString *)number withAccount:(VSLAccount *)account error:(NSError * _Nullable __autoreleasing *)error {
-    NSError *audioSessionCategoryError;
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];
-
-    if (audioSessionCategoryError) {
-        DDLogError(@"Error setting the correct AVAudioSession category");
-        if (error != NULL) {
-            *error = [NSError VSLUnderlyingError:nil
-                         localizedDescriptionKey:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)
-                     localizedFailureReasonError:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)
-                                     errorDomain:VSLCallErrorDomain
-                                       errorCode:VSLCallErrorCannotCreateCall];
-        }
-        return nil;
-    }
-    pj_str_t sipUri = [number sipUriWithDomain:account.accountConfiguration.sipDomain];
-
-    // Create call settings.
-    pjsua_call_setting callSetting;
-    pjsua_call_setting_default(&callSetting);
-    callSetting.aud_cnt = 1;
-
-    pjsua_call_id callIdentifier;
-
-    pj_status_t status = pjsua_call_make_call((int)account.accountId, &sipUri, &callSetting, NULL, NULL, &callIdentifier);
-
-    if (status != PJ_SUCCESS) {
-        DDLogError(@"Error creating call");
-        if (error != NULL) {
-            *error = [NSError VSLUnderlyingError:nil
-                         localizedDescriptionKey:NSLocalizedString(@"Could not setup call", nil)
-                     localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                                     errorDomain:VSLCallErrorDomain
-                                       errorCode:VSLCallErrorCannotCreateCall];
-        }
-        return nil;
-    }
-    DDLogVerbose(@"Created call");
-    VSLCall *call = [[self alloc] initWithCallId:callIdentifier accountId:account.accountId];
-    [account addCall:call];
-    return call;
-}
-
-- (instancetype)initWithCallId:(NSUInteger)callId accountId:(NSInteger)accountId {
-    self = [super init];
-    if (!self) {
-        return nil;
-    }
-
-    self.callId = callId;
-    self.accountId = accountId;
-
-    pjsua_call_info callInfo;
-    pj_status_t status = pjsua_call_get_info((pjsua_call_id)callId, &callInfo);
-    if (status == PJ_SUCCESS) {
-        if (callInfo.state == VSLCallStateIncoming) {
-            self.incoming = YES;
-        } else {
-            self.incoming = NO;
-        }
-        [self updateCallInfo:callInfo];
+- (instancetype)initPrivateWithAccount:(VSLAccount *)account {
+    if (self = [super init]) {
+        self.uuid = [[NSUUID alloc] init];
+        self.account = account;
     }
     return self;
 }
 
-#pragma mark - Properties
+- (instancetype)initInboundCallWithCallId:(NSUInteger)callId account:(VSLAccount *)account {
+    if (self = [self initPrivateWithAccount:account]) {
+        self.callId = callId;
 
+        pjsua_call_info callInfo;
+        pj_status_t status = pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
+        if (status == PJ_SUCCESS) {
+            if (callInfo.state == VSLCallStateIncoming) {
+                self.incoming = YES;
+            } else {
+                self.incoming = NO;
+            }
+            [self updateCallInfo:callInfo];
+        }
+    }
+    DDLogVerbose(@"Inbound call init with uuid:%@ and id:%ld", self.uuid.UUIDString, (long)self.callId);
+    return self;
+}
+
+- (instancetype)initOutboundCallWithNumberToCall:(NSString *)number account:(VSLAccount *)account {
+    if (self = [self initPrivateWithAccount:account]) {
+        self.numberToCall = [VialerUtils cleanPhoneNumber:number];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    DDLogVerbose(@"Dealloc Call uuid:%@ id:%ld", self.uuid.UUIDString, (long)self.callId);
+}
+
+#pragma mark - Properties
 - (void)setCallState:(VSLCallState)callState {
     if (_callState != callState) {
         NSString *stringFromCallStateProperty = NSStringFromSelector(@selector(callState));
         [self willChangeValueForKey:stringFromCallStateProperty];
-        DDLogDebug(@"CallState will change from %@(%ld) to %@(%ld)", VSLCallStateString(_callState),
+        DDLogDebug(@"Call(%@). CallState will change from %@(%ld) to %@(%ld)", self.uuid.UUIDString, VSLCallStateString(_callState),
                    (long)_callState, VSLCallStateString(callState), (long)callState);
         _callState = callState;
 
@@ -158,22 +135,31 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                 self.connected = YES;
                 [self.ringback stop];
                 // Register for the audio interruption notification to be able to restore the sip audio session after an interruption (incoming call/alarm....).
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:AVAudioSessionInterruptionNotification object:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:VSLAudioControllerAudioInterrupted object:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:VSLAudioControllerAudioResumed object:nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallConnectedNotification object:nil];
+
             } break;
 
             case VSLCallStateDisconnected: {
                 [self calculateStats];
                 [self.ringback stop];
-                [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
+
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLAudioControllerAudioResumed object:nil];
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLAudioControllerAudioInterrupted object:nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDisconnectedNotification object:nil];
+
                 if (self.connected && !self.userDidHangUp) {
                     [self.disconnectedSoundPlayer play];
                 }
-                [self.account removeCall:self];
             } break;
         }
         [self didChangeValueForKey:stringFromCallStateProperty];
+
+        NSDictionary *notificationUserInfo = @{VSLNotificationUserInfoCallKey : self};
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallStateChangedNotification
+                                                            object:nil
+                                                          userInfo:notificationUserInfo];
     }
 }
 
@@ -192,10 +178,6 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                    (long)_mediaState, VSLMediaStateString(mediaState), (long)mediaState);
         _mediaState = mediaState;
     }
-}
-
-- (VSLAccount *)account {
-    return [[VSLEndpoint sharedEndpoint] lookupAccount:self.accountId];
 }
 
 - (VSLRingback *)ringback {
@@ -225,6 +207,32 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 }
 
 #pragma mark - Actions
+
+- (void)startWithCompletion:(void (^)(NSError * error))completion {
+    NSAssert(self.account, @"An account must be set to be able to start a call");
+    pj_str_t sipUri = [self.numberToCall sipUriWithDomain:self.account.accountConfiguration.sipDomain];
+
+    // Create call settings.
+    pjsua_call_setting callSetting;
+    pjsua_call_setting_default(&callSetting);
+    callSetting.aud_cnt = 1;
+
+    pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, NULL, (int *)&_callId);
+    DDLogVerbose(@"Call(%@) received id:%ld", self.uuid.UUIDString, (long)self.callId);
+
+    NSError *error;
+    if (status != PJ_SUCCESS) {
+        DDLogError(@"Error creating call");
+        if (error != NULL) {
+            error = [NSError VSLUnderlyingError:nil
+                        localizedDescriptionKey:NSLocalizedString(@"Could not setup call", nil)
+                    localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                    errorDomain:VSLCallErrorDomain
+                                      errorCode:VSLCallErrorCannotCreateCall];
+        }
+    }
+    completion(error);
+}
 
 - (AVAudioPlayer *)disconnectedSoundPlayer {
     if (!_disconnectedSoundPlayer) {
@@ -300,9 +308,10 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
 - (void)mediaStateChanged:(pjsua_call_info)callInfo  {
     pjsua_call_media_status mediaState = callInfo.media_status;
+    DDLogVerbose(@"Media State Changed from %@ to %@", VSLMediaStateString(self.mediaState), VSLMediaStateString((VSLMediaState)mediaState));
     self.mediaState = (VSLMediaState)mediaState;
 
-    if (_mediaState == PJSUA_CALL_MEDIA_ACTIVE || _mediaState == PJSUA_CALL_MEDIA_REMOTE_HOLD) {
+    if (self.mediaState == VSLMediaStateActive || self.mediaState == VSLMediaStateRemoteHold) {
         [self.ringback stop];
         pjsua_conf_connect(callInfo.conf_slot, 0);
         pjsua_conf_connect(0, callInfo.conf_slot);
@@ -312,43 +321,36 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 }
 
 #pragma mark - User actions
-
-- (BOOL)answer:(NSError *__autoreleasing  _Nullable *)error {
+- (void)answerWithCompletion:(void (^)(NSError *error))completion {
     pj_status_t status;
 
     if (self.callId != PJSUA_INVALID_ID) {
-        NSError *audioSessionCategoryError;
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];
-        if (audioSessionCategoryError) {
-            DDLogError(@"Error setting the correct AVAudioSession category");
-            if (error != NULL) {
-                *error = [NSError VSLUnderlyingError:nil
-                             localizedDescriptionKey:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)
-                         localizedFailureReasonError:NSLocalizedString(@"Error setting the correct AVAudioSession category", nil)
-                                         errorDomain:VSLCallErrorDomain
-                                           errorCode:VSLCallErrorCannotCreateCall];
-            }
-            return NO;
-        }
-
         status = pjsua_call_answer((int)self.callId, PJSIP_SC_OK, NULL, NULL);
 
         if (status != PJ_SUCCESS) {
-            if (error != NULL) {
-                *error = [NSError VSLUnderlyingError:nil
-                             localizedDescriptionKey:NSLocalizedString(@"Could not answer call", nil)
-                         localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                                         errorDomain:VSLCallErrorDomain
-                                           errorCode:VSLCallErrorCannotHangupCall];
-            }
-            return NO;
+            DDLogError(@"Could not answer call PJSIP returned status code:%d", status);
+            NSError *error = [NSError VSLUnderlyingError:nil
+                                 localizedDescriptionKey:NSLocalizedString(@"Could not answer call", nil)
+                             localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                             errorDomain:VSLCallErrorDomain
+                                               errorCode:VSLCallErrorCannotAnswerCall];
+            completion(error);
+        } else {
+            completion(nil);
         }
-        return YES;
+
+    } else {
+        DDLogError(@"Could not answer call, PJSIP indicated callId(%ld) as invalid", (long)self.callId);
+        NSError *error = [NSError VSLUnderlyingError:nil
+                             localizedDescriptionKey:NSLocalizedString(@"Could not answer call", nil)
+                         localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"Call Id: %d invalid", nil), self.callId]
+                                         errorDomain:VSLCallErrorDomain
+                                           errorCode:VSLCallErrorCannotAnswerCall];
+        completion(error);
     }
-    return NO;
 }
 
-- (BOOL)decline:(NSError *__autoreleasing  _Nullable *)error {
+- (BOOL)decline:(NSError **)error {
     pj_status_t status = pjsua_call_answer((int)self.callId, PJSIP_SC_BUSY_HERE, NULL, NULL);
     if (status != PJ_SUCCESS) {
         if (error != NULL) {
@@ -363,7 +365,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     return YES;
 }
 
-- (BOOL)hangup:(NSError * _Nullable __autoreleasing *)error {
+- (BOOL)hangup:(NSError **)error {
     if (self.callId != PJSUA_INVALID_ID) {
         if (self.callState != VSLCallStateDisconnected) {
             self.userDidHangUp = YES;
@@ -383,7 +385,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     return YES;
 }
 
-- (BOOL)toggleMute:(NSError *__autoreleasing  _Nullable *)error {
+- (BOOL)toggleMute:(NSError **)error {
     if (self.callState != VSLCallStateConfirmed) {
         return YES;
     }
@@ -409,7 +411,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
             *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotToggleMute userInfo:userInfo];
         }
         return NO;
-        DDLogError(@"Error toggle muting microphone in call %@", self);
+        DDLogError(@"Error toggle muting microphone in call %@", self.uuid.UUIDString);
     }
     return YES;
 }
@@ -426,7 +428,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     DDLogVerbose(self.speaker ? @"Speaker modus activated": @"Speaker modus deactivated");
 }
 
-- (BOOL)toggleHold:(NSError *__autoreleasing  _Nullable *)error {
+- (BOOL)toggleHold:(NSError **)error {
     if (self.callState != VSLCallStateConfirmed) {
         return YES;
     }
@@ -449,12 +451,12 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
             *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotToggleHold userInfo:userInfo];
         }
         return NO;
-        DDLogError(@"Error toggle muting microphone in call %@", self);
+        DDLogError(@"Error toggle holding in call %@", self.uuid.UUIDString);
     }
     return YES;
 }
 
-- (BOOL)sendDTMF:(NSString *)character error:(NSError *__autoreleasing  _Nullable *)error {
+- (BOOL)sendDTMF:(NSString *)character error:(NSError **)error {
     // Return if the call is not confirmed or when the call is on hold.
     if (self.callState != VSLCallStateConfirmed || self.onHold) {
         return YES;
@@ -467,7 +469,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     status = pjsua_call_dial_dtmf((pjsua_call_id)self.callId, &digits);
 
     if (status == PJ_SUCCESS) {
-        DDLogVerbose(@"Succesfull send character: %@ for DTMF for call %@", character, self);
+        DDLogVerbose(@"Succesfull send character: %@ for DTMF for call %@", character, self.uuid.UUIDString);
     } else {
         // The RFC 2833 payload format did not work.
         const pj_str_t kSIPINFO = pj_str("INFO");
@@ -482,7 +484,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
             status = pjsua_call_send_request((pjsua_call_id)self.callId, &kSIPINFO, &messageData);
             if (status == PJ_SUCCESS) {
-                DDLogVerbose(@"Succesfull send character: %@ for DTMF for call %@", character, self);
+                DDLogVerbose(@"Succesfull send character: %@ for DTMF for call %@", character, self.uuid.UUIDString);
             } else {
                 if (error != NULL) {
                     NSDictionary *userInfo = @{NSLocalizedDescriptionKey:NSLocalizedString(@"Could not send DTMF", nil),
@@ -491,7 +493,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                     *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotSendDTMF userInfo:userInfo];
                 }
                 return NO;
-                DDLogError(@"Error error sending DTMF for call %@", self);
+                DDLogError(@"Error error sending DTMF for call %@", self.uuid.UUIDString);
             }
         }
     }
@@ -499,27 +501,12 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 }
 
 /**
- *  Function called on AVAudioSessionInterruptionNotification
- *
- *  The class registers for AVAudioSessionInterruptionNotification to be able to regain
- *  audio after it has been interrupted by another call or other audio event.
- *
- *  @param notification The notification which lead to this function being invoked over GCD.
+ * The Actual audio interuption is handled in VSLAudioController
  */
 - (void)audioInterruption:(NSNotification *)notification {
-    if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification]) {
-
-        NSInteger avInteruptionType = [[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] intValue];
-        if (avInteruptionType == AVAudioSessionInterruptionTypeBegan) {
-            [self toggleHold:nil];
-            pjsua_set_no_snd_dev();
-        } else if (avInteruptionType == AVAudioSessionInterruptionTypeEnded) {
-            [self toggleHold:nil];
-            // Resume audio
-            int capture_dev, playback_dev;
-            pjsua_get_snd_dev(&capture_dev, &playback_dev);
-            pjsua_set_snd_dev(capture_dev, playback_dev);
-        }
+    if (([notification.name isEqualToString:VSLAudioControllerAudioInterrupted] && !self.onHold) ||
+        ([notification.name isEqualToString:VSLAudioControllerAudioResumed] && self.onHold)) {
+        [self toggleHold:nil];
     }
 }
 
@@ -656,7 +643,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     if (status == PJ_SUCCESS) {
         self.totalMBsUsed = (stat.rtcp.rx.bytes + stat.rtcp.tx.bytes) / 1024.0 / 1024.0;
     } else {
-        DDLogWarn(@"No data");
+        DDLogInfo(@"No data");
     }
     return self.totalMBsUsed;
 }
@@ -698,14 +685,14 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
         // Number of packets send and received.
         float rxPackets = stat.rtcp.rx.pkt;
-        
+
         // Percentage package loss (100 = 100% loss - 0 = 0% loss)
         float rxPacketLoss = rxPackets == 0 ? 100.0 : (((float)stat.rtcp.rx.loss) / (float)(rxPackets + stat.rtcp.rx.loss)) * 100.0;
 
         // Now, let's deduct 2.5 R values per percentage of packet loss.
         self.R = R - (rxPacketLoss * 2.5);
     } else {
-        DDLogWarn(@"No R");
+        DDLogInfo(@"No R");
     }
     return self.R;
 }
@@ -716,9 +703,32 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     if (R > 0) {
         self.MOS = 1 + 0.035 * R + .000007 * R * (R - 60) * (100 - R);
     } else {
-        DDLogWarn(@"No MOS");
+        DDLogInfo(@"No MOS");
     }
     return self.MOS;
+}
+
+- (NSString *)debugDescription {
+    NSMutableString *desc = [[NSMutableString alloc] initWithFormat:@"%@\n", self];
+    [desc appendFormat:@"\t UUID: %@\n", self.uuid.UUIDString];
+    [desc appendFormat:@"\t Call ID: %ld\n", (long)self.callId];
+    [desc appendFormat:@"\t CallState: %@\n", VSLCallStateString(self.callState)];
+    [desc appendFormat:@"\t VSLMediaState: %@\n", VSLMediaStateString(self.mediaState)];
+    [desc appendFormat:@"\t VSLCallTransferState: %@\n", VSLCallTransferStateString(self.transferStatus)];
+    [desc appendFormat:@"\t Account: %ld\n", (long)self.account.accountId];
+    [desc appendFormat:@"\t Last Status: %@(%ld)\n", self.lastStatusText, (long)self.lastStatus];
+    [desc appendFormat:@"\t Number to Call: %@\n", self.numberToCall];
+    [desc appendFormat:@"\t Local URI: %@\n", self.localURI];
+    [desc appendFormat:@"\t Remote URI: %@\n", self.remoteURI];
+    [desc appendFormat:@"\t Caller Name: %@\n", self.callerName];
+    [desc appendFormat:@"\t Caller Number: %@\n", self.callerNumber];
+    [desc appendFormat:@"\t Is Incoming: %@\n", self.isIncoming? @"YES" : @"NO"];
+    [desc appendFormat:@"\t Is muted: %@\n", self.muted? @"YES" : @"NO"];
+    [desc appendFormat:@"\t On Speaker: %@\n", self.speaker? @"YES" : @"NO"];
+    [desc appendFormat:@"\t On Hold: %@\n", self.onHold? @"YES" : @"NO"];
+    [desc appendFormat:@"\t User Did Hangup: %@\n", self.userDidHangUp? @"YES" : @"NO"];
+
+    return desc;
 }
 
 @end

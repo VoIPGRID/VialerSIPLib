@@ -10,7 +10,9 @@
 #import "IPAddressMonitor.h"
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
+#import "VialerSIPLib.h"
 #import "VSLCall.h"
+#import "VSLCallManager.h"
 #import "VSLTransportConfiguration.h"
 
 static NSString * const VSLEndpointErrorDomain = @"VialerSIPLib.VSLEndpoint.error";
@@ -35,6 +37,7 @@ static pjsip_transport *the_transport;
 @property (assign) BOOL shouldReregisterAfterUnregister;
 @property (strong, nonatomic) IPAddressMonitor *ipAddressMonitor;
 @property (nonatomic) BOOL onlyUseILBC;
+@property (weak, nonatomic) VSLCallManager *callManager;
 @end
 
 @implementation VSLEndpoint
@@ -76,12 +79,15 @@ static pjsip_transport *the_transport;
                 break;
             }
             case VSLEndpointStarted: {
-                [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(startNetworkMonitoring) name:VSLCallConnectedNotification object:nil];
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopNetworkMonitoring) name:VSLCallDisconnectedNotification object:nil];
+                [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(checkNetworkMonitoring:) name:VSLCallStateChangedNotification object:nil];
                 break;
             }
         }
     }
+}
+
+- (VSLCallManager *)callManager {
+    return [[VialerSIPLib sharedInstance] callManager];
 }
 
 - (IPAddressMonitor *)ipAddressMonitor {
@@ -217,6 +223,9 @@ static pjsip_transport *the_transport;
         }
         return NO;
     }
+
+    pjsua_set_no_snd_dev();
+
     DDLogInfo(@"PJSIP Endpoint started succesfully");
     self.endpointConfiguration = endpointConfiguration;
     self.state = VSLEndpointStarted;
@@ -267,16 +276,15 @@ static pjsip_transport *the_transport;
         }
     }
 
+    // Destroy PJSUA.
+    pj_status_t status = pjsua_destroy();
+    if (status != PJ_SUCCESS) {
+        DDLogWarn(@"Error stopping SIP Endpoint");
+    }
+
     if (self.pjPool != NULL) {
         pj_pool_release([self pjPool]);
         self.pjPool = NULL;
-    }
-
-    // Destroy PJSUA.
-    pj_status_t status = pjsua_destroy();
-
-    if (status != PJ_SUCCESS) {
-        DDLogWarn(@"Error stopping SIP Endpoint");
     }
 
     self.state = VSLEndpointStopped;
@@ -323,7 +331,7 @@ static pjsip_transport *the_transport;
 
 - (VSLAccount *)getAccountWithSipAccount:(NSString *)sipAccount {
     for (VSLAccount *account in self.accounts) {
-        if (account.accountConfiguration.sipAccount == sipAccount) {
+        if ([account.accountConfiguration.sipAccount isEqualToString:sipAccount]) {
             return account;
         }
     }
@@ -448,8 +456,6 @@ static void logCallBack(int logLevel, const char *data, int len) {
 }
 
 static void onCallState(pjsua_call_id callId, pjsip_event *event) {
-    DDLogVerbose(@"Updated callState");
-
     pjsua_call_info callInfo;
     pjsua_call_get_info(callId, &callInfo);
 
@@ -458,19 +464,21 @@ static void onCallState(pjsua_call_id callId, pjsip_event *event) {
         VSLCall *call = [account lookupCall:callId];
         if (call) {
             [call callStateChanged:callInfo];
+        } else {
+            DDLogWarn(@"Received updated CallState(%@) for UNKNOWN call(id: %d)", VSLCallStateString(callInfo.state) , callId);
+
         }
     }
 }
 
 static void onCallMediaState(pjsua_call_id call_id) {
-    DDLogVerbose(@"Updated mediastate");
-
     pjsua_call_info callInfo;
     pjsua_call_get_info(call_id, &callInfo);
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
     if (account) {
         VSLCall *call = [account lookupCall:call_id];
+        DDLogVerbose(@"Received MediaState update for call:%@", call.uuid.UUIDString);
         if (call) {
             [call mediaStateChanged:callInfo];
         }
@@ -502,10 +510,10 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     DDLogVerbose(@"onRegState2");
     struct pjsip_regc_cbparam *rp = info->cbparam;
 
+    releaseStoredTransport();
     if (rp->code/100 == 2 && rp->expiration > 0 && rp->contact_cnt > 0) {
-        // TCP tranport already saved in onRegStarted
-    } else {
-        releaseStoredTransport();
+        the_transport = rp->rdata->tp_info.transport;
+        pjsip_transport_add_ref(the_transport);
     }
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
@@ -519,21 +527,24 @@ static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, c
     if (state == PJSIP_TP_STATE_DISCONNECTED && the_transport == tp) {
         releaseStoredTransport();
     }
+    the_transport = tp;
+    pjsip_transport_add_ref(tp);
 }
 
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
-    DDLogVerbose(@"Incoming call for Account: %d", acc_id);
-
-    VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
+    VSLEndpoint *endpoint = [VSLEndpoint sharedEndpoint];
+    VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
-        VSLCall *call = [[VSLCall alloc] initWithCallId:call_id accountId:acc_id];
+        DDLogInfo(@"Detected inbound call(%d) for account:%d", call_id, acc_id);
+        VSLCall *call = [[VSLCall alloc] initInboundCallWithCallId:call_id account:account];
         if (call) {
-            [account addCall:call];
-
+            [[[VialerSIPLib sharedInstance] callManager] addCall:call];
             if ([VSLEndpoint sharedEndpoint].incomingCallBlock) {
                 [VSLEndpoint sharedEndpoint].incomingCallBlock(call);
             }
         }
+    } else {
+        DDLogWarn(@"Could not accept incoming call. No account found with ID:%d", acc_id);
     }
 }
 
@@ -561,9 +572,9 @@ static void releaseStoredTransport() {
  *  @return YES if succesfull
  */
 - (BOOL)shutdownTransport {
-    pj_status_t status;
 
     if (the_transport) {
+        pj_status_t status;
         status = pjsip_transport_shutdown(the_transport);
         DDLogInfo(@"Shuting down transport");
         if (status != PJ_SUCCESS) {
@@ -578,13 +589,22 @@ static void releaseStoredTransport() {
 #pragma mark - Reachability detection
 
 /**
- *  Start the network monitor which will inform us about a network change so we can bring down
+ *  Start the network monitor if the call is not disconnected
+ *  which will inform us about a network change so we can bring down
  *  and reinitialize the TCP transport.
  */
-- (void)startNetworkMonitoring {
-    DDLogVerbose(@"Starting network monitor");
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:IPAddressMonitorChangedNotification object:nil];
-    [self.ipAddressMonitor startMonitoring];
+- (void)checkNetworkMonitoring:(NSNotification *)notification {
+    VSLCall *call = notification.object;
+
+    switch (call.callState) {
+        case VSLCallStateDisconnected:
+            [self stopNetworkMonitoring];
+            break;
+        default:
+            DDLogVerbose(@"Starting network monitor");
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:IPAddressMonitorChangedNotification object:nil];
+            [self.ipAddressMonitor startMonitoring];
+    }
 }
 
 /**

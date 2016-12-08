@@ -28,7 +28,7 @@
  *
  *  @return VSLRingtone instance.
  */
-- (instancetype _Nullable)initWithRingtonePath:(NSURL * _Nonnull)ringtonePath;
+- (instancetype _Nullable)initWithRingtonePath:(NSURL * _Nonnull)ringtonePath NS_DESIGNATED_INITIALIZER;
 
 /**
  *  Start playing the ringtone.

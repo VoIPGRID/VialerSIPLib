@@ -57,33 +57,43 @@ class VSLSecondCallViewController: VSLCallViewController {
             let secondCall = activeCall, firstCall.callState == .confirmed else { return }
 
         if firstCall.transfer(to: secondCall) {
+            callManager.end(firstCall) { error in
+                if error != nil {
+                    DDLogWrapper.logError("Error hanging up call: \(error)")
+                }
+            }
+            callManager.end(secondCall) { error in
+                if error != nil {
+                    DDLogWrapper.logError("Error hanging up call: \(error)")
+                }
+            }
             performSegue(withIdentifier: Configuration.Segues.TransferInProgress, sender: nil)
         }
     }
 
     override func endCall() {
-        if let call = activeCall, call.callState != .null {
-            do {
-                try call.hangup()
+        guard let call = activeCall, call.callState != .null else { return }
+
+        callManager.end(call) { error in
+            if error != nil {
+                DDLogWrapper.logError("Could not end call: \(error)")
+            } else {
                 self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
-            } catch let error {
-                DDLogWrapper.logError("Couldn't hangup call: \(error)")
             }
         }
     }
 
     @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
-
-        // Hangup active Call if it is not disconnected.
-        if let call = activeCall, call.callState != .disconnected {
-            do {
-                try call.hangup()
-                self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
-            } catch let error {
-                DDLogWrapper.logError("Couldn't hangup call: \(error)")
-            }
-        } else {
+        guard let call = activeCall, call.callState != .disconnected else {
             self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
+            return
+        }
+        callManager.end(call) { error in
+            if error != nil {
+                DDLogWrapper.logError("Could not end call: \(error)")
+            } else {
+                self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
+            }
         }
     }
 
