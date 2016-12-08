@@ -64,6 +64,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     CXCallUpdate *update = [[CXCallUpdate alloc] init];
     CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:call.callerNumber];
     update.remoteHandle = handle;
+    update.localizedCallerName = call.callerName;
 
     DDLogVerbose(@"UUID as sent to CallKit provider: %@", call.uuid.UUIDString);
     [self.provider reportNewIncomingCallWithUUID:call.uuid update:update completion:^(NSError * _Nullable error) {

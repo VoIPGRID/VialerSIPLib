@@ -197,7 +197,15 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
      - parameter numberLabel: UILabel that presents the number.
      */
     func updateLabels(call: VSLCall, statusLabel: UILabel?, numberLabel: UILabel?) {
-        numberLabel?.text = call.callerNumber
+        var numberLabelText: String {
+            if let name = call.callerName, name != "" {
+                return "\(name)\n\(call.callerNumber!)"
+            } else {
+                return call.callerNumber!
+            }
+        }
+
+        numberLabel?.text = numberLabelText
         switch call.callState {
         case .null:
             statusLabel?.text = "Not started"
