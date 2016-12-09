@@ -201,7 +201,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
             if let name = call.callerName, name != "" {
                 return "\(name)\n\(call.callerNumber!)"
             } else {
-                return call.callerNumber!
+                return call.isIncoming ? call.callerNumber! : call.numberToCall
             }
         }
 

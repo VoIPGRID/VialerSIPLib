@@ -38,6 +38,7 @@ static pjsip_transport *the_transport;
 @property (strong, nonatomic) IPAddressMonitor *ipAddressMonitor;
 @property (nonatomic) BOOL onlyUseILBC;
 @property (weak, nonatomic) VSLCallManager *callManager;
+@property (nonatomic) BOOL monitoringCalls;
 @end
 
 @implementation VSLEndpoint
@@ -594,7 +595,7 @@ static void releaseStoredTransport() {
  *  and reinitialize the TCP transport.
  */
 - (void)checkNetworkMonitoring:(NSNotification *)notification {
-    VSLCall *call = notification.object;
+    VSLCall *call = notification.userInfo[VSLNotificationUserInfoCallKey];
 
     switch (call.callState) {
         case VSLCallStateDisconnected:
@@ -602,8 +603,11 @@ static void releaseStoredTransport() {
             break;
         default:
             DDLogVerbose(@"Starting network monitor");
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:IPAddressMonitorChangedNotification object:nil];
-            [self.ipAddressMonitor startMonitoring];
+            if (!self.monitoringCalls) {
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:IPAddressMonitorChangedNotification object:nil];
+                [self.ipAddressMonitor startMonitoring];
+                self.monitoringCalls = YES;
+            }
     }
 }
 
@@ -631,6 +635,7 @@ static void releaseStoredTransport() {
         }
         [self.ipAddressMonitor stopMonitoring];
         self.ipAddressMonitor = nil;
+        self.monitoringCalls = NO;
     }
 }
 
