@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [2.0.1](https://github.com/VoIPGRID/VialerSIPLib/tree/2.0.1) (12/09/2016)
+Released on Friday, December 9, 2016.
+
+#### Fixed
+* Fixed networkmonitoring (again)(#22)[https://github.com/VoIPGRID/VialerSIPLib/pull/22]
+* Show correct number in dialscreen (#23)[https://github.com/VoIPGRID/VialerSIPLib/pull/23]
+
+
 ## [2.0.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.0.0) (12/08/2016)
 Released on Thursday, December 8, 2016.
 
