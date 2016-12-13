@@ -3,6 +3,7 @@
 //
 
 #import "DDLogWrapper.h"
+#import <VialerSIPLib/VSLAudioController.h>
 #import <VialerSIPLib/VialerSIPLib.h>
 #import <VialerSIPLib/VSLRingtone.h>
 #import <VialerSIPLib/CallKitProviderDelegate.h>

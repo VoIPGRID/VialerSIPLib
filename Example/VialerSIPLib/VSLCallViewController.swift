@@ -3,6 +3,8 @@
 //  Copyright © 2016 Devhouse Spindle. All rights reserved.
 //
 
+import AVFoundation
+import MediaPlayer
 import UIKit
 
 private var myContext = 0
@@ -47,6 +49,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         startConnectDurationTimer()
         activeCall?.addObserver(self, forKeyPath: "callState", options: .new, context: &myContext)
         activeCall?.addObserver(self, forKeyPath: "onHold", options: .new, context: &myContext)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateUI), name: NSNotification.Name(rawValue: VSLAudioControllerAudioInterrupted), object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -54,6 +57,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         connectDurationTimer?.invalidate()
         activeCall?.removeObserver(self, forKeyPath: "callState")
         activeCall?.removeObserver(self, forKeyPath: "onHold")
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: VSLAudioControllerAudioInterrupted), object: nil)
     }
 
     // MARK: - Outlets
@@ -87,9 +91,19 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
     }
 
     @IBAction func speakerButtonPressed(_ sender: UIButton) {
-        guard let call = activeCall else { return }
-        call.toggleSpeaker()
-        updateUI()
+        if callManager.audioController.hasBluetooth {
+            // We add the MPVolumeView to the view without any size, we just need it so we can push the button in code.
+            let volumeView = MPVolumeView(frame: CGRect())
+            view.addSubview(volumeView)
+            for view in volumeView.subviews {
+                if let button = view as? UIButton {
+                    button.sendActions(for: .touchUpInside)
+                }
+            }
+        } else {
+            callManager.audioController.output = callManager.audioController.output == .speaker ? .other : .speaker
+            updateUI()
+        }
     }
 
     @IBAction func holdButtonPressed(_ sender: UIButton) {
@@ -174,7 +188,6 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
             holdButton?.isEnabled = false
             hangupButton?.isEnabled = true
             speakerButton?.isEnabled = true
-            speakerButton?.setTitle(call.speaker ? "On Speaker" : "Speaker", for: UIControlState())
         case .confirmed:
             // All buttons enabled
             muteButton?.isEnabled = !call.onHold
@@ -185,7 +198,13 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
             holdButton?.setTitle(call.onHold ? "On Hold" : "Hold", for: UIControlState())
             hangupButton?.isEnabled = true
             speakerButton?.isEnabled = true
-            speakerButton?.setTitle(call.speaker ? "On Speaker" : "Speaker", for: UIControlState())
+        }
+
+        guard let callManager = callManager else { return }
+        if (callManager.audioController.hasBluetooth) {
+            speakerButton?.setTitle("Audio", for: UIControlState())
+        } else {
+            speakerButton?.setTitle(callManager.audioController.output == .speaker ? "On Speaker" : "Speaker", for: UIControlState())
         }
     }
 

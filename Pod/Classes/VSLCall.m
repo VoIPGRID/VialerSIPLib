@@ -416,18 +416,6 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     return YES;
 }
 
-- (void)toggleSpeaker {
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    if (!self.speaker) {
-        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-        self.speaker = YES;
-    } else {
-        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
-        self.speaker = NO;
-    }
-    DDLogVerbose(self.speaker ? @"Speaker modus activated": @"Speaker modus deactivated");
-}
-
 - (BOOL)toggleHold:(NSError **)error {
     if (self.callState != VSLCallStateConfirmed) {
         return YES;
