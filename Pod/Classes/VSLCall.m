@@ -18,6 +18,7 @@
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
+static double const VSLCallDelayTimeCheckSuccessfullHangup = 0.5;
 
 NSString * const VSLCallStateChangedNotification = @"VSLCallStateChangedNotification";
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";

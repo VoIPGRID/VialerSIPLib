@@ -1,7 +1,6 @@
 //
-//  IPAddress.h
+//  VSLNetworkMonitor.h
 //  Copyright © 2016 Devhouse Spindle. All rights reserved.
-//  Code based on: http://stackoverflow.com/questions/7072989/iphone-ipad-osx-how-to-get-my-ip-address-programmatically
 //
 
 #import <Foundation/Foundation.h>
@@ -9,18 +8,18 @@
 /**
  *  Notification that will be posted when an IP address change is detected.
  */
-extern NSString * _Nonnull const IPAddressMonitorChangedNotification;
+extern NSString * _Nonnull const VSLNetworkMonitorChangedNotification;
 
-@interface IPAddressMonitor : NSObject
+@interface VSLNetworkMonitor : NSObject
 
 /**
- *  Create a monitoring class that will notify when the external IP has changed.
+ *  Create a monitoring class that will notify when the internet connection has changed.
  *
  *  @param host NSString with the host that should be checked for reachability.
  *
- *  @return IPAddressMonitor instance.
+ *  @return VSLNetworkMonitor instance.
  */
-- (IPAddressMonitor * _Nullable)initWithHost:(NSString *_Nonnull)host;
+- (VSLNetworkMonitor * _Nullable)initWithHost:(NSString *_Nonnull)host;
 
 /**
  *  This will start the monitoring of the IP address.
