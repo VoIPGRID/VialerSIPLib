@@ -26,6 +26,39 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
 }
 
+- (BOOL)hasBluetooth {
+    NSArray *availableInputs = [[AVAudioSession sharedInstance] availableInputs];
+
+    for (AVAudioSessionPortDescription *input in availableInputs) {
+        if ([input.portType isEqualToString:AVAudioSessionPortBluetoothHFP]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (VSLAudioControllerOutputs)output {
+    AVAudioSessionRouteDescription *route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription *output in route.outputs) {
+        if ([output.portType isEqualToString:AVAudioSessionPortBluetoothHFP]) {
+            return VSLAudioControllerOutputBluetooth;
+        } else if ([output.portType isEqualToString:AVAudioSessionPortBuiltInSpeaker]) {
+            return VSLAudioControllerOutputSpeaker;
+        }
+    }
+    return VSLAudioControllerOutputOther;
+}
+
+- (void)setOutput:(VSLAudioControllerOutputs)output {
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    if (output == VSLAudioControllerOutputSpeaker) {
+        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+    } else if (output == VSLAudioControllerOutputOther) {
+        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
+    }
+    DDLogVerbose(output == VSLAudioControllerOutputSpeaker ? @"Speaker modus activated": @"Speaker modus deactivated");
+}
+
 - (void)configureAudioSession {
     NSError *audioSessionCategoryError;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];
@@ -94,4 +127,5 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
                                                           userInfo:nil];
     }
 }
+
 @end
