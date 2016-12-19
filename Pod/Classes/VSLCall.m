@@ -13,6 +13,7 @@
 #import "VSLEndpoint.h"
 #import "VSLRingback.h"
 #import "VialerSIPLib.h"
+#import "VialerUtils.h"
 
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
@@ -88,7 +89,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
 - (instancetype)initOutboundCallWithNumberToCall:(NSString *)number account:(VSLAccount *)account {
     if (self = [self initPrivateWithAccount:account]) {
-        self.numberToCall = number;
+        self.numberToCall = [VialerUtils cleanPhoneNumber:number];
     }
     return self;
 }

@@ -9,15 +9,12 @@
 
 Pod::Spec.new do |s|
 	s.name             	= "VialerSIPLib"
-	s.version          	= "1.0.6"
+	s.version          	= "2.0.1"
 	s.summary          	= "Vialer SIP Library for iOS"
-	s.description      	= <<-DESC
-                                    Objective-C wrapper around PJSIP.
-                                  DESC
-
+	s.description      	= "Objective-C wrapper around PJSIP."
 	s.homepage         	= "https://github.com/VoIPGRID/VialerSIPLib"
 	s.license          	= 'GNU GPL v3'
-	s.author           	= {"Devhouse Spindle" => "hello@wearespindle.com"}
+	s.author           	= {"Devhouse Spindle" => "vialersiplib@wearespindle.com"}
 
 	s.source           	= {:git => "https://github.com/VoIPGRID/VialerSIPLib.git", :tag => s.version.to_s}
 	s.social_media_url 	= "https://twitter.com/wearespindle"
@@ -32,5 +29,5 @@ Pod::Spec.new do |s|
 
 	s.dependency 'Vialer-pjsip-iOS'
 	s.dependency 'CocoaLumberjack'
-        s.dependency 'Reachability'
+    s.dependency 'Reachability'
 end
