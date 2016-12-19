@@ -598,16 +598,23 @@ static void releaseStoredTransport() {
     VSLCall *call = notification.userInfo[VSLNotificationUserInfoCallKey];
 
     switch (call.callState) {
-        case VSLCallStateDisconnected:
+        case VSLCallStateDisconnected: {
             [self stopNetworkMonitoring];
             break;
-        default:
-            DDLogVerbose(@"Starting network monitor");
+        }
+        default: {
             if (!self.monitoringCalls) {
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:VSLNetworkMonitorChangedNotification object:nil];
-                [self.networkMonitor startMonitoring];
-                self.monitoringCalls = YES;
+                for (VSLAccount *account in self.accounts) {
+                    if ([account firstActiveCall]) {
+                        DDLogVerbose(@"Starting network monitor");
+                        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:VSLNetworkMonitorChangedNotification object:nil];
+                        [self.networkMonitor startMonitoring]; 
+                        self.monitoringCalls = YES;
+                        break;
+                    }
+                }
             }
+        }
     }
 }
 
