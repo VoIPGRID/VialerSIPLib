@@ -121,6 +121,8 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     acc_cfg.proxy_cnt = 0;
     acc_cfg.media_stun_use = accountConfiguration.mediaStunType;
     acc_cfg.sip_stun_use = accountConfiguration.sipStunType;
+    acc_cfg.ice_cfg.enable_ice = false;
+    acc_cfg.turn_cfg.enable_turn = true;
 
     // If a proxy server is present on the account configuration add this to pjsua account configuration.
     if (accountConfiguration.sipProxyServer) {
