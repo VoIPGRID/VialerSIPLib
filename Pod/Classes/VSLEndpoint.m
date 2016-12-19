@@ -397,6 +397,8 @@ static pjsip_transport *the_transport;
                        @"speex/32000/1":    @0,
                        // GSM 8 kHZ
                        @"GSM/8000/1":       @0,
+                       // opus
+                       @"opus/48000/2":     @0,
                        };
 
     } else {
@@ -407,6 +409,8 @@ static pjsip_transport *the_transport;
                        @"G722/16000/1":     @209,
                        // iLBC
                        @"iLBC/8000/1":      @208,
+                       // opus
+                       @"opus/48000/2":     @207,
                        // G711
                        @"PCMU/8000/1":      @0,
                        // Speex 8 kHz
@@ -598,16 +602,23 @@ static void releaseStoredTransport() {
     VSLCall *call = notification.userInfo[VSLNotificationUserInfoCallKey];
 
     switch (call.callState) {
-        case VSLCallStateDisconnected:
+        case VSLCallStateDisconnected: {
             [self stopNetworkMonitoring];
             break;
-        default:
-            DDLogVerbose(@"Starting network monitor");
+        }
+        default: {
             if (!self.monitoringCalls) {
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:IPAddressMonitorChangedNotification object:nil];
-                [self.ipAddressMonitor startMonitoring];
-                self.monitoringCalls = YES;
+                for (VSLAccount *account in self.accounts) {
+                    if ([account firstActiveCall]) {
+                        DDLogVerbose(@"Starting network monitor");
+                        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:IPAddressMonitorChangedNotification object:nil];
+                        [self.ipAddressMonitor startMonitoring];
+                        self.monitoringCalls = YES;
+                        break;
+                    }
+                }
             }
+        }
     }
 }
 
