@@ -169,6 +169,8 @@ static pjsip_transport *the_transport;
     endpointConfig.cb.on_transport_state = &onTransportState;
     endpointConfig.max_calls = (unsigned int)endpointConfiguration.maxCalls;
     endpointConfig.user_agent = endpointConfiguration.userAgent.pjString;
+    endpointConfig.stun_srv_cnt = 1;
+    endpointConfig.stun_srv[0] = @"stun.pjsip.org".pjString;
 
     // Configure the media information for the endpoint.
     pjsua_media_config mediaConfig;
