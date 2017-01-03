@@ -406,13 +406,13 @@ static pjsip_transport *the_transport;
     } else {
         priorities = @{
                        // G711a
-                       @"PCMA/8000/1":      @210,
+                       @"PCMA/8000/1":      @0,
                        // G722
-                       @"G722/16000/1":     @209,
+                       @"G722/16000/1":     @0,
                        // iLBC
-                       @"iLBC/8000/1":      @208,
+                       @"iLBC/8000/1":      @0,
                        // opus
-                       @"opus/48000/2":     @207,
+                       @"opus/48000/2":     @210,
                        // G711
                        @"PCMU/8000/1":      @0,
                        // Speex 8 kHz
