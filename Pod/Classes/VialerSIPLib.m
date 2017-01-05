@@ -92,7 +92,7 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
         accountConfiguration.sipAccount = sipUser.sipAccount;
         accountConfiguration.sipPassword = sipUser.sipPassword;
         accountConfiguration.sipDomain = sipUser.sipDomain;
-        accountConfiguration.sipProxyServer = sipUser.sipProxy ? sipUser.sipProxy : @"";
+        accountConfiguration.sipProxyServer = sipUser.sipProxy ? sipUser.sipProxy : nil;
         accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
         accountConfiguration.dropCallOnRegistrationFailure = YES;
         
