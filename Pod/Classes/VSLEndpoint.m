@@ -7,7 +7,7 @@
 
 #import "Constants.h"
 #import <CocoaLumberJack/CocoaLumberjack.h>
-#import "IPAddressMonitor.h"
+#import "VSLNetworkMonitor.h"
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
 #import "VialerSIPLib.h"
@@ -35,7 +35,7 @@ static pjsip_transport *the_transport;
 @property (strong, nonatomic) NSArray *accounts;
 @property (assign) pj_pool_t *pjPool;
 @property (assign) BOOL shouldReregisterAfterUnregister;
-@property (strong, nonatomic) IPAddressMonitor *ipAddressMonitor;
+@property (strong, nonatomic) VSLNetworkMonitor *networkMonitor;
 @property (nonatomic) BOOL onlyUseILBC;
 @property (weak, nonatomic) VSLCallManager *callManager;
 @property (nonatomic) BOOL monitoringCalls;
@@ -91,8 +91,8 @@ static pjsip_transport *the_transport;
     return [[VialerSIPLib sharedInstance] callManager];
 }
 
-- (IPAddressMonitor *)ipAddressMonitor {
-    if (!_ipAddressMonitor) {
+- (VSLNetworkMonitor *)networkMonitor {
+    if (!_networkMonitor) {
         VSLAccount *activeAccount;
         for (VSLAccount *account in self.accounts) {
             if ([account firstActiveCall]) {
@@ -105,9 +105,9 @@ static pjsip_transport *the_transport;
         if (activeAccount) {
             reachabilityServer = activeAccount.accountConfiguration.sipProxyServer;
         }
-        _ipAddressMonitor = [[IPAddressMonitor alloc] initWithHost:reachabilityServer];
+        _networkMonitor = [[VSLNetworkMonitor alloc] initWithHost:reachabilityServer];
     }
-    return _ipAddressMonitor;
+    return _networkMonitor;
 }
 
 #pragma mark - Lifecycle
@@ -607,8 +607,8 @@ static void releaseStoredTransport() {
                 for (VSLAccount *account in self.accounts) {
                     if ([account firstActiveCall]) {
                         DDLogVerbose(@"Starting network monitor");
-                        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:IPAddressMonitorChangedNotification object:nil];
-                        [self.ipAddressMonitor startMonitoring];
+                        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:VSLNetworkMonitorChangedNotification object:nil];
+                        [self.networkMonitor startMonitoring];
                         self.monitoringCalls = YES;
                         break;
                     }
@@ -636,12 +636,12 @@ static void releaseStoredTransport() {
     if (!activeCallForAnyAccount) {
         DDLogVerbose(@"No active calls for any account, stopping network monitor");
         @try {
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:IPAddressMonitorChangedNotification object:nil];
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLNetworkMonitorChangedNotification object:nil];
         } @catch (NSException *exception) {
             DDLogWarn(@"Exception on removing the reachability change notification.");
         }
-        [self.ipAddressMonitor stopMonitoring];
-        self.ipAddressMonitor = nil;
+        [self.networkMonitor stopMonitoring];
+        self.networkMonitor = nil;
         self.monitoringCalls = NO;
     }
 }

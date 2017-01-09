@@ -18,6 +18,7 @@
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
+static double const VSLCallDelayTimeCheckSuccessfullHangup = 0.5;
 
 NSString * const VSLCallStateChangedNotification = @"VSLCallStateChangedNotification";
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
@@ -414,18 +415,6 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
         DDLogError(@"Error toggle muting microphone in call %@", self.uuid.UUIDString);
     }
     return YES;
-}
-
-- (void)toggleSpeaker {
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    if (!self.speaker) {
-        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-        self.speaker = YES;
-    } else {
-        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
-        self.speaker = NO;
-    }
-    DDLogVerbose(self.speaker ? @"Speaker modus activated": @"Speaker modus deactivated");
 }
 
 - (BOOL)toggleHold:(NSError **)error {

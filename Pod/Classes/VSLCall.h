@@ -212,11 +212,6 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
 @property (readonly, nonatomic) BOOL muted;
 
 /**
- *  True if the call is in speaker mode.
- */
-@property (readonly, nonatomic) BOOL speaker;
-
-/**
  *  True if the call is on hold locally.
  */
 @property (readonly, nonatomic) BOOL onHold;
@@ -380,13 +375,6 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  */
 - (void)answerWithCompletion:(void (^ _Nullable)(NSError * _Nullable error))completion;
 - (BOOL)answer:(NSError * _Nullable * _Nullable)error __attribute__((unavailable("Deprecated, use VSLCallManager -answerCall: completion: instead")));
-
-/**
- *  Toggle speaker mode of the call.
- *
- *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot put call in speaker mode.
- */
-- (void)toggleSpeaker;
 
 /**
  *  Toggle hold of the call.
