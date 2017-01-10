@@ -608,7 +608,7 @@ static void releaseStoredTransport() {
                     if ([account firstActiveCall]) {
                         DDLogVerbose(@"Starting network monitor");
                         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:VSLNetworkMonitorChangedNotification object:nil];
-                        [self.networkMonitor startMonitoring]; 
+                        [self.networkMonitor startMonitoring];
                         self.monitoringCalls = YES;
                         break;
                     }
