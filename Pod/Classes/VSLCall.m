@@ -379,8 +379,19 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                                              errorDomain:VSLCallErrorDomain
                                                errorCode:VSLCallErrorCannotHangupCall];
                 }
-                return NO;
             }
+            
+            __weak VSLCall *weakSelf = self;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(VSLCallDelayTimeCheckSuccessfullHangup * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (!weakSelf || weakSelf.callState == VSLCallStateDisconnected) {
+                    return;
+                }
+                
+                if (!weakSelf.muted) {
+                    [weakSelf toggleMute:nil];
+                }
+                weakSelf.callState = VSLCallStateDisconnected;
+            });
         }
     }
     return YES;

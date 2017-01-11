@@ -70,7 +70,6 @@ static pjsip_transport *the_transport;
             case VSLEndpointStopped: {
                 @try {
                     [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallConnectedNotification object:nil];
-                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallDisconnectedNotification object:nil];
                 } @catch (NSException *exception) {
 
                 }
