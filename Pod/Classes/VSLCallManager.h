@@ -5,10 +5,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSLAudioController.h"
 
 @class VSLCall;
 @class VSLAccount;
-@class VSLAudioController;
 
 /**
  *  The VSLCallManager class is the single point of entry for everything you want to do with a call.
@@ -24,7 +24,7 @@
 /**
  *  Controler responsible for managing the audio streams for the calls.
  */
-@property (readonly) VSLAudioController *_Nonnull audioController;
+@property (readonly) VSLAudioController * _Nonnull audioController;
 
 /**
  *  Start a call to the given number for the given account.
