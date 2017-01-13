@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let endpointConfiguration = VSLEndpointConfiguration()
         endpointConfiguration.logLevel = 3
         endpointConfiguration.userAgent = "VialerSIPLib Example App"
-        endpointConfiguration.transportConfigurations = [VSLTransportConfiguration(transportType: .TCP)!, VSLTransportConfiguration(transportType: .UDP)!]
+        endpointConfiguration.transportConfigurations = [VSLTransportConfiguration(transportType: .UDP)!]
 
         do {
             try VialerSIPLib.sharedInstance().configureLibrary(withEndPointConfiguration: endpointConfiguration)

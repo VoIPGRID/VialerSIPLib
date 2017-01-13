@@ -70,7 +70,6 @@ static pjsip_transport *the_transport;
             case VSLEndpointStopped: {
                 @try {
                     [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallConnectedNotification object:nil];
-                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallDisconnectedNotification object:nil];
                 } @catch (NSException *exception) {
 
                 }
@@ -495,26 +494,30 @@ static void onRegStarted2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     DDLogVerbose(@"onRegStarted2");
     pjsip_regc_info regc_info;
     pjsip_regc_get_info(info->regc, &regc_info);
-
-    if (the_transport != regc_info.transport) {
-        releaseStoredTransport();
-        /* Save transport instance so that we can close it later when
-         * new IP address is detected.
-         */
-        DDLogInfo(@"Saving transport");
-        the_transport = regc_info.transport;
-        pjsip_transport_add_ref(the_transport);
+    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
+        if (the_transport != regc_info.transport) {
+            releaseStoredTransport();
+            /* Save transport instance so that we can close it later when
+             * new IP address is detected.
+             */
+            DDLogInfo(@"Saving transport");
+            the_transport = regc_info.transport;
+            pjsip_transport_add_ref(the_transport);
+        }
     }
 }
 
 static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     DDLogVerbose(@"onRegState2");
-    struct pjsip_regc_cbparam *rp = info->cbparam;
-
-    releaseStoredTransport();
-    if (rp->code/100 == 2 && rp->expiration > 0 && rp->contact_cnt > 0) {
-        the_transport = rp->rdata->tp_info.transport;
-        pjsip_transport_add_ref(the_transport);
+    
+    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
+        struct pjsip_regc_cbparam *rp = info->cbparam;
+        
+        releaseStoredTransport();
+        if (rp->code/100 == 2 && rp->expiration > 0 && rp->contact_cnt > 0) {
+            the_transport = rp->rdata->tp_info.transport;
+            pjsip_transport_add_ref(the_transport);
+        }
     }
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
@@ -525,11 +528,13 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
 
 static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info) {
     DDLogVerbose(@"onTransportState");
-    if (state == PJSIP_TP_STATE_DISCONNECTED && the_transport == tp) {
-        releaseStoredTransport();
+    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
+        if (state == PJSIP_TP_STATE_DISCONNECTED && the_transport == tp) {
+            releaseStoredTransport();
+        }
+        the_transport = tp;
+        pjsip_transport_add_ref(tp);
     }
-    the_transport = tp;
-    pjsip_transport_add_ref(tp);
 }
 
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
@@ -574,7 +579,7 @@ static void releaseStoredTransport() {
  */
 - (BOOL)shutdownTransport {
 
-    if (the_transport) {
+    if (self.endpointConfiguration.hasTCPConfiguration && the_transport) {
         pj_status_t status;
         status = pjsip_transport_shutdown(the_transport);
         DDLogInfo(@"Shuting down transport");

@@ -282,8 +282,17 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
 - (void)reinvite {
     if (self.callState > VSLCallStateNull && self.callState < VSLCallStateDisconnected) {
-        pjsua_call_reinvite((pjsua_call_id)self.callId, PJSUA_CALL_UPDATE_CONTACT, NULL);
-        DDLogDebug(@"Reinvite sent");
+        pjsua_call_setting options;
+        pjsua_call_setting_default(&options);
+        options.flag = PJSUA_CALL_UPDATE_CONTACT | PJSUA_CALL_UPDATE_VIA;
+        pj_status_t status;
+        
+        status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &options, NULL);
+        if (status != PJ_SUCCESS) {
+            DDLogError(@"Cannot reinvite!");
+        } else {
+            DDLogDebug(@"Reinvite sent");
+        }
     }
 }
 
@@ -379,8 +388,24 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                                              errorDomain:VSLCallErrorDomain
                                                errorCode:VSLCallErrorCannotHangupCall];
                 }
-                return NO;
             }
+            
+            // When there is bad or no internet connection, try to set the call to be disconnected when the user presses the hangup button.
+            // To make sure the correct flow is followed to dispatch screens.
+            __weak VSLCall *weakSelf = self;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(VSLCallDelayTimeCheckSuccessfullHangup * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (!weakSelf || weakSelf.callState == VSLCallStateDisconnected) {
+                    return;
+                }
+                
+                DDLogDebug(@"Bad or no internet connection, setting call manual to disconnect.");
+                
+                // Mute the call to make sure the other party can't hear the user anymore.
+                if (!weakSelf.muted) {
+                    [weakSelf toggleMute:nil];
+                }
+                weakSelf.callState = VSLCallStateDisconnected;
+            });
         }
     }
     return YES;
