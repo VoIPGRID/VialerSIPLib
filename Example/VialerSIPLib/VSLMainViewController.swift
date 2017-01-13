@@ -54,13 +54,13 @@ class VSLMainViewController: UIViewController {
                                                    object: nil)
         }
 
-        account.addObserver(self, forKeyPath: "accountState", options: .new, context: &myContext)
+        account.addObserver(self, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
         updateUI()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        account.removeObserver(self, forKeyPath: "accountState")
+        account.removeObserver(self, forKeyPath: #keyPath(VSLAccount.accountState))
 
         NotificationCenter.default.removeObserver(self,
                                                   name:NSNotification.Name(rawValue: AppDelegate.Configuration.Notifications.IncomingCall),
@@ -79,6 +79,7 @@ class VSLMainViewController: UIViewController {
     // MARK: - Outlets
 
     @IBOutlet weak var registerAccountButton: UIButton!
+    @IBOutlet weak var useTCPSwitch: UISwitch!
 
     // MARK: - Actions
 
@@ -90,12 +91,26 @@ class VSLMainViewController: UIViewController {
         }
     }
 
+    @IBAction func useTCPSwitchPressed(_ sender: UISwitch) {
+        let prefs = UserDefaults.standard
+        prefs.set(sender.isOn, forKey: "useTCP")
+        account.removeObserver(self, forKeyPath: #keyPath(VSLAccount.accountState))
+        VialerSIPLib.sharedInstance().removeEndpoint()
+        AppDelegate.shared.setupVialerEndpoint()
+        AppDelegate.shared.setupAccount()
+        account.addObserver(self, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
+    }
+    
     // MARK: - Helper functions
 
     fileprivate func updateUI() {
         DispatchQueue.main.async {
             self.registerAccountButton.setTitle(self.account.isRegistered ? "Unregister" : "Register", for: UIControlState())
         }
+        
+        let prefs = UserDefaults.standard
+        let useTcp = prefs.bool(forKey: "useTCP")
+        useTCPSwitch.setOn(useTcp, animated: true)
     }
 
     fileprivate func registerAccount() {

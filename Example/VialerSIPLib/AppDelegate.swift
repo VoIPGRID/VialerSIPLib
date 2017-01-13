@@ -32,13 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         setupVialerEndpoint()
-
-        do {
-            account = try VialerSIPLib.sharedInstance().createAccount(withSip: SipUser())
-        } catch let error {
-            DDLogWrapper.logError("Could not create account. Error:\(error)\nExiting")
-            assert(false)
-        }
+        setupAccount()
+        
         return true
     }
 
@@ -47,11 +42,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         providerDelegate = CallKitProviderDelegate(callManager: VialerSIPLib.sharedInstance().callManager)
     }
 
-    fileprivate func setupVialerEndpoint() {
+    func setupVialerEndpoint() {
+        let prefs = UserDefaults.standard
+        let useTCP = prefs.bool(forKey: "useTCP")
+        var transportToUse: [VSLTransportConfiguration] {
+            if useTCP {
+                return [VSLTransportConfiguration(transportType: .TCP)!]
+            }
+            return [VSLTransportConfiguration(transportType: .UDP)!]
+        }
+
         let endpointConfiguration = VSLEndpointConfiguration()
         endpointConfiguration.logLevel = 3
         endpointConfiguration.userAgent = "VialerSIPLib Example App"
-        endpointConfiguration.transportConfigurations = [VSLTransportConfiguration(transportType: .TCP)!, VSLTransportConfiguration(transportType: .UDP)!]
+        endpointConfiguration.transportConfigurations = transportToUse
 
         do {
             try VialerSIPLib.sharedInstance().configureLibrary(withEndPointConfiguration: endpointConfiguration)
@@ -65,6 +69,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    func setupAccount() {
+        do {
+            account = try VialerSIPLib.sharedInstance().createAccount(withSip: SipUser())
+        } catch let error {
+            DDLogWrapper.logError("Could not create account. Error:\(error)\nExiting")
+            assert(false)
+        }
+    }
+    
     func displayIncomingCall(call: VSLCall) {
         if #available(iOS 10, *) {
             DDLogWrapper.logInfo("Incoming call block invoked, routing through CallKit.")

@@ -43,8 +43,11 @@ NSString * const VSLNetworkMonitorChangedNotification = @"VSLNetworkMonitorChang
 #pragma mark - Actions
 
 - (void)startMonitoring {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(internetConnectionChanged:) name:kReachabilityChangedNotification object:nil];
     [self.networkMonitor startNotifier];
+    // Delay the registering of the notification to ignore the initial reachability changed notifications.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(VSLNetworkMonitorDelayTimeForNotification * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(internetConnectionChanged:) name:kReachabilityChangedNotification object:nil];
+    });
 }
 
 - (void)stopMonitoring {
@@ -56,11 +59,12 @@ NSString * const VSLNetworkMonitorChangedNotification = @"VSLNetworkMonitorChang
 #pragma mark - Notifications
 
 - (void)internetConnectionChanged:(NSNotification *)notification {
-    DDLogDebug(@"Internet connection changed");
     /**
      *  Don't respond immediately to every network change. Because network changes will happen rapidly and go back an forth
      *  a couple of times, wait a little before posting the notification.
      */
+    DDLogDebug(@"Internet connection changed");
+
     if (self.isChangingNetwork) {
         return;
     }
