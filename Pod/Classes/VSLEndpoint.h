@@ -97,7 +97,7 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
 /**
  *  This will remove the pjsua configuration.
  */
-- (void)destoryPJSUAInstance;
+- (void)destroyPJSUAInstance;
 
 /**
  *  This will configure the endpoint with pjsua.

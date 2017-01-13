@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="SSt-lM-vHj">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C68" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="SSt-lM-vHj">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -28,7 +28,9 @@
                                     <constraint firstAttribute="width" constant="200" id="zAj-DJ-Ukd"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="Register Account"/>
+                                <state key="normal" title="Register Account">
+                                    <color key="titleColor" red="0.0" green="0.48058944940567017" blue="0.9978906512260437" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="registerAccountButtonPressed:" destination="AyF-vj-IOS" eventType="touchUpInside" id="KKm-1U-zcS"/>
                                 </connections>
@@ -45,31 +47,58 @@
                                     <segue destination="MBm-O2-Xi8" kind="show" identifier="" id="iv7-I5-ZDp"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="REP-2W-IGo">
+                                <rect key="frame" x="87" y="412" width="200" height="42"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="4VD-jA-Upc"/>
+                                    <constraint firstAttribute="width" constant="200" id="fMH-Wz-ahr"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use TCP" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="480-FL-ChL">
+                                <rect key="frame" x="123.5" y="462" width="97" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <color key="textColor" red="0.0" green="0.48058944940567017" blue="0.9978906512260437" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hca-fc-jcp">
+                                <rect key="frame" x="243.5" y="461.5" width="51" height="31"/>
+                                <connections>
+                                    <action selector="useTCPSwitchPressed:" destination="AyF-vj-IOS" eventType="valueChanged" id="A3V-ZR-rRh"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Jbq-Ih-gWu" firstAttribute="centerY" secondItem="QoV-RI-7MB" secondAttribute="centerY" id="2cB-70-5OT"/>
+                            <constraint firstItem="480-FL-ChL" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" constant="-15.5" id="7a8-hv-cZQ"/>
                             <constraint firstItem="cpM-wE-TQc" firstAttribute="width" secondItem="793-jp-Dlg" secondAttribute="width" id="G5z-Pj-pMi"/>
                             <constraint firstItem="cpM-wE-TQc" firstAttribute="top" secondItem="Jbq-Ih-gWu" secondAttribute="bottom" constant="8" id="I1S-y9-g6Q"/>
+                            <constraint firstItem="hca-fc-jcp" firstAttribute="centerY" secondItem="480-FL-ChL" secondAttribute="centerY" id="IHP-S6-RdB"/>
                             <constraint firstItem="cpM-wE-TQc" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" id="K7Z-ok-TRJ"/>
+                            <constraint firstItem="REP-2W-IGo" firstAttribute="top" secondItem="cpM-wE-TQc" secondAttribute="bottom" constant="8" id="L5k-ZP-xy0"/>
                             <constraint firstItem="793-jp-Dlg" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" id="LXc-8e-9Ex"/>
+                            <constraint firstItem="REP-2W-IGo" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" id="W63-cG-rKp"/>
                             <constraint firstItem="Jbq-Ih-gWu" firstAttribute="height" secondItem="cpM-wE-TQc" secondAttribute="height" id="aIn-p3-jrz"/>
                             <constraint firstItem="Jbq-Ih-gWu" firstAttribute="width" secondItem="793-jp-Dlg" secondAttribute="width" id="cTo-Yt-sTa"/>
+                            <constraint firstItem="480-FL-ChL" firstAttribute="top" secondItem="REP-2W-IGo" secondAttribute="bottom" constant="8" id="jr8-iq-Mov"/>
                             <constraint firstItem="Jbq-Ih-gWu" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" id="kqK-WS-bHD"/>
                             <constraint firstItem="Jbq-Ih-gWu" firstAttribute="height" secondItem="793-jp-Dlg" secondAttribute="height" id="pA4-lf-cOa"/>
                             <constraint firstItem="Jbq-Ih-gWu" firstAttribute="top" secondItem="793-jp-Dlg" secondAttribute="bottom" constant="8" id="sz2-g7-U2U"/>
+                            <constraint firstItem="hca-fc-jcp" firstAttribute="leading" secondItem="480-FL-ChL" secondAttribute="trailing" constant="23" id="y5E-EA-3hN"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="VialerSIPLib" id="NW3-3X-Cfz"/>
                     <connections>
                         <outlet property="registerAccountButton" destination="cpM-wE-TQc" id="hje-xx-xPv"/>
+                        <outlet property="useTCPSwitch" destination="hca-fc-jcp" id="x68-yN-FsM"/>
                         <segue destination="dkS-wQ-lUL" kind="show" identifier="ShowIncomingCallSegue" id="lQl-OU-owK"/>
                         <segue destination="1Mu-h3-ccv" kind="show" identifier="DirectlyShowActiveCallControllerSegue" id="r6l-M1-URi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tYx-aW-qum" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1523" y="1386"/>
+            <point key="canvasLocation" x="1522.4000000000001" y="1385.7571214392804"/>
         </scene>
         <!--Make Call-->
         <scene sceneID="wPY-Mv-Ch3">
@@ -1252,7 +1281,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="YHy-xe-5wc"/>
+        <segue reference="r6l-M1-URi"/>
         <segue reference="gOS-Fu-cCZ"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -178,7 +178,7 @@ static pjsip_transport *the_transport;
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
     if (status != PJ_SUCCESS) {
-        [self destoryPJSUAInstance];
+        [self destroyPJSUAInstance];
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
                          localizedDescriptionKey:NSLocalizedString(@"Could not initialize Endpoint.", nil)
@@ -213,7 +213,7 @@ static pjsip_transport *the_transport;
     // Start Endpoint.
     status = pjsua_start();
     if (status != PJ_SUCCESS) {
-        [self destoryPJSUAInstance];
+        [self destroyPJSUAInstance];
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
                          localizedDescriptionKey:NSLocalizedString(@"Could not start PJSIP Endpoint", nil)
@@ -258,12 +258,13 @@ static pjsip_transport *the_transport;
     return YES;
 }
 
-- (void)destoryPJSUAInstance {
+- (void)destroyPJSUAInstance {
     DDLogDebug(@"PJSUA was already running destroying old instance.");
     [self stopNetworkMonitoring];
 
     for (VSLAccount *account in self.accounts) {
         [account removeAllCalls];
+        [self removeAccount:account];
     }
 
     if (!pj_thread_is_registered()) {
