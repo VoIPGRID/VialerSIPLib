@@ -45,6 +45,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        UIDevice.current.isProximityMonitoringEnabled = true
         updateUI()
         startConnectDurationTimer()
         activeCall?.addObserver(self, forKeyPath: "callState", options: .new, context: &myContext)
@@ -54,6 +55,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        UIDevice.current.isProximityMonitoringEnabled = false
         connectDurationTimer?.invalidate()
         activeCall?.removeObserver(self, forKeyPath: "callState")
         activeCall?.removeObserver(self, forKeyPath: "onHold")
