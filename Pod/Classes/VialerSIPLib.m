@@ -80,7 +80,7 @@ static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
 
 - (void)removeEndpoint {
     if (self.endpointAvailable) {
-        [self.endpoint destoryPJSUAInstance];
+        [self.endpoint destroyPJSUAInstance];
     }
 }
 
