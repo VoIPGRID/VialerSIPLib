@@ -34,7 +34,6 @@ private var myContext = 0
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        UIDevice.current.isProximityMonitoringEnabled = false
         updateUI()
         currentCall?.addObserver(self, forKeyPath: "callState", options: .new, context: &myContext)
     }
@@ -60,7 +59,6 @@ private var myContext = 0
     }
 
     @IBAction override func callButtonPressed(_ sender: UIButton) {
-        UIDevice.current.isProximityMonitoringEnabled = true
         guard let number = numberToDialLabel.text, number != "" else { return }
 
         callManager.startCall(toNumber: number, for: currentCall!.account! ) { (call, error) in
