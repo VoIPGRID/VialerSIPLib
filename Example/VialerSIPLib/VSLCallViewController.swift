@@ -22,12 +22,15 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
             static let UnwindToMainViewController = "UnwindToMainViewControllerSegue"
             static let ShowKeypad = "ShowKeypadSegue"
             static let SetupTransfer = "SetupTransferSegue"
+            static let ShowEndCall = "ShowEndCallSegue"
         }
     }
 
     // MARK: - Properties
     var callManager: VSLCallManager!
 
+    var callAnswered: Bool = false
+    
     var activeCall: VSLCall? {
         didSet {
             updateUI()
@@ -244,6 +247,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
                 dateComponentsFormatter.zeroFormattingBehavior = .pad
                 dateComponentsFormatter.allowedUnits = [.minute, .second]
                 statusLabel?.text = "\(dateComponentsFormatter.string(from: call.connectDuration)!)"
+                callAnswered = true
             }
         case .disconnected:
             statusLabel?.text = "Disconnected"
@@ -267,6 +271,11 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
             keypadVC.delegate = self
         } else if let transferCallVC = segue.destination as? VSLTransferCallViewController {
             transferCallVC.currentCall = activeCall
+        } else if let endOfCallVC = segue.destination as? VSLEndOfCallViewController {
+            endOfCallVC.duration = activeCall!.connectDuration
+            endOfCallVC.mos = activeCall!.mos
+            endOfCallVC.mbsUsed = activeCall!.totalMBsUsed
+            endOfCallVC.codec = activeCall!.activeCodec
         }
     }
 
@@ -276,7 +285,11 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         if context == &myContext {
             if let call = object as? VSLCall, call.callState == .disconnected {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(Configuration.Timing.UnwindTime * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
-                    self.performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
+                    if self.callAnswered {
+                        self.performSegue(withIdentifier: Configuration.Segues.ShowEndCall, sender: nil)
+                    } else {
+                        self.performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
+                    }
                 }
             }
             DispatchQueue.main.async {

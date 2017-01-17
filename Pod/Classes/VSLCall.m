@@ -52,6 +52,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 /**
  *  Stats
  */
+@property (readwrite, nonatomic) NSString *activeCodec;
 @property (readwrite, nonatomic) float totalMBsUsed;
 @property (readwrite, nonatomic) float R;
 @property (readwrite, nonatomic) float MOS;
@@ -453,7 +454,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
     } else {
         status = pjsua_call_set_hold((pjsua_call_id)self.callId, NULL);
     }
-
+    
     if (status == PJ_SUCCESS) {
         self.onHold = !self.onHold;
         DDLogVerbose(self.onHold ? @"Call is on hold": @"On hold state ended");
@@ -648,6 +649,26 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 - (void)calculateStats {
     [self calculateMOS];
     [self calculateTotalMBsUsed];
+    [self codecUsed];
+}
+
+- (void)codecUsed {
+    pj_status_t status;
+    pjsua_stream_info stream_info;
+    status = pjsua_call_get_stream_info((pjsua_call_id)self.callId, 0, &stream_info);
+    pj_str_t active_codec;
+    if (status == PJ_SUCCESS) {
+        if (stream_info.type == PJMEDIA_TYPE_AUDIO) {
+            active_codec = stream_info.info.aud.fmt.encoding_name;
+            self.activeCodec = [NSString stringWithPJString:active_codec];
+        } else {
+            DDLogDebug(@"Stream is not an audio stream");
+            self.activeCodec = @"Unknown";
+        }
+    } else {
+        DDLogInfo(@"No stream found");
+        self.activeCodec = @"Unknown";
+    }
 }
 
 - (float)calculateTotalMBsUsed {
