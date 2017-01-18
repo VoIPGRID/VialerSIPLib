@@ -6,9 +6,9 @@
 
 #import "CallKitProviderDelegate.h"
 
-#import <CocoaLumberjack/CocoaLumberjack.h>
 #import "VialerSIPLib.h"
 #import "VSLAudioController.h"
+#import "VSLLogging.h"
 
 NSString * const CallKitProviderDelegateOutboundCallStarted = @"CallKitProviderDelegateOutboundCallStarted";
 NSString * const CallKitProviderDelegateInboundCallAccepted = @"CallKitProviderDelegateInboundCallAccepted";
@@ -66,15 +66,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     update.remoteHandle = handle;
     update.localizedCallerName = call.callerName;
 
-    DDLogVerbose(@"UUID as sent to CallKit provider: %@", call.uuid.UUIDString);
+    VSLLogVerbose(@"UUID as sent to CallKit provider: %@", call.uuid.UUIDString);
     [self.provider reportNewIncomingCallWithUUID:call.uuid update:update completion:^(NSError * _Nullable error) {
         if (error) {
-            DDLogError(@"Call(%@). CallKit report incoming call error: %@", call.uuid.UUIDString, error);
+            VSLLogError(@"Call(%@). CallKit report incoming call error: %@", call.uuid.UUIDString, error);
             NSError *hangupError;
             [call hangup:&hangupError];
 
             if (hangupError){
-                DDLogError(@"Error hanging up call(%@) after CallKit error:%@", call.uuid.UUIDString, error);
+                VSLLogError(@"Error hanging up call(%@) after CallKit error:%@", call.uuid.UUIDString, error);
             }
         }
     }];
@@ -92,11 +92,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
         [call answerWithCompletion:^(NSError *error) {
             if (error) {
-                DDLogError(@"Error answering call(%@) error:%@", call.uuid.UUIDString, error);
+                VSLLogError(@"Error answering call(%@) error:%@", call.uuid.UUIDString, error);
                 [action fail];
 
             } else {
-                DDLogVerbose(@"Answering call %@", call.uuid.UUIDString);
+                VSLLogVerbose(@"Answering call %@", call.uuid.UUIDString);
                 // Post a notification so the outbound call screen can be shown.
                 NSDictionary *notificationInfo = @{VSLNotificationUserInfoCallKey : call};
                 [[NSNotificationCenter defaultCenter] postNotificationName:CallKitProviderDelegateInboundCallAccepted
@@ -106,7 +106,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             }
         }];
     } else {
-        DDLogError(@"Error answering call(%@). No call found", action.callUUID.UUIDString);
+        VSLLogError(@"Error answering call(%@). No call found", action.callUUID.UUIDString);
         [action fail];
     }
 }
@@ -124,14 +124,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         NSError *hangupError;
         [call hangup:&hangupError];
         if (hangupError) {
-            DDLogInfo(@"Error hanging up call(%@) error:%@", call.uuid.UUIDString, hangupError);
+            VSLLogInfo(@"Error hanging up call(%@) error:%@", call.uuid.UUIDString, hangupError);
             [action fail];
         } else {
-            DDLogVerbose(@"Ending call %@", call.uuid.UUIDString);
+            VSLLogVerbose(@"Ending call %@", call.uuid.UUIDString);
             [action fulfill];
         }
     } else {
-        DDLogInfo(@"Error hanging up call(%@). No call found", action.callUUID.UUIDString);
+        VSLLogInfo(@"Error hanging up call(%@). No call found", action.callUUID.UUIDString);
         [action fulfill];
     }
 }
@@ -145,10 +145,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
     [call startWithCompletion:^(NSError *error) {
         if (error) {
-            DDLogError(@"Error starting call(%@) error: %@", call.uuid.UUIDString, error);
+            VSLLogError(@"Error starting call(%@) error: %@", call.uuid.UUIDString, error);
             [action fail];
         } else {
-            DDLogInfo(@"Call %@ started", call.uuid.UUIDString);
+            VSLLogInfo(@"Call %@ started", call.uuid.UUIDString);
 
             // Post a notification so the outbound call screen can be shown.
             NSDictionary *notificationInfo = @{VSLNotificationUserInfoCallKey : call};
@@ -170,7 +170,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSError *muteError;
     [call toggleMute:&muteError];
     if (muteError) {
-        DDLogError(@"Could not mute call(%@). Error: %@", call.uuid.UUIDString, muteError);
+        VSLLogError(@"Could not mute call(%@). Error: %@", call.uuid.UUIDString, muteError);
         [action fail];
     } else {
         [action fulfill];
@@ -186,7 +186,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSError *holdError;
     [call toggleHold:&holdError];
     if (holdError) {
-        DDLogError(@"Could not hold call(%@). Error: %@", call.uuid.UUIDString, holdError);
+        VSLLogError(@"Could not hold call(%@). Error: %@", call.uuid.UUIDString, holdError);
         [action fail];
     } else {
         if (call.onHold) {
@@ -205,7 +205,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     NSError *dtmfError;
     [call sendDTMF:action.digits error:&dtmfError];
     if (dtmfError) {
-        DDLogError(@"Call(%@). Could not send DTMF. Error %@", call.uuid.UUIDString, dtmfError);
+        VSLLogError(@"Call(%@). Could not send DTMF. Error %@", call.uuid.UUIDString, dtmfError);
         [action fail];
     } else {
         [action fulfill];

@@ -33,8 +33,16 @@ static const int ddLogLevel = DDLogLevelWarning;
     [DDLog addLogger:aslLogger];
 }
 
++ (void)logWithDDLogMessage:(DDLogMessage *)message {
+    [[DDLog sharedInstance] log:LOG_ASYNC_ENABLED message:message];
+}
+
 + (void)logVerbose:(NSString *)message {
     DDLogVerbose(@"%@", message);
+}
+
++ (void)logDebug:(NSString *)message {
+    DDLogDebug(@"%@", message);
 }
 
 + (void)logInfo:(NSString *)message {

@@ -6,10 +6,10 @@
 #import "VSLRingback.h"
 
 #import "Constants.h"
-#import <CocoaLumberJack/CocoaLumberjack.h>
+#import "NSString+PJString.h"
 #import <VialerPJSIP/pjsua.h>
 #import "VSLEndpoint.h"
-#import "NSString+PJString.h"
+#import "VSLLogging.h"
 
 static int const VSLRingbackChannelCount = 1;
 static int const VSLRingbackRingbackCount = 1;
@@ -44,7 +44,7 @@ static int const VSLRingbackInterval = 4000;
     status = pjmedia_tonegen_create2(endpoint.pjPool, &name, (unsigned int)endpoint.endpointConfiguration.clockRate, VSLRingbackChannelCount, (unsigned int)samplesPerFrame, 16, PJMEDIA_TONEGEN_LOOP, &_ringbackPort);
 
     if (status != PJ_SUCCESS) {
-        DDLogDebug(@"Error creating ringback tones");
+        VSLLogDebug(@"Error creating ringback tones");
         return nil;
     }
 
@@ -64,7 +64,7 @@ static int const VSLRingbackInterval = 4000;
     status = pjsua_conf_add_port(endpoint.pjPool, [self ringbackPort], (int *)&_ringbackSlot);
 
     if (status != PJ_SUCCESS) {
-        DDLogDebug(@"Error adding media port for ringback tones");
+        VSLLogDebug(@"Error adding media port for ringback tones");
         return nil;
     }
     return self;
@@ -89,7 +89,7 @@ static int const VSLRingbackInterval = 4000;
         // Destory the conference port otherwise the maximum number of ports will reached and pjsip will crash.
         pj_status_t status = pjsua_conf_remove_port((int)self.ringbackSlot);
         if (status != PJ_SUCCESS) {
-            DDLogWarn(@"Error removing the port!");
+            VSLLogWarning(@"Error removing the port!");
         }
     }
 }
