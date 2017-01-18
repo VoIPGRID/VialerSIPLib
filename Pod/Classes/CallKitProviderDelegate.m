@@ -52,6 +52,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     providerConfiguration.maximumCallsPerCallGroup = 1;
     providerConfiguration.supportsVideo = false;
 
+    NSString *ringtoneFileName = [[NSBundle mainBundle] pathForResource:@"ringtone" ofType:@"wav"];
+    if (ringtoneFileName) {
+        providerConfiguration.ringtoneSound = @"ringtone.wav";
+    }
+
     providerConfiguration.supportedHandleTypes = [NSSet setWithObject:[NSNumber numberWithInt:CXHandleTypePhoneNumber]];
 
     return providerConfiguration;
