@@ -9,7 +9,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import "Constants.h"
-#import <CocoaLumberJack/CocoaLumberjack.h>
+#import "VSLLogging.h"
 #import <UIKit/UIKit.h>
 
 static NSUInteger const VialerSIPLibVibrateDuration = 1;
@@ -47,7 +47,7 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
 		_audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:self.fileURL error:&error];
         _audioPlayer.numberOfLoops = -1;
         if (error) {
-            DDLogError(@"Audioplayer: %@", [error description]);
+            VSLLogError(@"Audioplayer: %@", [error description]);
         }
 	}
 	return _audioPlayer;
@@ -90,7 +90,7 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
 }
 
 - (void)configureAudioSessionBeforeRingtoneIsPlayed {
-    DDLogVerbose(@"Configuring Audio before playing ringtone");
+    VSLLogVerbose(@"Configuring Audio before playing ringtone");
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
 
     // Set the audio session category. The category that is set repects the silent switch.
@@ -99,7 +99,7 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
                                                   error:&setCategoryError];
     if (!setCategorySuccess) {
         if (setCategoryError != NULL) {
-            DDLogWarn(@"Error setting audioplayer category: %@", setCategoryError);
+            VSLLogWarning(@"Error setting audioplayer category: %@", setCategoryError);
         }
     }
 
@@ -110,7 +110,7 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
                                                                           error:&overrideOutputAudioPortError];
     if (!overrideOutputAudioPortSuccess) {
         if (overrideOutputAudioPortError != NULL) {
-            DDLogWarn(@"Error overriding audio port: %@", overrideOutputAudioPortError);
+            VSLLogWarning(@"Error overriding audio port: %@", overrideOutputAudioPortError);
         }
     }
 
@@ -119,13 +119,13 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
     BOOL setActiveSuccess = [audioSession setActive:YES error:&setActiveError];
     if (!setActiveSuccess) {
         if (setActiveError != NULL) {
-            DDLogWarn(@"Error activatiing audio: %@", setActiveError);
+            VSLLogWarning(@"Error activatiing audio: %@", setActiveError);
         }
     }
 }
 
 - (void)configureAudioSessionAfterRingtoneStopped {
-    DDLogVerbose(@"Configuring Audio after ringtone has stoped");
+    VSLLogVerbose(@"Configuring Audio after ringtone has stoped");
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
 
     // Set the audio session category. The category that is set is able to handle VoIP calls.
@@ -134,7 +134,7 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
                                                   error:&setCategoryError];
     if (!setCategorySuccess) {
         if (setCategoryError != NULL) {
-            DDLogWarn(@"Error setting audioplayer category: %@", setCategoryError);
+            VSLLogWarning(@"Error setting audioplayer category: %@", setCategoryError);
         }
     }
 }
