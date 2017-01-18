@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [2.4.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.4.0) (01/18/2017)
+Released on Wednesday, January 18, 2017.
+
+#### Added
+* Added custom ringtone if file is present (#49)[https://github.com/VoIPGRID/VialerSIPLib/pull/49]
+
+#### Fixed
+* Remove if check on error pointer when creating VSLCall (#49)[https://github.com/VoIPGRID/VialerSIPLib/pull/49]
+
+
 ## [2.3.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.3.0) (01/18/2017)
 Released on Wednesday, January 18, 2017.
 
