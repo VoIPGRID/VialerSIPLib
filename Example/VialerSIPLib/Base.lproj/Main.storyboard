@@ -98,7 +98,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tYx-aW-qum" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1522.4000000000001" y="1385.7571214392804"/>
+            <point key="canvasLocation" x="1390" y="1347"/>
         </scene>
         <!--Make Call-->
         <scene sceneID="wPY-Mv-Ch3">
@@ -315,7 +315,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TZr-mc-wrM" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Lhx-cM-9hh" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2421" y="793"/>
+            <point key="canvasLocation" x="2158" y="627"/>
         </scene>
         <!--Incoming call-->
         <scene sceneID="ik1-i3-S8I">
@@ -398,7 +398,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FxU-PX-ZF3" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="H26-nO-XdI" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2489" y="2059"/>
+            <point key="canvasLocation" x="2158" y="2106"/>
         </scene>
         <!--Call-->
         <scene sceneID="SXt-8l-PfE">
@@ -560,13 +560,133 @@
                         <outlet property="transferButton" destination="jOb-YB-mYR" id="kJq-Yl-W8t"/>
                         <segue destination="jXM-VD-3Or" kind="show" identifier="SetupTransferSegue" id="ZUQ-AO-NqA"/>
                         <segue destination="ebh-bT-Bvs" kind="show" identifier="ShowKeypadSegue" id="gOS-Fu-cCZ"/>
-                        <segue destination="ZMZ-hZ-GE9" kind="unwind" identifier="UnwindToMainViewControllerSegue" unwindAction="unwindToMainViewController:" id="TL7-TZ-z3I"/>
+                        <segue destination="IDg-PT-Ah2" kind="show" identifier="ShowEndCallSegue" id="vU0-97-2zf"/>
+                        <segue destination="ZMZ-hZ-GE9" kind="unwind" identifier="UnwindToMainViewControllerSegue" unwindAction="unwindToMainViewController:" id="VZS-aC-SF8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eaR-ZX-fvG" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="ZMZ-hZ-GE9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3304.8000000000002" y="1419.9400299850076"/>
+            <point key="canvasLocation" x="2888" y="1347"/>
+        </scene>
+        <!--EndOfCall-->
+        <scene sceneID="ZWH-WY-KPB">
+            <objects>
+                <viewController id="IDg-PT-Ah2" userLabel="EndOfCall" customClass="VSLEndOfCallViewController" customModule="VialerSIPLib_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="N12-VR-Ris"/>
+                        <viewControllerLayoutGuide type="bottom" id="q0s-7X-1kK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xCt-XY-2NE">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K6t-rP-BSs">
+                                <rect key="frame" x="16" y="95" width="343" height="163"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Codec" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ROw-a5-deG">
+                                        <rect key="frame" x="8" y="49" width="50" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0024161397013813257" green="0.48058450222015381" blue="0.99788802862167358" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Call duration" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vNr-aR-olc">
+                                        <rect key="frame" x="8" y="14" width="97" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0024161397013813257" green="0.48058450222015381" blue="0.99788802862167358" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MOS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y7p-Mn-EcW">
+                                        <rect key="frame" x="8" y="84" width="38" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0024161397013813257" green="0.48058450222015381" blue="0.99788802862167358" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MB used" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sFy-2z-lYw">
+                                        <rect key="frame" x="8" y="119" width="68" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0024161397013813257" green="0.48058450222015381" blue="0.99788802862167358" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="codec used label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XKe-eq-vEL">
+                                        <rect key="frame" x="144" y="49" width="185" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0024161397013813257" green="0.48058450222015381" blue="0.99788802862167358" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="mos label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pHL-Nz-62P">
+                                        <rect key="frame" x="144" y="84" width="185" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0024161397013813257" green="0.48058450222015381" blue="0.99788802862167358" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="call duration label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GLK-yb-m3w">
+                                        <rect key="frame" x="144" y="14" width="185" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.48058944939999998" blue="0.99789065119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="mb used label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wws-NE-GpY">
+                                        <rect key="frame" x="144" y="119" width="185" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0024161397013813257" green="0.48058450222015381" blue="0.99788802862167358" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="pHL-Nz-62P" firstAttribute="centerX" secondItem="K6t-rP-BSs" secondAttribute="centerX" constant="65" id="1Gq-ZO-nBw"/>
+                                    <constraint firstItem="ROw-a5-deG" firstAttribute="leading" secondItem="K6t-rP-BSs" secondAttribute="leading" constant="8" id="2hk-Qb-3Pu"/>
+                                    <constraint firstAttribute="trailing" secondItem="GLK-yb-m3w" secondAttribute="trailing" constant="14" id="BOk-sG-R81"/>
+                                    <constraint firstItem="GLK-yb-m3w" firstAttribute="centerX" secondItem="K6t-rP-BSs" secondAttribute="centerX" constant="65" id="CyE-LG-4SP"/>
+                                    <constraint firstItem="pHL-Nz-62P" firstAttribute="top" secondItem="XKe-eq-vEL" secondAttribute="bottom" constant="14" id="Iws-J6-VAz"/>
+                                    <constraint firstItem="Wws-NE-GpY" firstAttribute="top" secondItem="pHL-Nz-62P" secondAttribute="bottom" constant="14" id="LcM-Nk-G28"/>
+                                    <constraint firstItem="vNr-aR-olc" firstAttribute="top" secondItem="K6t-rP-BSs" secondAttribute="top" constant="14" id="LeP-yS-nIZ"/>
+                                    <constraint firstItem="y7p-Mn-EcW" firstAttribute="leading" secondItem="K6t-rP-BSs" secondAttribute="leading" constant="8" id="Lza-fQ-NIE"/>
+                                    <constraint firstItem="sFy-2z-lYw" firstAttribute="top" secondItem="y7p-Mn-EcW" secondAttribute="bottom" constant="14" id="ReV-oC-wEL"/>
+                                    <constraint firstAttribute="trailing" secondItem="pHL-Nz-62P" secondAttribute="trailing" constant="14" id="TGj-KA-tgy"/>
+                                    <constraint firstItem="vNr-aR-olc" firstAttribute="leading" secondItem="K6t-rP-BSs" secondAttribute="leading" constant="8" id="UFS-Pt-pfU"/>
+                                    <constraint firstItem="ROw-a5-deG" firstAttribute="top" secondItem="vNr-aR-olc" secondAttribute="bottom" constant="14" id="V1P-On-2FL"/>
+                                    <constraint firstItem="XKe-eq-vEL" firstAttribute="top" secondItem="GLK-yb-m3w" secondAttribute="bottom" constant="14" id="VqE-ko-FVg"/>
+                                    <constraint firstItem="GLK-yb-m3w" firstAttribute="top" secondItem="K6t-rP-BSs" secondAttribute="top" constant="14" id="aQd-HR-UZD"/>
+                                    <constraint firstAttribute="bottom" secondItem="Wws-NE-GpY" secondAttribute="bottom" constant="23" id="bbD-ud-pc2"/>
+                                    <constraint firstItem="Wws-NE-GpY" firstAttribute="centerX" secondItem="K6t-rP-BSs" secondAttribute="centerX" constant="65" id="dc8-zl-fNh"/>
+                                    <constraint firstAttribute="trailing" secondItem="XKe-eq-vEL" secondAttribute="trailing" constant="14" id="iMG-0Z-Fuw"/>
+                                    <constraint firstAttribute="trailing" secondItem="Wws-NE-GpY" secondAttribute="trailing" constant="14" id="ilg-FE-AaN"/>
+                                    <constraint firstItem="XKe-eq-vEL" firstAttribute="centerX" secondItem="K6t-rP-BSs" secondAttribute="centerX" constant="65" id="mkd-fi-j2d"/>
+                                    <constraint firstItem="sFy-2z-lYw" firstAttribute="leading" secondItem="K6t-rP-BSs" secondAttribute="leading" constant="8" id="ozN-zQ-MRS"/>
+                                    <constraint firstItem="y7p-Mn-EcW" firstAttribute="top" secondItem="ROw-a5-deG" secondAttribute="bottom" constant="14" id="sAi-Sh-i86"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="leadingMargin" secondItem="K6t-rP-BSs" secondAttribute="leading" id="0B2-FS-iaJ"/>
+                            <constraint firstItem="K6t-rP-BSs" firstAttribute="top" secondItem="N12-VR-Ris" secondAttribute="bottom" constant="31" id="0qv-hy-K9P"/>
+                            <constraint firstItem="K6t-rP-BSs" firstAttribute="centerX" secondItem="xCt-XY-2NE" secondAttribute="centerX" id="OXA-d3-O7n"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="K6t-rP-BSs" secondAttribute="trailing" id="Yxz-n1-GA6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="End of call" id="sIK-1i-3S0">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="Cx0-hR-2Mg">
+                            <connections>
+                                <action selector="backButtonPressed:" destination="1Mu-h3-ccv" id="4T2-0i-jw4"/>
+                                <segue destination="Cw1-72-cmW" kind="unwind" identifier="UnwindToMainViewControllerSegue" unwindAction="unwindToMainViewController:" id="s7n-x0-Cvh"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="MBUsedLabel" destination="Wws-NE-GpY" id="zZe-iN-Fvb"/>
+                        <outlet property="callDurationLabel" destination="GLK-yb-m3w" id="NYF-ZV-Yo2"/>
+                        <outlet property="codecUsedLabel" destination="XKe-eq-vEL" id="0nz-2L-usw"/>
+                        <outlet property="mosLabel" destination="pHL-Nz-62P" id="wY1-BO-OLJ"/>
+                        <segue destination="Cw1-72-cmW" kind="unwind" identifier="UnwindToMainViewControllerSegue" unwindAction="unwindToMainViewController:" id="WkY-Lm-85C"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SxG-iM-Znv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Cw1-72-cmW" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="6058" y="866"/>
         </scene>
         <!--Call transfer-->
         <scene sceneID="Idh-b9-EZV">
@@ -815,7 +935,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7pi-sV-x6w" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="x53-3m-veC" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4559" y="1576"/>
+            <point key="canvasLocation" x="3378" y="2140"/>
         </scene>
         <!--Call-->
         <scene sceneID="66P-CD-GGF">
@@ -1001,7 +1121,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8ex-Yd-OOI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5087" y="528"/>
+            <point key="canvasLocation" x="5076" y="1405"/>
         </scene>
         <!--Call Transfer-->
         <scene sceneID="NZ1-gz-jNu">
@@ -1198,7 +1318,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FwZ-jI-IOd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="dRq-bv-NE6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5424" y="1586"/>
+            <point key="canvasLocation" x="4298" y="2140"/>
         </scene>
         <!--Call Transfer-->
         <scene sceneID="6qc-zs-FxM">
@@ -1254,19 +1374,20 @@
                         <outlet property="transferStatusLabel" destination="iuT-Sk-lVp" id="5RE-oc-BCS"/>
                         <segue destination="uh8-L6-fnF" kind="unwind" identifier="UnwindToSecondCallViewControllerSegue" unwindAction="unwindToSecondCallViewController:" id="lWe-1F-nSN"/>
                         <segue destination="uh8-L6-fnF" kind="unwind" identifier="UnwindToCallViewControllerSegue" unwindAction="unwindToMainViewController:" id="5Mb-id-5wX"/>
+                        <segue destination="IDg-PT-Ah2" kind="show" identifier="ShowEndCallSegue" id="QD7-SH-Sgy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Lm-Sp-H40" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="uh8-L6-fnF" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6362" y="1605"/>
+            <point key="canvasLocation" x="5239" y="2140"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="c1L-6Y-LaN">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SSt-lM-vHj" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jtT-MN-I6f">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="jtT-MN-I6f">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1277,10 +1398,11 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1VF-8B-wO3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="447" y="1640"/>
+            <point key="canvasLocation" x="577" y="1347"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="QD7-SH-Sgy"/>
         <segue reference="r6l-M1-URi"/>
         <segue reference="gOS-Fu-cCZ"/>
     </inferredMetricsTieBreakers>

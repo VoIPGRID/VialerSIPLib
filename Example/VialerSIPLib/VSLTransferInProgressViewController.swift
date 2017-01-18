@@ -15,6 +15,7 @@ class VSLTransferInProgressViewController: UIViewController {
         struct Segues {
             static let UnwindToCallViewController = "UnwindToCallViewControllerSegue"
             static let UnwindToSecondCallViewController = "UnwindToSecondCallViewControllerSegue"
+            static let ShowEndCallSegue = "ShowEndCallSegue"
         }
         static let UnwindTiming = 2.0
     }
@@ -93,7 +94,16 @@ class VSLTransferInProgressViewController: UIViewController {
         if firstCall?.transferStatus == .rejected {
             performSegue(withIdentifier: Configuration.Segues.UnwindToSecondCallViewController, sender: nil)
         } else {
-            performSegue(withIdentifier: Configuration.Segues.UnwindToCallViewController, sender: nil)
+            performSegue(withIdentifier: Configuration.Segues.ShowEndCallSegue, sender: nil)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let endOfCallVC = segue.destination as? VSLEndOfCallViewController {
+            endOfCallVC.duration = firstCall!.connectDuration
+            endOfCallVC.mos = firstCall!.mos
+            endOfCallVC.mbsUsed = firstCall!.totalMBsUsed
+            endOfCallVC.codec = firstCall!.activeCodec
         }
     }
 
