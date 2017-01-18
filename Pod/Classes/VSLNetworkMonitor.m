@@ -5,9 +5,9 @@
 
 #import "VSLNetworkMonitor.h"
 
-#import <CocoaLumberJack/CocoaLumberjack.h>
 #import "Constants.h"
 #import "Reachability.h"
+#import "VSLLogging.h"
 
 
 static double const VSLNetworkMonitorDelayTimeForNotification = 0.1;
@@ -63,7 +63,7 @@ NSString * const VSLNetworkMonitorChangedNotification = @"VSLNetworkMonitorChang
      *  Don't respond immediately to every network change. Because network changes will happen rapidly and go back an forth
      *  a couple of times, wait a little before posting the notification.
      */
-    DDLogDebug(@"Internet connection changed");
+    VSLLogDebug(@"Internet connection changed");
 
     if (self.isChangingNetwork) {
         return;
@@ -72,7 +72,7 @@ NSString * const VSLNetworkMonitorChangedNotification = @"VSLNetworkMonitorChang
 
     __weak VSLNetworkMonitor *weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(VSLNetworkMonitorDelayTimeForNotification * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        DDLogDebug(@"Posting notification that internet connection has changed.");
+        VSLLogDebug(@"Posting notification that internet connection has changed.");
         weakSelf.isChangingNetwork = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:VSLNetworkMonitorChangedNotification object:nil];
     });

@@ -12,6 +12,7 @@
 #import "VSLAccount.h"
 #import "VSLAudioController.h"
 #import "VSLCall.h"
+#import "VSLLogging.h"
 #import "VialerSIPLib.h"
 
 
@@ -67,23 +68,23 @@
 
         [self requestCallKitAction:startCallAction completion:^(NSError *error) {
             if (error) {
-                DDLogError(@"Error requesting \"Start Call Transaction\" error: %@", error);
+                VSLLogError(@"Error requesting \"Start Call Transaction\" error: %@", error);
                 [self removeCall:call];
                 completion(nil, error);
             } else {
-                DDLogInfo(@"\"Start Call Transaction\" requested succesfully for Call(%@) with account(%ld)", call.uuid.UUIDString, (long)account.accountId);
+                VSLLogInfo(@"\"Start Call Transaction\" requested succesfully for Call(%@) with account(%ld)", call.uuid.UUIDString, (long)account.accountId);
                 completion(call, nil);
             }
         }];
     } else {
-        DDLogVerbose(@"Starting call: %@", call.uuid.UUIDString);
+        VSLLogVerbose(@"Starting call: %@", call.uuid.UUIDString);
         [self.audioController configureAudioSession];
         [call startWithCompletion:^(NSError *error) {
             if (error) {
-                DDLogError(@"Error starting call(%@): %@", call.uuid.UUIDString, error);
+                VSLLogError(@"Error starting call(%@): %@", call.uuid.UUIDString, error);
                 completion(nil, error);
             } else {
-                DDLogInfo(@"Call(%@) started", call.uuid.UUIDString);
+                VSLLogInfo(@"Call(%@) started", call.uuid.UUIDString);
                 [self.audioController activateAudioSession];
                 completion(call, nil);
             }
@@ -113,14 +114,14 @@
         [self requestCallKitAction:endCallAction completion:completion];
 
     } else {
-        DDLogVerbose(@"Ending call: %@", call.uuid.UUIDString);
+        VSLLogVerbose(@"Ending call: %@", call.uuid.UUIDString);
         NSError *hangupError;
         [call hangup:&hangupError];
         if (hangupError) {
-            DDLogError(@"Could not hangup call(%@). Error: %@", call.uuid.UUIDString, hangupError);
+            VSLLogError(@"Could not hangup call(%@). Error: %@", call.uuid.UUIDString, hangupError);
             completion(hangupError);
         } else {
-            DDLogInfo(@"\"End Call Transaction\" requested succesfully for Call(%@)", call.uuid.UUIDString);
+            VSLLogInfo(@"\"End Call Transaction\" requested succesfully for Call(%@)", call.uuid.UUIDString);
             completion(nil);
         }
     }
@@ -135,10 +136,10 @@
         NSError *muteError;
         [call toggleMute:&muteError];
         if (muteError) {
-            DDLogError(@"Could not mute call. Error: %@", muteError);
+            VSLLogError(@"Could not mute call. Error: %@", muteError);
             completion(muteError);
         } else {
-            DDLogInfo(@"\"Mute Call Transaction\" requested succesfully for Call(%@)", call.uuid.UUIDString);
+            VSLLogInfo(@"\"Mute Call Transaction\" requested succesfully for Call(%@)", call.uuid.UUIDString);
             completion(nil);
         }
     }
@@ -152,10 +153,10 @@
         NSError *holdError;
         [call toggleHold:&holdError];
         if (holdError) {
-            DDLogError(@"Could not hold call (%@). Error: %@", call.uuid.UUIDString, holdError);
+            VSLLogError(@"Could not hold call (%@). Error: %@", call.uuid.UUIDString, holdError);
             completion(holdError);
         } else {
-            DDLogInfo(@"\"Hold Call Transaction\" requested succesfully for Call(%@)", call.uuid.UUIDString);
+            VSLLogInfo(@"\"Hold Call Transaction\" requested succesfully for Call(%@)", call.uuid.UUIDString);
             completion(nil);
         }
     }
@@ -171,10 +172,10 @@
         NSError *dtmfError;
         [call sendDTMF:character error:&dtmfError];
         if (dtmfError) {
-            DDLogError(@"Could not send DTMF. Error: %@", dtmfError);
+            VSLLogError(@"Could not send DTMF. Error: %@", dtmfError);
             completion(dtmfError);
         } else {
-            DDLogInfo(@"\"Sent DTMF Transaction\" requested succesfully for Call(%@)", call.uuid.UUIDString);
+            VSLLogInfo(@"\"Sent DTMF Transaction\" requested succesfully for Call(%@)", call.uuid.UUIDString);
             completion(nil);
         }
     }
@@ -184,7 +185,7 @@
     CXTransaction *transaction = [[CXTransaction alloc] initWithAction:action];
     [self.callController requestTransaction:transaction completion:^(NSError * _Nullable error) {
         if (error) {
-            DDLogError(@"Error requesting transaction: %@. Error:%@", transaction, error);
+            VSLLogError(@"Error requesting transaction: %@. Error:%@", transaction, error);
             completion(error);
         } else {
             completion(nil);
@@ -194,22 +195,22 @@
 
 - (void)addCall:(VSLCall *)call {
     [self.calls addObject:call];
-    DDLogVerbose(@"Call(%@) added. Calls count:%ld",call.uuid.UUIDString, (long)[self.calls count]);
+    VSLLogVerbose(@"Call(%@) added. Calls count:%ld",call.uuid.UUIDString, (long)[self.calls count]);
 
 }
 
 - (void)removeCall:(VSLCall *)call {
     [self.calls removeObject:call];
-    DDLogVerbose(@"Call(%@) removed. Calls count: %ld",call.uuid.UUIDString, (long)[self.calls count]);
+    VSLLogVerbose(@"Call(%@) removed. Calls count: %ld",call.uuid.UUIDString, (long)[self.calls count]);
 }
 
 - (void)endAllCalls {
     for (VSLCall *call in self.calls) {
-        DDLogVerbose(@"Ending call: %@", call.uuid.UUIDString);
+        VSLLogVerbose(@"Ending call: %@", call.uuid.UUIDString);
         NSError *hangupError;
         [call hangup:&hangupError];
         if (hangupError) {
-            DDLogError(@"Could not hangup call(%@). Error: %@", call.uuid.UUIDString, hangupError);
+            VSLLogError(@"Could not hangup call(%@). Error: %@", call.uuid.UUIDString, hangupError);
         } else {
             [self.audioController deactivateAudioSession];
         }
@@ -230,7 +231,7 @@
  *  @retrun A VSLCall object or nil if not found.
  */
 - (VSLCall *)callWithUUID:(NSUUID *)uuid {
-    DDLogVerbose(@"Looking for a call with UUID:%@", uuid.UUIDString);
+    VSLLogVerbose(@"Looking for a call with UUID:%@", uuid.UUIDString);
     NSUInteger callIndex = [self.calls indexOfObjectPassingTest:^BOOL(VSLCall* _Nonnull call, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([call.uuid isEqual:uuid]) {
             return YES;
@@ -240,10 +241,10 @@
 
     if (callIndex != NSNotFound) {
         VSLCall *call = [self.calls objectAtIndex:callIndex];
-        DDLogDebug(@"VSLCall found for UUID:%@ VSLCall:%@", uuid.UUIDString, call);
+        VSLLogDebug(@"VSLCall found for UUID:%@ VSLCall:%@", uuid.UUIDString, call);
         return call;
     }
-    DDLogDebug(@"No VSLCall found for UUID:%@", uuid.UUIDString);
+    VSLLogDebug(@"No VSLCall found for UUID:%@", uuid.UUIDString);
     return nil;
 }
 
@@ -313,7 +314,7 @@
 }
 
 - (void)reinviteActiveCallsForAccount:(VSLAccount *)account {
-    DDLogDebug(@"Reinviting calls");
+    VSLLogDebug(@"Reinviting calls");
     for (VSLCall *call in [self activeCallsForAccount:account]) {
         [call reinvite];
     }

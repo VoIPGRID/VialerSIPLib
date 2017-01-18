@@ -33,6 +33,7 @@
 		C48B488E1D421CB100AB2875 /* SipUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48B488D1D421CB100AB2875 /* SipUser.swift */; };
 		C48B48901D42228900AB2875 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48B488F1D42228900AB2875 /* AppDelegate.swift */; };
 		DAEE78D0DFEE673BBB2D3BFA /* libPods-VialerSIPLib_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC9964E9ED02C94D58D97B6B /* libPods-VialerSIPLib_Tests.a */; };
+		EE79A6C51E2CFC0F00AC4AC7 /* VSLEndOfCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */; };
 		F26407E11DA7D6FE00393D4B /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26407E01DA7D6FE00393D4B /* CallKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F271B54E1DABD18F0028D620 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F271B54D1DABD18F0028D620 /* IntentHandler.swift */; };
 		F271B5521DABD18F0028D620 /* IntentsExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F271B54B1DABD18F0028D620 /* IntentsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -127,6 +128,7 @@
 		C4A6D7661D5A12720014A4FB /* Keys.swift.example */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Keys.swift.example; sourceTree = "<group>"; };
 		C64094058567ED161343B634 /* Pods-VialerSIPLib_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		E4DBAC75C9B3D560D6779049 /* Pods-VialerSIPLib_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSLEndOfCallViewController.swift; sourceTree = "<group>"; };
 		F26407E01DA7D6FE00393D4B /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		F271B54B1DABD18F0028D620 /* IntentsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = IntentsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F271B54D1DABD18F0028D620 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 				C44F26451D3FB63600A5A406 /* VSLMainViewController.swift */,
 				C44F26471D3FBFCF00A5A406 /* VSLMakeCallViewController.swift */,
 				C44F26491D3FC71D00A5A406 /* VSLCallViewController.swift */,
+				EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */,
 				C457E49C1D3D070D0005D4B4 /* VSLTransferCallViewController.swift */,
 				C44F26411D3F5B7D00A5A406 /* VSLSecondCallViewController.swift */,
 				C44F264B1D3FD33F00A5A406 /* VSLIncomingCallViewController.swift */,
@@ -629,6 +632,7 @@
 				C44F264C1D3FD33F00A5A406 /* VSLIncomingCallViewController.swift in Sources */,
 				C457E49D1D3D070D0005D4B4 /* VSLTransferCallViewController.swift in Sources */,
 				C4441B721D424F8100C98E49 /* DDLogWrapper.m in Sources */,
+				EE79A6C51E2CFC0F00AC4AC7 /* VSLEndOfCallViewController.swift in Sources */,
 				C48B488E1D421CB100AB2875 /* SipUser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

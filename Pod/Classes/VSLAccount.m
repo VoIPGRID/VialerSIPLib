@@ -7,7 +7,7 @@
 
 @import CallKit;
 #import "Constants.h"
-#import <CocoaLumberJack/CocoaLumberjack.h>
+#import "VSLLogging.h"
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
 #import "VSLCallManager.h"
@@ -15,6 +15,7 @@
 #import "VSLCall.h"
 #import "VSLEndpoint.h"
 #import "VSLEndpointConfiguration.h"
+#import "VSLLogging.h"
 
 static NSUInteger const VSLAccountRegistrationTimeoutInSeconds = 800;
 static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
@@ -49,7 +50,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 - (void)setAccountState:(VSLAccountState)accountState {
     if (_accountState != accountState) {
-        DDLogDebug(@"AccountState will change from %@(%ld) to %@(%ld)", VSLAccountStateString(_accountState),
+        VSLLogDebug(@"AccountState will change from %@(%ld) to %@(%ld)", VSLAccountStateString(_accountState),
                    (long)_accountState, VSLAccountStateString(accountState), (long)accountState);
         _accountState = accountState;
     }
@@ -132,7 +133,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     pj_status_t status = pjsua_acc_add(&acc_cfg, PJ_TRUE, &accountId);
 
     if (status == PJ_SUCCESS) {
-        DDLogInfo(@"Account added succesfully");
+        VSLLogInfo(@"Account added succesfully");
         self.accountConfiguration = accountConfiguration;
         self.accountId = accountId;
         [[VSLEndpoint sharedEndpoint] addAccount:self];
@@ -159,13 +160,13 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
     status = pjsua_acc_del((pjsua_acc_id)self.accountId);
     if (status != PJ_SUCCESS) {
-        DDLogError(@"Unable to remove account from sip server.");
+        VSLLogError(@"Unable to remove account from sip server.");
     }
     [[VSLEndpoint sharedEndpoint] removeAccount:self];
 }
 
 - (void)registerAccountWithCompletion:(RegistrationCompletionBlock)completion {
-    DDLogDebug(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
+    VSLLogDebug(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
 
     pjsua_acc_info info;
     pjsua_acc_get_info((pjsua_acc_id)self.accountId, &info);
@@ -175,14 +176,14 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     // not wit a connection loss. So, to track a registration in progress, an ivar is used.
     if (!self.registrationInProgress && info.expires == -1) {
         self.registrationInProgress = YES;
-        DDLogVerbose(@"Sending registration for account: %@", [NSNumber numberWithInteger:self.accountId]);
+        VSLLogVerbose(@"Sending registration for account: %@", [NSNumber numberWithInteger:self.accountId]);
 
         pj_status_t status;
         status = pjsua_acc_set_registration((pjsua_acc_id)self.accountId, PJ_TRUE);
         self.registrationInProgress = NO;
 
         if (status != PJ_SUCCESS) {
-            DDLogError(@"Account registration failed");
+            VSLLogError(@"Account registration failed");
             NSError *error = [NSError VSLUnderlyingError:nil
                                  localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
                              localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
@@ -191,7 +192,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
             completion(NO, error);
         }
     } else {
-        DDLogVerbose(@"VSLAccount registered or registration in progress, cannot sent another registration");
+        VSLLogVerbose(@"VSLAccount registered or registration in progress, cannot sent another registration");
     }
 
     // Check if account is connected, otherwise set completionblock.
@@ -224,7 +225,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     status = pjsua_acc_set_registration((pjsua_acc_id)self.accountId, PJ_FALSE);
 
     if (status != PJ_SUCCESS) {
-        DDLogError(@"Account unregistration failed");
+        VSLLogError(@"Account unregistration failed");
         if (error != nil) {
             *error = [NSError VSLUnderlyingError:nil
                          localizedDescriptionKey:NSLocalizedString(@"Account unregistration failed", nil)
@@ -234,7 +235,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         }
         return NO;
     }
-    DDLogInfo(@"Account unregistered succesfully");
+    VSLLogInfo(@"Account unregistered succesfully");
     return YES;
 }
 
@@ -256,11 +257,11 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         if (self.shouldReregister) {
             [self registerAccountWithCompletion:^(BOOL success, NSError * _Nullable error) {
                 if (success) {
-                    DDLogInfo(@"Account was re-registerd after a sucessfull unregister.");
+                    VSLLogInfo(@"Account was re-registerd after a sucessfull unregister.");
                     self.shouldReregister = NO;
                     [self reinviteActiveCalls];
                 } else {
-                    DDLogWarn(@"Unable to re-register account");
+                    VSLLogWarning(@"Unable to re-register account");
                     self.shouldReregister = NO;
                 }
             }];
@@ -271,7 +272,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         self.accountState = VSLAccountStateConnected;
         // Registration is succesfull.
         if (self.registrationCompletionBlock) {
-            DDLogVerbose(@"Account registered succesfully");
+            VSLLogVerbose(@"Account registered succesfully");
             self.registrationCompletionBlock(YES, nil);
             self.registrationCompletionBlock = nil;
         }

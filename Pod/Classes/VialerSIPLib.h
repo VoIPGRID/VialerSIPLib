@@ -4,6 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #import "VSLAccountConfiguration.h"
 #import "VSLCallManager.h"
 #import "VSLCall.h"
@@ -158,6 +159,14 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *  @param incomingCallBlock block that will be invoked when an incoming call is setup.
  */
 - (void)setIncomingCallBlock:(void(^ _Nonnull )(VSLCall * _Nonnull call))incomingCallBlock;
+
+
+/**
+ Set the log call back method to do own custom logging.
+
+ @param logcallBackBlock block that will be invoked when a log message is shown.
+ */
+- (void)setLogCallBackBlock:(void(^ _Nonnull)(DDLogMessage * _Nonnull logMessage))logCallBackBlock;
 
 /**
  *  Get a VSLCall with the callId.
