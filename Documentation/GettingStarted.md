@@ -130,6 +130,24 @@ To be able to use the app through a native iOS interface, e.g. recents or contac
 This is done by creating a new "target" and selecting "Intent Extension". You will see a new target and also a folder with the same name as the extension you've just created with 2 files in it (at least for swift) IntentHandler.swift and info.plist.
 Replace the contents of IntentHandler.swift with:
 
+Objective-C
+```objective-c
+#pragma mark - INStartAudioCallIntentHandling
+- (void)handleStartAudioCall:(INStartAudioCallIntent *)intent
+                  completion:(void (^)(INStartAudioCallIntentResponse *response))completion {
+    NSLog(@"HANDLE Audio intent:%@",intent);
+    INStartAudioCallIntentResponse *response = nil;
+    NSArray<INPerson *> *contacts = intent.contacts;
+    INPerson *person = contacts.firstObject;
+    if (person.personHandle != nil) {
+        NSUserActivity *userActivity = [[NSUserActivity alloc] initWithActivityType:NSStringFromClass([INStartAudioCallIntent class])];
+        response = [[INStartAudioCallIntentResponse alloc] initWithCode:INStartAudioCallIntentResponseCodeContinueInApp userActivity:userActivity];
+    } else {
+        response = [[INStartAudioCallIntentResponse alloc] initWithCode:INStartAudioCallIntentResponseCodeFailure userActivity:nil];
+    }
+    completion(response);
+}
+```
 Swift
 ```swift
     /*
