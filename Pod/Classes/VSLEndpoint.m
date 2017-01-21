@@ -27,6 +27,7 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info);
 static void onRegStarted2(pjsua_acc_id acc_id, pjsua_reg_info *info);
 static void onNatDetect(const pj_stun_nat_detect_result *res);
 static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info);
+static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_event *event);
 
 static pjsip_transport *the_transport;
 
@@ -166,6 +167,7 @@ static pjsip_transport *the_transport;
     endpointConfig.cb.on_reg_started2 = &onRegStarted2;
     endpointConfig.cb.on_nat_detect = &onNatDetect;
     endpointConfig.cb.on_transport_state = &onTransportState;
+    endpointConfig.cb.on_call_media_event = &onCallMediaEvent;
     endpointConfig.max_calls = (unsigned int)endpointConfiguration.maxCalls;
     endpointConfig.user_agent = endpointConfiguration.userAgent.pjString;
 
@@ -535,6 +537,36 @@ static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, c
         the_transport = tp;
         pjsip_transport_add_ref(tp);
     }
+}
+
+/* Callback on media events. Adjust renderer window size to original video size */
+static void onCallMediaEvent(pjsua_call_id call_id,
+                             unsigned med_idx,
+                             pjmedia_event *event) {
+#if PJSUA_HAS_VIDEO
+    if (event->type == PJMEDIA_EVENT_FMT_CHANGED) {
+        char event_name[5];
+        VSLLogVerbose(@"Event Media %s", pjmedia_fourcc_name(event->type, event_name));
+        pjsua_call_info ci;
+        pjsua_vid_win_id wid;
+        pjmedia_rect_size size;
+        
+        pjsua_call_get_info(call_id, &ci);
+        
+        if ((ci.media[med_idx].type == PJMEDIA_TYPE_VIDEO) &&
+            (ci.media[med_idx].dir & PJMEDIA_DIR_DECODING))
+        {
+            wid = ci.media[med_idx].stream.vid.win_in;
+            size = event->data.fmt_changed.new_fmt.det.vid.size;
+            NSDictionary *userInfo = @{VSLNotificationUserInfoCallIdKey:@(call_id),
+                                       VSLNotificationUserInfoWindowIdKey:@(wid),
+                                       VSLNotificationUserInfoWindowSizeKey:[NSValue valueWithCGSize:(CGSize){size.w, size.h}]};
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:VSLNotificationUserInfoVideoSizeRenderKey object:nil userInfo:userInfo];
+            });
+        }
+    }
+#endif
 }
 
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {

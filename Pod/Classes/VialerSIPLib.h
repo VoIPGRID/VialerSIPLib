@@ -19,6 +19,19 @@
 extern NSString * __nonnull const VSLNotificationUserInfoCallKey;
 
 /**
+ *  Key to be used for retreiving a CallId out of NSNotification user info dict.
+ */
+extern NSString * __nonnull const VSLNotificationUserInfoCallIdKey;
+/**
+ *  Key to be used for retreiving a render window id out of NSNotification user info dict.
+ */
+extern NSString * __nonnull const VSLNotificationUserInfoWindowIdKey;
+/**
+ *  Key to be used for retreiving a new size of render view out of NSNotification user info dict.
+ */
+extern NSString * __nonnull const VSLNotificationUserInfoWindowSizeKey;
+
+/**
  *  Possible errors the VialerSIPLib can return.
  */
 typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
