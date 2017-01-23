@@ -10,8 +10,9 @@
 #import "VSLAudioController.h"
 #import "VSLLogging.h"
 
-NSString * const CallKitProviderDelegateOutboundCallStarted = @"CallKitProviderDelegateOutboundCallStarted";
-NSString * const CallKitProviderDelegateInboundCallAccepted = @"CallKitProviderDelegateInboundCallAccepted";
+NSString * const CallKitProviderDelegateOutboundCallStartedNotification = @"CallKitProviderDelegateOutboundCallStarted";
+NSString * const CallKitProviderDelegateInboundCallAcceptedNotification = @"CallKitProviderDelegateInboundCallAccepted";
+NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"CallKitProviderDelegateInboundCallRejected";
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
@@ -104,7 +105,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                 VSLLogVerbose(@"Answering call %@", call.uuid.UUIDString);
                 // Post a notification so the outbound call screen can be shown.
                 NSDictionary *notificationInfo = @{VSLNotificationUserInfoCallKey : call};
-                [[NSNotificationCenter defaultCenter] postNotificationName:CallKitProviderDelegateInboundCallAccepted
+                [[NSNotificationCenter defaultCenter] postNotificationName:CallKitProviderDelegateInboundCallAcceptedNotification
                                                                     object:self
                                                                   userInfo:notificationInfo];
                 [action fulfill];
@@ -124,6 +125,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     //TODO: In the beta it should become clear if we want to Fullfill or Fail on the
     //different error conditions
     VSLCall *call = [self.callManager callWithUUID:action.callUUID];
+
+    if (call.callState == VSLCallStateIncoming) {
+        VSLLogInfo(@"Rejected incoming call, post info so that app can catch.");
+        [[NSNotificationCenter defaultCenter] postNotificationName:CallKitProviderDelegateInboundCallRejectedNotification object:self userInfo:nil];
+    }
 
     if (call) {
         NSError *hangupError;
@@ -157,7 +163,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
             // Post a notification so the outbound call screen can be shown.
             NSDictionary *notificationInfo = @{VSLNotificationUserInfoCallKey : call};
-            [[NSNotificationCenter defaultCenter] postNotificationName:CallKitProviderDelegateOutboundCallStarted
+            [[NSNotificationCenter defaultCenter] postNotificationName:CallKitProviderDelegateOutboundCallStartedNotification
                                                                 object:self
                                                               userInfo:notificationInfo];
             [action fulfill];

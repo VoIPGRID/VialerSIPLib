@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     struct Configuration {
         struct Notifications {
-            static let IncomingCall = "AppDelegate.Notifications.IncomingCall"
+            static let incomingCall = Notification.Name("AppDelegate.Notification.IncomingCall")
         }
     }
 
@@ -96,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             providerDelegate?.reportIncomingCall(call)
         } else {
             DDLogWrapper.logInfo("Incoming call block invoked, using own app presentation.")
-            NotificationCenter.default.post(name: Notification.Name(rawValue: Configuration.Notifications.IncomingCall),
+            NotificationCenter.default.post(name: AppDelegate.Configuration.Notifications.incomingCall,
                                             object: self,
                                             userInfo: [VSLNotificationUserInfoCallKey : call])
         }
