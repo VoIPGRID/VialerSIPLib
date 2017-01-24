@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [2.5.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.5.0) (01/24/2017)
+Released on Tuesday, January 24, 2017.
+
+#### Added
+* Notifications are sent when a call was accepted or rejected through CallKit (#55)[https://github.com/VoIPGRID/VialerSIPLib/pull/55]
+* Documentation of the repo had a cleanup (#56)[https://github.com/VoIPGRID/VialerSIPLib/pull/56]
+* Getting started guide was updated for Objective C example for intents extension (ddec838)[https://github.com/VoIPGRID/VialerSIPLib/commit/ddec838a8b64f7f6ebe83e13732aeb001d56e502]
+
+
+
 ## [2.4.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.4.0) (01/18/2017)
 Released on Wednesday, January 18, 2017.
 
