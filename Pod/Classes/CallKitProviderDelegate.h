@@ -6,8 +6,9 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * __nonnull const CallKitProviderDelegateOutboundCallStarted;
-extern NSString * __nonnull const CallKitProviderDelegateInboundCallAccepted;
+extern NSString * __nonnull const CallKitProviderDelegateOutboundCallStartedNotification;
+extern NSString * __nonnull const CallKitProviderDelegateInboundCallAcceptedNotification;
+extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNotification;
 
 @import CallKit;
 

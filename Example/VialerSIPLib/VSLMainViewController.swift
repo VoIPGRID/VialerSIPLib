@@ -40,17 +40,17 @@ class VSLMainViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(incomingCallNotification(_:)),
-                                               name: NSNotification.Name(rawValue: AppDelegate.Configuration.Notifications.IncomingCall),
+                                               name: AppDelegate.Configuration.Notifications.incomingCall,
                                                object: nil)
         // If we are CallKit compatible
         if #available(iOS 10.0, *) {
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(directlyShowActiveCallController(_:)),
-                                                   name: NSNotification.Name(rawValue: CallKitProviderDelegateOutboundCallStarted),
+                                                   name: Notification.Name.CallKitProviderDelegateOutboundCallStarted,
                                                    object: nil)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(directlyShowActiveCallController(_:)),
-                                                   name: NSNotification.Name(rawValue: CallKitProviderDelegateInboundCallAccepted),
+                                                   name: Notification.Name.CallKitProviderDelegateInboundCallAccepted,
                                                    object: nil)
         }
 
@@ -63,15 +63,15 @@ class VSLMainViewController: UIViewController {
         account.removeObserver(self, forKeyPath: #keyPath(VSLAccount.accountState))
 
         NotificationCenter.default.removeObserver(self,
-                                                  name:NSNotification.Name(rawValue: AppDelegate.Configuration.Notifications.IncomingCall),
+                                                  name:AppDelegate.Configuration.Notifications.incomingCall,
                                                   object: nil)
 
         if #available(iOS 10.0, *) {
             NotificationCenter.default.removeObserver(self,
-                                                      name: NSNotification.Name(rawValue: CallKitProviderDelegateOutboundCallStarted),
+                                                      name: Notification.Name.CallKitProviderDelegateOutboundCallStarted,
                                                       object: nil)
             NotificationCenter.default.removeObserver(self,
-                                                      name: NSNotification.Name(rawValue: CallKitProviderDelegateInboundCallAccepted),
+                                                      name: Notification.Name.CallKitProviderDelegateInboundCallAccepted,
                                                       object: nil)
         }
     }
