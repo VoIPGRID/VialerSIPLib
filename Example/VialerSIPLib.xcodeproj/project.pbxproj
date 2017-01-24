@@ -125,6 +125,9 @@
 		C48B488D1D421CB100AB2875 /* SipUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SipUser.swift; sourceTree = "<group>"; };
 		C48B488F1D42228900AB2875 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C49B2C3A1DF9B9CB000FFBF7 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		C4A5C09D1E3640CF008F5297 /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CONTRIBUTING.md; path = ../Documentation/CONTRIBUTING.md; sourceTree = "<group>"; };
+		C4A5C09F1E364121008F5297 /* ISSUE_TEMPLATE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = ISSUE_TEMPLATE.md; path = ../.github/ISSUE_TEMPLATE.md; sourceTree = "<group>"; };
+		C4A5C0A01E364140008F5297 /* PULL_REQUEST_TEMPLATE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PULL_REQUEST_TEMPLATE.md; sourceTree = "<group>"; };
 		C4A6D7661D5A12720014A4FB /* Keys.swift.example */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Keys.swift.example; sourceTree = "<group>"; };
 		C64094058567ED161343B634 /* Pods-VialerSIPLib_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		E4DBAC75C9B3D560D6779049 /* Pods-VialerSIPLib_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -276,6 +279,8 @@
 				5D24E0A5A14D1689830035B2 /* README.md */,
 				C49B2C3A1DF9B9CB000FFBF7 /* CHANGELOG.md */,
 				751644FF6D649E93790619BF /* LICENSE */,
+				C4A5C09F1E364121008F5297 /* ISSUE_TEMPLATE.md */,
+				C4A5C0A01E364140008F5297 /* PULL_REQUEST_TEMPLATE.md */,
 				C48736151C4F901600604413 /* Documentation */,
 			);
 			name = "Podspec Metadata";
@@ -345,6 +350,7 @@
 		C48736151C4F901600604413 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				C4A5C09D1E3640CF008F5297 /* CONTRIBUTING.md */,
 				C48736131C4F897D00604413 /* GettingStarted.md */,
 				C48736161C4F904100604413 /* README.md */,
 				C48736181C4F912C00604413 /* Middleware.md */,
@@ -453,6 +459,7 @@
 					6003F589195388D20070C39A = {
 						DevelopmentTeam = E2Q9UE8HM6;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
