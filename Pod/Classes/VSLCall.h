@@ -15,6 +15,14 @@
 extern NSString * _Nonnull const VSLCallStateChangedNotification;
 
 /**
+ *  Notification which is posted when the call's media event recived.
+ *  The callId for which the media event changed can be found in the
+ *  notifications user info dict.
+ */
+extern NSString * _Nonnull const VSLNotificationUserInfoVideoSizeRenderKey;
+
+
+/**
  *  Notification that will be posted when a phonecall is connected.
  */
 extern NSString * _Nonnull const VSLCallConnectedNotification DEPRECATED_MSG_ATTRIBUTE("Deprecated, listen for VSLCallStateChangedNotification instead");

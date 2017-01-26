@@ -12,7 +12,10 @@
 #import "VSLLogging.h"
 
 static NSString * const VialerSIPLibErrorDomain = @"VialerSIPLib.error";
- NSString * const VSLNotificationUserInfoCallKey = @"VSLNotificationUserInfoCallKey";
+NSString * const VSLNotificationUserInfoCallKey = @"VSLNotificationUserInfoCallKey";
+NSString * const VSLNotificationUserInfoCallIdKey = @"VSLNotificationUserInfoCallIdKey";
+NSString * const VSLNotificationUserInfoWindowIdKey = @"VSLNotificationUserInfoWindowIdKey";
+NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInfoWindowSizeKey";
 
 @interface VialerSIPLib()
 @property (strong, nonatomic) VSLEndpoint *endpoint;
