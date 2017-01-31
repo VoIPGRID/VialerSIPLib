@@ -66,13 +66,18 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
 }
 
 - (void)start {
+    [self startWithVibrare:YES];
+}
+
+- (void)startWithVibrare:(BOOL)vibrare {
     if (!self.isPlaying) {
         [self.audioPlayer prepareToPlay];
         [self configureAudioSessionBeforeRingtoneIsPlayed];
         [self.audioPlayer play];
-
-        [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
-        [[NSRunLoop mainRunLoop] addTimer:self.vibrateTimer forMode:NSRunLoopCommonModes];
+        if (vibrare) {
+            [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+            [[NSRunLoop mainRunLoop] addTimer:self.vibrateTimer forMode:NSRunLoopCommonModes];
+        }
     }
 }
 
