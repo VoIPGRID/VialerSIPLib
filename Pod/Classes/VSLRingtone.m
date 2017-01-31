@@ -69,12 +69,12 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
     [self startWithVibrare:YES];
 }
 
-- (void)startWithVibrare:(BOOL)vibrare {
+- (void)startWithVibrate:(BOOL)vibrate {
     if (!self.isPlaying) {
         [self.audioPlayer prepareToPlay];
         [self configureAudioSessionBeforeRingtoneIsPlayed];
         [self.audioPlayer play];
-        if (vibrare) {
+        if (vibrate) {
             [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
             [[NSRunLoop mainRunLoop] addTimer:self.vibrateTimer forMode:NSRunLoopCommonModes];
         }

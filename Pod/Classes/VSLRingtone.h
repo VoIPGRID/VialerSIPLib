@@ -38,7 +38,7 @@
 /**
  *  Start playing the ringtone.
  */
-- (void)startWithVibrare:(BOOL)vibrare;
+- (void)startWithVibrate:(BOOL)vibrate;
 
 /**
  *  Stop playing the ringtone.
