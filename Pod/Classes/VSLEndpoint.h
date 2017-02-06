@@ -58,7 +58,6 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
 };
 #define VSLEndpointStateString(VSLEndpointState) [@[@"VSLEndpointStopped", @"VSLEndpointStarting", @"VSLEndpointStarted"] objectAtIndex:VSLEndpointState]
 
-
 @interface VSLEndpoint : NSObject
 
 /**

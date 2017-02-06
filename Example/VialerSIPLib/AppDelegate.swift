@@ -52,10 +52,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return [VSLTransportConfiguration(transportType: .UDP)!]
         }
 
+
         let endpointConfiguration = VSLEndpointConfiguration()
         endpointConfiguration.logLevel = 3
         endpointConfiguration.userAgent = "VialerSIPLib Example App"
         endpointConfiguration.transportConfigurations = transportToUse
+        endpointConfiguration.codecConfigurations = [
+            VSLCodecs(codec: .ILBC, andPriotity: 210),
+            VSLCodecs(codec: .g711a, andPriotity: 209)
+        ]
 
         do {
             try VialerSIPLib.sharedInstance().configureLibrary(withEndPointConfiguration: endpointConfiguration)
