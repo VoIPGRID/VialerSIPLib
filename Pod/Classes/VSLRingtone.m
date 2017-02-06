@@ -66,7 +66,7 @@ static NSUInteger const VialerSIPLibVibrateDuration = 1;
 }
 
 - (void)start {
-    [self startWithVibrare:YES];
+    [self startWithVibrate:YES];
 }
 
 - (void)startWithVibrate:(BOOL)vibrate {
