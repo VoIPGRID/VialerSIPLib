@@ -84,7 +84,7 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *
  *  @return NSString with the proxy Address.
  */
-@property (readonly, nonatomic) NSString * _Nonnull sipProxy;
+@property (readonly, nonatomic) NSString * _Nullable sipProxy;
 
 /**
  * Control the use of STUN for the SIP signaling.

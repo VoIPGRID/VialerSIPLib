@@ -10,7 +10,7 @@ class SipUser: NSObject, SIPEnabledUser {
     let sipAccount: String
     let sipPassword: String
     let sipDomain: String
-    let sipProxy: String
+    let sipProxy: String?
     let sipRegisterOnAdd: Bool
 
     init(sipAccount: String, sipPassword: String, sipDomain: String, sipProxy: String) {

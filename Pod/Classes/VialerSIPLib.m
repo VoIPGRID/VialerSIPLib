@@ -95,7 +95,9 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
         accountConfiguration.sipAccount = sipUser.sipAccount;
         accountConfiguration.sipPassword = sipUser.sipPassword;
         accountConfiguration.sipDomain = sipUser.sipDomain;
-        accountConfiguration.sipProxyServer = sipUser.sipProxy ? sipUser.sipProxy : @"";
+        if ([sipUser respondsToSelector:@selector(sipProxy)]) {
+            accountConfiguration.sipProxyServer = sipUser.sipProxy;
+        }
         accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
         accountConfiguration.dropCallOnRegistrationFailure = YES;
         
