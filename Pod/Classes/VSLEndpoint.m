@@ -285,10 +285,12 @@ static pjsip_transport *the_transport;
         VSLLogWarning(@"Error stopping SIP Endpoint");
     }
 
-    if (self.pjPool != NULL) {
-        pj_pool_release([self pjPool]);
-        self.pjPool = NULL;
+    @try {
+        pj_pool_safe_release(&self->_pjPool);
+    } @catch (NSException *exception) {
+        VSLLogError(@"%Error stopping _pjPool @",[exception description]);
     }
+
 
     self.state = VSLEndpointStopped;
 }
