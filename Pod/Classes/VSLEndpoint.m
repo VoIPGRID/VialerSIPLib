@@ -286,7 +286,7 @@ static pjsip_transport *the_transport;
     }
 
     @try {
-        pj_pool_safe_release(self->_pjPool);
+        pj_pool_safe_release(&self->_pjPool);
     } @catch (NSException *exception) {
         VSLLogError(@"%Error stopping _pjPool @",[exception description]);
     }
