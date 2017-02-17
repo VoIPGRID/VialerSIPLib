@@ -36,7 +36,7 @@
  *
  *  Default value: nil
  */
-@property (strong, nonatomic) NSString *logFilename;
+@property (strong, nonatomic) NSString * _Nullable logFilename;
 
 /**
  *  Additional flags to be given to pj_file_open() when opening the log file.
@@ -69,7 +69,12 @@
 /**
  *  An array which will hold all the configured transports.
  */
-@property (strong, nonatomic) NSArray *transportConfigurations;
+@property (strong, nonatomic) NSArray * _Nonnull transportConfigurations;
+
+/**
+ * An array which will hold the which codec is going to be used and its priority.
+ */
+@property (strong, nonatomic) NSArray * _Nonnull codecConfigurations;
 
 /**
  *  To check if the endpoint has a tcp configuration.
@@ -82,5 +87,5 @@
  * Optional user agent string (default empty). If it's empty, no
  * User-Agent header will be sent with outgoing requests.
  */
-@property (strong, nonatomic) NSString *userAgent;
+@property (strong, nonatomic) NSString * _Nullable userAgent;
 @end

@@ -11,6 +11,7 @@
 #import "VialerSIPLib.h"
 #import "VSLCall.h"
 #import "VSLCallManager.h"
+#import "VSLCodecs.h"
 #import "VSLLogging.h"
 #import "VSLNetworkMonitor.h"
 #import "VSLTransportConfiguration.h"
@@ -380,48 +381,13 @@ static pjsip_transport *the_transport;
 }
 
 - (pj_uint8_t)priorityForCodec:(NSString *)identifier {
-    NSDictionary *priorities;
-    if (self.onlyUseILBC) {
-        priorities = @{
-                       // G711a
-                       @"PCMA/8000/1":      @0,
-                       // G722
-                       @"G722/16000/1":     @0,
-                       // iLBC
-                       @"iLBC/8000/1":      @210,
-                       // G711
-                       @"PCMU/8000/1":      @0,
-                       // Speex 8 kHz
-                       @"speex/8000/1":     @0,
-                       // Speex 16 kHz
-                       @"speex/16000/1":    @0,
-                       // Speex 32 kHz
-                       @"speex/32000/1":    @0,
-                       // GSM 8 kHZ
-                       @"GSM/8000/1":       @0,
-                       };
-
-    } else {
-        priorities = @{
-                       // G711a
-                       @"PCMA/8000/1":      @210,
-                       // G722
-                       @"G722/16000/1":     @209,
-                       // iLBC
-                       @"iLBC/8000/1":      @208,
-                       // G711
-                       @"PCMU/8000/1":      @0,
-                       // Speex 8 kHz
-                       @"speex/8000/1":     @0,
-                       // Speex 16 kHz
-                       @"speex/16000/1":    @0,
-                       // Speex 32 kHz
-                       @"speex/32000/1":    @0,
-                       // GSM 8 kHZ
-                       @"GSM/8000/1":       @0,
-                       };
+    NSUInteger priority = 0;
+    for (VSLCodecs* codecs in self.endpointConfiguration.codecConfigurations) {
+        if ([VSLCodecString(codecs.codec) isEqualToString:identifier]) {
+            priority = codecs.priority;
+        }
     }
-    return (pj_uint8_t)[priorities[identifier] unsignedIntegerValue];
+    return (pj_uint8_t)priority;
 }
 
 #pragma mark - PJSUA callbacks
