@@ -279,20 +279,16 @@ static pjsip_transport *the_transport;
         }
     }
 
+    
+    if (self.pjPool != NULL) {
+        pj_pool_safe_release(&self->_pjPool);
+    }
+    
     // Destroy PJSUA.
     pj_status_t status = pjsua_destroy();
     if (status != PJ_SUCCESS) {
         VSLLogWarning(@"Error stopping SIP Endpoint");
     }
-
-    @try {
-        if (self.pjPool != NULL) {
-            pj_pool_safe_release(&self->_pjPool);
-        }
-    } @catch (NSException *exception) {
-        VSLLogError(@"%Error stopping _pjPool @",[exception description]);
-    }
-
 
     self.state = VSLEndpointStopped;
 }
