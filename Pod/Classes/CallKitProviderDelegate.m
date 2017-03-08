@@ -122,27 +122,30 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
  * "native" CallKit interface.
  */
 - (void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action {
-    //TODO: In the beta it should become clear if we want to Fullfill or Fail on the
-    //different error conditions
+    // Find call.
     VSLCall *call = [self.callManager callWithUUID:action.callUUID];
-
-    if (call.callState == VSLCallStateIncoming) {
-        VSLLogInfo(@"Rejected incoming call, post info so that app can catch.");
-        [[NSNotificationCenter defaultCenter] postNotificationName:CallKitProviderDelegateInboundCallRejectedNotification object:self userInfo:nil];
+    if (!call) {
+        VSLLogInfo(@"Error hanging up call(%@). No call found", action.callUUID.UUIDString);
+        [action fulfill];
+        return;
     }
 
-    if (call) {
-        NSError *hangupError;
-        [call hangup:&hangupError];
-        if (hangupError) {
-            VSLLogInfo(@"Error hanging up call(%@) error:%@", call.uuid.UUIDString, hangupError);
-            [action fail];
-        } else {
-            VSLLogVerbose(@"Ending call %@", call.uuid.UUIDString);
-            [action fulfill];
-        }
+    // Decline if incoming, otherwise hangup.
+    NSError *error;
+    if (call.callState == VSLCallStateIncoming) {
+        VSLLogInfo(@"Rejected incoming call, post info so that app can catch.");
+        [call decline:&error];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CallKitProviderDelegateInboundCallRejectedNotification object:self userInfo:nil];
     } else {
-        VSLLogInfo(@"Error hanging up call(%@). No call found", action.callUUID.UUIDString);
+        [call hangup:&error];
+    }
+
+    // Check if there was an error hanging up.
+    if (error) {
+        VSLLogInfo(@"Error hanging up call(%@) error:%@", call.uuid.UUIDString, error);
+        [action fail];
+    } else {
+        VSLLogVerbose(@"Ending call %@", call.uuid.UUIDString);
         [action fulfill];
     }
 }
