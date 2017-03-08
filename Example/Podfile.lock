@@ -7,18 +7,18 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (3.0.0):
     - CocoaLumberjack/Default
-  - OCMock (3.3.1)
+  - OCMock (3.4)
   - Reachability (3.2)
-  - Vialer-pjsip-iOS (1.1.0)
-  - VialerSIPLib (2.3.0):
+  - Vialer-pjsip-iOS (2.0.0)
+  - VialerSIPLib (2.5.0):
     - CocoaLumberjack
     - Reachability
-    - Vialer-pjsip-iOS
 
 DEPENDENCIES:
   - CocoaLumberjack
   - OCMock
   - Reachability
+  - Vialer-pjsip-iOS
   - VialerSIPLib (from `../`)
 
 EXTERNAL SOURCES:
@@ -27,11 +27,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
-  OCMock: f3f61e6eaa16038c30caa5798c5e49d3307b6f22
+  OCMock: 35ae71d6a8fcc1b59434d561d1520b9dd4f15765
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Vialer-pjsip-iOS: ced3608a20ffdcdf4afdc84a8e381c57525f8f25
-  VialerSIPLib: 1e7e022232f57a4e84f3e270aa029505347e5017
+  Vialer-pjsip-iOS: e5287013fb3e0d74e79dd53e6d0bd9c92c3f52ce
+  VialerSIPLib: cfc554f12eb5f63f41ff366d4c1243fd16f0d6be
 
-PODFILE CHECKSUM: 0f7b04fb045caf39ed7c2486524959b2d2be90e8
+PODFILE CHECKSUM: a628ea4bf991636055e59a5a5193665110f91ffe
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0
