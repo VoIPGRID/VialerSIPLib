@@ -399,6 +399,8 @@ static pjsip_transport *the_transport;
                        @"speex/32000/1":    @0,
                        // GSM 8 kHZ
                        @"GSM/8000/1":       @0,
+                       // opus
+                       @"opus/48000/2":     @0,
                        };
 
     } else {
@@ -409,6 +411,8 @@ static pjsip_transport *the_transport;
                        @"G722/16000/1":     @209,
                        // iLBC
                        @"iLBC/8000/1":      @208,
+                       // opus
+                       @"opus/48000/2":     @207,
                        // G711
                        @"PCMU/8000/1":      @0,
                        // Speex 8 kHz
