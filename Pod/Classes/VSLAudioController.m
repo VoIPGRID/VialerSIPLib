@@ -61,6 +61,7 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
 
 - (void)configureAudioSession {
     NSError *audioSessionCategoryError;
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategorySoloAmbient error:&audioSessionCategoryError]; //stop background music
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&audioSessionCategoryError];
     VSLLogVerbose(@"Setting AVAudioSessionCategory to \"Play and Record\"");
 
