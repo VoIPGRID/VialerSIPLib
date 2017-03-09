@@ -21,6 +21,7 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 static double const VSLCallDelayTimeCheckSuccessfullHangup = 0.5;
 
 NSString * const VSLCallStateChangedNotification = @"VSLCallStateChangedNotification";
+NSString * const VSLNotificationUserInfoVideoSizeRenderKey = @"VSLNotificationUserInfoVideoSizeRenderKey";
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
 NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
 
