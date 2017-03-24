@@ -1,11 +1,9 @@
 PODS:
-  - CocoaLumberjack (3.0.0):
-    - CocoaLumberjack/Default (= 3.0.0)
-    - CocoaLumberjack/Extensions (= 3.0.0)
-  - CocoaLumberjack/Core (3.0.0)
-  - CocoaLumberjack/Default (3.0.0):
-    - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (3.0.0):
+  - CocoaLumberjack (3.1.0):
+    - CocoaLumberjack/Default (= 3.1.0)
+    - CocoaLumberjack/Extensions (= 3.1.0)
+  - CocoaLumberjack/Default (3.1.0)
+  - CocoaLumberjack/Extensions (3.1.0):
     - CocoaLumberjack/Default
   - OCMock (3.4)
   - Reachability (3.2)
@@ -26,7 +24,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
+  CocoaLumberjack: 8311463ddf9ee86a06ef92a071dd656c89244500
   OCMock: 35ae71d6a8fcc1b59434d561d1520b9dd4f15765
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   Vialer-pjsip-iOS: 8f9073448404525d53f3aa4b9517e3b2b9aae2c7

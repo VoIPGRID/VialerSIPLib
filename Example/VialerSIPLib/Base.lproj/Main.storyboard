@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C68" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="SSt-lM-vHj">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="SSt-lM-vHj">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -23,10 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cpM-wE-TQc">
-                                <rect key="frame" x="87.5" y="362.5" width="200" height="42"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="zAj-DJ-Ukd"/>
-                                </constraints>
+                                <rect key="frame" x="89.5" y="300" width="191" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Register Account">
                                     <color key="titleColor" red="0.0" green="0.48058944940567017" blue="0.9978906512260437" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -35,57 +32,47 @@
                                     <action selector="registerAccountButtonPressed:" destination="AyF-vj-IOS" eventType="touchUpInside" id="KKm-1U-zcS"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jbq-Ih-gWu">
-                                <rect key="frame" x="87.5" y="312.5" width="200" height="42"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="793-jp-Dlg">
-                                <rect key="frame" x="87.5" y="262.5" width="200" height="42"/>
+                                <rect key="frame" x="130.5" y="218" width="109" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Make Call"/>
                                 <connections>
                                     <segue destination="MBm-O2-Xi8" kind="show" identifier="" id="iv7-I5-ZDp"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="REP-2W-IGo">
-                                <rect key="frame" x="87" y="412" width="200" height="42"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="42" id="4VD-jA-Upc"/>
-                                    <constraint firstAttribute="width" constant="200" id="fMH-Wz-ahr"/>
-                                </constraints>
-                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use TCP" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="480-FL-ChL">
-                                <rect key="frame" x="123.5" y="462" width="97" height="30"/>
+                                <rect key="frame" x="121" y="382" width="97" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <color key="textColor" red="0.0" green="0.48058944940567017" blue="0.9978906512260437" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hca-fc-jcp">
-                                <rect key="frame" x="243.5" y="461.5" width="51" height="31"/>
+                                <rect key="frame" x="241" y="381" width="51" height="31"/>
                                 <connections>
                                     <action selector="useTCPSwitchPressed:" destination="AyF-vj-IOS" eventType="valueChanged" id="A3V-ZR-rRh"/>
                                 </connections>
                             </switch>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zdE-sB-R9M">
+                                <rect key="frame" x="110.5" y="452" width="154" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Setup codecs"/>
+                                <connections>
+                                    <segue destination="rbU-Z5-Qn8" kind="show" id="MxP-Qp-b4X"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Jbq-Ih-gWu" firstAttribute="centerY" secondItem="QoV-RI-7MB" secondAttribute="centerY" id="2cB-70-5OT"/>
-                            <constraint firstItem="480-FL-ChL" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" constant="-15.5" id="7a8-hv-cZQ"/>
-                            <constraint firstItem="cpM-wE-TQc" firstAttribute="width" secondItem="793-jp-Dlg" secondAttribute="width" id="G5z-Pj-pMi"/>
-                            <constraint firstItem="cpM-wE-TQc" firstAttribute="top" secondItem="Jbq-Ih-gWu" secondAttribute="bottom" constant="8" id="I1S-y9-g6Q"/>
                             <constraint firstItem="hca-fc-jcp" firstAttribute="centerY" secondItem="480-FL-ChL" secondAttribute="centerY" id="IHP-S6-RdB"/>
-                            <constraint firstItem="cpM-wE-TQc" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" id="K7Z-ok-TRJ"/>
-                            <constraint firstItem="REP-2W-IGo" firstAttribute="top" secondItem="cpM-wE-TQc" secondAttribute="bottom" constant="8" id="L5k-ZP-xy0"/>
-                            <constraint firstItem="793-jp-Dlg" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" id="LXc-8e-9Ex"/>
-                            <constraint firstItem="REP-2W-IGo" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" id="W63-cG-rKp"/>
-                            <constraint firstItem="Jbq-Ih-gWu" firstAttribute="height" secondItem="cpM-wE-TQc" secondAttribute="height" id="aIn-p3-jrz"/>
-                            <constraint firstItem="Jbq-Ih-gWu" firstAttribute="width" secondItem="793-jp-Dlg" secondAttribute="width" id="cTo-Yt-sTa"/>
-                            <constraint firstItem="480-FL-ChL" firstAttribute="top" secondItem="REP-2W-IGo" secondAttribute="bottom" constant="8" id="jr8-iq-Mov"/>
-                            <constraint firstItem="Jbq-Ih-gWu" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" id="kqK-WS-bHD"/>
-                            <constraint firstItem="Jbq-Ih-gWu" firstAttribute="height" secondItem="793-jp-Dlg" secondAttribute="height" id="pA4-lf-cOa"/>
-                            <constraint firstItem="Jbq-Ih-gWu" firstAttribute="top" secondItem="793-jp-Dlg" secondAttribute="bottom" constant="8" id="sz2-g7-U2U"/>
+                            <constraint firstItem="cpM-wE-TQc" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" constant="-2.5" id="K7Z-ok-TRJ"/>
+                            <constraint firstItem="480-FL-ChL" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" constant="-18" id="KvN-OW-wvx"/>
+                            <constraint firstItem="793-jp-Dlg" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" constant="-2.5" id="LXc-8e-9Ex"/>
+                            <constraint firstItem="793-jp-Dlg" firstAttribute="centerY" secondItem="QoV-RI-7MB" secondAttribute="centerY" constant="-94.5" id="OZd-fT-8ee"/>
+                            <constraint firstItem="zdE-sB-R9M" firstAttribute="centerX" secondItem="QoV-RI-7MB" secondAttribute="centerX" id="bUB-aP-WZS"/>
+                            <constraint firstItem="cpM-wE-TQc" firstAttribute="top" secondItem="793-jp-Dlg" secondAttribute="bottom" constant="40" id="hku-eK-OPQ"/>
+                            <constraint firstItem="480-FL-ChL" firstAttribute="top" secondItem="cpM-wE-TQc" secondAttribute="bottom" constant="40" id="kNJ-sU-tgc"/>
                             <constraint firstItem="hca-fc-jcp" firstAttribute="leading" secondItem="480-FL-ChL" secondAttribute="trailing" constant="23" id="y5E-EA-3hN"/>
+                            <constraint firstItem="zdE-sB-R9M" firstAttribute="top" secondItem="480-FL-ChL" secondAttribute="bottom" constant="40" id="zIo-y8-Sgy"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="VialerSIPLib" id="NW3-3X-Cfz"/>
@@ -98,7 +85,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tYx-aW-qum" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1390" y="1347"/>
+            <point key="canvasLocation" x="1389.5999999999999" y="1346.176911544228"/>
         </scene>
         <!--Make Call-->
         <scene sceneID="wPY-Mv-Ch3">
@@ -316,6 +303,50 @@
                 <exit id="Lhx-cM-9hh" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2158" y="627"/>
+        </scene>
+        <!--Setup codecs-->
+        <scene sceneID="yRS-Ep-spe">
+            <objects>
+                <tableViewController id="rbU-Z5-Qn8" customClass="VSLSetupCodecsViewController" customModule="VialerSIPLib_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="oOr-FR-0WZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="codec" textLabel="ncR-1P-Dht" style="IBUITableViewCellStyleDefault" id="HeC-uv-dow">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HeC-uv-dow" id="QAS-fW-67J">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ncR-1P-Dht">
+                                            <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="rbU-Z5-Qn8" id="uAm-ii-nfv"/>
+                            <outlet property="delegate" destination="rbU-Z5-Qn8" id="7n9-zD-j0E"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Setup codecs" id="Zsc-Ma-jHj">
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="EHo-SF-9yG">
+                            <connections>
+                                <action selector="saveButtonPressed:" destination="rbU-Z5-Qn8" id="bzx-bq-qp8"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HcF-Un-7ka" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1352.8" y="2177.3613193403298"/>
         </scene>
         <!--Incoming call-->
         <scene sceneID="ik1-i3-S8I">
@@ -1387,7 +1418,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SSt-lM-vHj" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="jtT-MN-I6f">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jtT-MN-I6f">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1402,8 +1433,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="QD7-SH-Sgy"/>
-        <segue reference="r6l-M1-URi"/>
+        <segue reference="4zL-3o-bhB"/>
         <segue reference="gOS-Fu-cCZ"/>
+        <segue reference="QD7-SH-Sgy"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -233,7 +233,7 @@ static pjsip_transport *the_transport;
     self.endpointConfiguration = endpointConfiguration;
     self.state = VSLEndpointStarted;
 
-    [self updateCodecs];
+    [VSLCodecs updateCodecs:self.endpointConfiguration.codecConfigurations];
 
     return YES;
 }
@@ -294,7 +294,6 @@ static pjsip_transport *the_transport;
         VSLLogError(@"%Error stopping _pjPool @",[exception description]);
     }
 
-
     self.state = VSLEndpointStopped;
 }
 
@@ -348,51 +347,15 @@ static pjsip_transport *the_transport;
 
 #pragma mark - codecs
 
-- (void)onlyUseILBC:(BOOL)activate {
-    if (self.onlyUseILBC == activate) {
-        return;
-    }
-    self.onlyUseILBC = activate;
-    if (![self updateCodecs]) {
-        self.onlyUseILBC = !activate;
-    }
-}
-
-- (BOOL)updateCodecs {
-    if (self.state != VSLEndpointStarted) {
-        return NO;
-    }
-
-    const unsigned codecInfoSize = 64;
-    pjsua_codec_info codecInfo[codecInfoSize];
-    unsigned codecCount = codecInfoSize;
-    pj_status_t status = pjsua_enum_codecs(codecInfo, &codecCount);
-    if (status != PJ_SUCCESS) {
-        VSLLogError(@"Error getting list of codecs");
-        return NO;
-    } else {
-        for (NSUInteger i = 0; i < codecCount; i++) {
-            NSString *codecIdentifier = [NSString stringWithPJString:codecInfo[i].codec_id];
-            pj_uint8_t priority = [self priorityForCodec:codecIdentifier];
-            status = pjsua_codec_set_priority(&codecInfo[i].codec_id, priority);
-            if (status != PJ_SUCCESS) {
-                VSLLogError(@"Error setting codec priority to the correct value");
-                return NO;
-            }
-        }
-    }
-    return YES;
-}
-
-- (pj_uint8_t)priorityForCodec:(NSString *)identifier {
-    NSUInteger priority = 0;
-    for (VSLCodecs* codecs in self.endpointConfiguration.codecConfigurations) {
-        if ([VSLCodecString(codecs.codec) isEqualToString:identifier]) {
-            priority = codecs.priority;
-        }
-    }
-    return (pj_uint8_t)priority;
-}
+//- (void)onlyUseILBC:(BOOL)activate {
+//    if (self.onlyUseILBC == activate) {
+//        return;
+//    }
+//    self.onlyUseILBC = activate;
+//    if (![self updateCodecs]) {
+//        self.onlyUseILBC = !activate;
+//    }
+//}
 
 #pragma mark - PJSUA callbacks
 
