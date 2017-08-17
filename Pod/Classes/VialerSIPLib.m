@@ -109,7 +109,7 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
         }
 
         account = [[VSLAccount alloc] initWithCallManager:self.callManager];
-
+ 
         NSError *accountConfigError = nil;
         [account configureWithAccountConfiguration:accountConfiguration error:&accountConfigError];
         if (accountConfigError && error != NULL) {
@@ -123,6 +123,10 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
 
 - (void)setIncomingCallBlock:(void (^)(VSLCall * _Nonnull))incomingCallBlock {
     [VSLEndpoint sharedEndpoint].incomingCallBlock = incomingCallBlock;
+}
+
+- (void)setMissedCallBlock:(void (^)(VSLCall * _Nonnull))missedCallBlock {
+    [VSLEndpoint sharedEndpoint].missedCallBlock = missedCallBlock;
 }
 
 - (void)setLogCallBackBlock:(void (^)(DDLogMessage*))logCallBackBlock {

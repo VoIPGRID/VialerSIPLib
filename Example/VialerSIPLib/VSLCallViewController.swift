@@ -87,7 +87,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
 
         callManager.toggleMute(for: call) { error in
             if error != nil {
-                DDLogWrapper.logError("Error muting call: \(error)")
+                DDLogWrapper.logError("Error muting call: \(error!)")
             }
             DispatchQueue.main.async {
                 self.updateUI()
@@ -116,7 +116,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
 
         callManager.toggleHold(for: call) { error in
             if error != nil {
-                DDLogWrapper.logError("Error holding call: \(error)")
+                DDLogWrapper.logError("Error holding call: \(error!)")
             }
             DispatchQueue.main.async {
                 self.updateUI()
@@ -141,7 +141,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
 
         callManager.toggleHold(for: call) { error in
             if error != nil {
-                DDLogWrapper.logError("Error holding current call: \(error)")
+                DDLogWrapper.logError("Error holding current call: \(error!)")
                 return
             }
             DispatchQueue.main.async {
@@ -163,7 +163,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
 
         callManager.end(call) { error in
             if error != nil {
-                DDLogWrapper.logError("error hanging up call(\(call.uuid.uuidString)): \(error)")
+                DDLogWrapper.logError("error hanging up call(\(call.uuid.uuidString)): \(error!)")
             }
         }
     }

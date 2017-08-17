@@ -28,6 +28,7 @@ static void onRegStarted2(pjsua_acc_id acc_id, pjsua_reg_info *info);
 static void onNatDetect(const pj_stun_nat_detect_result *res);
 static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info);
 static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_event *event);
+static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_event *event);
 
 static pjsip_transport *the_transport;
 
@@ -168,6 +169,7 @@ static pjsip_transport *the_transport;
     endpointConfig.cb.on_nat_detect = &onNatDetect;
     endpointConfig.cb.on_transport_state = &onTransportState;
     endpointConfig.cb.on_call_media_event = &onCallMediaEvent;
+    endpointConfig.cb.on_call_tsx_state = &onTxStateChange;
     endpointConfig.max_calls = (unsigned int)endpointConfiguration.maxCalls;
     endpointConfig.user_agent = endpointConfiguration.userAgent.pjString;
 
@@ -279,9 +281,8 @@ static pjsip_transport *the_transport;
         }
     }
 
-    
     if (self.pjPool != NULL) {
-        pj_pool_safe_release(&self->_pjPool);
+        pj_pool_release(self->_pjPool);
     }
     
     // Destroy PJSUA.
@@ -569,7 +570,20 @@ static void onCallMediaEvent(pjsua_call_id call_id,
 #endif
 }
 
-static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
+static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_event *event) {
+    pjsua_call_info callInfo;
+    pjsua_call_get_info(call_id, &callInfo);
+    
+    // When a call is in de early state it is possible to check if
+    // the call has been completed elsewhere or if the original call
+    // has ended the call.
+    if (callInfo.state == VSLCallStateEarly) {
+        
+        [VSLEndpoint wasCallMissed:call_id pjsuaCallInfo:callInfo pjsipEvent:event];
+    }
+}
+
+ void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
     VSLEndpoint *endpoint = [VSLEndpoint sharedEndpoint];
     VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
@@ -697,6 +711,37 @@ static void releaseStoredTransport() {
         if ([self shutdownTransport]) {
             for (VSLAccount *account in self.accounts) {
                 [account reregisterAccount];
+            }
+        }
+    }
+}
+
++ (void)wasCallMissed:(pjsua_call_id)call_id pjsuaCallInfo:(pjsua_call_info)callInfo pjsipEvent:(pjsip_event*)event {
+    // Get the packet that belongs to RX transaction.
+    NSString *packet =  [NSString stringWithFormat:@"%s", event->body.tsx_state.src.rdata->pkt_info.packet];
+    
+    if (![packet isEqualToString: @""]) {
+        NSString *callCompletedElsewhere = @"Call completed elsewhere";
+        NSString *originatorCancel = @"ORIGINATOR_CANCEL";
+        VSLCallTerminateReason reason = VSLCallTerminateReasonUnknown;
+        
+        if ([packet rangeOfString:callCompletedElsewhere].location != NSNotFound) {
+            // The call has been completed elsewhere.
+            reason = VSLCallTerminateReasonCallCompletedElsewhere;
+        } else if ([packet rangeOfString:originatorCancel].location != NSNotFound) {
+            //The original caller has hung up.
+            reason = VSLCallTerminateReasonOriginatorCancel;
+        }
+        
+        if ([VSLEndpoint sharedEndpoint].missedCallBlock && reason != VSLCallTerminateReasonUnknown) {
+            VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
+            VSLCall *call = [account lookupCall:call_id];
+            if (call) {
+                call.terminateReason = reason;
+                VSLLogDebug(@"Call was terminated for reason: %@", VSLCallTerminateReasonString(reason));
+                [VSLEndpoint sharedEndpoint].missedCallBlock(call);
+            } else {
+                VSLLogWarning(@"Received updated CallState(%@) for UNKNOWN call(id: %d)", VSLCallStateString(callInfo.state) , call_id);
             }
         }
     }

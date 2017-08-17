@@ -59,12 +59,12 @@ class VSLSecondCallViewController: VSLCallViewController {
         if firstCall.transfer(to: secondCall) {
             callManager.end(firstCall) { error in
                 if error != nil {
-                    DDLogWrapper.logError("Error hanging up call: \(error)")
+                    DDLogWrapper.logError("Error hanging up call: \(error!)")
                 }
             }
             callManager.end(secondCall) { error in
                 if error != nil {
-                    DDLogWrapper.logError("Error hanging up call: \(error)")
+                    DDLogWrapper.logError("Error hanging up call: \(error!)")
                 }
             }
             performSegue(withIdentifier: Configuration.Segues.TransferInProgress, sender: nil)
@@ -76,7 +76,7 @@ class VSLSecondCallViewController: VSLCallViewController {
 
         callManager.end(call) { error in
             if error != nil {
-                DDLogWrapper.logError("Could not end call: \(error)")
+                DDLogWrapper.logError("Could not end call: \(error!))")
             } else {
                 self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
             }
@@ -90,7 +90,7 @@ class VSLSecondCallViewController: VSLCallViewController {
         }
         callManager.end(call) { error in
             if error != nil {
-                DDLogWrapper.logError("Could not end call: \(error)")
+                DDLogWrapper.logError("Could not end call: \(error!)")
             } else {
                 self.performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCall, sender: nil)
             }

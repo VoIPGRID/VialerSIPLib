@@ -145,6 +145,20 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
 };
 #define VSLCallTransferStateString(VSLCallTransferState) [@[@"VSLCallTransferStateUnkown", @"VSLCallTransferStateInitialized", @"VSLCallTransferStateTrying", @"VSLCallTransferStateAccepted", @"VSLCallTransferStateRejected"] objectAtIndex:VSLCallTransferState]
 
+typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
+    VSLCallTerminateReasonUnknown,
+    /**
+     * Call has been picked up elsewhere.
+     */
+    VSLCallTerminateReasonCallCompletedElsewhere,
+    /**
+     * The caller has hung up before the call was picked up.
+     */
+    VSLCallTerminateReasonOriginatorCancel,
+};
+#define VSLCallTerminateReasonString(VSLCallTerminateReason) [@[@"VSLCallTerminateReasonUnknown", @"VSLCallTerminateReasonCallCompletedElsewhere", @"VSLCallTerminateReasonOriginatorCancel"] objectAtIndex:VSLCallTerminateReason]
+
+
 @interface VSLCall : NSObject
 
 #pragma mark - Properties
@@ -228,6 +242,11 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
  *  The statie in which the transfer of the call currently is.
  */
 @property (readonly, nonatomic) VSLCallTransferState transferStatus;
+
+/*
+ * The reason why a call was termianted.
+ */
+@property (nonatomic) VSLCallTerminateReason terminateReason;
 
 /**
  *  For an outbound call, this property is set and indicates the number

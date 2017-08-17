@@ -76,7 +76,7 @@
 /**
  *  Find a call with the given UUID.
  *
- *  @param UUID The UUID of the call to find.
+ *  @param uuid The UUID of the call to find.
  *
  *  @return A VSLCall instance if a call was found for the given UUID, otherwise nil.
  */
@@ -85,7 +85,7 @@
 /**
  *  Find a call for the given call ID.
  *
- *  @param call ID The PJSIP generated call ID given to an incoming call.
+ *  @param callId The PJSIP generated call ID given to an incoming call.
  *
  *  @return A VSLCall instance if a call with the given call ID was found, otherwise nil.
  */

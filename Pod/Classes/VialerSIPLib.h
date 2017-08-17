@@ -173,11 +173,17 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 - (void)setIncomingCallBlock:(void(^ _Nonnull )(VSLCall * _Nonnull call))incomingCallBlock;
 
+/**
+ * Set the missed block for when a call is missed.
+ *
+ *  @param missedCallBlock block that will be invoked when a call is completed elsewhere or has been hungup before pickup 
+ */
+- (void)setMissedCallBlock:(void(^ _Nonnull )(VSLCall * _Nonnull call))missedCallBlock;
 
 /**
  Set the log call back method to do own custom logging.
 
- @param logcallBackBlock block that will be invoked when a log message is shown.
+ @param logCallBackBlock block that will be invoked when a log message is shown.
  */
 - (void)setLogCallBackBlock:(void(^ _Nonnull)(DDLogMessage * _Nonnull logMessage))logCallBackBlock;
 

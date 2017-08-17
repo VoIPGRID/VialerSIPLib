@@ -4,7 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#include <VialerPJSIP/pjsua-lib/pjsua.h>
+#include <VialerPJSIP/pjsua.h>
 
 /**
  *  The available stun to configure.

@@ -24,7 +24,7 @@
 /**
  *  The init to set an own ringtone file.
  *
- *  @param path Ringtone path.
+ *  @param ringtonePath Ringtone path.
  *
  *  @return VSLRingtone instance.
  */
