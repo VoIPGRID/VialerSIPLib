@@ -63,7 +63,7 @@ private var myContext = 0
 
         callManager.startCall(toNumber: number, for: currentCall!.account! ) { (call, error) in
             if error != nil {
-                DDLogWrapper.logError("Could not start second call: \(error)")
+                DDLogWrapper.logError("Could not start second call: \(error!)")
             } else {
                 self.newCall = call
                 DispatchQueue.main.async {

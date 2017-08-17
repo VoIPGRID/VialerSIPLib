@@ -66,7 +66,7 @@ class VSLIncomingCallViewController: UIViewController {
         guard let call = call else { return }
         callManager.end(call) { error in
             if error != nil {
-                DDLogWrapper.logError("cannot decline call: \(error)")
+                DDLogWrapper.logError("cannot decline call: \(error!)")
             } else {
                 self.performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
             }
@@ -77,7 +77,7 @@ class VSLIncomingCallViewController: UIViewController {
         guard let call = call, call.callState == .incoming else { return }
         callManager.answer(call) { error in
             if error != nil {
-                DDLogWrapper.logError("error answering call: \(error)")
+                DDLogWrapper.logError("error answering call: \(error!)")
             } else {
                 self.performSegue(withIdentifier: Configuration.Segues.ShowCall, sender: nil)
             }

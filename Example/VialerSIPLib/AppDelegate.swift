@@ -111,7 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             VialerSIPLib.sharedInstance().callManager.startCall(toNumber: handle, for:account, completion: { (call, error) in
                 if error != nil {
-                    DDLogWrapper.logError("Could not create outbound call. Error:\(error)")
+                    DDLogWrapper.logError("Could not create outbound call. Error: \(error!)")
                 }
             })
         }

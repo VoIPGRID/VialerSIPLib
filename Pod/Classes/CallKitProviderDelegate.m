@@ -14,8 +14,6 @@ NSString * const CallKitProviderDelegateOutboundCallStartedNotification = @"Call
 NSString * const CallKitProviderDelegateInboundCallAcceptedNotification = @"CallKitProviderDelegateInboundCallAccepted";
 NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"CallKitProviderDelegateInboundCallRejected";
 
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
-
 @interface CallKitProviderDelegate()
 @property (strong, nonatomic) CXProvider *provider;
 @property (weak, nonatomic) VSLCallManager *callManager;

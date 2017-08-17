@@ -70,7 +70,7 @@ class VSLKeypadViewController: UIViewController {
         guard let call = call, call.callState == .confirmed, let button = sender as? UIButton else { return }
         callManager.sendDTMF(for: call, character: button.currentTitle!) { error in
             if error != nil {
-                DDLogWrapper.logError("Error sending DTMF: \(error)")
+                DDLogWrapper.logError("Error sending DTMF: \(error ?? "Unknown Error" as! Error)")
             } else {
                 DispatchQueue.main.async {
                     self.dtmfSent = self.dtmfSent + button.currentTitle!
