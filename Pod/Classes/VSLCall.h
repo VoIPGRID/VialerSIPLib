@@ -5,6 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import "VSLAccount.h"
+#import "VSLCallStats.h"
 #import <VialerPJSIP/pjsua.h>
 
 /**
@@ -272,15 +273,6 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  The connection duration of the call.
  */
 @property (readonly, nonatomic) NSTimeInterval connectDuration;
-
-/**
- *  Calculated R score of the call.
- *
- *  R score is a way to calculate the quality of a phone call.
- *
- *  Ranges 0 to 93.2, where 0 is very bad quality and 93.2 is best quality possible.
- */
-@property (readonly, nonatomic) float R;
 
 /**
  *  Calculated MOS score of the call.
