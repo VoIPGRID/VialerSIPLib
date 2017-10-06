@@ -71,7 +71,7 @@ static pjsip_transport *the_transport;
         switch (_state) {
             case VSLEndpointStopped: {
                 @try {
-                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallConnectedNotification object:nil];
+                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallStateChangedNotification object:nil];
                 } @catch (NSException *exception) {
 
                 }
@@ -575,10 +575,9 @@ static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_
     pjsua_call_get_info(call_id, &callInfo);
     
     // When a call is in de early state it is possible to check if
-    // the call has been completed elsewhere or if the original call
+    // the call has been completed elsewhere or if the original caller
     // has ended the call.
     if (callInfo.state == VSLCallStateEarly) {
-        
         [VSLEndpoint wasCallMissed:call_id pjsuaCallInfo:callInfo pjsipEvent:event];
     }
 }
