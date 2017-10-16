@@ -23,6 +23,7 @@ NSString * const VSLCallStateChangedNotification = @"VSLCallStateChangedNotifica
 NSString * const VSLNotificationUserInfoVideoSizeRenderKey = @"VSLNotificationUserInfoVideoSizeRenderKey";
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
 NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
+NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 
 @interface VSLCall()
 @property (readwrite, nonatomic) VSLCallState callState;
@@ -96,6 +97,9 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDeallocNotification
+                                                        object:nil
+                                                      userInfo:nil];
     VSLLogVerbose(@"Dealloc Call uuid:%@ id:%ld", self.uuid.UUIDString, (long)self.callId);
 }
 
@@ -229,6 +233,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                                 errorDomain:VSLCallErrorDomain
                                   errorCode:VSLCallErrorCannotCreateCall];
     }
+
     completion(error);
 }
 

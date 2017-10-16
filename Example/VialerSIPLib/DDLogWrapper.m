@@ -8,10 +8,11 @@
 @import UIKit;
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #import "SPLumberjackLogFormatter.h"
+#import "VialerSIPLib.h"
 
 // Definition of the current log level
 #ifdef DEBUG
-static const int ddLogLevel = DDLogLevelDebug;
+static const int ddLogLevel = DDLogLevelVerbose;
 #else
 static const int ddLogLevel = DDLogLevelWarning;
 #endif

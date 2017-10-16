@@ -36,11 +36,14 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
 
 + (BOOL)callKitAvailable {
     // Check if Callkit is available by checking the CallKit classes used
-    if ([CXAction class] && [CXTransaction class] && [CXCall class]) {
-        return true;
-    } else {
-        return false;
+    if (@available(iOS 10.0, *)) {
+        if ([CXAction class] && [CXTransaction class] && [CXCall class]) {
+            return true;
+        } else {
+            return false;
+        }
     }
+    return false;
 }
 
 - (VSLEndpoint *)endpoint {

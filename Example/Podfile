@@ -1,6 +1,9 @@
 platform :ios, '9.0'
 #use_frameworks! #!! Do not enable, causes an error about "target has transitive dependencies that include static binaries.... "
 
+source 'https://github.com/VoIPGRID/PrivatePodSpecs-iOS'
+source 'https://github.com/CocoaPods/Specs'
+
 def pods_for_all_targets
     pod 'VialerSIPLib', :path => '../'
     pod 'Reachability'

@@ -22,6 +22,7 @@ extern NSString * _Nonnull const VSLCallStateChangedNotification;
  */
 extern NSString * _Nonnull const VSLNotificationUserInfoVideoSizeRenderKey;
 
+extern NSString * _Nonnull const VSLCallDeallocNotification;
 
 /**
  *  Notification that will be posted when a phonecall is connected.

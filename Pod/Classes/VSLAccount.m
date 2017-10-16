@@ -266,10 +266,13 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
                 }
             }];
         }
+        self.registrationInProgress = NO;
     } else if (PJSIP_IS_STATUS_IN_CLASS(code, 100) || PJSIP_IS_STATUS_IN_CLASS(code, 300)) {
         self.accountState = VSLAccountStateConnecting;
+        self.registrationInProgress = YES;
     } else if (PJSIP_IS_STATUS_IN_CLASS(code, 200)) {
         self.accountState = VSLAccountStateConnected;
+        self.registrationInProgress = NO;
         // Registration is succesfull.
         if (self.registrationCompletionBlock) {
             VSLLogVerbose(@"Account registered succesfully");
