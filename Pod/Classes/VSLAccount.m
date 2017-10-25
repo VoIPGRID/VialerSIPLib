@@ -129,6 +129,11 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:tcp] prependSipUri].pjString;
     }
     
+    acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite;
+    acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
+    acc_cfg.contact_use_src_port = accountConfiguration.contactUseSrcPort;
+    acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite;
+    
     if (accountConfiguration.turnConfiguration) {
         acc_cfg.turn_cfg_use = PJSUA_TURN_CONFIG_USE_CUSTOM;
         acc_cfg.turn_cfg.enable_turn = accountConfiguration.turnConfiguration.enableTurn;
