@@ -33,12 +33,12 @@ typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
     VSLContactRewriteUnregister = PJSUA_CONTACT_REWRITE_UNREGISTER,
     VSLContactRewriteNoUnregister = PJSUA_CONTACT_REWRITE_NO_UNREG,
     VSLContactRewriteAlwaysUpdate = PJSUA_CONTACT_REWRITE_ALWAYS_UPDATE
-}
+};
 
 typedef NS_ENUM(NSUInteger, VSLStunPasswordType) {
     VSLStunPasswordTypePlain = PJ_STUN_PASSWD_PLAIN,
     VSLStunPasswordTypeHashed = PJ_STUN_PASSWD_HASHED,
-}
+};
 
 @interface VSLTurnConfiguration : NSObject
 @property (nonatomic, assign) BOOL enableTurn;
