@@ -29,6 +29,29 @@ typedef NS_ENUM(NSUInteger, VSLStunUse) {
     VSLStunUseRetryOnFailure = PJSUA_STUN_RETRY_ON_FAILURE
 };
 
+typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
+    VSLContactRewriteUnregister = PJSUA_CONTACT_REWRITE_UNREGISTER,
+    VSLContactRewriteNoUnregister = PjSUA_CONTACT_REWRITE_NO_UNREG,
+    VSLContactRewriteAlwaysUpdate = PJSUA_CONTACT_REWRITE_ALWAYS_UPDATE
+}
+
+typedef NS_ENUM(NSUInteger, VSLStunPasswordType) {
+    VSLStunPasswordTypePlain = PJ_STUN_PASSWD_PLAIN,
+    VSLStunPasswordTypeHashed = PJ_STUN_PASSWD_HASHED,
+}
+
+@interface VSLTurnConfiguration : NSObject
+@property (nonatomic, assign) BOOL enableTurn;
+@property (nonatomic, assign) VSLStunPasswordType passwordType;
+
+@property (nonatomic, strong) NSString * _Nullable server;
+@property (nonatomic, strong) NSString * _Nullable username;
+@property (nonatomic, strong) NSString * _Nullable password;
+@end
+
+@interface VSLIceConfiguration : NSObject
+@property (nonatomic, assign) BOOL enableIce;
+@end
 
 @interface VSLAccountConfiguration : NSObject
 
@@ -98,4 +121,17 @@ typedef NS_ENUM(NSUInteger, VSLStunUse) {
  */
 @property (nonatomic) VSLStunUse mediaStunType;
 
+/**
+ *  FM work in progress
+ */
+@property (nonatomic) BOOL allowContactRewrite;
+@property (nonatomic) VSLContactRewriteMethod contactRewriteMethod;
+@property (nonatomic) BOOL contactUseSrcPort;
+@property (nonatomic) BOOL allowViaRewrite;
+
+@property (nonatomic) VSLTurnConfiguration * _Nullable turnConfiguration;
+
+@property (nonatomic) VSLIceConfiguration * _Nullable VSLIceConfiguration;
+
 @end
+

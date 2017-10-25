@@ -128,6 +128,25 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         acc_cfg.proxy_cnt = 1;
         acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:tcp] prependSipUri].pjString;
     }
+    
+    acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite;
+    acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
+    acc_cfg.contact_use_src_port = accountConfiguration.contactUseSrcPort;
+    acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite;
+    
+    if (accountConfiguration.turnConfiguration) {
+        acc_cfg.turn_cfg_use = PJSUA_TURN_CONFIG_USE_CUSTOM;
+        acc_cfg.turn_cfg.enable_turn = accountConfiguration.turnConfiguration.enableTurn;
+        acc_cfg.turn_cfg.turn_server = accountConfiguration.turnConfiguration.server.pjString;
+        acc_cfg.turn_cfg.turn_auth_cred.data.static_cred.username = accountConfiguration.turnConfiguration.username.pjString;
+        acc_cfg.turn_cfg.turn_auth_cred.data.static_cred.data_type = accountConfiguration.turnConfiguration.passwordType;
+        acc_cfg.turn_cfg.turn_auth_cred.data.static_cred.data = accountConfiguration.turnConfiguration.password.pjString;
+    }
+    
+    if (accountConfiguration.iceConfiguration) {
+        acc_cfg.ice_cfg_use = PJSUA_ICE_CONFIG_USE_CUSTOM;
+        acc_cfg.ice_cfg.enable_ice = accountConfiguration.iceConfiguration.enableIce;
+    }
 
     int accountId;
     pj_status_t status = pjsua_acc_add(&acc_cfg, PJ_TRUE, &accountId);
