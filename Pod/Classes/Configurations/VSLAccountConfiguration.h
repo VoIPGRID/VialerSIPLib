@@ -31,7 +31,7 @@ typedef NS_ENUM(NSUInteger, VSLStunUse) {
 
 typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
     VSLContactRewriteUnregister = PJSUA_CONTACT_REWRITE_UNREGISTER,
-    VSLContactRewriteNoUnregister = PjSUA_CONTACT_REWRITE_NO_UNREG,
+    VSLContactRewriteNoUnregister = PJSUA_CONTACT_REWRITE_NO_UNREG,
     VSLContactRewriteAlwaysUpdate = PJSUA_CONTACT_REWRITE_ALWAYS_UPDATE
 }
 
