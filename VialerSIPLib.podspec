@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
 	s.name             	= "VialerSIPLib"
-	s.version          	= "2.7.0"
+	s.version          	= "2.8.0"
 	s.summary          	= "Vialer SIP Library for iOS"
 	s.description      	= "Objective-C wrapper around PJSIP."
 	s.homepage         	= "https://github.com/VoIPGRID/VialerSIPLib"
