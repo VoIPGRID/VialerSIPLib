@@ -29,12 +29,6 @@ typedef NS_ENUM(NSUInteger, VSLStunUse) {
     VSLStunUseRetryOnFailure = PJSUA_STUN_RETRY_ON_FAILURE
 };
 
-typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
-    VSLContactRewriteUnregister = PJSUA_CONTACT_REWRITE_UNREGISTER,
-    VSLContactRewriteNoUnregister = PJSUA_CONTACT_REWRITE_NO_UNREG,
-    VSLContactRewriteAlwaysUpdate = PJSUA_CONTACT_REWRITE_ALWAYS_UPDATE
-};
-
 typedef NS_ENUM(NSUInteger, VSLStunPasswordType) {
     VSLStunPasswordTypePlain = PJ_STUN_PASSWD_PLAIN,
     VSLStunPasswordTypeHashed = PJ_STUN_PASSWD_HASHED,
@@ -124,11 +118,6 @@ typedef NS_ENUM(NSUInteger, VSLStunPasswordType) {
 /**
  *  FM work in progress
  */
-@property (nonatomic) BOOL allowContactRewrite;
-@property (nonatomic) VSLContactRewriteMethod contactRewriteMethod;
-@property (nonatomic) BOOL contactUseSrcPort;
-@property (nonatomic) BOOL allowViaRewrite;
-
 @property (nonatomic) VSLTurnConfiguration * _Nullable turnConfiguration;
 
 @property (nonatomic) VSLIceConfiguration * _Nullable iceConfiguration;
