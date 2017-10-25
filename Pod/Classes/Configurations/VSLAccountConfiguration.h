@@ -131,7 +131,7 @@ typedef NS_ENUM(NSUInteger, VSLStunPasswordType) {
 
 @property (nonatomic) VSLTurnConfiguration * _Nullable turnConfiguration;
 
-@property (nonatomic) VSLIceConfiguration * _Nullable VSLIceConfiguration;
+@property (nonatomic) VSLIceConfiguration * _Nullable iceConfiguration;
 
 @end
 
