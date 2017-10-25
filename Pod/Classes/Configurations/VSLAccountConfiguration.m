@@ -14,6 +14,9 @@
         self.dropCallOnRegistrationFailure = NO;
         self.mediaStunType = VSLStunUseRetryOnFailure;
         self.sipStunType = VSLStunUseDefault;
+        self.contactRewriteMethod = VSLContactRewriteMethodAlwaysUpdate;
+        self.ipAddressChangeHangupAllCalls = NO;
+        self.ipAddressChangeReinviteFlags = VSLReinviteFlagsReinitMedia | VSLReinviteFlagsUpdateVia | VSLReinviteFlagsUpdateContact;
     }
     return self;
 }

@@ -221,6 +221,10 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
     pjsua_call_setting_default(&callSetting);
     callSetting.aud_cnt = 1;
 
+    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+        callSetting.vid_cnt = 0;
+    }
+
     pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, NULL, (int *)&_callId);
     VSLLogVerbose(@"Call(%@) received id:%ld", self.uuid.UUIDString, (long)self.callId);
 

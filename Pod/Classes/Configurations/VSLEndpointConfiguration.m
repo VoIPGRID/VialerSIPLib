@@ -28,6 +28,8 @@ static NSUInteger const VSLEndpointConfigurationSndClockRate = 0;
 
         self.clockRate = VSLEndpointConfigurationClockRate;
         self.sndClockRate = VSLEndpointConfigurationSndClockRate;
+        self.disableVideoSupport = false;
+        self.unregisterAfterCall = false;
     }
     return self;
 }
@@ -52,6 +54,21 @@ static NSUInteger const VSLEndpointConfigurationSndClockRate = 0;
 - (BOOL)hasTCPConfiguration {
     NSUInteger index = [self.transportConfigurations indexOfObjectPassingTest:^BOOL(VSLTransportConfiguration *transportConfiguration, NSUInteger idx, BOOL *stop) {
         if (transportConfiguration.transportType == VSLTransportTypeTCP || transportConfiguration.transportType == VSLTransportTypeTCP6) {
+            *stop = YES;
+            return YES;
+        }
+        return NO;
+    }];
+
+    if (index == NSNotFound) {
+        return NO;
+    }
+    return YES;
+}
+
+- (BOOL)hasTLSConfiguration {
+    NSUInteger index = [self.transportConfigurations indexOfObjectPassingTest:^BOOL(VSLTransportConfiguration *transportConfiguration, NSUInteger idx, BOOL *stop) {
+        if (transportConfiguration.transportType == VSLTransportTypeTLS || transportConfiguration.transportType == VSLTransportTypeTLS6) {
             *stop = YES;
             return YES;
         }

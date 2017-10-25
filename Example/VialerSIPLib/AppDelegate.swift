@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             setupCallKit()
         }
         
-        setupLogCallBack()
+//        setupLogCallBack()
         setupVialerEndpoint()
         setupAccount()
         return true
@@ -44,18 +44,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setupVialerEndpoint() {
         let prefs = UserDefaults.standard
-        let useTCP = prefs.bool(forKey: "useTCP")
+        let transportType = prefs.string(forKey: "transportType")
         var transportToUse: [VSLTransportConfiguration] {
-            if useTCP {
+            switch transportType {
+            case "TLS"?:
+                DDLogWrapper.logInfo("Using TLS");
+                return [VSLTransportConfiguration(transportType: .TLS)!]
+            case "TCP"?:
+                DDLogWrapper.logInfo("Using TCP");
                 return [VSLTransportConfiguration(transportType: .TCP)!]
+            default:
+                DDLogWrapper.logInfo("Using UDP");
+                return [VSLTransportConfiguration(transportType: .UDP)!]
             }
-            return [VSLTransportConfiguration(transportType: .UDP)!]
         }
 
         let endpointConfiguration = VSLEndpointConfiguration()
-        endpointConfiguration.logLevel = 3
         endpointConfiguration.userAgent = "VialerSIPLib Example App"
         endpointConfiguration.transportConfigurations = transportToUse
+        endpointConfiguration.disableVideoSupport = !prefs.bool(forKey: "useVideo")
 
         do {
             try VialerSIPLib.sharedInstance().configureLibrary(withEndPointConfiguration: endpointConfiguration)
@@ -84,12 +91,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func setupLogCallBack() {
-        VialerSIPLib.sharedInstance().setLogCallBack { (logMessage) in
-            DDLogWrapper.log(message: logMessage)
-        }
-    }
-    
+//    func setupLogCallBack() {
+//        VialerSIPLib.sharedInstance().setLogCallBack { (logMessage) in
+//            DDLogWrapper.log(message: logMessage)
+//        }
+//    }
+
     func displayIncomingCall(call: VSLCall) {
         if #available(iOS 10, *) {
             DDLogWrapper.logInfo("Incoming call block invoked, routing through CallKit.")

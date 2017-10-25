@@ -96,17 +96,20 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 - (BOOL)configureWithAccountConfiguration:(VSLAccountConfiguration * _Nonnull)accountConfiguration error:(NSError **)error {
 
     // If the endpoint has a tcp connection create a variable with the needed information.
-    NSString *tcp = @"";
+    NSString *transportString = @"";
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration]) {
-        tcp = @";transport=tcp";
+        transportString = @";transport=tcp";
+    }
+    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
+        transportString = @";transport=tls";
     }
 
     pjsua_acc_config acc_cfg;
     pjsua_acc_config_default(&acc_cfg);
 
     // Add sip information to the pjsua account configuration.
-    acc_cfg.id = [[accountConfiguration.sipAddress stringByAppendingString:tcp] prependSipUri].pjString;
-    acc_cfg.reg_uri = [[accountConfiguration.sipDomain stringByAppendingString:tcp] prependSipUri].pjString;
+    acc_cfg.id = [[accountConfiguration.sipAddress stringByAppendingString:transportString] prependSipUri].pjString;
+    acc_cfg.reg_uri = [[accountConfiguration.sipDomain stringByAppendingString:transportString] prependSipUri].pjString;
     acc_cfg.register_on_acc_add = accountConfiguration.sipRegisterOnAdd ? PJ_TRUE : PJ_FALSE;
     acc_cfg.publish_enabled = accountConfiguration.sipPublishEnabled ? PJ_TRUE : PJ_FALSE;
     acc_cfg.reg_timeout = VSLAccountRegistrationTimeoutInSeconds;
@@ -123,10 +126,32 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     acc_cfg.media_stun_use = accountConfiguration.mediaStunType;
     acc_cfg.sip_stun_use = accountConfiguration.sipStunType;
 
+    acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite ? PJ_TRUE : PJ_FALSE;
+    acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
+
+    // Shutdown the old transport is no longer connected because of an ip address change.
+    acc_cfg.ip_change_cfg.shutdown_tp = accountConfiguration.ipAddressChangeShutdownTransport ? PJ_TRUE : PJ_FALSE;
+
+    // Don't hangup calls when the ip address changes.
+    acc_cfg.ip_change_cfg.hangup_calls = accountConfiguration.ipAddressChangeHangupAllCalls ? PJ_FALSE : PJ_FALSE;
+
+    // When a call is reinvited use the specified header.
+    if (!accountConfiguration.ipAddressChangeHangupAllCalls) {
+        acc_cfg.ip_change_cfg.reinvite_flags = PJSUA_CALL_UPDATE_CONTACT;
+    }
+
+    acc_cfg.contact_use_src_port = accountConfiguration.contactUseSrcPort ? PJ_TRUE : PJ_FALSE;
+    acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite ? PJ_TRUE : PJ_FALSE;
+
+    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
+        acc_cfg.srtp_secure_signaling = 1;
+        acc_cfg.use_srtp = PJMEDIA_SRTP_MANDATORY;
+    }
+
     // If a proxy server is present on the account configuration add this to pjsua account configuration.
     if (accountConfiguration.sipProxyServer) {
         acc_cfg.proxy_cnt = 1;
-        acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:tcp] prependSipUri].pjString;
+        acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:transportString] prependSipUri].pjString;
     }
     
     acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite;
