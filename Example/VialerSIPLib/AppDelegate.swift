@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             setupCallKit()
         }
         
-        setupLogCallBack()
+//        setupLogCallBack()
         setupVialerEndpoint()
         setupAccount()
         return true
@@ -45,9 +45,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupVialerEndpoint() {
         let prefs = UserDefaults.standard
         let useTCP = prefs.bool(forKey: "useTCP")
+        let useTLS = prefs.bool(forKey: "useTLS")
         var transportToUse: [VSLTransportConfiguration] {
+            return [VSLTransportConfiguration(transportType: .TLS)!]
             if useTCP {
                 return [VSLTransportConfiguration(transportType: .TCP)!]
+            }
+            if useTLS {
+                return [VSLTransportConfiguration(transportType: .TLS)!]
             }
             return [VSLTransportConfiguration(transportType: .UDP)!]
         }
@@ -84,12 +89,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func setupLogCallBack() {
-        VialerSIPLib.sharedInstance().setLogCallBack { (logMessage) in
-            DDLogWrapper.log(message: logMessage)
-        }
-    }
-    
+//    func setupLogCallBack() {
+//        VialerSIPLib.sharedInstance().setLogCallBack { (logMessage) in
+//            DDLogWrapper.log(message: logMessage)
+//        }
+//    }
+
     func displayIncomingCall(call: VSLCall) {
         if #available(iOS 10, *) {
             DDLogWrapper.logInfo("Incoming call block invoked, routing through CallKit.")

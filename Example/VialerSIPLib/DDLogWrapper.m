@@ -6,32 +6,22 @@
 #import "DDLogWrapper.h"
 
 @import UIKit;
-#import <CocoaLumberjack/CocoaLumberjack.h>
 #import "SPLumberjackLogFormatter.h"
 #import "VialerSIPLib.h"
-
-// Definition of the current log level
-#ifdef DEBUG
-static const int ddLogLevel = DDLogLevelVerbose;
-#else
-static const int ddLogLevel = DDLogLevelWarning;
-#endif
 
 @implementation DDLogWrapper
 
 + (void)setup {
     SPLumberjackLogFormatter *logFormatter = [[SPLumberjackLogFormatter alloc] init];
 
-    if ([[[UIDevice currentDevice] systemVersion] compare:@"10" options:NSNumericSearch] == NSOrderedAscending) {
-        DDTTYLogger *ttyLogger = [DDTTYLogger sharedInstance];
-        [ttyLogger setLogFormatter:logFormatter];
-        [DDLog addLogger:ttyLogger];
-    }
+    DDTTYLogger *ttyLogger = [DDTTYLogger sharedInstance];
+    [ttyLogger setLogFormatter:logFormatter];
 
-    //Add a logger to CocoaLumberjack, the DDASL logger simulate the default NSLog behaviour.
-    DDASLLogger *aslLogger = [DDASLLogger sharedInstance];
-    aslLogger.logFormatter = logFormatter;
-    [DDLog addLogger:aslLogger];
+    [DDLog addLogger:ttyLogger];
+
+    [VialerSIPLib sharedInstance].logCallBackBlock = ^(DDLogMessage *_Nonnull message) {
+        [DDLogWrapper logWithDDLogMessage:message];
+    };
 }
 
 + (void)logWithDDLogMessage:(DDLogMessage *)message {

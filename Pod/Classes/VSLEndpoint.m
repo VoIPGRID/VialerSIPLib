@@ -29,6 +29,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
 static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info);
 static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_event *event);
 static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_event *event);
+static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info);
 
 static pjsip_transport *the_transport;
 
@@ -177,6 +178,7 @@ static pjsip_transport *the_transport;
     endpointConfig.cb.on_transport_state = &onTransportState;
     endpointConfig.cb.on_call_media_event = &onCallMediaEvent;
     endpointConfig.cb.on_call_tsx_state = &onTxStateChange;
+    endpointConfig.cb.on_ip_change_progress = &onIpChangeProgress;
     endpointConfig.max_calls = (unsigned int)endpointConfiguration.maxCalls;
     endpointConfig.user_agent = endpointConfiguration.userAgent.pjString;
 
@@ -503,33 +505,33 @@ static void onCallMediaState(pjsua_call_id call_id) {
  */
 static void onRegStarted2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     VSLLogVerbose(@"onRegStarted2");
-    pjsip_regc_info regc_info;
-    pjsip_regc_get_info(info->regc, &regc_info);
-    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
-        if (the_transport != regc_info.transport) {
-            releaseStoredTransport();
-            /* Save transport instance so that we can close it later when
-             * new IP address is detected.
-             */
-            VSLLogInfo(@"Saving transport");
-            the_transport = regc_info.transport;
-            pjsip_transport_add_ref(the_transport);
-        }
-    }
+//    pjsip_regc_info regc_info;
+//    pjsip_regc_get_info(info->regc, &regc_info);
+//    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
+//        if (the_transport != regc_info.transport) {
+//            releaseStoredTransport();
+//            /* Save transport instance so that we can close it later when
+//             * new IP address is detected.
+//             */
+//            VSLLogInfo(@"Saving transport");
+//            the_transport = regc_info.transport;
+//            pjsip_transport_add_ref(the_transport);
+//        }
+//    }
 }
 
 static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     VSLLogVerbose(@"onRegState2");
     
-    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
-        struct pjsip_regc_cbparam *rp = info->cbparam;
-        
-        releaseStoredTransport();
-        if (rp->code/100 == 2 && rp->expiration > 0 && rp->contact_cnt > 0) {
-            the_transport = rp->rdata->tp_info.transport;
-            pjsip_transport_add_ref(the_transport);
-        }
-    }
+//    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
+//        struct pjsip_regc_cbparam *rp = info->cbparam;
+//
+//        releaseStoredTransport();
+//        if (rp->code/100 == 2 && rp->expiration > 0 && rp->contact_cnt > 0) {
+//            the_transport = rp->rdata->tp_info.transport;
+//            pjsip_transport_add_ref(the_transport);
+//        }
+//    }
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
     if (account) {
@@ -539,13 +541,13 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
 
 static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info) {
     VSLLogVerbose(@"onTransportState");
-    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
-        if (state == PJSIP_TP_STATE_DISCONNECTED && the_transport == tp) {
-            releaseStoredTransport();
-        }
-        the_transport = tp;
-        pjsip_transport_add_ref(tp);
-    }
+//    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
+//        if (state == PJSIP_TP_STATE_DISCONNECTED && the_transport == tp) {
+//            releaseStoredTransport();
+//        }
+//        the_transport = tp;
+//        pjsip_transport_add_ref(tp);
+//    }
 }
 
 /* Callback on media events. Adjust renderer window size to original video size */
@@ -562,9 +564,7 @@ static void onCallMediaEvent(pjsua_call_id call_id,
         
         pjsua_call_get_info(call_id, &ci);
         
-        if ((ci.media[med_idx].type == PJMEDIA_TYPE_VIDEO) &&
-            (ci.media[med_idx].dir & PJMEDIA_DIR_DECODING))
-        {
+        if (ci.media[med_idx].type == PJMEDIA_TYPE_VIDEO && ci.media[med_idx].dir & PJMEDIA_DIR_DECODING) {
             wid = ci.media[med_idx].stream.vid.win_in;
             size = event->data.fmt_changed.new_fmt.det.vid.size;
             NSDictionary *userInfo = @{VSLNotificationUserInfoCallIdKey:@(call_id),
@@ -618,11 +618,11 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
  *  Release the current TCP transport.
  */
 static void releaseStoredTransport() {
-    if (the_transport) {
-        VSLLogDebug(@"Releasing transport");
-        pjsip_transport_dec_ref(the_transport);
-        the_transport = NULL;
-    }
+//    if (the_transport) {
+//        VSLLogDebug(@"Releasing transport");
+//        pjsip_transport_dec_ref(the_transport);
+//        the_transport = NULL;
+//    }
 }
 
 /**
@@ -630,27 +630,30 @@ static void releaseStoredTransport() {
  *
  *  @return YES if succesfull
  */
-- (BOOL)shutdownTransport {
-    if (!self.endpointConfiguration.hasTCPConfiguration) {
-        return NO;
-    }
-
-
-    if (self.endpointConfiguration.hasTCPConfiguration && the_transport) {
-        pj_status_t status;
-        status = pjsip_transport_shutdown(the_transport);
-        VSLLogInfo(@"Shuting down transport");
-        if (status != PJ_SUCCESS) {
-            VSLLogWarning(@"Transport shutdown error");
-            return NO;
-        }
-        releaseStoredTransport();
-    }
-    return YES;
-}
+//- (BOOL)shutdownTransport {
+//    if (!self.endpointConfiguration.hasTCPConfiguration) {
+//        return NO;
+//    }
+//
+//
+//    if (self.endpointConfiguration.hasTCPConfiguration && the_transport) {
+//        pj_status_t status;
+//        status = pjsip_transport_shutdown(the_transport);
+//        VSLLogInfo(@"Shuting down transport");
+//        if (status != PJ_SUCCESS) {
+//            VSLLogWarning(@"Transport shutdown error");
+//            return NO;
+//        }
+//        releaseStoredTransport();
+//    }
+//    return YES;
+//}
 
 - (void)callDealloc:(NSNotification *)notification {
-    VSLLogError(@"Call dealloc");
+    if (![self.endpointConfiguration unregisterAfterCall]) {
+        return;
+    }
+
     for (VSLAccount *account in self.accounts) {
         if (![self.callManager firstActiveCallForAccount:account]) {
             NSArray *calls = [self.callManager callsForAccount:account];
@@ -731,14 +734,24 @@ static void releaseStoredTransport() {
  *  @param notification The notification which lead to this function being invoked over GCD.
  */
 - (void)ipAddressChanged:(NSNotification *)notification {
-    VSLLogInfo(@"network changed");
-    if (self.state == VSLEndpointStarted) {
-        if ([self shutdownTransport]) {
-            for (VSLAccount *account in self.accounts) {
-                [account reregisterAccount];
-            }
-        }
-    }
+
+    pjsua_ip_change_param param;
+    pjsua_ip_change_param_default(&param);
+
+    pjsua_handle_ip_change(&param);
+
+//    VSLLogInfo(@"network changed");
+//    if (self.state == VSLEndpointStarted) {
+//        if ([self shutdownTransport]) {
+//            for (VSLAccount *account in self.accounts) {
+//                [account reregisterAccount];
+//            }
+//        }
+//    }
+}
+
+static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info) {
+    VSLLogError(@"onIpChangeProgress");
 }
 
 + (void)wasCallMissed:(pjsua_call_id)call_id pjsuaCallInfo:(pjsua_call_info)callInfo pjsipEvent:(pjsip_event*)event {

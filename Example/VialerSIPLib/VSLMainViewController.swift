@@ -149,7 +149,7 @@ class VSLMainViewController: UIViewController {
 
     // MARK: - NSNotificationCenter
 
-    func incomingCallNotification(_ notification: Notification) {
+    @objc func incomingCallNotification(_ notification: Notification) {
         guard let call = notification.userInfo?[VSLNotificationUserInfoCallKey] as? VSLCall else { return }
         // When there is another call active, decline incoming call.
         if call != account.firstActiveCall() {
@@ -164,7 +164,7 @@ class VSLMainViewController: UIViewController {
     }
 
     // When an outbound call is requested trough CallKit, show the VSLCallViewController directly.
-    func directlyShowActiveCallController(_ notification: Notification) {
+    @objc func directlyShowActiveCallController(_ notification: Notification) {
         guard let call = notification.userInfo?[VSLNotificationUserInfoCallKey] as? VSLCall else { return }
         activeCall = call
         DispatchQueue.main.async {

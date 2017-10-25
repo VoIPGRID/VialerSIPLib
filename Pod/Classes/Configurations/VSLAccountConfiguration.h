@@ -91,11 +91,12 @@ typedef NS_ENUM(NSUInteger, VSLStunUse) {
 /**
  *  The stun type that should be used.
  */
-@property (nonatomic) VSLStunUse sipStunType;
+@property (nonatomic) pjsua_stun_use sipStunType;
 
 /**
  *  The media stun type that should be used.
  */
-@property (nonatomic) VSLStunUse mediaStunType;
+@property (nonatomic) pjsua_stun_use mediaStunType;
+
 
 @end
