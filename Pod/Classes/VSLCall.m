@@ -16,7 +16,6 @@
 #import "VialerUtils.h"
 
 
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 static double const VSLCallDelayTimeCheckSuccessfullHangup = 0.5;
 
@@ -24,6 +23,7 @@ NSString * const VSLCallStateChangedNotification = @"VSLCallStateChangedNotifica
 NSString * const VSLNotificationUserInfoVideoSizeRenderKey = @"VSLNotificationUserInfoVideoSizeRenderKey";
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
 NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
+NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 
 @interface VSLCall()
 @property (readwrite, nonatomic) VSLCallState callState;
@@ -55,7 +55,6 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
  */
 @property (readwrite, nonatomic) NSString *activeCodec;
 @property (readwrite, nonatomic) float totalMBsUsed;
-@property (readwrite, nonatomic) float R;
 @property (readwrite, nonatomic) float MOS;
 @end
 
@@ -98,6 +97,9 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDeallocNotification
+                                                        object:nil
+                                                      userInfo:nil];
     VSLLogVerbose(@"Dealloc Call uuid:%@ id:%ld", self.uuid.UUIDString, (long)self.callId);
 }
 
@@ -140,8 +142,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                 // Register for the audio interruption notification to be able to restore the sip audio session after an interruption (incoming call/alarm....).
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:VSLAudioControllerAudioInterrupted object:nil];
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:VSLAudioControllerAudioResumed object:nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallConnectedNotification object:nil];
-
+//                [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallConnectedNotification object:nil];
             } break;
 
             case VSLCallStateDisconnected: {
@@ -150,7 +151,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLAudioControllerAudioResumed object:nil];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLAudioControllerAudioInterrupted object:nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDisconnectedNotification object:nil];
+//                [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDisconnectedNotification object:nil];
 
                 if (self.connected && !self.userDidHangUp) {
                     [self.disconnectedSoundPlayer play];
@@ -232,6 +233,7 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
                                 errorDomain:VSLCallErrorDomain
                                   errorCode:VSLCallErrorCannotCreateCall];
     }
+
     completion(error);
 }
 
@@ -646,100 +648,16 @@ NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotifica
 #pragma mark - Stats
 
 - (void)calculateStats {
-    [self calculateMOS];
-    [self calculateTotalMBsUsed];
-    [self codecUsed];
-}
-
-- (void)codecUsed {
-    pj_status_t status;
-    pjsua_stream_info stream_info;
-    status = pjsua_call_get_stream_info((pjsua_call_id)self.callId, 0, &stream_info);
-    pj_str_t active_codec;
-    if (status == PJ_SUCCESS) {
-        if (stream_info.type == PJMEDIA_TYPE_AUDIO) {
-            active_codec = stream_info.info.aud.fmt.encoding_name;
-            self.activeCodec = [NSString stringWithPJString:active_codec];
-        } else {
-            DDLogDebug(@"Stream is not an audio stream");
-            self.activeCodec = @"Unknown";
-        }
-    } else {
-        DDLogInfo(@"No stream found");
-        self.activeCodec = @"Unknown";
+    VSLCallStats *callStats = [[VSLCallStats alloc] initWithCall: self];
+    NSDictionary *stats = [callStats generate];
+    if ([stats count] > 0) {
+        
+        self.activeCodec = stats[VSLCallStatsActiveCodec];
+        self.MOS = [[stats objectForKey:VSLCallStatsMOS] floatValue];
+        self.totalMBsUsed = [stats[VSLCallStatsTotalMBsUsed] floatValue];
+        
+        VSLLogDebug(@"activeCodec: %@ with MOS score: %f and MBs used: %f", self.activeCodec, self.MOS, self.totalMBsUsed);
     }
-}
-
-- (float)calculateTotalMBsUsed {
-    pj_status_t status = PJ_SUCCESS;
-    pjsua_stream_stat stat;
-    status = pjsua_call_get_stream_stat((pjsua_call_id)self.callId, 0, &stat);
-    if (status == PJ_SUCCESS) {
-        self.totalMBsUsed = (stat.rtcp.rx.bytes + stat.rtcp.tx.bytes) / 1024.0 / 1024.0;
-    } else {
-        VSLLogInfo(@"No data");
-    }
-    return self.totalMBsUsed;
-}
-
-/**
- *  This will calculate the current MOS value of the call.
- *
- *  Credits to: https://www.pingman.com/kb/article/how-is-mos-calculated-in-pingplotter-pro-50.html
- */
-- (float)calculateR {
-    pj_status_t status = PJ_SUCCESS;
-    pjsua_stream_stat stat;
-    status = pjsua_call_get_stream_stat((pjsua_call_id)self.callId, 0, &stat);
-    if (status == PJ_SUCCESS) {
-
-        // Average Jitter in miliseconds
-        float rxJitter = (float)stat.rtcp.rx.jitter.mean / 1000;
-
-        // Round Trip Time in miliseconds.
-        float averageRoundTripTime = stat.rtcp.rtt.mean / 1000.0f;
-
-        // If there is no Round Trip Time information in rtcp packets we estimate value.
-        if (averageRoundTripTime == 0) {
-            averageRoundTripTime = 20.0; // Guess from Bob after logging of some calls.
-        }
-
-        // Take the average latency, add jitter, but double the impact to latency
-        // then add 10 for protocol latencies
-        float effectiveLatency = averageRoundTripTime + rxJitter * 2 + 10;
-
-        // Implement a basic curve - deduct 4 for the R value at 160ms of latency
-        // (round trip).  Anything over that gets a much more agressive deduction.
-        float R;
-        if (effectiveLatency < 160) {
-            R = 93.2 - (effectiveLatency / 40);
-        } else {
-            R = 93.2 - (effectiveLatency - 120) / 10;
-        }
-
-        // Number of packets send and received.
-        float rxPackets = stat.rtcp.rx.pkt;
-
-        // Percentage package loss (100 = 100% loss - 0 = 0% loss)
-        float rxPacketLoss = rxPackets == 0 ? 100.0 : (((float)stat.rtcp.rx.loss) / (float)(rxPackets + stat.rtcp.rx.loss)) * 100.0;
-
-        // Now, let's deduct 2.5 R values per percentage of packet loss.
-        self.R = R - (rxPacketLoss * 2.5);
-    } else {
-        VSLLogInfo(@"No R");
-    }
-    return self.R;
-}
-
-- (float)calculateMOS {
-    // Convert the R into an MOS value.
-    float R = [self calculateR];
-    if (R > 0) {
-        self.MOS = 1 + 0.035 * R + .000007 * R * (R - 60) * (100 - R);
-    } else {
-        VSLLogInfo(@"No MOS");
-    }
-    return self.MOS;
 }
 
 - (NSString *)debugDescription {
