@@ -4,6 +4,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSLIceConfiguration.h"
+#import "VSLTurnConfiguration.h"
 #include <VialerPJSIP/pjsua.h>
 
 /**
@@ -34,24 +36,6 @@ typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
     VSLContactRewriteNoUnregister = PJSUA_CONTACT_REWRITE_NO_UNREG,
     VSLContactRewriteAlwaysUpdate = PJSUA_CONTACT_REWRITE_ALWAYS_UPDATE
 };
-
-typedef NS_ENUM(NSUInteger, VSLStunPasswordType) {
-    VSLStunPasswordTypePlain = PJ_STUN_PASSWD_PLAIN,
-    VSLStunPasswordTypeHashed = PJ_STUN_PASSWD_HASHED,
-};
-
-@interface VSLTurnConfiguration : NSObject
-@property (nonatomic, assign) BOOL enableTurn;
-@property (nonatomic, assign) VSLStunPasswordType passwordType;
-
-@property (nonatomic, strong) NSString * _Nullable server;
-@property (nonatomic, strong) NSString * _Nullable username;
-@property (nonatomic, strong) NSString * _Nullable password;
-@end
-
-@interface VSLIceConfiguration : NSObject
-@property (nonatomic, assign) BOOL enableIce;
-@end
 
 @interface VSLAccountConfiguration : NSObject
 

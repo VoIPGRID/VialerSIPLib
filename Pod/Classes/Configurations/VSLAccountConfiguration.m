@@ -5,12 +5,6 @@
 
 #import "VSLAccountConfiguration.h"
 
-@implementation VSLIceConfiguration
-@end
-
-@implementation VSLTurnConfiguration
-@end
-
 @implementation VSLAccountConfiguration
 
 - (instancetype)init {
