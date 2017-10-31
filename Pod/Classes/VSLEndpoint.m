@@ -71,8 +71,14 @@ static pjsip_transport *the_transport;
         switch (_state) {
             case VSLEndpointStopped: {
                 @try {
-                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallConnectedNotification object:nil];
+                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallStateChangedNotification object:nil];
                 } @catch (NSException *exception) {
+
+                }
+
+                @try {
+                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallDeallocNotification object: nil];
+                } @catch(NSException *exceptiom) {
 
                 }
                 break;
@@ -81,7 +87,8 @@ static pjsip_transport *the_transport;
                 break;
             }
             case VSLEndpointStarted: {
-                [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(checkNetworkMonitoring:) name:VSLCallStateChangedNotification object:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkMonitoring:) name:VSLCallStateChangedNotification object:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callDealloc:) name:VSLCallDeallocNotification object:nil];
                 break;
             }
         }
@@ -304,6 +311,7 @@ static pjsip_transport *the_transport;
     NSMutableArray *mutableArray = [self.accounts mutableCopy];
     [mutableArray removeObject:account];
     self.accounts = [mutableArray copy];
+    
 }
 
 - (VSLAccount *)lookupAccount:(NSInteger)accountId {
@@ -575,10 +583,9 @@ static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_
     pjsua_call_get_info(call_id, &callInfo);
     
     // When a call is in de early state it is possible to check if
-    // the call has been completed elsewhere or if the original call
+    // the call has been completed elsewhere or if the original caller
     // has ended the call.
     if (callInfo.state == VSLCallStateEarly) {
-        
         [VSLEndpoint wasCallMissed:call_id pjsuaCallInfo:callInfo pjsipEvent:event];
     }
 }
@@ -624,6 +631,10 @@ static void releaseStoredTransport() {
  *  @return YES if succesfull
  */
 - (BOOL)shutdownTransport {
+    if (!self.endpointConfiguration.hasTCPConfiguration) {
+        return NO;
+    }
+
 
     if (self.endpointConfiguration.hasTCPConfiguration && the_transport) {
         pj_status_t status;
@@ -638,7 +649,21 @@ static void releaseStoredTransport() {
     return YES;
 }
 
+- (void)callDealloc:(NSNotification *)notification {
+    VSLLogError(@"Call dealloc");
+    for (VSLAccount *account in self.accounts) {
+        if (![self.callManager firstActiveCallForAccount:account]) {
+            NSArray *calls = [self.callManager callsForAccount:account];
+            if (calls.count == 0) {
+                NSError *error;
+                [account unregisterAccount:&error];
+            }
+        }
+    }
+}
+
 #pragma mark - Reachability detection
+
 
 /**
  *  Start the network monitor if the call is not disconnected

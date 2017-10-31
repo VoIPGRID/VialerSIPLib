@@ -12,7 +12,7 @@ import Intents
 
 class IntentHandler: INExtension, INStartAudioCallIntentHandling {
 
-    func handle(startAudioCall intent: INStartAudioCallIntent, completion: @escaping (INStartAudioCallIntentResponse) -> Void) {
+    func handle(intent: INStartAudioCallIntent, completion: @escaping (INStartAudioCallIntentResponse) -> Void) {
         let response: INStartAudioCallIntentResponse
         defer {
             completion(response)

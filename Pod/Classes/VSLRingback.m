@@ -71,6 +71,12 @@ static int const VSLRingbackInterval = 4000;
 }
 
 -(void)dealloc {
+    // Destory the conference port otherwise the maximum number of ports will reached and pjsip will crash.
+    pj_status_t status = pjsua_conf_remove_port((int)self.ringbackSlot);
+    if (status != PJ_SUCCESS) {
+        VSLLogWarning(@"Error removing the port!");
+    }
+    
     pjmedia_port_destroy(self.ringbackPort);
 }
 

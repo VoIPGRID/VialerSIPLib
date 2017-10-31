@@ -2,7 +2,25 @@
 All notable changes to this project will be documented in this file.
 
 ---
-## [2.6.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.5.0) (01/24/2017)
+
+## [2.8.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.8.0) (10/25/2017)
+Released on Wednesday, October 25, 2017.
+
+### Added
+* Vialer-PJSIP-iOS pod update to the newest version
+
+### Fixed
+* Some cleanup in a call when this has finished
+* Some documentation warnings have been fixed
+* Updated the project to XCode 9
+
+## [2.7.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.7.0) (18/09/2017)
+Released on
+
+### Added
+* Callback for when for missed calls (#96)[https://github.com/VoIPGRID/VialerSIPLib/pull/96]
+
+## [2.6.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.6.0) (03/09/2017)
 Released on Thursday, March 9, 2017.
 
 #### Added

@@ -12,6 +12,7 @@
 #import "VSLAccount.h"
 #import "VSLAudioController.h"
 #import "VSLCall.h"
+#import "VSLEndpoint.h"
 #import "VSLLogging.h"
 #import "VialerSIPLib.h"
 
@@ -20,7 +21,7 @@
 @interface VSLCallManager()
 @property (strong, nonatomic) NSMutableArray *calls;
 @property (strong, nonatomic) VSLAudioController *audioController;
-@property (strong, nonatomic) CXCallController *callController;
+@property (strong, nonatomic) CXCallController *callController NS_AVAILABLE_IOS(10.0);
 @end
 
 @implementation VSLCallManager
@@ -52,9 +53,11 @@
     return _audioController;
 }
 
-- (CXCallController *)callController {
-    if (!_callController) {
-        _callController = [[CXCallController alloc] init];
+- (CXCallController *)callController NS_AVAILABLE_IOS(10.0) {
+    if (@available(iOS 10, *)) {
+        if (!_callController) {
+            _callController = [[CXCallController alloc] init];
+        }
     }
     return _callController;
 }
@@ -63,7 +66,7 @@
     VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
     [self addCall:call];
 
-    if ([VialerSIPLib callKitAvailable]) {
+    if (@available(iOS 10.0, *)) {
         CXHandle *numberHandle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:call.numberToCall];
         CXAction *startCallAction = [[CXStartCallAction alloc] initWithCallUUID:call.uuid handle:numberHandle];
 
@@ -94,7 +97,7 @@
 }
 
 - (void)answerCall:(VSLCall *)call completion:(void (^)(NSError *error))completion {
-    if ([VialerSIPLib callKitAvailable]) {
+    if (@available(iOS 10.0, *)) {
         [call answerWithCompletion:completion];
     } else {
         [self.audioController configureAudioSession];
@@ -110,7 +113,7 @@
 }
 
 - (void)endCall:(VSLCall *)call completion:(void (^)(NSError *error))completion {
-    if ([VialerSIPLib callKitAvailable]) {
+    if (@available(iOS 10.0, *)) {
         CXAction *endCallAction = [[CXEndCallAction alloc] initWithCallUUID:call.uuid];
         [self requestCallKitAction:endCallAction completion:completion];
     } else {
@@ -128,7 +131,7 @@
 }
 
 - (void)toggleMuteForCall:(VSLCall *)call completion:(void (^)(NSError *error))completion {
-    if ([VialerSIPLib callKitAvailable]) {
+    if (@available(iOS 10.0, *)) {
         CXAction *toggleMuteAction = [[CXSetMutedCallAction alloc] initWithCallUUID:call.uuid muted:!call.muted];
         [self requestCallKitAction:toggleMuteAction completion:completion];
     } else {
@@ -145,7 +148,7 @@
 }
 
 - (void)toggleHoldForCall:(VSLCall *)call completion:(void (^)(NSError * _Nullable))completion {
-    if ([VialerSIPLib callKitAvailable]) {
+    if (@available(iOS 10.0, *)) {
         CXAction *toggleHoldAction = [[CXSetHeldCallAction alloc] initWithCallUUID:call.uuid onHold:!call.onHold];
         [self requestCallKitAction:toggleHoldAction completion:completion];
     } else {
@@ -163,7 +166,7 @@
 }
 
 - (void)sendDTMFForCall :(VSLCall *)call character:(NSString *)character completion:(void (^)(NSError * _Nullable))completion {
-    if([VialerSIPLib callKitAvailable]) {
+    if (@available(iOS 10.0, *)) {
         CXAction *dtmfAction = [[CXPlayDTMFCallAction alloc] initWithCallUUID:call.uuid digits:character type:CXPlayDTMFCallActionTypeSingleTone];
         [self requestCallKitAction:dtmfAction completion:completion];
     } else {
@@ -179,16 +182,18 @@
     }
 }
 
-- (void)requestCallKitAction:(CXAction *)action completion:(void (^)(NSError *error))completion {
-    CXTransaction *transaction = [[CXTransaction alloc] initWithAction:action];
-    [self.callController requestTransaction:transaction completion:^(NSError * _Nullable error) {
-        if (error) {
-            VSLLogError(@"Error requesting transaction: %@. Error:%@", transaction, error);
-            VSLBlockSafeRun(completion,error);
-        } else {
-            VSLBlockSafeRun(completion,nil);
-        }
-    }];
+- (void)requestCallKitAction:(CXAction *)action completion:(void (^)(NSError *error))completion NS_AVAILABLE_IOS(10.0) {
+    if (@available(iOS 10.0, *)) {
+        CXTransaction *transaction = [[CXTransaction alloc] initWithAction:action];
+        [self.callController requestTransaction:transaction completion:^(NSError * _Nullable error) {
+            if (error) {
+                VSLLogError(@"Error requesting transaction: %@. Error:%@", transaction, error);
+                VSLBlockSafeRun(completion,error);
+            } else {
+                VSLBlockSafeRun(completion,nil);
+            }
+        }];
+    }
 }
 
 - (void)addCall:(VSLCall *)call {
@@ -224,7 +229,7 @@
 /**
  *  Checks if there is a call with the given UUID.
  *
- *  @param UUID The UUID of the call to find.
+ *  @param uuid The UUID of the call to find.
  *
  *  @retrun A VSLCall object or nil if not found.
  */

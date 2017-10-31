@@ -15,7 +15,7 @@ NSString * const CallKitProviderDelegateInboundCallAcceptedNotification = @"Call
 NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"CallKitProviderDelegateInboundCallRejected";
 
 @interface CallKitProviderDelegate()
-@property (strong, nonatomic) CXProvider *provider;
+@property (strong, nonatomic) CXProvider *provider NS_AVAILABLE_IOS(10.0);
 @property (weak, nonatomic) VSLCallManager *callManager;
 @end
 
@@ -24,16 +24,16 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 - (instancetype)initWithCallManager:(VSLCallManager *)callManager {
     if (self = [super init]) {
         self.callManager = callManager;
-
-        self.provider = [[CXProvider alloc] initWithConfiguration:[self providerConfiguration]];
-        [self.provider setDelegate:self queue:nil];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(callStateChanged:)
-                                                     name:VSLCallStateChangedNotification
-                                                   object:nil];
-
-        // The CallKit WWDC video checks for the authorization status but as of iOS 10b3 this is no longer required.
+        
+        if (@available(iOS 10.0, *)) {
+            self.provider = [[CXProvider alloc] initWithConfiguration:[self providerConfiguration]];
+            [self.provider setDelegate:self queue:nil];
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(callStateChanged:)
+                                                         name:VSLCallStateChangedNotification
+                                                       object:nil];
+        }
     }
     return self;
 }
@@ -42,46 +42,51 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallStateChangedNotification object:nil];
 }
 
-- (CXProviderConfiguration *)providerConfiguration {
-    NSString *appname = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
-    CXProviderConfiguration *providerConfiguration = [[CXProviderConfiguration alloc]
-                                                      initWithLocalizedName:NSLocalizedString(appname, nil)];
-
-    providerConfiguration.maximumCallGroups = 2;
-    providerConfiguration.maximumCallsPerCallGroup = 1;
-    providerConfiguration.supportsVideo = false;
-
-    NSString *ringtoneFileName = [[NSBundle mainBundle] pathForResource:@"ringtone" ofType:@"wav"];
-    if (ringtoneFileName) {
-        providerConfiguration.ringtoneSound = @"ringtone.wav";
+- (CXProviderConfiguration *)providerConfiguration NS_AVAILABLE_IOS(10.0){
+    if (@available(iOS 10.0, *)) {
+        NSString *appname = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+        CXProviderConfiguration *providerConfiguration = [[CXProviderConfiguration alloc]
+                                                          initWithLocalizedName:NSLocalizedString(appname, nil)];
+        
+        providerConfiguration.maximumCallGroups = 2;
+        providerConfiguration.maximumCallsPerCallGroup = 1;
+        providerConfiguration.supportsVideo = false;
+        
+        NSString *ringtoneFileName = [[NSBundle mainBundle] pathForResource:@"ringtone" ofType:@"wav"];
+        if (ringtoneFileName) {
+            providerConfiguration.ringtoneSound = @"ringtone.wav";
+        }
+        
+        providerConfiguration.supportedHandleTypes = [NSSet setWithObject:[NSNumber numberWithInt:CXHandleTypePhoneNumber]];
+        
+        return providerConfiguration;
     }
-
-    providerConfiguration.supportedHandleTypes = [NSSet setWithObject:[NSNumber numberWithInt:CXHandleTypePhoneNumber]];
-
-    return providerConfiguration;
+    return nil;
 }
 
 /**
  * This causes CallKit to show the "native" call screen.
  */
 - (void)reportIncomingCall:(VSLCall *)call {
-    CXCallUpdate *update = [[CXCallUpdate alloc] init];
-    CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:call.callerNumber];
-    update.remoteHandle = handle;
-    update.localizedCallerName = call.callerName;
-
-    VSLLogVerbose(@"UUID as sent to CallKit provider: %@", call.uuid.UUIDString);
-    [self.provider reportNewIncomingCallWithUUID:call.uuid update:update completion:^(NSError * _Nullable error) {
-        if (error) {
-            VSLLogError(@"Call(%@). CallKit report incoming call error: %@", call.uuid.UUIDString, error);
-            NSError *hangupError;
-            [call hangup:&hangupError];
-
-            if (hangupError){
-                VSLLogError(@"Error hanging up call(%@) after CallKit error:%@", call.uuid.UUIDString, error);
+    if (@available(iOS 10.0, *)) {
+        CXCallUpdate *update = [[CXCallUpdate alloc] init];
+        CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:call.callerNumber];
+        update.remoteHandle = handle;
+        update.localizedCallerName = call.callerName;
+        
+        VSLLogVerbose(@"UUID as sent to CallKit provider: %@", call.uuid.UUIDString);
+        [self.provider reportNewIncomingCallWithUUID:call.uuid update:update completion:^(NSError * _Nullable error) {
+            if (error) {
+                VSLLogError(@"Call(%@). CallKit report incoming call error: %@", call.uuid.UUIDString, error);
+                NSError *hangupError;
+                [call hangup:&hangupError];
+                
+                if (hangupError){
+                    VSLLogError(@"Error hanging up call(%@) after CallKit error:%@", call.uuid.UUIDString, error);
+                }
             }
-        }
-    }];
+        }];
+    }
 }
 
 // MARK: - CXProviderDelegate
@@ -89,7 +94,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
  * Delegate method called when the user accepts the incoming call from within the
  * "native" CallKit interface.
  */
-- (void)provider:(CXProvider *)provider performAnswerCallAction:(CXAnswerCallAction *)action {
+- (void)provider:(CXProvider *)provider performAnswerCallAction:(CXAnswerCallAction *)action NS_AVAILABLE_IOS(10.0) {
     VSLCall *call = [self.callManager callWithUUID:action.callUUID];
     if (call) {
         [self.callManager.audioController configureAudioSession];
@@ -119,7 +124,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
  * Delegate method called when the user declines the incoming call from within the
  * "native" CallKit interface.
  */
-- (void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action {
+- (void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action NS_AVAILABLE_IOS(10.0){
     // Find call.
     VSLCall *call = [self.callManager callWithUUID:action.callUUID];
     if (!call) {
@@ -151,7 +156,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 /**
  * Delegate method called when CallKit approves the apps request to start an outbound call.
  */
-- (void)provider:(CXProvider *)provider performStartCallAction:(CXStartCallAction *)action {
+- (void)provider:(CXProvider *)provider performStartCallAction:(CXStartCallAction *)action NS_AVAILABLE_IOS(10.0) {
     VSLCall *call = [self.callManager callWithUUID:action.callUUID];
     [self.callManager.audioController configureAudioSession];
 
@@ -172,7 +177,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     }];
 }
 
-- (void)provider:(CXProvider *)provider performSetMutedCallAction:(CXSetMutedCallAction *)action {
+- (void)provider:(CXProvider *)provider performSetMutedCallAction:(CXSetMutedCallAction *)action NS_AVAILABLE_IOS(10.0) {
     VSLCall *call = [self.callManager callWithUUID:action.callUUID];
     if (!call) {
         [action fail];
@@ -189,7 +194,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     }
 }
 
-- (void)provider:(CXProvider *)provider performSetHeldCallAction:(CXSetHeldCallAction *)action {
+- (void)provider:(CXProvider *)provider performSetHeldCallAction:(CXSetHeldCallAction *)action NS_AVAILABLE_IOS(10.0) {
     VSLCall *call = [self.callManager callWithUUID:action.callUUID];
     if (!call) {
         [action fail];
@@ -208,7 +213,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     }
 }
 
-- (void)provider:(CXProvider *)provider performPlayDTMFCallAction:(CXPlayDTMFCallAction *)action {
+- (void)provider:(CXProvider *)provider performPlayDTMFCallAction:(CXPlayDTMFCallAction *)action NS_AVAILABLE_IOS(10.0) {
     VSLCall *call = [self.callManager callWithUUID:action.callUUID];
     if (!call) {
         [action fail];
@@ -224,15 +229,16 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     }
 }
 
-- (void)provider:(CXProvider *)provider didActivateAudioSession:(AVAudioSession *)audioSession {
+- (void)provider:(CXProvider *)provider didActivateAudioSession:(AVAudioSession *)audioSession NS_AVAILABLE_IOS(10.0) {
     [self.callManager.audioController activateAudioSession];
 }
 
-- (void)provider:(CXProvider *)provider didDeactivateAudioSession:(AVAudioSession *)audioSession {
+- (void)provider:(CXProvider *)provider didDeactivateAudioSession:(AVAudioSession *)audioSession NS_AVAILABLE_IOS(10.0) {
     [self.callManager.audioController deactivateAudioSession];
 }
 
-- (void)providerDidReset:(CXProvider *)provider {
+- (void)providerDidReset:(CXProvider *)provider NS_AVAILABLE_IOS(10.0) {
+    VSLLogDebug(@"Provider reset: end all calls");
     [self.callManager endAllCalls];
 }
 
@@ -244,8 +250,11 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 
         case VSLCallStateCalling:
             if (!call.isIncoming) {
-                [self.provider reportOutgoingCallWithUUID:call.uuid
-                                  startedConnectingAtDate:[NSDate date]];
+                VSLLogDebug(@"Outgoing call, in CALLING state, with UUID: %@", call.uuid);
+                if (@available(iOS 10.0, *)) {
+                    [self.provider reportOutgoingCallWithUUID:call.uuid
+                                      startedConnectingAtDate:[NSDate date]];
+                }
             }
             break;
 
@@ -254,35 +263,51 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 
         case VSLCallStateEarly:
             if (!call.isIncoming) {
-                [self.provider reportOutgoingCallWithUUID:call.uuid
-                                  startedConnectingAtDate:[NSDate date]];
+                VSLLogDebug(@"Outgoing call, in EARLY state, with UUID: %@", call.uuid);
+                if (@available(iOS 10.0, *)) {
+                    [self.provider reportOutgoingCallWithUUID:call.uuid
+                                      startedConnectingAtDate:[NSDate date]];
+                }
             }
             break;
         case VSLCallStateConnecting:
             if (!call.isIncoming) {
-                [self.provider reportOutgoingCallWithUUID:call.uuid
-                                  startedConnectingAtDate:[NSDate date]];
+                VSLLogDebug(@"Outgoing call, in CONNECTING state, with UUID: %@", call.uuid);
+                if (@available(iOS 10.0, *)) {
+                    [self.provider reportOutgoingCallWithUUID:call.uuid
+                                      startedConnectingAtDate:[NSDate date]];
+                }
             }
             break;
 
         case VSLCallStateConfirmed:
             if (!call.isIncoming) {
-                [self.provider reportOutgoingCallWithUUID:call.uuid
-                                          connectedAtDate:[NSDate date]];
+                VSLLogDebug(@"Outgoing call, in CONFIRMED state, with UUID: %@", call.uuid);
+                if (@available(iOS 10.0, *)) {
+                    [self.provider reportOutgoingCallWithUUID:call.uuid
+                                              connectedAtDate:[NSDate date]];
+                }
             }
             break;
 
         case VSLCallStateDisconnected:
             if (!call.connected) {
-                [self.provider reportOutgoingCallWithUUID:call.uuid
-                                          connectedAtDate:[NSDate date]];
-                [self.provider reportCallWithUUID:call.uuid
-                                      endedAtDate:[NSDate date]
-                                           reason:CXCallEndedReasonUnanswered];
+                VSLLogDebug(@"Call never connected, in DISCONNETED state, with UUID: %@", call.uuid);
+                
+                if (@available(iOS 10.0, *)) {
+                    [self.provider reportOutgoingCallWithUUID:call.uuid
+                                              connectedAtDate:[NSDate date]];
+                    [self.provider reportCallWithUUID:call.uuid
+                                          endedAtDate:[NSDate date]
+                                               reason:CXCallEndedReasonUnanswered];
+                }
             } else if (!call.userDidHangUp) {
-                [self.provider reportCallWithUUID:call.uuid
-                                      endedAtDate:[NSDate date]
-                                           reason:CXCallEndedReasonRemoteEnded];
+                VSLLogDebug(@"Call remotly ended, in DISCONNECTED state, with UUID: %@", call.uuid);
+                if (@available(iOS 10.0, *)) {
+                    [self.provider reportCallWithUUID:call.uuid
+                                          endedAtDate:[NSDate date]
+                                               reason:CXCallEndedReasonRemoteEnded];
+                }
             }
             break;
     }
