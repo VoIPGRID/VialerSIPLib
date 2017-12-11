@@ -206,9 +206,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
         VSLLogError(@"Could not hold call(%@). Error: %@", call.uuid.UUIDString, holdError);
         [action fail];
     } else {
-        if (call.onHold) {
-            [self.callManager.audioController deactivateAudioSession];
-        }
+        call.onHold ? [self.callManager.audioController deactivateAudioSession] : [self.callManager.audioController activateAudioSession];
         [action fulfill];
     }
 }
