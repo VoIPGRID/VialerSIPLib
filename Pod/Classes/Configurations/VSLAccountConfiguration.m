@@ -15,8 +15,12 @@
         self.mediaStunType = VSLStunUseRetryOnFailure;
         self.sipStunType = VSLStunUseDefault;
         self.contactRewriteMethod = VSLContactRewriteMethodAlwaysUpdate;
+        self.ipAddressChangeShutdownTransport = YES;
         self.ipAddressChangeHangupAllCalls = NO;
         self.ipAddressChangeReinviteFlags = VSLReinviteFlagsReinitMedia | VSLReinviteFlagsUpdateVia | VSLReinviteFlagsUpdateContact;
+        self.contactUseSrcPort = YES;
+        self.allowViaRewrite = YES;
+        self.allowContactRewrite = YES;
     }
     return self;
 }

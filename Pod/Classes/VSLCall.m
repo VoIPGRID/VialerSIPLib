@@ -221,9 +221,9 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
     pjsua_call_setting_default(&callSetting);
     callSetting.aud_cnt = 1;
 
-    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+//    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
         callSetting.vid_cnt = 0;
-    }
+//    }
 
     pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, NULL, (int *)&_callId);
     VSLLogVerbose(@"Call(%@) received id:%ld", self.uuid.UUIDString, (long)self.callId);
@@ -652,6 +652,14 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 #pragma mark - Stats
 
 - (void)calculateStats {
+    pjsua_call_info callInfo;
+    pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
+
+    if (callInfo.media_status != PJSUA_CALL_MEDIA_ACTIVE) {
+        VSLLogError(@"Stream is not active!");
+    }
+
+
     VSLCallStats *callStats = [[VSLCallStats alloc] initWithCall: self];
     NSDictionary *stats = [callStats generate];
     if ([stats count] > 0) {

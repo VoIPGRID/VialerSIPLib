@@ -68,6 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try VialerSIPLib.sharedInstance().configureLibrary(withEndPointConfiguration: endpointConfiguration)
             // Set your incoming call block here.
             setupIncomingCallBlock()
+            VialerSIPLib.sharedInstance().onlyUseIlbc(true)
         } catch let error {
             DDLogWrapper.logError("Error setting up VialerSIPLib: \(error)")
         }

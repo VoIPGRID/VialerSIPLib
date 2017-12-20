@@ -130,14 +130,14 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
 
     // Shutdown the old transport is no longer connected because of an ip address change.
-    acc_cfg.ip_change_cfg.shutdown_tp = accountConfiguration.ipAddressChangeShutdownTransport ? PJ_TRUE : PJ_FALSE;
+    acc_cfg.ip_change_cfg.shutdown_tp = PJ_FALSE;
 
     // Don't hangup calls when the ip address changes.
-    acc_cfg.ip_change_cfg.hangup_calls = accountConfiguration.ipAddressChangeHangupAllCalls ? PJ_FALSE : PJ_FALSE;
+    acc_cfg.ip_change_cfg.hangup_calls = accountConfiguration.ipAddressChangeHangupAllCalls ? PJ_TRUE : PJ_FALSE;
 
     // When a call is reinvited use the specified header.
     if (!accountConfiguration.ipAddressChangeHangupAllCalls) {
-        acc_cfg.ip_change_cfg.reinvite_flags = PJSUA_CALL_UPDATE_CONTACT;
+        acc_cfg.ip_change_cfg.reinvite_flags = accountConfiguration.ipAddressChangeReinviteFlags;
     }
 
     acc_cfg.contact_use_src_port = accountConfiguration.contactUseSrcPort ? PJ_TRUE : PJ_FALSE;
@@ -154,8 +154,6 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:transportString] prependSipUri].pjString;
     }
     
-    acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite;
-    acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
     acc_cfg.contact_use_src_port = accountConfiguration.contactUseSrcPort;
     acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite;
     
@@ -200,6 +198,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 }
 
 - (void)removeAccount {
+    VSLLogVerbose(@"Removing account");
     pj_status_t status;
 
     status = pjsua_acc_del((pjsua_acc_id)self.accountId);
@@ -215,6 +214,9 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     pjsua_acc_info info;
     pjsua_acc_get_info((pjsua_acc_id)self.accountId, &info);
 
+    pjsua_acc_config cfg;
+    pjsua_acc_get_config((pjsua_acc_id)self.accountId, [VSLEndpoint sharedEndpoint].pjPool, &cfg);
+    
     // If pjsua_acc_info.expires == -1 the account has a registration but, as it turns out,
     // this is not a valid check whether there is a registration in progress or not, at least,
     // not wit a connection loss. So, to track a registration in progress, an ivar is used.

@@ -26,12 +26,9 @@ static void onCallReplaced(pjsua_call_id old_call_id, pjsua_call_id new_call_id)
 static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info);
 static void onRegStarted2(pjsua_acc_id acc_id, pjsua_reg_info *info);
 static void onNatDetect(const pj_stun_nat_detect_result *res);
-static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info);
 static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_event *event);
 static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_event *event);
 static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info);
-
-static pjsip_transport *the_transport;
 
 @interface VSLEndpoint()
 @property (strong, nonatomic) VSLEndpointConfiguration *endpointConfiguration;
@@ -178,7 +175,6 @@ static pjsip_transport *the_transport;
     endpointConfig.cb.on_reg_state2 = &onRegState2;
     endpointConfig.cb.on_reg_started2 = &onRegStarted2;
     endpointConfig.cb.on_nat_detect = &onNatDetect;
-    endpointConfig.cb.on_transport_state = &onTransportState;
     endpointConfig.cb.on_call_media_event = &onCallMediaEvent;
     endpointConfig.cb.on_call_tsx_state = &onTxStateChange;
     endpointConfig.cb.on_ip_change_progress = &onIpChangeProgress;
@@ -453,8 +449,6 @@ static void logCallBack(int logLevel, const char *data, int len) {
         logString = [logString substringToIndex:[logString length]-1];
     }
 
-
-
     switch (logLevel) {
         case 1:
             VSLLogError(@"%@", logString);
@@ -475,6 +469,7 @@ static void logCallBack(int logLevel, const char *data, int len) {
 }
 
 static void onCallState(pjsua_call_id callId, pjsip_event *event) {
+    VSLLogVerbose(@"onCallState");
     pjsua_call_info callInfo;
     pjsua_call_get_info(callId, &callInfo);
 
@@ -503,40 +498,12 @@ static void onCallMediaState(pjsua_call_id call_id) {
     }
 }
 
-/**
- *  We need to keep track of the current TCP transport in combination with
- *  a network monitor to be able to handle network/ip address changes.
- *  http://trac.pjsip.org/repos/wiki/IPAddressChange#iphone
- */
 static void onRegStarted2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     VSLLogVerbose(@"onRegStarted2");
-//    pjsip_regc_info regc_info;
-//    pjsip_regc_get_info(info->regc, &regc_info);
-//    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
-//        if (the_transport != regc_info.transport) {
-//            releaseStoredTransport();
-//            /* Save transport instance so that we can close it later when
-//             * new IP address is detected.
-//             */
-//            VSLLogInfo(@"Saving transport");
-//            the_transport = regc_info.transport;
-//            pjsip_transport_add_ref(the_transport);
-//        }
-//    }
 }
 
 static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     VSLLogVerbose(@"onRegState2");
-    
-//    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
-//        struct pjsip_regc_cbparam *rp = info->cbparam;
-//
-//        releaseStoredTransport();
-//        if (rp->code/100 == 2 && rp->expiration > 0 && rp->contact_cnt > 0) {
-//            the_transport = rp->rdata->tp_info.transport;
-//            pjsip_transport_add_ref(the_transport);
-//        }
-//    }
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
     if (account) {
@@ -544,43 +511,30 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     }
 }
 
-static void onTransportState(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info) {
-    VSLLogVerbose(@"onTransportState");
-//    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.hasTCPConfiguration) {
-//        if (state == PJSIP_TP_STATE_DISCONNECTED && the_transport == tp) {
-//            releaseStoredTransport();
-//        }
-//        the_transport = tp;
-//        pjsip_transport_add_ref(tp);
-//    }
-}
-
 /* Callback on media events. Adjust renderer window size to original video size */
-static void onCallMediaEvent(pjsua_call_id call_id,
-                             unsigned med_idx,
-                             pjmedia_event *event) {
-#if PJSUA_HAS_VIDEO
-    if (event->type == PJMEDIA_EVENT_FMT_CHANGED) {
-        char event_name[5];
-        VSLLogVerbose(@"Event Media %s", pjmedia_fourcc_name(event->type, event_name));
-        pjsua_call_info ci;
-        pjsua_vid_win_id wid;
-        pjmedia_rect_size size;
-        
-        pjsua_call_get_info(call_id, &ci);
-        
-        if (ci.media[med_idx].type == PJMEDIA_TYPE_VIDEO && ci.media[med_idx].dir & PJMEDIA_DIR_DECODING) {
-            wid = ci.media[med_idx].stream.vid.win_in;
-            size = event->data.fmt_changed.new_fmt.det.vid.size;
-            NSDictionary *userInfo = @{VSLNotificationUserInfoCallIdKey:@(call_id),
-                                       VSLNotificationUserInfoWindowIdKey:@(wid),
-                                       VSLNotificationUserInfoWindowSizeKey:[NSValue valueWithCGSize:(CGSize){size.w, size.h}]};
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:VSLNotificationUserInfoVideoSizeRenderKey object:nil userInfo:userInfo];
-            });
+static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_event *event) {
+    #if PJSUA_HAS_VIDEO
+        if (event->type == PJMEDIA_EVENT_FMT_CHANGED) {
+            char event_name[5];
+            VSLLogVerbose(@"Event Media %s", pjmedia_fourcc_name(event->type, event_name));
+            pjsua_call_info ci;
+            pjsua_vid_win_id wid;
+            pjmedia_rect_size size;
+
+            pjsua_call_get_info(call_id, &ci);
+
+            if (ci.media[med_idx].type == PJMEDIA_TYPE_VIDEO && ci.media[med_idx].dir & PJMEDIA_DIR_DECODING) {
+                wid = ci.media[med_idx].stream.vid.win_in;
+                size = event->data.fmt_changed.new_fmt.det.vid.size;
+                NSDictionary *userInfo = @{VSLNotificationUserInfoCallIdKey:@(call_id),
+                                           VSLNotificationUserInfoWindowIdKey:@(wid),
+                                           VSLNotificationUserInfoWindowSizeKey:[NSValue valueWithCGSize:(CGSize){size.w, size.h}]};
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:VSLNotificationUserInfoVideoSizeRenderKey object:nil userInfo:userInfo];
+                });
+            }
         }
-    }
-#endif
+    #endif
 }
 
 static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_event *event) {
@@ -595,7 +549,7 @@ static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_
     }
 }
 
- void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
+void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
     VSLEndpoint *endpoint = [VSLEndpoint sharedEndpoint];
     VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
@@ -619,41 +573,6 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
     }
 }
 
-/**
- *  Release the current TCP transport.
- */
-static void releaseStoredTransport() {
-//    if (the_transport) {
-//        VSLLogDebug(@"Releasing transport");
-//        pjsip_transport_dec_ref(the_transport);
-//        the_transport = NULL;
-//    }
-}
-
-/**
- *  Shutsdown the current TCP transport.
- *
- *  @return YES if succesfull
- */
-//- (BOOL)shutdownTransport {
-//    if (!self.endpointConfiguration.hasTCPConfiguration) {
-//        return NO;
-//    }
-//
-//
-//    if (self.endpointConfiguration.hasTCPConfiguration && the_transport) {
-//        pj_status_t status;
-//        status = pjsip_transport_shutdown(the_transport);
-//        VSLLogInfo(@"Shuting down transport");
-//        if (status != PJ_SUCCESS) {
-//            VSLLogWarning(@"Transport shutdown error");
-//            return NO;
-//        }
-//        releaseStoredTransport();
-//    }
-//    return YES;
-//}
-
 - (void)callDealloc:(NSNotification *)notification {
     if (![self.endpointConfiguration unregisterAfterCall]) {
         return;
@@ -665,6 +584,27 @@ static void releaseStoredTransport() {
             if (calls.count == 0) {
                 NSError *error;
                 [account unregisterAccount:&error];
+            }
+        }
+    }
+    
+    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
+        // Remove all current transports.
+        pjsua_transport_id transportIds[32];
+        unsigned count = PJ_ARRAY_SIZE(transportIds);
+        
+        pj_status_t status = pjsua_enum_transports (transportIds, &count);
+
+        if (status == PJ_SUCCESS && count > 1) {
+            for (int i = 1; i < count; i++) {
+                pjsua_transport_id tId = transportIds[i];
+                pjsua_transport_info info;
+                pj_status_t status = pjsua_transport_get_info(tId, &info);
+                if (status == PJ_SUCCESS) {
+                    VSLLogError(@"SUCCESS: Destoryed transport: %d", i);
+                } else {
+                    VSLLogError(@"FAILED: Destoryed transport: %d", i);
+                }
             }
         }
     }
@@ -742,21 +682,14 @@ static void releaseStoredTransport() {
 
     pjsua_ip_change_param param;
     pjsua_ip_change_param_default(&param);
+//    param.restart_lis_delay = 0;
+//    param.restart_listener = PJ_TRUE;
 
     pjsua_handle_ip_change(&param);
-
-//    VSLLogInfo(@"network changed");
-//    if (self.state == VSLEndpointStarted) {
-//        if ([self shutdownTransport]) {
-//            for (VSLAccount *account in self.accounts) {
-//                [account reregisterAccount];
-//            }
-//        }
-//    }
 }
 
 static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info) {
-    VSLLogError(@"onIpChangeProgress");
+    VSLLogError(@"onIpChangeProgress: %u", op);
 }
 
 + (void)wasCallMissed:(pjsua_call_id)call_id pjsuaCallInfo:(pjsua_call_info)callInfo pjsipEvent:(pjsip_event*)event {
