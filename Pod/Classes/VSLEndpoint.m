@@ -111,7 +111,10 @@ static pjsip_transport *the_transport;
 
         NSString *reachabilityServer = @"sipproxy.voipgrid.nl";
         if (activeAccount) {
-            reachabilityServer = activeAccount.accountConfiguration.sipProxyServer;
+            if (!activeAccount.accountConfiguration.sipProxyServer || [activeAccount.accountConfiguration.sipProxyServer length] < 7)
+                reachabilityServer = activeAccount.accountConfiguration.sipDomain;
+            else
+                reachabilityServer = activeAccount.accountConfiguration.sipProxyServer;
         }
         _networkMonitor = [[VSLNetworkMonitor alloc] initWithHost:reachabilityServer];
     }
