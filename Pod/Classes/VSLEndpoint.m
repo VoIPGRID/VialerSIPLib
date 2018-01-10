@@ -204,7 +204,31 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     // Add the transport configuration to the endpoint.
     for (VSLTransportConfiguration *transportConfiguration in endpointConfiguration.transportConfigurations) {
         pjsua_transport_config transportConfig;
+
+        static int time=30, probe=5, interval=1, enable=1;
+        transportConfig.sockopt_params.cnt = 4;
+        transportConfig.sockopt_params.options[0].level     = pj_SOL_TCP();
+        transportConfig.sockopt_params.options[0].optname   = 1;
+        transportConfig.sockopt_params.options[0].optval    = &time;
+        transportConfig.sockopt_params.options[0].optlen    = sizeof(time);
+
+        transportConfig.sockopt_params.options[1].level     = pj_SOL_TCP();
+        transportConfig.sockopt_params.options[1].optname   = 1;
+        transportConfig.sockopt_params.options[1].optval    = &interval;
+        transportConfig.sockopt_params.options[1].optlen    = sizeof(interval);
+
+        transportConfig.sockopt_params.options[2].level     = pj_SOL_TCP();
+        transportConfig.sockopt_params.options[2].optname   = 1;
+        transportConfig.sockopt_params.options[2].optval    = &probe;
+        transportConfig.sockopt_params.options[2].optlen    = sizeof(probe);
+
+        transportConfig.sockopt_params.options[3].level     = pj_SOL_SOCKET();
+        transportConfig.sockopt_params.options[3].optname   = 1;
+        transportConfig.sockopt_params.options[3].optval    = &enable;
+        transportConfig.sockopt_params.options[3].optlen    = sizeof(enable);
+
         pjsua_transport_config_default(&transportConfig);
+
 
         pjsip_transport_type_e transportType = (pjsip_transport_type_e)transportConfiguration.transportType;
         pjsua_transport_id transportId;
@@ -682,14 +706,35 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 
     pjsua_ip_change_param param;
     pjsua_ip_change_param_default(&param);
-//    param.restart_lis_delay = 0;
-//    param.restart_listener = PJ_TRUE;
+    param.restart_lis_delay = 10;
+    param.restart_listener = PJ_TRUE;
 
     pjsua_handle_ip_change(&param);
 }
 
 static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info) {
-    VSLLogError(@"onIpChangeProgress: %u", op);
+    VSLLogInfo(@"onIpChangeProgress:");
+
+    switch (op) {
+        case PJSUA_IP_CHANGE_OP_RESTART_LIS:
+            VSLLogInfo(@"Restart Listener: %u", status);
+            break;
+        case PJSUA_IP_CHANGE_OP_ACC_SHUTDOWN_TP:
+            VSLLogInfo(@"Account Shutdown transport: %u", status);
+            break;
+        case PJSUA_IP_CHANGE_OP_ACC_UPDATE_CONTACT:
+            VSLLogInfo(@"Account update contact: %u", status);
+            break;
+        case PJSUA_IP_CHANGE_OP_ACC_HANGUP_CALLS:
+            VSLLogInfo(@"Account hangup calls: %u", status);
+            break;
+        case PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS:
+            VSLLogInfo(@"Account reinvite calls: %u", status);
+            break;
+
+        default:
+            break;
+    }
 }
 
 + (void)wasCallMissed:(pjsua_call_id)call_id pjsuaCallInfo:(pjsua_call_info)callInfo pjsipEvent:(pjsip_event*)event {
