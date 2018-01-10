@@ -10,7 +10,7 @@
 #import "VSLLogging.h"
 
 
-static double const VSLNetworkMonitorDelayTimeForNotification = 5;
+static double const VSLNetworkMonitorDelayTimeForNotification = 0.5;
 
 NSString * const VSLNetworkMonitorChangedNotification = @"VSLNetworkMonitorChangedNotification";
 

@@ -130,14 +130,14 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
 
     // Shutdown the old transport is no longer connected because of an ip address change.
-    acc_cfg.ip_change_cfg.shutdown_tp = PJ_FALSE;
+    acc_cfg.ip_change_cfg.shutdown_tp = accountConfiguration.ipAddressChangeShutdownTransport ? PJ_TRUE : PJ_FALSE;
 
     // Don't hangup calls when the ip address changes.
     acc_cfg.ip_change_cfg.hangup_calls = accountConfiguration.ipAddressChangeHangupAllCalls ? PJ_TRUE : PJ_FALSE;
 
     // When a call is reinvited use the specified header.
     if (!accountConfiguration.ipAddressChangeHangupAllCalls) {
-        acc_cfg.ip_change_cfg.reinvite_flags = accountConfiguration.ipAddressChangeReinviteFlags;
+        acc_cfg.ip_change_cfg.reinvite_flags = (unsigned int)accountConfiguration.ipAddressChangeReinviteFlags;
     }
 
     acc_cfg.contact_use_src_port = accountConfiguration.contactUseSrcPort ? PJ_TRUE : PJ_FALSE;

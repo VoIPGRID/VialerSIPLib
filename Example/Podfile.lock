@@ -1,15 +1,15 @@
 PODS:
-  - CocoaLumberjack (3.3.0):
-    - CocoaLumberjack/Default (= 3.3.0)
-    - CocoaLumberjack/Extensions (= 3.3.0)
-  - CocoaLumberjack/Default (3.3.0)
-  - CocoaLumberjack/Extensions (3.3.0):
+  - CocoaLumberjack (3.4.0):
+    - CocoaLumberjack/Default (= 3.4.0)
+    - CocoaLumberjack/Extensions (= 3.4.0)
+  - CocoaLumberjack/Default (3.4.0)
+  - CocoaLumberjack/Extensions (3.4.0):
     - CocoaLumberjack/Default
   - OCMock (3.4.1)
   - Reachability (3.2)
   - SPLumberjackLogFormatter (0.0.1):
     - CocoaLumberjack
-  - Vialer-pjsip-iOS (3.2.0)
+  - Vialer-pjsip-iOS (3.3.0)
   - VialerSIPLib (2.8.0):
     - CocoaLumberjack
     - Reachability
@@ -34,13 +34,13 @@ CHECKOUT OPTIONS:
     :git: https://github.com/VoIPGRID/SPLumberjackLogFormatter.git
 
 SPEC CHECKSUMS:
-  CocoaLumberjack: 3c8c74683302f9012bb168e1c4b7ae3c0b558431
+  CocoaLumberjack: e033a5d8513357af2dd456eb66e202c325c30627
   OCMock: 2cd0716969bab32a2283ff3a46fd26a8c8b4c5e3
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SPLumberjackLogFormatter: a2290c9b880f3166b2d1bace45dc1fc1302b28ab
-  Vialer-pjsip-iOS: d4343c9f96d01244132a9a13f7e3e6fda003e2f7
+  Vialer-pjsip-iOS: fe7317dd3702d54b08986d8d3e2a109cbb06ecae
   VialerSIPLib: 4727f7f4d9c193dbd8efad416a9b8054ea0a5a25
 
-PODFILE CHECKSUM: 1adc794c74ea8f2d7335bc5495c38dec44ab03ab
+PODFILE CHECKSUM: 64a9b7d822c5cdfb540de83747cdf7175cb1a64d
 
 COCOAPODS: 1.3.1

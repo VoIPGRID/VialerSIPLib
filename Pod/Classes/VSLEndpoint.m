@@ -204,29 +204,6 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     // Add the transport configuration to the endpoint.
     for (VSLTransportConfiguration *transportConfiguration in endpointConfiguration.transportConfigurations) {
         pjsua_transport_config transportConfig;
-
-        static int time=30, probe=5, interval=1, enable=1;
-        transportConfig.sockopt_params.cnt = 4;
-        transportConfig.sockopt_params.options[0].level     = pj_SOL_TCP();
-        transportConfig.sockopt_params.options[0].optname   = 1;
-        transportConfig.sockopt_params.options[0].optval    = &time;
-        transportConfig.sockopt_params.options[0].optlen    = sizeof(time);
-
-        transportConfig.sockopt_params.options[1].level     = pj_SOL_TCP();
-        transportConfig.sockopt_params.options[1].optname   = 1;
-        transportConfig.sockopt_params.options[1].optval    = &interval;
-        transportConfig.sockopt_params.options[1].optlen    = sizeof(interval);
-
-        transportConfig.sockopt_params.options[2].level     = pj_SOL_TCP();
-        transportConfig.sockopt_params.options[2].optname   = 1;
-        transportConfig.sockopt_params.options[2].optval    = &probe;
-        transportConfig.sockopt_params.options[2].optlen    = sizeof(probe);
-
-        transportConfig.sockopt_params.options[3].level     = pj_SOL_SOCKET();
-        transportConfig.sockopt_params.options[3].optname   = 1;
-        transportConfig.sockopt_params.options[3].optval    = &enable;
-        transportConfig.sockopt_params.options[3].optlen    = sizeof(enable);
-
         pjsua_transport_config_default(&transportConfig);
 
 
@@ -716,22 +693,39 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     VSLLogInfo(@"onIpChangeProgress:");
 
     switch (op) {
-        case PJSUA_IP_CHANGE_OP_RESTART_LIS:
+        case PJSUA_IP_CHANGE_OP_RESTART_LIS: {
             VSLLogInfo(@"Restart Listener: %u", status);
             break;
-        case PJSUA_IP_CHANGE_OP_ACC_SHUTDOWN_TP:
+        }
+        case PJSUA_IP_CHANGE_OP_ACC_SHUTDOWN_TP: {
             VSLLogInfo(@"Account Shutdown transport: %u", status);
             break;
-        case PJSUA_IP_CHANGE_OP_ACC_UPDATE_CONTACT:
+        }
+        case PJSUA_IP_CHANGE_OP_ACC_UPDATE_CONTACT: {
             VSLLogInfo(@"Account update contact: %u", status);
+            // When disableVideoSupport is on reinivite the calls again. And in the reinivite
+            // disable the video stream. Otherwise the response is an 488 Not Acceptatble here.
+            if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+                pjsua_call_id callId = info->acc_reinvite_calls.call_id;
+                pjsua_acc_id accountId = info->acc_reinvite_calls.acc_id;
+
+                VSLLogError(@"Do a reinvite for account: %d and the call: %d", accountId, callId);
+
+                VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:accountId];
+                VSLCall *call = [account lookupCall:callId];
+                [call reinvite];
+            }
             break;
-        case PJSUA_IP_CHANGE_OP_ACC_HANGUP_CALLS:
+        }
+        case PJSUA_IP_CHANGE_OP_ACC_HANGUP_CALLS: {
             VSLLogInfo(@"Account hangup calls: %u", status);
             break;
-        case PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS:
+        }
+        case PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS: {
             VSLLogInfo(@"Account reinvite calls: %u", status);
-            break;
 
+            break;
+        }
         default:
             break;
     }
