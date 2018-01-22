@@ -137,7 +137,7 @@
 		F271B54B1DABD18F0028D620 /* IntentsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = IntentsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F271B54D1DABD18F0028D620 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		F271B54F1DABD18F0028D620 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F27386101C16EE96002C4CD1 /* VialerSIPLib.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = VialerSIPLib.podspec; path = ../VialerSIPLib.podspec; sourceTree = "<group>"; };
+		F27386101C16EE96002C4CD1 /* VialerSIPLib.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = VialerSIPLib.podspec; path = ../VialerSIPLib.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		F27386121C170862002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F27386191C170B3C002C4CD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F2800BB41DCB448F009B6361 /* NSUserActivity+StartCallConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+StartCallConvertible.swift"; sourceTree = "<group>"; };
@@ -566,11 +566,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example-resources.sh",
-				$PODS_CONFIGURATION_BUILD_DIR/VialerSIPLib/VialerSIPLib.bundle,
+				"${PODS_CONFIGURATION_BUILD_DIR}/VialerSIPLib/VialerSIPLib.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/VialerSIPLib.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -602,11 +602,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests-resources.sh",
-				$PODS_CONFIGURATION_BUILD_DIR/VialerSIPLib/VialerSIPLib.bundle,
+				"${PODS_CONFIGURATION_BUILD_DIR}/VialerSIPLib/VialerSIPLib.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/VialerSIPLib.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

@@ -76,7 +76,11 @@
  */
 @property (nonatomic) BOOL disableVideoSupport;
 
-
+/**
+ * Whether the account needs to be unregistered after a call has been made
+ *
+ * @return BOOL
+ */
 @property (nonatomic) BOOL unregisterAfterCall;
 
 /**
@@ -87,7 +91,7 @@
 -(BOOL)hasTCPConfiguration;
 
 /**
- * To check if the endpoint has a tcl configuration.
+ * To check if the endpoint has a tls configuration.
  *
  * @return BOOL
  */
