@@ -42,7 +42,6 @@
 		F2800BB61DCB448F009B6361 /* NSUserActivity+StartCallConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2800BB41DCB448F009B6361 /* NSUserActivity+StartCallConvertible.swift */; };
 		F2800BB71DCB448F009B6361 /* StartCallConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2800BB51DCB448F009B6361 /* StartCallConvertible.swift */; };
 		F2800BBB1DCBCF47009B6361 /* VSLCallManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2800BBA1DCBCF47009B6361 /* VSLCallManagerTests.m */; };
-		F28560DE1DD0C017008BB9AC /* SPLumberjackLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = F28560DD1DD0C017008BB9AC /* SPLumberjackLogFormatter.m */; };
 		F951E38D1C56214300FA480F /* VialerSIPLibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F951E38C1C56214300FA480F /* VialerSIPLibTests.m */; };
 		F95AFD271C7F39BC005FC8CD /* VSLCallTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F95AFD261C7F39BC005FC8CD /* VSLCallTests.m */; };
 		F9906C211C3A85AC0044EA99 /* VSLAccountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */; };
@@ -133,6 +132,7 @@
 		C64094058567ED161343B634 /* Pods-VialerSIPLib_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		E4DBAC75C9B3D560D6779049 /* Pods-VialerSIPLib_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSLEndOfCallViewController.swift; sourceTree = "<group>"; };
+		EEF1CB7C1FA096F800B5170F /* VialerSIPLib_Example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VialerSIPLib_Example-Prefix.pch"; sourceTree = "<group>"; };
 		F26407E01DA7D6FE00393D4B /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		F271B54B1DABD18F0028D620 /* IntentsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = IntentsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F271B54D1DABD18F0028D620 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
@@ -143,8 +143,6 @@
 		F2800BB41DCB448F009B6361 /* NSUserActivity+StartCallConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+StartCallConvertible.swift"; sourceTree = "<group>"; };
 		F2800BB51DCB448F009B6361 /* StartCallConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartCallConvertible.swift; sourceTree = "<group>"; };
 		F2800BBA1DCBCF47009B6361 /* VSLCallManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLCallManagerTests.m; sourceTree = "<group>"; };
-		F28560DC1DD0C017008BB9AC /* SPLumberjackLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPLumberjackLogFormatter.h; sourceTree = "<group>"; };
-		F28560DD1DD0C017008BB9AC /* SPLumberjackLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPLumberjackLogFormatter.m; sourceTree = "<group>"; };
 		F951E38C1C56214300FA480F /* VialerSIPLibTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VialerSIPLibTests.m; sourceTree = "<group>"; };
 		F95AFD261C7F39BC005FC8CD /* VSLCallTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLCallTests.m; sourceTree = "<group>"; };
 		F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountTests.m; sourceTree = "<group>"; };
@@ -247,6 +245,7 @@
 			children = (
 				6003F595195388D20070C39A /* Info.plist */,
 				C457E49B1D3D070D0005D4B4 /* VialerSIPLib_Example-Bridging-Header.h */,
+				EEF1CB7C1FA096F800B5170F /* VialerSIPLib_Example-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -310,8 +309,6 @@
 				C4A6D7661D5A12720014A4FB /* Keys.swift.example */,
 				C4441B701D424F8100C98E49 /* DDLogWrapper.h */,
 				C4441B711D424F8100C98E49 /* DDLogWrapper.m */,
-				F28560DC1DD0C017008BB9AC /* SPLumberjackLogFormatter.h */,
-				F28560DD1DD0C017008BB9AC /* SPLumberjackLogFormatter.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -646,7 +643,6 @@
 				C4021B6B1D426F22003560F6 /* Keys.swift in Sources */,
 				C44F26421D3F5B7D00A5A406 /* VSLSecondCallViewController.swift in Sources */,
 				C44F26481D3FBFCF00A5A406 /* VSLMakeCallViewController.swift in Sources */,
-				F28560DE1DD0C017008BB9AC /* SPLumberjackLogFormatter.m in Sources */,
 				C44F264A1D3FC71D00A5A406 /* VSLCallViewController.swift in Sources */,
 				C44F26461D3FB63600A5A406 /* VSLMainViewController.swift in Sources */,
 				C44F264C1D3FD33F00A5A406 /* VSLIncomingCallViewController.swift in Sources */,
@@ -757,6 +753,8 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/VialerSIPLib/VialerSIPLib_Example-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -806,6 +804,8 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/VialerSIPLib/VialerSIPLib_Example-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -840,7 +840,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VialerSIPLib/VialerSIPLib_Example-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
 			};
@@ -864,7 +864,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VialerSIPLib/VialerSIPLib_Example-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
 			};
@@ -927,7 +927,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -950,7 +950,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = nl.voipgrid.VialerSIPLib.IntentsExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

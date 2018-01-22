@@ -63,6 +63,10 @@
 }
 
 - (void)startCallToNumber:(NSString *)number forAccount:(VSLAccount *)account completion:(void (^)(VSLCall *call, NSError *error))completion {
+    if (account.accountState != VSLAccountStateConnected) {
+        [account registerAccountWithCompletion:nil];
+    }
+    
     VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
     [self addCall:call];
 
@@ -149,6 +153,7 @@
 
 - (void)toggleHoldForCall:(VSLCall *)call completion:(void (^)(NSError * _Nullable))completion {
     if (@available(iOS 10.0, *)) {
+        VSLLogError(@"toggle call hold");
         CXAction *toggleHoldAction = [[CXSetHeldCallAction alloc] initWithCallUUID:call.uuid onHold:!call.onHold];
         [self requestCallKitAction:toggleHoldAction completion:completion];
     } else {

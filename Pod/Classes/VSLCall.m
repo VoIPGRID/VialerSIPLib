@@ -221,6 +221,10 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
     pjsua_call_setting_default(&callSetting);
     callSetting.aud_cnt = 1;
 
+    if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+        callSetting.vid_cnt = 0;
+    }
+
     pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, NULL, (int *)&_callId);
     VSLLogVerbose(@"Call(%@) received id:%ld", self.uuid.UUIDString, (long)self.callId);
 
@@ -286,14 +290,17 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
     if (self.callState > VSLCallStateNull && self.callState < VSLCallStateDisconnected) {
         pjsua_call_setting options;
         pjsua_call_setting_default(&options);
-        options.flag = PJSUA_CALL_UPDATE_CONTACT | PJSUA_CALL_UPDATE_VIA;
-        pj_status_t status;
-        
-        status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &options, NULL);
+
+        options.flag = self.account.accountConfiguration.ipAddressChangeReinviteFlags;
+        if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+            options.vid_cnt = 0;
+        }
+
+        pj_status_t status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &options, NULL);
         if (status != PJ_SUCCESS) {
-            VSLLogError(@"Cannot reinvite!");
+            VSLLogError(@"Cannot reinvite for call id: %ld!", (long)self.callId);
         } else {
-            VSLLogDebug(@"Reinvite sent");
+            VSLLogDebug(@"Reinvite sent for call id: %ld", (long)self.callId);
         }
     }
 }
@@ -648,6 +655,14 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 #pragma mark - Stats
 
 - (void)calculateStats {
+    pjsua_call_info callInfo;
+    pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
+
+    if (callInfo.media_status != PJSUA_CALL_MEDIA_ACTIVE) {
+        VSLLogError(@"Stream is not active!");
+    }
+
+
     VSLCallStats *callStats = [[VSLCallStats alloc] initWithCall: self];
     NSDictionary *stats = [callStats generate];
     if ([stats count] > 0) {
