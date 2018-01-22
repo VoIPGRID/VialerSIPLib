@@ -206,9 +206,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
         VSLLogError(@"Could not hold call(%@). Error: %@", call.uuid.UUIDString, holdError);
         [action fail];
     } else {
-        if (call.onHold) {
-            [self.callManager.audioController deactivateAudioSession];
-        }
+        call.onHold ? [self.callManager.audioController deactivateAudioSession] : [self.callManager.audioController activateAudioSession];
         [action fulfill];
     }
 }
@@ -292,7 +290,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 
         case VSLCallStateDisconnected:
             if (!call.connected) {
-                VSLLogDebug(@"Call never connected, in DISCONNETED state, with UUID: %@", call.uuid);
+                VSLLogDebug(@"Call never connected, in DISCONNECTED state, with UUID: %@", call.uuid);
                 
                 if (@available(iOS 10.0, *)) {
                     [self.provider reportOutgoingCallWithUUID:call.uuid

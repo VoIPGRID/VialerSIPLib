@@ -204,19 +204,29 @@ NSString * const VSLCallStatsTotalMBsUsed = @"VSLCallStatsTotalMBsUsed";
 # pragma mark - Actions
 
 - (NSDictionary *)generate{
+    NSDictionary *stats = @{};
+
+    pjsua_call_info callInfo;
+    pjsua_call_get_info((pjsua_call_id)self.call.callId, &callInfo);
+
+    if (callInfo.media_status != PJSUA_CALL_MEDIA_ACTIVE) {
+        VSLLogError(@"Stream is not active!");
+        return stats;
+    }
+
+    
     pj_status_t status;
     pjsua_stream_info stream_info;
-    status = pjsua_call_get_stream_info((pjsua_call_id)self.call.callId, 0, &stream_info);
+    status = pjsua_call_get_stream_info((pjsua_call_id)self.call.callId, callInfo.media[0].index, &stream_info);
     
-    NSDictionary *stats = @{};
-    
+
     if (status == PJ_SUCCESS) {
         self.streamInfo = stream_info;
         [self codecUsed];
         
         pj_status_t status;
         pjsua_stream_stat stream_stat;
-        status = pjsua_call_get_stream_stat((pjsua_call_id)self.call.callId, 0, &stream_stat);
+        status = pjsua_call_get_stream_stat((pjsua_call_id)self.call.callId, callInfo.media[0].index, &stream_stat);
         
         if (status == PJ_SUCCESS) {
             self.streamStat = stream_stat;

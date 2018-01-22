@@ -72,11 +72,30 @@
 @property (strong, nonatomic) NSArray *transportConfigurations;
 
 /**
+ * Coniguration property to not offer the video codec in the INVITE.
+ */
+@property (nonatomic) BOOL disableVideoSupport;
+
+/**
+ * Whether the account needs to be unregistered after a call has been made
+ *
+ * @return BOOL
+ */
+@property (nonatomic) BOOL unregisterAfterCall;
+
+/**
  *  To check if the endpoint has a tcp configuration.
  *
  *  @return BOOL
  */
 -(BOOL)hasTCPConfiguration;
+
+/**
+ * To check if the endpoint has a tls configuration.
+ *
+ * @return BOOL
+ */
+-(BOOL)hasTLSConfiguration;
 
 /**
  * Optional user agent string (default empty). If it's empty, no

@@ -168,7 +168,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         }
     }
 
-    func updateUI() {
+    @objc func updateUI() {
         guard let call = activeCall else { return }
         updateLabels(call: call, statusLabel: statusLabel, numberLabel: numberLabel)
 

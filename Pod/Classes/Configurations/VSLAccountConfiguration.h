@@ -4,6 +4,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSLIceConfiguration.h"
+#import "VSLTurnConfiguration.h"
 #include <VialerPJSIP/pjsua.h>
 
 /**
@@ -29,6 +31,17 @@ typedef NS_ENUM(NSUInteger, VSLStunUse) {
     VSLStunUseRetryOnFailure = PJSUA_STUN_RETRY_ON_FAILURE
 };
 
+typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
+    VSLContactRewriteMethodUnregister = PJSUA_CONTACT_REWRITE_UNREGISTER,
+    VSLContactRewriteMethodNoUnregister = PJSUA_CONTACT_REWRITE_NO_UNREG,
+    VSLContactRewriteMethodAlwaysUpdate = PJSUA_CONTACT_REWRITE_ALWAYS_UPDATE
+};
+
+typedef NS_ENUM(NSUInteger, VSLReinviteFlags) {
+    VSLReinviteFlagsReinitMedia = PJSUA_CALL_REINIT_MEDIA,
+    VSLReinviteFlagsUpdateContact = PJSUA_CALL_UPDATE_CONTACT,
+    VSLReinviteFlagsUpdateVia = PJSUA_CALL_UPDATE_VIA
+};
 
 @interface VSLAccountConfiguration : NSObject
 
@@ -91,11 +104,41 @@ typedef NS_ENUM(NSUInteger, VSLStunUse) {
 /**
  *  The stun type that should be used.
  */
-@property (nonatomic) VSLStunUse sipStunType;
+@property (nonatomic) pjsua_stun_use sipStunType;
 
 /**
  *  The media stun type that should be used.
  */
-@property (nonatomic) VSLStunUse mediaStunType;
+@property (nonatomic) pjsua_stun_use mediaStunType;
+
+@property (nonatomic) BOOL allowContactRewrite;
+@property (nonatomic) VSLContactRewriteMethod contactRewriteMethod;
+@property (nonatomic) BOOL contactUseSrcPort;
+@property (nonatomic) BOOL allowViaRewrite;
+
+
+/**
+ * Should the old transport be cleaned up.
+ */
+@property (nonatomic) BOOL ipAddressChangeShutdownTransport;
+
+/**
+ * Should all calls be ended when an ip address change has been detected.
+ *
+ * Default: NO
+ */
+@property (nonatomic) BOOL ipAddressChangeHangupAllCalls;
+
+/**
+ * When ipAddressChangeHangupAllCalls is set to NO, this property should be set.
+ *
+ * Default: VSLReinviteFlagsReinitMedia | VSLReinviteFlagsUpdateVia | VSLReinviteFlagsUpdateContact
+ */
+@property (nonatomic) VSLReinviteFlags ipAddressChangeReinviteFlags;
+
+@property (nonatomic) VSLTurnConfiguration * _Nullable turnConfiguration;
+
+@property (nonatomic) VSLIceConfiguration * _Nullable iceConfiguration;
 
 @end
+

@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [3.0.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.0.0) (01/22/2017)
+Released on Monday, Januari 22, 2018.
+
+### Added
+* Ability to use secure calling
+* Update Vialer-PJSIP-IOS pod to the newest version
+* Added possibility to support Stun and Ice through configuration
+
+### Fixed
+* Configurable wheter the account needs to be unregistered after a call has been made
+
 ## [2.8.0](https://github.com/VoIPGRID/VialerSIPLib/tree/2.8.0) (10/25/2017)
 Released on Wednesday, October 25, 2017.
 

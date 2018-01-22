@@ -63,6 +63,10 @@
 }
 
 - (void)startCallToNumber:(NSString *)number forAccount:(VSLAccount *)account completion:(void (^)(VSLCall *call, NSError *error))completion {
+    if (account.accountState != VSLAccountStateConnected) {
+        [account registerAccountWithCompletion:nil];
+    }
+    
     VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
     [self addCall:call];
 

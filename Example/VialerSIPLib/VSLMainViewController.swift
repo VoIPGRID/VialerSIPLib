@@ -7,7 +7,8 @@ import UIKit
 
 private var myContext = 0
 
-class VSLMainViewController: UIViewController {
+class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+
 
     // MARK: - Configuration
 
@@ -28,11 +29,13 @@ class VSLMainViewController: UIViewController {
 
     fileprivate var activeCall: VSLCall?
 
+    fileprivate var transportPickerData: [String] = [String]()
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        transportPickerData = ["UDP", "TCP", "TLS"]
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -79,9 +82,19 @@ class VSLMainViewController: UIViewController {
     // MARK: - Outlets
 
     @IBOutlet weak var registerAccountButton: UIButton!
-    @IBOutlet weak var useTCPSwitch: UISwitch!
-
+    @IBOutlet weak var transportPicker: UIPickerView!
+    @IBOutlet weak var useVideoSwitch: UISwitch!
+    
     // MARK: - Actions
+    @IBAction func useVideoSwichPressed(_ sender: UISwitch) {
+        let prefs = UserDefaults.standard
+        prefs.set(sender.isOn, forKey: "useVideo")
+        account.removeObserver(self, forKeyPath: #keyPath(VSLAccount.accountState))
+        VialerSIPLib.sharedInstance().removeEndpoint()
+        AppDelegate.shared.setupVialerEndpoint()
+        AppDelegate.shared.setupAccount()
+        account.addObserver(self, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
+    }
 
     @IBAction func registerAccountButtonPressed(_ sender: UIButton) {
         if account.isRegistered {
@@ -91,26 +104,47 @@ class VSLMainViewController: UIViewController {
         }
     }
 
-    @IBAction func useTCPSwitchPressed(_ sender: UISwitch) {
+    // MARK: - TransportType Picker
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return transportPickerData.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return transportPickerData[row]
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let prefs = UserDefaults.standard
-        prefs.set(sender.isOn, forKey: "useTCP")
+        prefs.set(transportPickerData[row], forKey: "transportType")
         account.removeObserver(self, forKeyPath: #keyPath(VSLAccount.accountState))
         VialerSIPLib.sharedInstance().removeEndpoint()
         AppDelegate.shared.setupVialerEndpoint()
         AppDelegate.shared.setupAccount()
         account.addObserver(self, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
     }
-    
+
     // MARK: - Helper functions
 
     fileprivate func updateUI() {
         DispatchQueue.main.async {
             self.registerAccountButton.setTitle(self.account.isRegistered ? "Unregister" : "Register", for: UIControlState())
         }
-        
+
         let prefs = UserDefaults.standard
-        let useTcp = prefs.bool(forKey: "useTCP")
-        useTCPSwitch.setOn(useTcp, animated: true)
+        let useVideo = prefs.bool(forKey: "useVideo")
+        DispatchQueue.main.async {
+            self.useVideoSwitch.setOn(useVideo, animated: true)
+        }
+
+        let transportType = prefs.string(forKey: "transportType")
+        if transportType != nil, let defaultRowIndex = transportPickerData.index(of: transportType!) {
+            transportPicker.selectRow(defaultRowIndex, inComponent: 0, animated: true)
+        }
+
     }
 
     fileprivate func registerAccount() {
@@ -149,7 +183,7 @@ class VSLMainViewController: UIViewController {
 
     // MARK: - NSNotificationCenter
 
-    func incomingCallNotification(_ notification: Notification) {
+    @objc func incomingCallNotification(_ notification: Notification) {
         guard let call = notification.userInfo?[VSLNotificationUserInfoCallKey] as? VSLCall else { return }
         // When there is another call active, decline incoming call.
         if call != account.firstActiveCall() {
@@ -164,7 +198,7 @@ class VSLMainViewController: UIViewController {
     }
 
     // When an outbound call is requested trough CallKit, show the VSLCallViewController directly.
-    func directlyShowActiveCallController(_ notification: Notification) {
+    @objc func directlyShowActiveCallController(_ notification: Notification) {
         guard let call = notification.userInfo?[VSLNotificationUserInfoCallKey] as? VSLCall else { return }
         activeCall = call
         DispatchQueue.main.async {

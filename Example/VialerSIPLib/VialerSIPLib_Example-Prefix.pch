@@ -1,0 +1,13 @@
+//
+//  VialerSIPLib_Example-Prefix.pch
+//  Copyright © 2017 Devhouse Spindle. All rights reserved.
+//
+
+#ifndef VialerSIPLib_Example_Prefix_pch
+#define VialerSIPLib_Example_Prefix_pch
+
+#import "DDLogWrapper.h"
+
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+
+#endif /* VialerSIPLib_Example_Prefix_pch */
