@@ -4,6 +4,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSLIpChangeConfiguration.h"
+#import "VSLStunConfiguration.h"
+
 
 @interface VSLEndpointConfiguration : NSObject
 
@@ -36,7 +39,7 @@
  *
  *  Default value: nil
  */
-@property (strong, nonatomic) NSString *logFilename;
+@property (strong, nonatomic) NSString * _Nullable logFilename;
 
 /**
  *  Additional flags to be given to pj_file_open() when opening the log file.
@@ -69,15 +72,23 @@
 /**
  *  An array which will hold all the configured transports.
  */
-@property (strong, nonatomic) NSArray *transportConfigurations;
+@property (strong, nonatomic) NSArray * _Nonnull transportConfigurations;
 
 /**
  * Coniguration property to not offer the video codec in the INVITE.
+ *
+ * Default: NO
  */
 @property (nonatomic) BOOL disableVideoSupport;
 
+@property (nonatomic) VSLStunConfiguration * _Nullable stunConfiguration;
+
+@property (nonatomic) VSLIpChangeConfiguration * _Nullable ipChangeConfiguration;
+
 /**
  * Whether the account needs to be unregistered after a call has been made
+ *
+ * Default: No
  *
  * @return BOOL
  */
@@ -98,8 +109,16 @@
 -(BOOL)hasTLSConfiguration;
 
 /**
+ * To check if the endpoint has an udp configuration.
+ *
+ * @return BOOL
+ */
+-(BOOL)hasUDPConfiguration;
+
+/**
  * Optional user agent string (default empty). If it's empty, no
  * User-Agent header will be sent with outgoing requests.
  */
-@property (strong, nonatomic) NSString *userAgent;
+@property (strong, nonatomic) NSString * _Nullable userAgent;
+
 @end

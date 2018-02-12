@@ -151,4 +151,10 @@
  */
 - (void)reinviteActiveCallsForAccount:(VSLAccount * _Nonnull)account;
 
+/**
+ *  Sent a SIP UPDATE message to all active calls for the given account.
+ *
+ *  @param account The VSLAccount instance for which to sent the UPDATE.
+ */
+- (void)updateActiveCallsForAccount:(VSLAccount * _Nonnull)account;
 @end

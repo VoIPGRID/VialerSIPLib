@@ -10,7 +10,7 @@
 #import "VSLLogging.h"
 
 
-static double const VSLNetworkMonitorDelayTimeForNotification = 0.5;
+static double const VSLNetworkMonitorDelayTimeForNotification = 1;
 
 NSString * const VSLNetworkMonitorChangedNotification = @"VSLNetworkMonitorChangedNotification";
 
@@ -72,7 +72,7 @@ NSString * const VSLNetworkMonitorChangedNotification = @"VSLNetworkMonitorChang
 
     __weak VSLNetworkMonitor *weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(VSLNetworkMonitorDelayTimeForNotification * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        VSLLogDebug(@"Posting notification that internet connection has changed.");
+        VSLLogInfo(@"Posting notification that internet connection has changed.");
         weakSelf.isChangingNetwork = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:VSLNetworkMonitorChangedNotification object:nil];
     });

@@ -58,7 +58,6 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
 };
 #define VSLEndpointStateString(VSLEndpointState) [@[@"VSLEndpointStopped", @"VSLEndpointStarting", @"VSLEndpointStarted"] objectAtIndex:VSLEndpointState]
 
-
 @interface VSLEndpoint : NSObject
 
 /**
@@ -70,6 +69,8 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
  *  The pool associated with the endpoint.
  */
 @property (readonly) pj_pool_t * _Nullable pjPool;
+
+@property (readwrite) BOOL ipChangeInProgress;
 
 /**
  *  The incomingCallBlock will be called when an incoming call is received by pjsip.

@@ -439,4 +439,8 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  */
 - (void)reinvite;
 
+/**
+ *  Will sent the UPDATE message to the call.
+ */
+- (void)update;
 @end

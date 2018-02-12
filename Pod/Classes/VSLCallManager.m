@@ -327,6 +327,13 @@
     }
 }
 
+- (void)updateActiveCallsForAccount:(VSLAccount *)account {
+    VSLLogDebug(@"Sent UPDATE for calls");
+    for (VSLCall *call in [self activeCallsForAccount:account]) {
+        [call update];
+    }
+}
+
 - (void)callStateChanged:(NSNotification *)notification {
     VSLCall *call = [[notification userInfo] objectForKey:VSLNotificationUserInfoCallKey];
     if (call.callState == VSLCallStateDisconnected) {
