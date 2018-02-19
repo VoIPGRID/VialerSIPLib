@@ -11,6 +11,7 @@
 #import "VSLEndpointConfiguration.h"
 #import "VSLIceConfiguration.h"
 #import "VSLStunConfiguration.h"
+#import "VSLPlayDTMF.h"
 #import "VSLTransportConfiguration.h"
 #import "CallKitProviderDelegate.h"
 
@@ -283,4 +284,6 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 - (void)onlyUseIlbc:(BOOL)activate;
 
+
+- (void)playDTMFSoundWithFile:(NSString *)file;
 @end

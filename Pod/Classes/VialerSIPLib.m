@@ -220,4 +220,8 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
     [self.endpoint onlyUseILBC:activate];
 }
 
+- (void)playDTMFSoundWithFile:(NSString *)file {
+    [VSLPlayDTMF playSoundWithFile:file];
+}
+
 @end
