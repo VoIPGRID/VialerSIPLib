@@ -75,11 +75,11 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 
                 }
 
-//                @try {
-//                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallDeallocNotification object: nil];
-//                } @catch(NSException *exceptiom) {
-//
-//                }
+                @try {
+                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallDeallocNotification object: nil];
+                } @catch(NSException *exceptiom) {
+
+                }
                 break;
             }
             case VSLEndpointStarting: {
@@ -87,7 +87,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
             }
             case VSLEndpointStarted: {
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkMonitoring:) name:VSLCallStateChangedNotification object:nil];
-//                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callDealloc:) name:VSLCallDeallocNotification object:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callDealloc:) name:VSLCallDeallocNotification object:nil];
                 break;
             }
         }
@@ -609,8 +609,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
     }
 }
 
-//- (void)callDealloc:(NSNotification *)notification {
-- (void)callDealloc {
+- (void)callDealloc:(NSNotification *)notification {
     if (!self.endpointConfiguration.unregisterAfterCall) {
         return;
     }
@@ -712,7 +711,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
         [self.networkMonitor stopMonitoring];
         self.networkMonitor = nil;
         self.monitoringCalls = NO;
-        [self callDealloc];
+        [self callDealloc: nil];
     }
 }
 
