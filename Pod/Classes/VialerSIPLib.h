@@ -9,6 +9,8 @@
 #import "VSLCallManager.h"
 #import "VSLCall.h"
 #import "VSLEndpointConfiguration.h"
+#import "VSLIceConfiguration.h"
+#import "VSLStunConfiguration.h"
 #import "VSLTransportConfiguration.h"
 #import "CallKitProviderDelegate.h"
 
@@ -50,18 +52,21 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *  The protocol which needs to be implemented in order to use the library.
  */
 @protocol SIPEnabledUser <NSObject>
+
 /**
  *  The sip account that should be used when authenticate on remote PBX.
  *
  *  @return NSString with the password.
  */
 @property (readonly, nonatomic) NSString * _Nonnull sipAccount;
+
 /**
  *  The password that should be used when authenticate on remote PBX.
  *
  *  @return NSString with the password.
  */
 @property (readonly, nonatomic) NSString * _Nonnull sipPassword;
+
 /**
  *  The domain where the PBX can be found.
  *
@@ -69,6 +74,7 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 @property (readonly, nonatomic) NSString * _Nonnull sipDomain;
 @optional
+
 /**
  *  When set to YES, the account will be registered on configuration.
  *
@@ -77,6 +83,16 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *  @return BOOL is registration should happen.
  */
 @property (readonly, nonatomic) BOOL sipRegisterOnAdd;
+
+/**
+ *  When set to YES, calls will be dropped after registration fails.
+ *
+ *  Default is NO.
+ *
+ *  @return BOOL if call should be dropped if registration fails.
+ */
+@property (readonly, nonatomic) BOOL dropCallOnRegistrationFailure;
+
 /**
  *  The proxy address where to connect to.
  *
@@ -100,7 +116,56 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 @property (nonatomic) VSLStunUse mediaStunType;
 
-@end
+/**
+ *  The ICE Configuration that should be used.
+ */
+@property (readonly, nonatomic) VSLIceConfiguration * _Nullable iceConfiguration;
+
+/**
+ * Specify if source TCP port should be used as the initial Contact
+ * address if TCP/TLS transport is used. Note that this feature will
+ * be automatically turned off when nameserver is configured because
+ * it may yield different destination address due to DNS SRV resolution.
+ * Also some platforms are unable to report the local address of the
+ * TCP socket when it is still connecting. In these cases, this
+ * feature will also be turned off.
+ *
+ *  Default: YES
+ */
+@property (readonly, nonatomic) BOOL contactUseSrcPort;
+
+/**
+ * This option is used to overwrite the "sent-by" field of the Via header
+ * for outgoing messages with the same interface address as the one in
+ * the REGISTER request, as long as the request uses the same transport
+ * instance as the previous REGISTER request.
+ *
+ *  Default: YES
+ */
+@property (readonly, nonatomic) BOOL allowViaRewrite;
+
+/**
+ * This option is used to update the transport address and the Contact
+ * header of REGISTER request. When this option is  enabled, the library
+ * will keep track of the public IP address from the response of REGISTER
+ * request. Once it detects that the address has changed, it will
+ * unregister current Contact, update the Contact with transport address
+ * learned from Via header, and register a new Contact to the registrar.
+ * This will also update the public name of UDP transport if STUN is
+ * configured.
+ *
+ *  Default: YES
+ */
+@property (readonly, nonatomic) BOOL allowContactRewrite;
+
+/**
+ * Control how Contact update will be done with the registration.
+ *
+ * Default: VSLContactRewriteMethodAlwaysUpdate
+ */
+@property (readonly, nonatomic) VSLContactRewriteMethod contactRewriteMethod;
+
+@end // End of the SIPEnabledUser protocol
 
 @interface VialerSIPLib : NSObject
 

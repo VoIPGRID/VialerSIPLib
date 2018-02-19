@@ -13,11 +13,11 @@
  */
 typedef NS_ENUM(NSUInteger, VSLStunUse) {
     /**
-     * Follow the default setting in the global \a pjsua_config.
+     * Follow the default setting in the global pjsua_config.
      */
     VSLStunUseDefault = PJSUA_STUN_USE_DEFAULT,
     /**
-     * Disable STUN. If STUN is not enabled in the global \a pjsua_config,
+     * Disable STUN. If STUN is not enabled in the global pjsua_config,
      * this setting has no effect.
      */
     VSLStunUseDisable = PJSUA_STUN_USE_DISABLED,
@@ -31,16 +31,32 @@ typedef NS_ENUM(NSUInteger, VSLStunUse) {
     VSLStunUseRetryOnFailure = PJSUA_STUN_RETRY_ON_FAILURE
 };
 
+/**
+ *  Enum which specifies the contact rewrite method
+ */
 typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
+    /**
+     * The Contact update will be done by sending unregistration
+     * to the currently registered Contact, while simultaneously sending new
+     * registration (with different Call-ID) for the updated Contact.
+     */
     VSLContactRewriteMethodUnregister = PJSUA_CONTACT_REWRITE_UNREGISTER,
+    /**
+     * The Contact update will be done in a single, current
+     * registration session, by removing the current binding (by setting its
+     * Contact's expires parameter to zero) and adding a new Contact binding,
+     * all done in a single request.
+     */
     VSLContactRewriteMethodNoUnregister = PJSUA_CONTACT_REWRITE_NO_UNREG,
+    /**
+     * The Contact update will be done when receiving any registration final
+     * response. If this flag is not specified, contact update will only be
+     * done upon receiving 2xx response. This flag MUST be used with
+     * PJSUA_CONTACT_REWRITE_UNREGISTER or PJSUA_CONTACT_REWRITE_NO_UNREG
+     * above to specify how the Contact update should be performed when
+     * receiving 2xx response.
+     */
     VSLContactRewriteMethodAlwaysUpdate = PJSUA_CONTACT_REWRITE_ALWAYS_UPDATE
-};
-
-typedef NS_ENUM(NSUInteger, VSLReinviteFlags) {
-    VSLReinviteFlagsReinitMedia = PJSUA_CALL_REINIT_MEDIA,
-    VSLReinviteFlagsUpdateContact = PJSUA_CALL_UPDATE_CONTACT,
-    VSLReinviteFlagsUpdateVia = PJSUA_CALL_UPDATE_VIA
 };
 
 @interface VSLAccountConfiguration : NSObject
@@ -98,6 +114,8 @@ typedef NS_ENUM(NSUInteger, VSLReinviteFlags) {
 
 /**
  *  If YES all current calls will be hungup when a registation failure is detected.
+ *
+ *  Default: NO
  */
 @property (nonatomic) BOOL dropCallOnRegistrationFailure;
 
@@ -111,30 +129,49 @@ typedef NS_ENUM(NSUInteger, VSLReinviteFlags) {
  */
 @property (nonatomic) pjsua_stun_use mediaStunType;
 
-@property (nonatomic) BOOL allowContactRewrite;
+/**
+ * Control how Contact update will be done with the registration.
+ *
+ * Default: VSLContactRewriteMethodAlwaysUpdate
+ */
 @property (nonatomic) VSLContactRewriteMethod contactRewriteMethod;
+
+/**
+ * Specify if source TCP port should be used as the initial Contact
+ * address if TCP/TLS transport is used. Note that this feature will
+ * be automatically turned off when nameserver is configured because
+ * it may yield different destination address due to DNS SRV resolution.
+ * Also some platforms are unable to report the local address of the
+ * TCP socket when it is still connecting. In these cases, this
+ * feature will also be turned off.
+ *
+ *  Default: YES
+ */
 @property (nonatomic) BOOL contactUseSrcPort;
+
+/**
+ * This option is used to update the transport address and the Contact
+ * header of REGISTER request. When this option is  enabled, the library
+ * will keep track of the public IP address from the response of REGISTER
+ * request. Once it detects that the address has changed, it will
+ * unregister current Contact, update the Contact with transport address
+ * learned from Via header, and register a new Contact to the registrar.
+ * This will also update the public name of UDP transport if STUN is
+ * configured.
+ *
+ *  Default: YES
+ */
+@property (nonatomic) BOOL allowContactRewrite;
+
+/**
+ * This option is used to overwrite the "sent-by" field of the Via header
+ * for outgoing messages with the same interface address as the one in
+ * the REGISTER request, as long as the request uses the same transport
+ * instance as the previous REGISTER request.
+ *
+ *  Default: YES
+ */
 @property (nonatomic) BOOL allowViaRewrite;
-
-
-/**
- * Should the old transport be cleaned up.
- */
-@property (nonatomic) BOOL ipAddressChangeShutdownTransport;
-
-/**
- * Should all calls be ended when an ip address change has been detected.
- *
- * Default: NO
- */
-@property (nonatomic) BOOL ipAddressChangeHangupAllCalls;
-
-/**
- * When ipAddressChangeHangupAllCalls is set to NO, this property should be set.
- *
- * Default: VSLReinviteFlagsReinitMedia | VSLReinviteFlagsUpdateVia | VSLReinviteFlagsUpdateContact
- */
-@property (nonatomic) VSLReinviteFlags ipAddressChangeReinviteFlags;
 
 @property (nonatomic) VSLTurnConfiguration * _Nullable turnConfiguration;
 

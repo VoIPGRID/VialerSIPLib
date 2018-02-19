@@ -20,16 +20,14 @@ static NSUInteger const VSLEndpointConfigurationSndClockRate = 0;
 - (instancetype)init {
     if (self = [super init]) {
         self.maxCalls = VSLEndpointConfigurationMaxCalls;
-
         self.logLevel = VSLEndpointConfigurationLogLevel;
         self.logConsoleLevel = VSLEndpointConfigurationLogConsoleLevel;
         self.logFilename = VSLEndpointConfigurationLogFileName;
         self.logFileFlags = PJ_O_APPEND;
-
         self.clockRate = VSLEndpointConfigurationClockRate;
         self.sndClockRate = VSLEndpointConfigurationSndClockRate;
-        self.disableVideoSupport = false;
-        self.unregisterAfterCall = false;
+        self.disableVideoSupport = NO;
+        self.unregisterAfterCall = NO;
     }
     return self;
 }
@@ -39,6 +37,20 @@ static NSUInteger const VSLEndpointConfigurationSndClockRate = 0;
         _transportConfigurations = [NSArray array];
     }
     return _transportConfigurations;
+}
+
+- (VSLIpChangeConfiguration *)ipChangeConfiguration {
+    if (!_ipChangeConfiguration) {
+        _ipChangeConfiguration = [[VSLIpChangeConfiguration alloc] init];
+    }
+    return _ipChangeConfiguration;
+}
+
+- (VSLStunConfiguration *)stunConfiguration {
+    if (!_stunConfiguration) {
+        _stunConfiguration = [[VSLStunConfiguration alloc] init];
+    }
+    return _stunConfiguration;
 }
 
 - (void)setLogLevel:(NSUInteger)logLevel {
@@ -69,6 +81,21 @@ static NSUInteger const VSLEndpointConfigurationSndClockRate = 0;
 - (BOOL)hasTLSConfiguration {
     NSUInteger index = [self.transportConfigurations indexOfObjectPassingTest:^BOOL(VSLTransportConfiguration *transportConfiguration, NSUInteger idx, BOOL *stop) {
         if (transportConfiguration.transportType == VSLTransportTypeTLS || transportConfiguration.transportType == VSLTransportTypeTLS6) {
+            *stop = YES;
+            return YES;
+        }
+        return NO;
+    }];
+
+    if (index == NSNotFound) {
+        return NO;
+    }
+    return YES;
+}
+
+-(BOOL)hasUDPConfiguration {
+    NSUInteger index = [self.transportConfigurations indexOfObjectPassingTest:^BOOL(VSLTransportConfiguration *transportConfiguration, NSUInteger idx, BOOL *stop) {
+        if (transportConfiguration.transportType == VSLTransportTypeUDP || transportConfiguration.transportType == VSLTransportTypeUDP6) {
             *stop = YES;
             return YES;
         }
