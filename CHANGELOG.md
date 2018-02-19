@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [3.1.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.0) (02/19/2017)
+Released on Monday, February 19, 2018.
+
+### Added
+- Ability to use Stun servers.
+
+### 
+- Fixes for the previous release secure calling. Extra file for the IP Change configuration for PJSIP. 
+
 ## [3.0.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.0.0) (01/22/2017)
 Released on Monday, Januari 22, 2018.
 
