@@ -98,17 +98,45 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
         accountConfiguration.sipAccount = sipUser.sipAccount;
         accountConfiguration.sipPassword = sipUser.sipPassword;
         accountConfiguration.sipDomain = sipUser.sipDomain;
+
         if ([sipUser respondsToSelector:@selector(sipProxy)]) {
             accountConfiguration.sipProxyServer = sipUser.sipProxy;
         }
-        accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
-        accountConfiguration.dropCallOnRegistrationFailure = YES;
+
+        if ([sipUser respondsToSelector:@selector(sipRegisterOnAdd)]) {
+            accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
+        }
+
+        if ([sipUser respondsToSelector:@selector(dropCallOnRegistrationFailure)]) {
+            accountConfiguration.dropCallOnRegistrationFailure = sipUser.dropCallOnRegistrationFailure;
+        }
         
         if ([sipUser respondsToSelector:@selector(mediaStunType)]) {
-            accountConfiguration.mediaStunType = sipUser.mediaStunType;
+            accountConfiguration.mediaStunType = (pjsua_stun_use) sipUser.mediaStunType;
         }
+        
         if ([sipUser respondsToSelector:@selector(sipStunType)]) {
-            accountConfiguration.sipStunType = sipUser.sipStunType;
+            accountConfiguration.sipStunType = (pjsua_stun_use) sipUser.sipStunType;
+        }
+
+        if ([sipUser respondsToSelector:@selector(contactRewriteMethod)]) {
+            accountConfiguration.contactRewriteMethod = sipUser.contactRewriteMethod;
+        }
+
+        if ([sipUser respondsToSelector:@selector(iceConfiguration)]) {
+            accountConfiguration.iceConfiguration = sipUser.iceConfiguration;
+        }
+
+        if ([sipUser respondsToSelector:@selector(contactUseSrcPort)]) {
+            accountConfiguration.contactUseSrcPort = sipUser.contactUseSrcPort;
+        }
+
+        if ([sipUser respondsToSelector:@selector(allowViaRewrite)]) {
+            accountConfiguration.allowViaRewrite = sipUser.allowViaRewrite;
+        }
+
+        if ([sipUser respondsToSelector:@selector(allowContactRewrite)]) {
+            accountConfiguration.allowContactRewrite = sipUser.allowContactRewrite;
         }
 
         account = [[VSLAccount alloc] initWithCallManager:self.callManager];

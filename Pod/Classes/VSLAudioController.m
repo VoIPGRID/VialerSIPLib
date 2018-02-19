@@ -90,8 +90,11 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
     VSLLogDebug(@"Activating audiosession");
     [self checkCurrentThreadIsRegisteredWithPJSUA];
     pjsua_set_no_snd_dev();
-    pj_status_t status;
-    status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
+
+    pjsua_snd_dev_param snd_dev_param;
+    pjsua_snd_dev_param_default(&snd_dev_param);
+    pj_status_t status = pjsua_set_snd_dev2(&snd_dev_param);
+
     if (status != PJ_SUCCESS) {
         VSLLogWarning(@"Failure in enabling sound device");
     }

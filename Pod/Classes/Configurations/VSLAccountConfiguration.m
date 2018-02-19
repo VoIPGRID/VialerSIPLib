@@ -12,12 +12,9 @@
         self.sipAuthRealm = @"*";
         self.sipAuthScheme = @"digest";
         self.dropCallOnRegistrationFailure = NO;
-        self.mediaStunType = VSLStunUseRetryOnFailure;
+        self.mediaStunType = VSLStunUseDefault;
         self.sipStunType = VSLStunUseDefault;
         self.contactRewriteMethod = VSLContactRewriteMethodAlwaysUpdate;
-        self.ipAddressChangeShutdownTransport = YES;
-        self.ipAddressChangeHangupAllCalls = NO;
-        self.ipAddressChangeReinviteFlags = VSLReinviteFlagsReinitMedia | VSLReinviteFlagsUpdateVia | VSLReinviteFlagsUpdateContact;
         self.contactUseSrcPort = YES;
         self.allowViaRewrite = YES;
         self.allowContactRewrite = YES;

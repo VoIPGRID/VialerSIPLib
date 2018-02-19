@@ -13,6 +13,7 @@
 #import "VSLCallManager.h"
 #import "VSLLogging.h"
 #import "VSLNetworkMonitor.h"
+#import "VSLIpChangeConfiguration.h"
 #import "VSLTransportConfiguration.h"
 
 static NSString * const VSLEndpointErrorDomain = @"VialerSIPLib.VSLEndpoint.error";
@@ -74,11 +75,11 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 
                 }
 
-                @try {
-                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallDeallocNotification object: nil];
-                } @catch(NSException *exceptiom) {
-
-                }
+//                @try {
+//                    [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLCallDeallocNotification object: nil];
+//                } @catch(NSException *exceptiom) {
+//
+//                }
                 break;
             }
             case VSLEndpointStarting: {
@@ -86,7 +87,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
             }
             case VSLEndpointStarted: {
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkMonitoring:) name:VSLCallStateChangedNotification object:nil];
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callDealloc:) name:VSLCallDeallocNotification object:nil];
+//                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callDealloc:) name:VSLCallDeallocNotification object:nil];
                 break;
             }
         }
@@ -181,11 +182,22 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     endpointConfig.max_calls = (unsigned int)endpointConfiguration.maxCalls;
     endpointConfig.user_agent = endpointConfiguration.userAgent.pjString;
 
+    if (endpointConfiguration.stunConfiguration) {
+        endpointConfig.stun_srv_cnt = endpointConfiguration.stunConfiguration.numOfStunServers;
+        int i = 0;
+        for (NSString* stunServer in endpointConfiguration.stunConfiguration.stunServers){
+            endpointConfig.stun_srv[i] = [stunServer pjString];
+            i++;
+        }
+    }
+
     // Configure the media information for the endpoint.
     pjsua_media_config mediaConfig;
     pjsua_media_config_default(&mediaConfig);
     mediaConfig.clock_rate = (unsigned int)endpointConfiguration.clockRate == 0 ? PJSUA_DEFAULT_CLOCK_RATE : (unsigned int)endpointConfiguration.clockRate;
     mediaConfig.snd_clock_rate = (unsigned int)endpointConfiguration.sndClockRate;
+    mediaConfig.has_ioqueue = PJ_TRUE;
+    mediaConfig.thread_cnt = 1;
 
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
@@ -333,7 +345,6 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 }
 
 - (VSLCall *)lookupCall:(NSInteger)callId {
-
     for (VSLAccount *account in self.accounts) {
         VSLCall *call = [account lookupCall:callId];
         if (call) {
@@ -510,6 +521,30 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     if (account) {
         [account accountStateChanged];
     }
+
+    if ([VSLEndpoint sharedEndpoint].ipChangeInProgress) {
+        // When disableVideoSupport is on reinivite the calls again. And in the reinivite
+        // disable the video stream. Otherwise the response is an 488 Not Acceptatble here.
+        if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+            VSLIpChangeConfiguration *ipChangeConfiguration = [VSLEndpoint sharedEndpoint].endpointConfiguration.ipChangeConfiguration;
+            VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
+            if (ipChangeConfiguration) {
+                switch (ipChangeConfiguration.ipChangeCallsUpdate) {
+                    case VSLIpChangeConfigurationIpChangeCallsReinvite:
+                        VSLLogInfo(@"Do a reinvite for all calls of account: %d", acc_id);
+                        [[[VSLEndpoint sharedEndpoint] callManager] reinviteActiveCallsForAccount:account];
+                        break;
+                    case VSLIpChangeConfigurationIpChangeCallsUpdate:
+                        VSLLogInfo(@"Do a update for all calls of account: %d", acc_id);
+                        [[[VSLEndpoint sharedEndpoint] callManager] updateActiveCallsForAccount:account];
+                        break;
+                    case VSLIpChangeConfigurationIpChangeCallsDefault:
+                        // Do nothing.
+                        break;
+                }
+            }
+        }
+    }
 }
 
 /* Callback on media events. Adjust renderer window size to original video size */
@@ -574,8 +609,9 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
     }
 }
 
-- (void)callDealloc:(NSNotification *)notification {
-    if (![self.endpointConfiguration unregisterAfterCall]) {
+//- (void)callDealloc:(NSNotification *)notification {
+- (void)callDealloc {
+    if (!self.endpointConfiguration.unregisterAfterCall) {
         return;
     }
 
@@ -627,7 +663,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
             [self stopNetworkMonitoring];
             break;
         }
-        default: {
+        case VSLCallStateConfirmed: {
             if (!self.monitoringCalls) {
                 for (VSLAccount *account in self.accounts) {
                     if ([account firstActiveCall]) {
@@ -639,6 +675,14 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
                     }
                 }
             }
+        }
+        case VSLCallStateNull:
+        case VSLCallStateCalling:
+        case VSLCallStateIncoming:
+        case VSLCallStateEarly:
+        case VSLCallStateConnecting: {
+            // Do nothing.
+            break;
         }
     }
 }
@@ -668,6 +712,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
         [self.networkMonitor stopMonitoring];
         self.networkMonitor = nil;
         self.monitoringCalls = NO;
+        [self callDealloc];
     }
 }
 
@@ -680,10 +725,9 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
  *  @param notification The notification which lead to this function being invoked over GCD.
  */
 - (void)ipAddressChanged:(NSNotification *)notification {
-
     pjsua_ip_change_param param;
     pjsua_ip_change_param_default(&param);
-    param.restart_lis_delay = 10;
+    param.restart_lis_delay = 100;
     param.restart_listener = PJ_TRUE;
 
     pjsua_handle_ip_change(&param);
@@ -691,6 +735,8 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 
 static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info) {
     VSLLogInfo(@"onIpChangeProgress:");
+
+    [VSLEndpoint sharedEndpoint].ipChangeInProgress = TRUE;
 
     switch (op) {
         case PJSUA_IP_CHANGE_OP_RESTART_LIS: {
@@ -703,18 +749,6 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
         }
         case PJSUA_IP_CHANGE_OP_ACC_UPDATE_CONTACT: {
             VSLLogInfo(@"Account update contact: %u", status);
-            // When disableVideoSupport is on reinivite the calls again. And in the reinivite
-            // disable the video stream. Otherwise the response is an 488 Not Acceptatble here.
-            if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
-                pjsua_call_id callId = info->acc_reinvite_calls.call_id;
-                pjsua_acc_id accountId = info->acc_reinvite_calls.acc_id;
-
-                VSLLogError(@"Do a reinvite for account: %d and the call: %d", accountId, callId);
-
-                VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:accountId];
-                VSLCall *call = [account lookupCall:callId];
-                [call reinvite];
-            }
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_HANGUP_CALLS: {
@@ -723,7 +757,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
         }
         case PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS: {
             VSLLogInfo(@"Account reinvite calls: %u", status);
-
+            [VSLEndpoint sharedEndpoint].ipChangeInProgress = FALSE;
             break;
         }
         default:

@@ -50,6 +50,7 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 @property (readwrite, nonatomic) NSTimeInterval lastSeenConnectDuration;
 @property (strong, nonatomic) NSString *numberToCall;
 @property (weak, nonatomic) VSLAccount *account;
+@property (nonatomic) BOOL reinviteCall;
 /**
  *  Stats
  */
@@ -288,20 +289,50 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 
 - (void)reinvite {
     if (self.callState > VSLCallStateNull && self.callState < VSLCallStateDisconnected) {
-        pjsua_call_setting options;
-        pjsua_call_setting_default(&options);
+        pjsua_call_setting callSetting;
+        pjsua_call_setting_default(&callSetting);
 
-        options.flag = self.account.accountConfiguration.ipAddressChangeReinviteFlags;
+        VSLIpChangeConfiguration *ipChangeConfiguration = [VSLEndpoint sharedEndpoint].endpointConfiguration.ipChangeConfiguration;
+        if (ipChangeConfiguration) {
+            callSetting.flag = ipChangeConfiguration.ipAddressChangeReinviteFlags;
+        }
         if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
-            options.vid_cnt = 0;
+            callSetting.vid_cnt = 0;
         }
 
-        pj_status_t status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &options, NULL);
+        pj_status_t status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &callSetting, NULL);
         if (status != PJ_SUCCESS) {
             VSLLogError(@"Cannot reinvite for call id: %ld!", (long)self.callId);
         } else {
             VSLLogDebug(@"Reinvite sent for call id: %ld", (long)self.callId);
+            self.reinviteCall = YES;
         }
+    }
+}
+
+- (void)update {
+    if (self.callState > VSLCallStateNull && self.callState < VSLCallStateDisconnected) {
+        pjsua_call_setting callSetting;
+        pjsua_call_setting_default(&callSetting);
+
+        VSLIpChangeConfiguration *ipChangeConfiguration = [VSLEndpoint sharedEndpoint].endpointConfiguration.ipChangeConfiguration;
+        if (ipChangeConfiguration) {
+            callSetting.flag = ipChangeConfiguration.ipAddressChangeReinviteFlags;
+        }
+
+        if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+            callSetting.vid_cnt = 0;
+        }
+
+        pj_status_t status = pjsua_call_update2((pjsua_call_id)self.callId, &callSetting, NULL);
+        if (status != PJ_SUCCESS) {
+            VSLLogError(@"Cannot sent UPDATE for call id: %ld!", (long)self.callId);
+        } else {
+            VSLLogDebug(@"UPDATE sent for call id: %ld", (long)self.callId);
+            self.reinviteCall = YES;
+        }
+    } else {
+        VSLLogDebug(@"Can not send call update because the call is not yet setup or already disconnected");
     }
 }
 

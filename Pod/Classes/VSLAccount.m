@@ -123,51 +123,58 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     acc_cfg.cred_info[0].data_type = PJSIP_CRED_DATA_PLAIN_PASSWD;
     acc_cfg.cred_info[0].data = accountConfiguration.sipPassword.pjString;
     acc_cfg.proxy_cnt = 0;
-    acc_cfg.media_stun_use = accountConfiguration.mediaStunType;
-    acc_cfg.sip_stun_use = accountConfiguration.sipStunType;
-
-    acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite ? PJ_TRUE : PJ_FALSE;
-    acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
-
-    // Shutdown the old transport is no longer connected because of an ip address change.
-    acc_cfg.ip_change_cfg.shutdown_tp = accountConfiguration.ipAddressChangeShutdownTransport ? PJ_TRUE : PJ_FALSE;
-
-    // Don't hangup calls when the ip address changes.
-    acc_cfg.ip_change_cfg.hangup_calls = accountConfiguration.ipAddressChangeHangupAllCalls ? PJ_TRUE : PJ_FALSE;
-
-    // When a call is reinvited use the specified header.
-    if (!accountConfiguration.ipAddressChangeHangupAllCalls) {
-        acc_cfg.ip_change_cfg.reinvite_flags = (unsigned int)accountConfiguration.ipAddressChangeReinviteFlags;
-    }
-
-    acc_cfg.contact_use_src_port = accountConfiguration.contactUseSrcPort ? PJ_TRUE : PJ_FALSE;
-    acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite ? PJ_TRUE : PJ_FALSE;
-
-    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
-        acc_cfg.srtp_secure_signaling = 1;
-        acc_cfg.use_srtp = PJMEDIA_SRTP_MANDATORY;
-    }
 
     // If a proxy server is present on the account configuration add this to pjsua account configuration.
     if (accountConfiguration.sipProxyServer) {
         acc_cfg.proxy_cnt = 1;
         acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:transportString] prependSipUri].pjString;
     }
-    
-    acc_cfg.contact_use_src_port = accountConfiguration.contactUseSrcPort;
-    acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite;
+
+    acc_cfg.sip_stun_use = accountConfiguration.sipStunType;
+    acc_cfg.media_stun_use = accountConfiguration.mediaStunType;
+
+    acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite ? PJ_TRUE : PJ_FALSE;
+    acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite ? PJ_TRUE : PJ_FALSE;
+
+    // Only set the contact rewrite method when allow contact rewrite is set to TRUE.
+    if (accountConfiguration.allowContactRewrite) {
+        acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
+    }
+
+    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
+        VSLIpChangeConfiguration *ipChangeConfiguration = [VSLEndpoint sharedEndpoint].endpointConfiguration.ipChangeConfiguration;
+        if (ipChangeConfiguration) {
+            // Shutdown the old transport is no longer connected because of an ip address change.
+            acc_cfg.ip_change_cfg.shutdown_tp = ipChangeConfiguration.ipAddressChangeShutdownTransport ? PJ_TRUE : PJ_FALSE;
+
+            // Don't hangup calls when the ip address changes.
+            acc_cfg.ip_change_cfg.hangup_calls = ipChangeConfiguration.ipAddressChangeHangupAllCalls ? PJ_TRUE : PJ_FALSE;
+
+            // When a call is reinvited use the specified header.
+            if (!ipChangeConfiguration.ipAddressChangeHangupAllCalls) {
+                acc_cfg.ip_change_cfg.reinvite_flags = (unsigned int)ipChangeConfiguration.ipAddressChangeReinviteFlags;
+            }
+
+        }
+        acc_cfg.contact_use_src_port = accountConfiguration.contactUseSrcPort ? PJ_TRUE : PJ_FALSE;
+    }
+
+    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
+        acc_cfg.srtp_secure_signaling = 1;
+        acc_cfg.use_srtp = PJMEDIA_SRTP_MANDATORY;
+    }
     
     if (accountConfiguration.turnConfiguration) {
         acc_cfg.turn_cfg_use = PJSUA_TURN_CONFIG_USE_CUSTOM;
         acc_cfg.turn_cfg.enable_turn = accountConfiguration.turnConfiguration.enableTurn;
         acc_cfg.turn_cfg.turn_server = accountConfiguration.turnConfiguration.server.pjString;
         acc_cfg.turn_cfg.turn_auth_cred.data.static_cred.username = accountConfiguration.turnConfiguration.username.pjString;
-        acc_cfg.turn_cfg.turn_auth_cred.data.static_cred.data_type = accountConfiguration.turnConfiguration.passwordType;
+        acc_cfg.turn_cfg.turn_auth_cred.data.static_cred.data_type = (pj_stun_passwd_type) 	accountConfiguration.turnConfiguration.passwordType;
         acc_cfg.turn_cfg.turn_auth_cred.data.static_cred.data = accountConfiguration.turnConfiguration.password.pjString;
     }
     
     if (accountConfiguration.iceConfiguration) {
-        acc_cfg.ice_cfg_use = PJSUA_ICE_CONFIG_USE_CUSTOM;
+        acc_cfg.ice_cfg_use = PJSUA_ICE_CONFIG_USE_DEFAULT;
         acc_cfg.ice_cfg.enable_ice = accountConfiguration.iceConfiguration.enableIce;
     }
 
