@@ -3,7 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [3.1.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.1) (03/06/2018)
+## [3.1.2](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.2) (13/06/2018)
+Released on Tuesday, March 16, 2018.
+
+### Added
+* Update Vialer-PJSIP-IOS pod to the newest version
+
+## [3.1.1](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.1) (03/06/2018)
 Released on Tuesday, March 06, 2018.
 
 ### Added

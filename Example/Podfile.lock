@@ -9,8 +9,8 @@ PODS:
   - Reachability (3.2)
   - SPLumberjackLogFormatter (0.0.1):
     - CocoaLumberjack
-  - Vialer-pjsip-iOS (3.3.2)
-  - VialerSIPLib (3.1.0):
+  - Vialer-pjsip-iOS (3.3.4)
+  - VialerSIPLib (3.1.1):
     - CocoaLumberjack
     - Reachability
     - Vialer-pjsip-iOS
@@ -36,9 +36,9 @@ SPEC CHECKSUMS:
   OCMock: 2cd0716969bab32a2283ff3a46fd26a8c8b4c5e3
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SPLumberjackLogFormatter: a2290c9b880f3166b2d1bace45dc1fc1302b28ab
-  Vialer-pjsip-iOS: a885d47c123779f3c11dd86536a1370236d3ae49
-  VialerSIPLib: d0478861e2e51abb82a46ca3c9d2e890e9ab104b
+  Vialer-pjsip-iOS: e424942984350a4493d998d5fccb03e723284005
+  VialerSIPLib: d87cf97f24843b9de945534ab2b2ac0a8af2891d
 
-PODFILE CHECKSUM: b8d5073366707a10dc8147a6ce9ec2ead52b0186
+PODFILE CHECKSUM: 96f5daa87b4af4791838d6c46730f065f53edec3
 
 COCOAPODS: 1.4.0
