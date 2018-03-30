@@ -116,6 +116,13 @@
 -(BOOL)hasUDPConfiguration;
 
 /**
+ * To check if an transport is ip v6 enabled.
+ *
+ * @return BOOL
+ */
+-(BOOL)hasIPv6Transport;
+
+/**
  * Optional user agent string (default empty). If it's empty, no
  * User-Agent header will be sent with outgoing requests.
  */

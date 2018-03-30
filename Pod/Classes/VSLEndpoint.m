@@ -40,6 +40,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 @property (nonatomic) BOOL onlyUseILBC;
 @property (weak, nonatomic) VSLCallManager *callManager;
 @property (nonatomic) BOOL monitoringCalls;
+@property (nonatomic) NSInteger transportId;
 @end
 
 @implementation VSLEndpoint
@@ -233,6 +234,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
             }
             return NO;
         }
+        self.transportId = transportId;
     }
 
     // Start Endpoint.

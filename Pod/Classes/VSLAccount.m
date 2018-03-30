@@ -178,6 +178,11 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         acc_cfg.ice_cfg.enable_ice = accountConfiguration.iceConfiguration.enableIce;
     }
 
+    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasIPv6Transport]) {
+        acc_cfg.transport_id = (pjsua_transport_id) [VSLEndpoint sharedEndpoint].transportId;
+        acc_cfg.ipv6_media_use = PJSUA_IPV6_ENABLED;
+    }
+
     int accountId;
     pj_status_t status = pjsua_acc_add(&acc_cfg, PJ_TRUE, &accountId);
 

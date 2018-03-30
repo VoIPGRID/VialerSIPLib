@@ -108,4 +108,19 @@ static NSUInteger const VSLEndpointConfigurationSndClockRate = 0;
     return YES;
 }
 
+- (BOOL)hasIPv6Transport {
+    NSUInteger index = [self.transportConfigurations indexOfObjectPassingTest:^BOOL(VSLTransportConfiguration *transportConfiguration, NSUInteger idx, BOOL *stop) {
+        if (transportConfiguration.transportType == VSLTransportTypeUDP6 || transportConfiguration.transportType == VSLTransportTypeTLS6 || transportConfiguration.transportType == VSLTransportTypeTCP6) {
+            *stop = YES;
+            return YES;
+        }
+        return NO;
+    }];
+
+    if (index == NSNotFound) {
+        return NO;
+    }
+    return YES;
+}
+
 @end

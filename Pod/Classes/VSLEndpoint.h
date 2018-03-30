@@ -70,6 +70,8 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
  */
 @property (readonly) pj_pool_t * _Nullable pjPool;
 
+@property (readonly) NSInteger transportId;
+
 @property (readwrite) BOOL ipChangeInProgress;
 
 /**
