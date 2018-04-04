@@ -378,7 +378,14 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
     pj_status_t status;
 
     if (self.callId != PJSUA_INVALID_ID) {
-        status = pjsua_call_answer((int)self.callId, PJSIP_SC_OK, NULL, NULL);
+        pjsua_call_setting callSetting;
+        pjsua_call_setting_default(&callSetting);
+
+        if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+            callSetting.vid_cnt = 0;
+        }
+
+        status = pjsua_call_answer2((int)self.callId, &callSetting, PJSIP_SC_OK, NULL, NULL);
 
         if (status != PJ_SUCCESS) {
             VSLLogError(@"Could not answer call PJSIP returned status code:%d", status);

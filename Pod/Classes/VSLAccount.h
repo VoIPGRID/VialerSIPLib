@@ -134,7 +134,7 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  *  Will unregister the account and will re-register the account once the account
  *  state reaches "unregistered".
  */
-- (void) reregisterAccount;
+- (void)reregisterAccount;
 
 /**
  *  This will remove the account from the Endpoint and will also de-register the account from the server.
