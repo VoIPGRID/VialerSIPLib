@@ -90,7 +90,11 @@ class VSLIncomingCallViewController: UIViewController {
             statusLabel?.text = ""
             return
         }
-        numberLabel?.text = call.callerNumber
+        if (call.callerName != "") {
+            numberLabel?.text = call.callerName
+        } else {
+            numberLabel?.text = call.callerNumber
+        }
         switch call.callState {
         case .incoming:
             statusLabel?.text = "Incoming call"

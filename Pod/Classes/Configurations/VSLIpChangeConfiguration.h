@@ -79,4 +79,9 @@ typedef NS_ENUM(NSUInteger, VSLReinviteFlags) {
  * Default: VSLReinviteFlagsReinitMedia | VSLReinviteFlagsUpdateVia | VSLReinviteFlagsUpdateContact
  */
 @property (nonatomic) VSLReinviteFlags ipAddressChangeReinviteFlags;
+
+/**
+ * Return the default reinvite flags
+ */
++ (VSLReinviteFlags)defaultReinviteFlags;
 @end

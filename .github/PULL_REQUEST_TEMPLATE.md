@@ -2,11 +2,11 @@
 
 {if exists provide related issue}
 
-### Expected behaviour
+### Expected behavior
 
 {what should have happened}
 
-### Actual behaviour
+### Actual behavior
 
 {what happens}
 

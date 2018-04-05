@@ -17,4 +17,8 @@
     return self;
 }
 
++ (VSLReinviteFlags)defaultReinviteFlags {
+    return VSLReinviteFlagsReinitMedia | VSLReinviteFlagsUpdateVia | VSLReinviteFlagsUpdateContact;
+}
+
 @end
