@@ -7,20 +7,22 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    class var shared: AppDelegate {
-        return UIApplication.shared.delegate as! AppDelegate
-    }
-
     struct Configuration {
         struct Notifications {
             static let incomingCall = Notification.Name("AppDelegate.Notification.IncomingCall")
         }
     }
 
+    static var shared: AppDelegate!
+
     var window: UIWindow?
     var providerDelegate: CallKitProviderDelegate?
     var account: VSLAccount!
+
+    override init() {
+        super.init()
+        AppDelegate.shared = self
+    }
 
     // MARK: - Lifecycle
 
@@ -31,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             setupCallKit()
         }
         
-//        setupLogCallBack()
+        setupLogCallBack()
         setupVialerEndpoint()
         setupAccount()
         return true
@@ -63,6 +65,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         endpointConfiguration.userAgent = "VialerSIPLib Example App"
         endpointConfiguration.transportConfigurations = transportToUse
         endpointConfiguration.disableVideoSupport = !prefs.bool(forKey: "useVideo")
+        endpointConfiguration.unregisterAfterCall = prefs.bool(forKey: "unregisterAfterCall")
+
+        let ipChangeConfiguration = VSLIpChangeConfiguration()
+        ipChangeConfiguration.ipChangeCallsUpdate = .update
+        ipChangeConfiguration.ipAddressChangeReinviteFlags = VSLIpChangeConfiguration.defaultReinviteFlags()
+
+        endpointConfiguration.ipChangeConfiguration = ipChangeConfiguration;
 
         do {
             try VialerSIPLib.sharedInstance().configureLibrary(withEndPointConfiguration: endpointConfiguration)
@@ -82,6 +91,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             assert(false)
         }
     }
+
+    func getAccount() -> VSLAccount! {
+        return account
+    }
     
     func setupIncomingCallBlock() {
         // The code from this block will be called when the framework receives an incoming call.
@@ -92,11 +105,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-//    func setupLogCallBack() {
-//        VialerSIPLib.sharedInstance().setLogCallBack { (logMessage) in
-//            DDLogWrapper.log(message: logMessage)
-//        }
-//    }
+    func setupLogCallBack() {
+        VialerSIPLib.sharedInstance().setLogCallBack { (logMessage) in
+            DDLogWrapper.log(message: logMessage)
+        }
+    }
 
     func displayIncomingCall(call: VSLCall) {
         if #available(iOS 10, *) {

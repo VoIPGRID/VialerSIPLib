@@ -6,11 +6,11 @@
 
 {file or feature containing the issue}
 
-### Expected behaviour
+### Expected behavior
 
 {what should happen}
 
-### Actual behaviour
+### Actual behavior
 
 {what happens}
 

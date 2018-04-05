@@ -23,7 +23,7 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
 
     fileprivate var account: VSLAccount {
         get {
-            return AppDelegate.shared.account
+            return AppDelegate.shared.getAccount()
         }
     }
 
@@ -84,18 +84,34 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     @IBOutlet weak var registerAccountButton: UIButton!
     @IBOutlet weak var transportPicker: UIPickerView!
     @IBOutlet weak var useVideoSwitch: UISwitch!
-    
+    @IBOutlet weak var unregisterAfterCallSwitch: UISwitch!
+
     // MARK: - Actions
     @IBAction func useVideoSwichPressed(_ sender: UISwitch) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let prefs = UserDefaults.standard
         prefs.set(sender.isOn, forKey: "useVideo")
         account.removeObserver(self, forKeyPath: #keyPath(VSLAccount.accountState))
         VialerSIPLib.sharedInstance().removeEndpoint()
-        AppDelegate.shared.setupVialerEndpoint()
-        AppDelegate.shared.setupAccount()
+        appDelegate.setupVialerEndpoint()
+        appDelegate.setupAccount()
         account.addObserver(self, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
     }
 
+    @IBAction func unregisterAfterCallPressed(_ sender: UISwitch) {
+        DispatchQueue.main.async { [weak self] in
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            let prefs = UserDefaults.standard
+            prefs.set(sender.isOn, forKey: "unregisterAfterCall")
+            self!.account.removeObserver(self!, forKeyPath: #keyPath(VSLAccount.accountState))
+            VialerSIPLib.sharedInstance().removeEndpoint()
+            appDelegate.setupVialerEndpoint()
+            appDelegate.setupAccount()
+            self!.account.addObserver(self!, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
+        }
+    }
+
+    
     @IBAction func registerAccountButtonPressed(_ sender: UIButton) {
         if account.isRegistered {
             try! account.unregisterAccount()
@@ -122,8 +138,9 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         prefs.set(transportPickerData[row], forKey: "transportType")
         account.removeObserver(self, forKeyPath: #keyPath(VSLAccount.accountState))
         VialerSIPLib.sharedInstance().removeEndpoint()
-        AppDelegate.shared.setupVialerEndpoint()
-        AppDelegate.shared.setupAccount()
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        appDelegate.setupVialerEndpoint()
+        appDelegate.setupAccount()
         account.addObserver(self, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
     }
 
@@ -140,9 +157,16 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             self.useVideoSwitch.setOn(useVideo, animated: true)
         }
 
+        let unregisterAfterCall = prefs.bool(forKey: "unregisterAfterCall")
+        DispatchQueue.main.async {
+            self.unregisterAfterCallSwitch.setOn(unregisterAfterCall, animated: true)
+        }
+
         let transportType = prefs.string(forKey: "transportType")
         if transportType != nil, let defaultRowIndex = transportPickerData.index(of: transportType!) {
-            transportPicker.selectRow(defaultRowIndex, inComponent: 0, animated: true)
+            DispatchQueue.main.async { [weak self] in
+                self?.transportPicker.selectRow(defaultRowIndex, inComponent: 0, animated: true)
+            }
         }
 
     }
