@@ -286,6 +286,6 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *
  *  @param activate BOOL, if YES, only iLBC will be used.
  */
-- (void)onlyUseIlbc:(BOOL)activate;
+- (void)onlyUseIlbc:(BOOL)activate __attribute__((deprecated("Deprecated, use VSLCodecConfigurarion to add codecs to the endpoint instead")));
 
 @end

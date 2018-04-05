@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "VSLIpChangeConfiguration.h"
 #import "VSLStunConfiguration.h"
+#import "VSLCodecConfiguration.h"
 
 
 @interface VSLEndpointConfiguration : NSObject
@@ -81,9 +82,20 @@
  */
 @property (nonatomic) BOOL disableVideoSupport;
 
+/**
+ * The available STUN configuration
+ */
 @property (nonatomic) VSLStunConfiguration * _Nullable stunConfiguration;
 
+/**
+ * The IP change configuration, what happens when an ip address changes.
+ */
 @property (nonatomic) VSLIpChangeConfiguration * _Nullable ipChangeConfiguration;
+
+/**
+ * The codecs that are going to be used by the endpoint
+ */
+@property (nonatomic) VSLCodecConfiguration * _Nullable codecConfiguration;
 
 /**
  * Whether the account needs to be unregistered after a call has been made

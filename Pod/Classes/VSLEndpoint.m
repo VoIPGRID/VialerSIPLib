@@ -11,10 +11,12 @@
 #import "VialerSIPLib.h"
 #import "VSLCall.h"
 #import "VSLCallManager.h"
+#import "VSLAudioCodecs.h"
 #import "VSLLogging.h"
 #import "VSLNetworkMonitor.h"
 #import "VSLIpChangeConfiguration.h"
 #import "VSLTransportConfiguration.h"
+#import "VSLVideoCodecs.h"
 
 static NSString * const VSLEndpointErrorDomain = @"VialerSIPLib.VSLEndpoint.error";
 
@@ -255,7 +257,12 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     self.endpointConfiguration = endpointConfiguration;
     self.state = VSLEndpointStarted;
 
-    [self updateCodecs];
+    if (self.endpointConfiguration.codecConfiguration != NULL) {
+        [self updateAudioCodecs];
+        [self updateVideoCodecs];
+    } else {
+        [self updateCodecs];
+    }
 
     return YES;
 }
@@ -444,6 +451,96 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
                        };
     }
     return (pj_uint8_t)[priorities[identifier] unsignedIntegerValue];
+}
+
+-(BOOL)updateAudioCodecs {
+    if (self.state != VSLEndpointStarted) {
+        return NO;
+    }
+
+    const unsigned audioCodecInfoSize = 64;
+    pjsua_codec_info audioCodecInfo[audioCodecInfoSize];
+    unsigned audioCodecCount = audioCodecInfoSize;
+    pj_status_t status = pjsua_enum_codecs(audioCodecInfo, &audioCodecCount);
+    if (status != PJ_SUCCESS) {
+        VSLLogError(@"Error getting list of audio codecs");
+        return NO;
+    }
+
+    for (NSUInteger i = 0; i < audioCodecCount; i++) {
+        NSString *codecIdentifier = [NSString stringWithPJString:audioCodecInfo[i].codec_id];
+        pj_uint8_t priority = [self priorityForAudioCodec:codecIdentifier];
+        status = pjsua_codec_set_priority(&audioCodecInfo[i].codec_id, priority);
+        if (status != PJ_SUCCESS) {
+            VSLLogError(@"Error setting codec priority to the correct value");
+            return NO;
+        }
+    }
+    return YES;
+}
+
+-(pj_uint8_t)priorityForAudioCodec:(NSString *)identifier {
+    NSUInteger priority = 0;
+    for (VSLAudioCodecs* audioCodec in self.endpointConfiguration.codecConfiguration.audioCodecs) {
+        if ([VSLAudioCodecString(audioCodec.codec) isEqualToString:identifier]) {
+            priority = audioCodec.priority;
+            return (pj_uint8_t)priority;
+        }
+    }
+    return (pj_uint8_t)priority;
+}
+
+-(BOOL)updateVideoCodecs {
+    if (self.state != VSLEndpointStarted) {
+        return NO;
+    }
+
+    const unsigned videoCodecInfoSize = 64;
+    pjsua_codec_info videoCodecInfo[videoCodecInfoSize];
+    unsigned videoCodecCount = videoCodecInfoSize;
+    pj_status_t videoStatus = pjsua_vid_enum_codecs(videoCodecInfo, &videoCodecCount);
+    if (videoStatus != PJ_SUCCESS) {
+        VSLLogError(@"Error getting list of video codecs");
+        return NO;
+    } else {
+        for (NSUInteger i = 0; i < videoCodecCount; i++) {
+            NSString *codecIdentifier = [NSString stringWithPJString:videoCodecInfo[i].codec_id];
+            pj_uint8_t priority = [self priorityForVideoCodec:codecIdentifier];
+            
+            videoStatus = pjsua_vid_codec_set_priority(&videoCodecInfo[i].codec_id, priority);
+
+            if (priority > 0) {
+                pjmedia_vid_codec_param param;
+                pjsua_vid_codec_get_param(&videoCodecInfo[i].codec_id, &param);
+                param.ignore_fmtp = PJ_TRUE;
+                param.enc_fmt.det.vid.size.w = 288;
+                param.enc_fmt.det.vid.size.h = 352;
+                param.enc_fmt.det.vid.fps.num = 20;
+                param.enc_fmt.det.vid.fps.denum = 1;
+                param.dec_fmt.det.vid.size.w = 1920;
+                param.dec_fmt.det.vid.size.h = 1920;
+                pjsua_vid_codec_set_param(&videoCodecInfo[i].codec_id, &param);
+
+                if (videoStatus != PJ_SUCCESS) {
+                    DDLogError(@"Error setting video codec priority to the correct value");
+                    return NO;
+                }
+            }
+        }
+    }
+
+    return YES;
+}
+
+-(pj_uint8_t)priorityForVideoCodec:(NSString *)identifier {
+    NSUInteger priority = 0;
+    for (VSLVideoCodecs* videoCodec in self.endpointConfiguration.codecConfiguration.videoCodecs) {
+        if ([VSLVideoCodecString(videoCodec.codec) isEqualToString:identifier] && !self.endpointConfiguration.disableVideoSupport) {
+            priority = videoCodec.priority;
+            return (pj_uint8_t)priority;
+        }
+    }
+    return (pj_uint8_t)priority;
 }
 
 #pragma mark - PJSUA callbacks
