@@ -246,6 +246,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         }
     } else {
         VSLLogVerbose(@"VSLAccount registered or registration in progress, cannot sent another registration");
+        VSLLogVerbose(@"VSLAccount state: %ld", (long)self.accountState);
     }
 
     // Check if account is connected, otherwise set completionblock.

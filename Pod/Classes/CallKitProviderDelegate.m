@@ -8,6 +8,7 @@
 
 #import "VialerSIPLib.h"
 #import "VSLAudioController.h"
+#import "VSLEndpoint.h"
 #import "VSLLogging.h"
 
 NSString * const CallKitProviderDelegateOutboundCallStartedNotification = @"CallKitProviderDelegateOutboundCallStarted";
@@ -50,7 +51,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
         
         providerConfiguration.maximumCallGroups = 2;
         providerConfiguration.maximumCallsPerCallGroup = 1;
-        providerConfiguration.supportsVideo = false;
+        providerConfiguration.supportsVideo = ![VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport;
         
         NSString *ringtoneFileName = [[NSBundle mainBundle] pathForResource:@"ringtone" ofType:@"wav"];
         if (ringtoneFileName) {

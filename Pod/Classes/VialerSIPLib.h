@@ -174,6 +174,11 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 @property (readonly, nonatomic) BOOL endpointAvailable;
 
+/**
+ * If the endpoint is configured with TLS.
+ */
+@property (readonly, nonatomic) BOOL hasTLSTransport;
+
 /*
  *  The callManager used by the Lib.
  */
