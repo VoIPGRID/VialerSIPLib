@@ -224,6 +224,7 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 
     if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
         callSetting.vid_cnt = 0;
+        callSetting.flag &= ~PJSUA_CALL_INCLUDE_DISABLED_MEDIA;
     }
 
     pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, NULL, (int *)&_callId);
@@ -298,6 +299,7 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
         }
         if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
             callSetting.vid_cnt = 0;
+            callSetting.flag &= ~PJSUA_CALL_INCLUDE_DISABLED_MEDIA;
         }
 
         pj_status_t status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &callSetting, NULL);
@@ -322,6 +324,7 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 
         if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
             callSetting.vid_cnt = 0;
+            callSetting.flag &= ~PJSUA_CALL_INCLUDE_DISABLED_MEDIA;
         }
 
         pj_status_t status = pjsua_call_update2((pjsua_call_id)self.callId, &callSetting, NULL);
@@ -375,7 +378,14 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
     pj_status_t status;
 
     if (self.callId != PJSUA_INVALID_ID) {
-        status = pjsua_call_answer((int)self.callId, PJSIP_SC_OK, NULL, NULL);
+        pjsua_call_setting callSetting;
+        pjsua_call_setting_default(&callSetting);
+
+        if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+            callSetting.vid_cnt = 0;
+        }
+
+        status = pjsua_call_answer2((int)self.callId, &callSetting, PJSIP_SC_OK, NULL, NULL);
 
         if (status != PJ_SUCCESS) {
             VSLLogError(@"Could not answer call PJSIP returned status code:%d", status);
@@ -489,7 +499,15 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
     pj_status_t status;
 
     if (self.onHold) {
-        status = pjsua_call_reinvite((pjsua_call_id)self.callId, PJ_TRUE, NULL);
+        pjsua_call_setting callSetting;
+        pjsua_call_setting_default(&callSetting);
+        callSetting.flag = PJSUA_CALL_UNHOLD;
+
+        if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
+            callSetting.vid_cnt = 0;
+        }
+        
+        status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &callSetting, NULL);
     } else {
         status = pjsua_call_set_hold((pjsua_call_id)self.callId, NULL);
     }

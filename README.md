@@ -1,6 +1,6 @@
 # VialerSIPLib
 
-[![CI Status](http://img.shields.io/travis/wearespindle/VialerSIPLib.svg?style=flat)](https://travis-ci.org/wearespindle/VialerSIPLib)
+<!--- [![CI Status](http://img.shields.io/travis/wearespindle/VialerSIPLib.svg?style=flat)](https://travis-ci.org/wearespindle/VialerSIPLib) -->
 [![Version](https://img.shields.io/cocoapods/v/VialerSIPLib.svg?style=flat)](https://cocoapods.org/pods/VialerSIPLib)
 [![License](https://img.shields.io/cocoapods/l/VialerSIPLib.svg?style=flat)](https://opensource.org/licenses/GPL-3.0)
 [![Platform](https://img.shields.io/cocoapods/p/VialerSIPLib.svg?style=flat)](https://cocoapods.org/pods/VialerSIPLib)
@@ -23,6 +23,7 @@ In active development.
 
 - Cocoapods
 - iOS 9.0 or greater
+- [Git lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
 
 ### Installation
 
@@ -33,6 +34,11 @@ it, simply add the following line to your Podfile:
     platform :ios, '9.0'
     pod 'VialerSIPLib'
 ```
+
+When you are having trouble that your app can't compile because of a linker error.
+Try this because of the VialerSIPLIB is now requiring git-lfs.
+Clear the cache of cocoapods which is located at: `/Users/$USER/Library/Caches/CocoaPods`
+Thanks to phatblat from this thread [CocoaPods/CocoaPods#4801](https://github.com/CocoaPods/CocoaPods/issues/4801)
 
 ### Running
 

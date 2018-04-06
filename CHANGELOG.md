@@ -3,17 +3,28 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [3.1.2](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.2) (13/06/2018)
+## [3.1.3](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.2) (04/06/2018)
+Released on Friday, April 6, 2018.
+
+### Added
+- Updated Vialer-pjsip-iOS to the newest version.
+
+### Fixed
+- Fix issue when there were no calls possible from the background when video is disabled remove the video codec option from the INVITE (#131)
+- Incoming callername not showing #124 (#130)
+- Fixed issue that call was not being to release on hold status (#129)
+
+## [3.1.2](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.2) (03/16/2018)
 Released on Tuesday, March 16, 2018.
 
 ### Added
-* Update Vialer-PJSIP-IOS pod to the newest version
+- Update Vialer-PJSIP-IOS pod to the newest version
 
 ## [3.1.1](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.1) (03/06/2018)
 Released on Tuesday, March 06, 2018.
 
 ### Added
-* Update Vialer-PJSIP-IOS pod to the newest version
+- Update Vialer-PJSIP-IOS pod to the newest version
 
 ## [3.1.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.0) (02/19/2018)
 Released on Monday, February 19, 2018.

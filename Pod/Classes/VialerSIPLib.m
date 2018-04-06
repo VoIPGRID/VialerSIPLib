@@ -54,10 +54,11 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
 }
 
 - (BOOL)endpointAvailable {
-    if (self.endpoint.state == VSLEndpointStarted) {
-        return YES;
-    }
-    return NO;
+    return self.endpoint.state == VSLEndpointStarted;
+}
+
+- (BOOL)hasTLSTransport {
+    return self.endpoint.state == VSLEndpointStarted && self.endpoint.endpointConfiguration.hasTLSConfiguration;
 }
 
 - (VSLCallManager *)callManager {
