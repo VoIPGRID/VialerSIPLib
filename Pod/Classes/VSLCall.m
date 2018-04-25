@@ -257,6 +257,24 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
     return _disconnectedSoundPlayer;
 }
 
+- (BOOL)blindTransferCallWithNumber:(NSString *)number {
+    NSString *cleanedNumber = [VialerUtils cleanPhoneNumber:number];
+
+    if ([cleanedNumber isEqualToString:@""]) {
+        return NO;
+    }
+
+    pj_str_t sipUri = [cleanedNumber sipUriWithDomain:self.account.accountConfiguration.sipDomain];
+
+    pj_status_t status = pjsua_call_xfer((pjsua_call_id)self.callId, &sipUri, nil);
+
+    if (status == PJ_SUCCESS) {
+        self.transferStatus = VSLCallTransferStateInitialized;
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL)transferToCall:(VSLCall *)secondCall {
     NSError *error;
     if (!self.onHold && ![self toggleHold:&error]) {

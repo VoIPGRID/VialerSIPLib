@@ -17,6 +17,7 @@ private var myContext = 0
             static let UnwindToMainView = "UnwindToMainViewSegue"
             static let ShowKeypad = "ShowKeypadSegue"
             static let UnwindToFirstCallInProgress = "UnwindToFirstCallInProgressSegue"
+            static let TransferInProgress = "TransferInProgressSegue"
         }
     }
 
@@ -55,6 +56,19 @@ private var myContext = 0
             performSegue(withIdentifier: Configuration.Segues.UnwindToFirstCallInProgress, sender: nil)
         } else {
             performSegue(withIdentifier: Configuration.Segues.UnwindToMainView, sender: nil)
+        }
+    }
+
+    @IBAction func blindButtonPressed(_ sender: UIButton) {
+        guard let number = numberToDialLabel.text, number != "" else { return }
+        guard let call = currentCall else { return }
+
+        if call.blindTransferCall(withNumber: number) {
+            callManager.end(call) { (error) in
+                if error != nil {
+                    self.performSegue(withIdentifier: Configuration.Segues.TransferInProgress, sender: nil)
+                }
+            }
         }
     }
 
@@ -98,6 +112,10 @@ private var myContext = 0
             } else if let call = currentCall, call.callState != .null && call.callState != .disconnected {
                 callVC.activeCall = call
             }
+        } else if let transferInProgressVC = segue.destination as? VSLTransferInProgressViewController {
+            guard let call = currentCall else { return }
+            transferInProgressVC.firstCall = call
+            transferInProgressVC.secondCallBlindNumber = numberToDialLabel.text
         }
     }
 
