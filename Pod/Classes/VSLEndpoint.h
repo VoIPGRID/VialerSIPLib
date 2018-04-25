@@ -158,6 +158,6 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
  *
  *  @param activate BOOL, if YES, only iLBC will be used.
  */
-- (void)onlyUseILBC:(BOOL)activate;
+- (void)onlyUseILBC:(BOOL)activate __attribute__((deprecated("Deprecated, use VSLCodecConfigurarion to add codecs to the endpoint instead")));
 
 @end
