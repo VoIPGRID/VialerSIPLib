@@ -417,6 +417,15 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 - (BOOL)sendDTMF:(NSString * _Nonnull)character error:(NSError * _Nullable * _Nullable)error;
 
 /**
+ *  Blind transfer a call with a given number.
+ *
+ *  @param number NSString the number that should be transfered to.
+ *
+ *  @return BOOL success if the transfer has been sent.
+ */
+- (BOOL)blindTransferCallWithNumber:(NSString * _Nonnull)number;
+
+/**
  *  Transfer the call to the given VSLCall.
  *
  *  @param secondCall VSLCall this call should be transferred to.
