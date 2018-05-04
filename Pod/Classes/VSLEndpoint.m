@@ -622,6 +622,7 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     if ([VSLEndpoint sharedEndpoint].ipChangeInProgress) {
         // When disableVideoSupport is on reinivite the calls again. And in the reinivite
         // disable the video stream. Otherwise the response is an 488 Not Acceptatble here.
+        // When videosupport has been disabled in the PBX.
         if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
             VSLIpChangeConfiguration *ipChangeConfiguration = [VSLEndpoint sharedEndpoint].endpointConfiguration.ipChangeConfiguration;
             VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];

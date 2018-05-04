@@ -24,6 +24,7 @@ NSString * const VSLNotificationUserInfoVideoSizeRenderKey = @"VSLNotificationUs
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
 NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
 NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
+NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNotification";
 
 @interface VSLCall()
 @property (readwrite, nonatomic) VSLCallState callState;
@@ -51,6 +52,8 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 @property (strong, nonatomic) NSString *numberToCall;
 @property (weak, nonatomic) VSLAccount *account;
 @property (nonatomic) BOOL reinviteCall;
+@property (readwrite, nonatomic) NSTimer *audioCheckTimer;
+@property (readwrite, nonatomic) int audioCheckTimerFired;
 /**
  *  Stats
  */
@@ -370,7 +373,40 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
         pjsua_conf_connect(0, callInfo.conf_slot);
     }
 
+    if (self.mediaState == VSLMediaStateActive && ![self.audioCheckTimer isValid]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.audioCheckTimerFired = 0;
+            self.audioCheckTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(checkIfAudioPresent) userInfo: nil repeats: YES];
+        });
+    }
+
     [self updateCallInfo:callInfo];
+}
+
+- (void)checkIfAudioPresent {
+    pjsua_call_info callInfo;
+    pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
+
+    pj_status_t status;
+    pjsua_stream_stat stream_stat;
+    status = pjsua_call_get_stream_stat((pjsua_call_id)self.callId, callInfo.media[0].index, &stream_stat);
+
+    int rxPkt = stream_stat.rtcp.rx.pkt;
+    int txPkt = stream_stat.rtcp.tx.pkt;
+
+    if (rxPkt == 0 || txPkt == 0) {
+        VSLLogWarning(@"There is NO audio %f: sec into the call. Trying a reinvite", self.lastSeenConnectDuration);
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallNoAudioForCallNotification object:nil];
+        [self.audioCheckTimer invalidate];
+    }
+
+    if (self.audioCheckTimerFired > 5) {
+        VSLLogInfo(@"There is audio in the last 10 seconds rxPkt: %d and txPkt: %d", rxPkt, txPkt);
+        [self.audioCheckTimer invalidate];
+        self.audioCheckTimerFired = 0;
+    }
+
+    self.audioCheckTimerFired++;
 }
 
 #pragma mark - User actions
@@ -711,7 +747,6 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
         VSLLogError(@"Stream is not active!");
     }
 
-
     VSLCallStats *callStats = [[VSLCallStats alloc] initWithCall: self];
     NSDictionary *stats = [callStats generate];
     if ([stats count] > 0) {
@@ -722,6 +757,7 @@ NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
         
         VSLLogDebug(@"activeCodec: %@ with MOS score: %f and MBs used: %f", self.activeCodec, self.MOS, self.totalMBsUsed);
     }
+    [self.audioCheckTimer invalidate];
 }
 
 - (NSString *)debugDescription {
