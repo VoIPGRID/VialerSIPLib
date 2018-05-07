@@ -54,6 +54,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         activeCall?.addObserver(self, forKeyPath: "callState", options: .new, context: &myContext)
         activeCall?.addObserver(self, forKeyPath: "onHold", options: .new, context: &myContext)
         NotificationCenter.default.addObserver(self, selector: #selector(updateUI), name: NSNotification.Name(rawValue: VSLAudioControllerAudioInterrupted), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(noAudioForCall), name: Notification.Name.VSLCallNoAudioForCall, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -63,6 +64,7 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         activeCall?.removeObserver(self, forKeyPath: "callState")
         activeCall?.removeObserver(self, forKeyPath: "onHold")
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: VSLAudioControllerAudioInterrupted), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.VSLCallNoAudioForCall, object: nil)
     }
 
     // MARK: - Outlets
@@ -166,6 +168,12 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
                 DDLogWrapper.logError("error hanging up call(\(call.uuid.uuidString)): \(error!)")
             }
         }
+    }
+
+    @objc func noAudioForCall() {
+        guard let call = activeCall, call.callState != .disconnected else { return }
+
+        call.reinvite()
     }
 
     @objc func updateUI() {
