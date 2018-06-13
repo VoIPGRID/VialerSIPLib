@@ -5,8 +5,8 @@
 
 #import <Foundation/Foundation.h>
 
-@class VSLAudioCodecs;
-@class VSLVideoCodecs;
+#import "VSLAudioCodecs.h"
+#import "VSLVideoCodecs.h"
 
 @interface VSLCodecConfiguration : NSObject
 

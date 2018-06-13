@@ -94,7 +94,6 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 }
 
 - (BOOL)configureWithAccountConfiguration:(VSLAccountConfiguration * _Nonnull)accountConfiguration error:(NSError **)error {
-
     // If the endpoint has a tcp connection create a variable with the needed information.
     NSString *transportString = @"";
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration]) {
@@ -217,7 +216,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 - (void)registerAccountWithCompletion:(RegistrationCompletionBlock)completion {
     VSLLogDebug(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
-
+    VSLLogDebug(@"Should force registration: %@", self.forceRegistration ? @"YES" : @"NO");
     pjsua_acc_info info;
     pjsua_acc_get_info((pjsua_acc_id)self.accountId, &info);
 
@@ -227,7 +226,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     // If pjsua_acc_info.expires == -1 the account has a registration but, as it turns out,
     // this is not a valid check whether there is a registration in progress or not, at least,
     // not wit a connection loss. So, to track a registration in progress, an ivar is used.
-    if (!self.registrationInProgress && info.expires == -1) {
+    if (self.forceRegistration || (!self.registrationInProgress && info.expires == -1)) {
         self.registrationInProgress = YES;
         VSLLogVerbose(@"Sending registration for account: %@", [NSNumber numberWithInteger:self.accountId]);
 
@@ -294,7 +293,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 }
 
 - (void)reregisterAccount {
-    if ([[self.callManager callsForAccount:self] count] > 0) {
+    if ([self.callManager callsForAccount:self].count > 0) {
         self.shouldReregister = YES;
         [self unregisterAccount:nil];
     }

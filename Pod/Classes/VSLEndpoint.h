@@ -54,7 +54,11 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
     /**
      *  Endpoint is running.
      */
-    VSLEndpointStarted
+    VSLEndpointStarted,
+    /**
+     *  Endpoint is closing.
+     */
+    VSLEndpointClosing,
 };
 #define VSLEndpointStateString(VSLEndpointState) [@[@"VSLEndpointStopped", @"VSLEndpointStarting", @"VSLEndpointStarted"] objectAtIndex:VSLEndpointState]
 
