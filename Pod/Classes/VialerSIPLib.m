@@ -16,6 +16,7 @@ NSString * const VSLNotificationUserInfoCallKey = @"VSLNotificationUserInfoCallK
 NSString * const VSLNotificationUserInfoCallIdKey = @"VSLNotificationUserInfoCallIdKey";
 NSString * const VSLNotificationUserInfoWindowIdKey = @"VSLNotificationUserInfoWindowIdKey";
 NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInfoWindowSizeKey";
+NSString * const VSLNotificationUserInfoCallStateKey = @"VSLNotificationUserInfoCallStateKey";
 
 @interface VialerSIPLib()
 @property (strong, nonatomic) VSLEndpoint *endpoint;
@@ -58,7 +59,7 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
 }
 
 - (BOOL)hasTLSTransport {
-    return self.endpoint.state == VSLEndpointStarted && self.endpoint.endpointConfiguration.hasTLSConfiguration;
+    return self.endpointAvailable && self.endpoint.endpointConfiguration.hasTLSConfiguration;
 }
 
 - (VSLCallManager *)callManager {
@@ -165,7 +166,7 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
     [VSLEndpoint sharedEndpoint].logCallBackBlock = logCallBackBlock;
 }
 
-- (void)registerAccountWithUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser withCompletion:(void (^)(BOOL, VSLAccount * _Nullable))completion {
+- (void)registerAccountWithUser:(id<SIPEnabledUser> _Nonnull __autoreleasing)sipUser forceRegistration:(BOOL)force withCompletion:(void (^)(BOOL, VSLAccount * _Nullable))completion {
     NSError *accountConfigError;
     VSLAccount *account = [self createAccountWithSipUser:sipUser error:&accountConfigError];
     if (!account) {
@@ -173,6 +174,7 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
         completion(NO, nil);
     }
 
+    account.forceRegistration = force;
     [account registerAccountWithCompletion:^(BOOL success, NSError * _Nullable error) {
         if (!success) {
             VSLLogError(@"The registration of the account has failed.\n%@", error);
@@ -209,7 +211,7 @@ NSString * const VSLNotificationUserInfoWindowSizeKey = @"VSLNotificationUserInf
 
 - (BOOL)anotherCallInProgress:(VSLCall *)call {
     VSLAccount *account = [self firstAccount];
-    VSLCall *activeCall = [account firstActiveCall];
+    VSLCall *activeCall = [self.callManager firstCallForAccount:account];
 
     if (call.callId != activeCall.callId) {
         return YES;

@@ -84,6 +84,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
                 }
                 break;
             }
+            case VSLEndpointClosing:
             case VSLEndpointStarting: {
                 break;
             }
@@ -104,7 +105,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     if (!_networkMonitor) {
         VSLAccount *activeAccount;
         for (VSLAccount *account in self.accounts) {
-            if ([account firstActiveCall]) {
+            if ([self.callManager firstCallForAccount:account]) {
                 activeAccount = account;
                 break;
             }
@@ -136,8 +137,15 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     VSLLogDebug(@"Creating new PJSIP Endpoint instance.");
     self.state = VSLEndpointStarting;
 
-    // Create PJSUA on the main thread to make all subsequent calls from the main
-    // thread.
+
+    // Create worker thread for pjsip.
+    NSError *threadError;
+    if (![self createPJSIPThreadWithError:&threadError]) {
+        *error = threadError;
+        return NO;
+    }
+
+    // Create PJSUA on the main thread to make all subsequent calls from the main thread.
     pj_status_t status = pjsua_create();
     if (status != PJ_SUCCESS) {
         self.state = VSLEndpointStopped;
@@ -151,12 +159,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
         return NO;
     }
 
-    // Create Thread & Pool
-    NSError *threadError;
-    if (![self createPJThreadAndPoolwithError:&threadError]) {
-        *error = threadError;
-        return NO;
-    }
+    [self createPoolForPJSIP];
 
     // Configure the different logging information for the endpoint.
     pjsua_logging_config logConfig;
@@ -200,6 +203,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     mediaConfig.snd_clock_rate = (unsigned int)endpointConfiguration.sndClockRate;
     mediaConfig.has_ioqueue = PJ_TRUE;
     mediaConfig.thread_cnt = 1;
+    mediaConfig.no_vad = PJ_TRUE;
 
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
@@ -267,12 +271,12 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     return YES;
 }
 
-- (BOOL)createPJThreadAndPoolwithError:(NSError * _Nullable __autoreleasing *)error {
+- (BOOL)createPJSIPThreadWithError:(NSError * _Nullable __autoreleasing *)error {
     // Create a seperate thread
     pj_thread_desc aPJThreadDesc;
     if (!pj_thread_is_registered()) {
         pj_thread_t *pjThread;
-        pj_status_t status = pj_thread_register(NULL, aPJThreadDesc, &pjThread);
+        pj_status_t status = pj_thread_register("VialerPJSIP", aPJThreadDesc, &pjThread);
         if (status != PJ_SUCCESS) {
             if (error != NULL) {
                 *error = [NSError VSLUnderlyingError:nil
@@ -285,24 +289,28 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
         }
     }
 
+    return YES;
+}
+
+- (void)createPoolForPJSIP {
     // Create pool for PJSUA.
     self.pjPool = pjsua_pool_create("VialerSIPLib-pjsua", 1000, 1000);
-    return YES;
 }
 
 - (void)destroyPJSUAInstance {
     VSLLogDebug(@"PJSUA was already running destroying old instance.");
+    self.state = VSLEndpointClosing;
     [self stopNetworkMonitoring];
+    [self.callManager endAllCalls];
 
     for (VSLAccount *account in self.accounts) {
-        [account removeAllCalls];
         [self removeAccount:account];
     }
 
     if (!pj_thread_is_registered()) {
         pj_thread_desc aPJThreadDesc;
         pj_thread_t *pjThread;
-        pj_status_t status = pj_thread_register(NULL, aPJThreadDesc, &pjThread);
+        pj_status_t status = pj_thread_register("VialerPJSIP", aPJThreadDesc, &pjThread);
 
         if (status != PJ_SUCCESS) {
             VSLLogError(@"Error registering thread at PJSUA");
@@ -310,7 +318,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     }
 
     if (self.pjPool != NULL) {
-        pj_pool_release(self->_pjPool);
+        pj_pool_release(self.pjPool);
     }
     
     // Destroy PJSUA.
@@ -332,7 +340,6 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     NSMutableArray *mutableArray = [self.accounts mutableCopy];
     [mutableArray removeObject:account];
     self.accounts = [mutableArray copy];
-    
 }
 
 - (VSLAccount *)lookupAccount:(NSInteger)accountId {
@@ -352,13 +359,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 }
 
 - (VSLCall *)lookupCall:(NSInteger)callId {
-    for (VSLAccount *account in self.accounts) {
-        VSLCall *call = [account lookupCall:callId];
-        if (call) {
-            return call;
-        }
-    }
-    return nil;
+    return [self.callManager callWithCallId:callId];
 }
 
 - (VSLAccount *)getAccountWithSipAccount:(NSString *)sipAccount {
@@ -555,7 +556,7 @@ static void logCallBack(int logLevel, const char *data, int len) {
     // The data obtained from the callback has a NewLine character at the end, remove it.
     unichar last = [logString characterAtIndex:[logString length] - 1];
     if ([[NSCharacterSet newlineCharacterSet] characterIsMember:last]) {
-        logString = [logString substringToIndex:[logString length]-1];
+        logString = [logString substringToIndex:[logString length] - 1];
     }
 
     switch (logLevel) {
@@ -584,7 +585,7 @@ static void onCallState(pjsua_call_id callId, pjsip_event *event) {
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
     if (account) {
-        VSLCall *call = [account lookupCall:callId];
+        VSLCall *call = [[VSLEndpoint sharedEndpoint].callManager callWithCallId:callId];
         if (call) {
             [call callStateChanged:callInfo];
         } else {
@@ -599,7 +600,7 @@ static void onCallMediaState(pjsua_call_id call_id) {
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
     if (account) {
-        VSLCall *call = [account lookupCall:call_id];
+        VSLCall *call = [[VSLEndpoint sharedEndpoint].callManager callWithCallId:call_id];
         VSLLogVerbose(@"Received MediaState update for call:%@", call.uuid.UUIDString);
         if (call) {
             [call mediaStateChanged:callInfo];
@@ -683,7 +684,7 @@ static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_
     }
 }
 
-void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
+static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
     VSLEndpoint *endpoint = [VSLEndpoint sharedEndpoint];
     VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
@@ -695,20 +696,21 @@ void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *r
                 [VSLEndpoint sharedEndpoint].incomingCallBlock(call);
             }
         }
+        call = nil;
     } else {
         VSLLogWarning(@"Could not accept incoming call. No account found with ID:%d", acc_id);
     }
 }
 
 static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_str_t *statusText, pj_bool_t final, pj_bool_t *continueNotifications) {
-    VSLCall *call = [[VSLEndpoint sharedEndpoint] lookupCall:callId];
+    VSLCall *call = [[VSLEndpoint sharedEndpoint].callManager callWithCallId:callId];
     if (call) {
         [call callTransferStatusChangedWithStatusCode:statusCode statusText:[NSString stringWithPJString:*statusText] final:final == 1];
     }
 }
 
 - (void)callDealloc:(NSNotification *)notification {
-    if (!self.endpointConfiguration.unregisterAfterCall) {
+    if (!self.endpointConfiguration.unregisterAfterCall || self.state != VSLEndpointStarted) {
         return;
     }
 
@@ -753,9 +755,9 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
  *  and reinitialize the TCP transport.
  */
 - (void)checkNetworkMonitoring:(NSNotification *)notification {
-    VSLCall *call = notification.userInfo[VSLNotificationUserInfoCallKey];
+    VSLCallState callState = [notification.userInfo[VSLNotificationUserInfoCallStateKey] intValue];
 
-    switch (call.callState) {
+    switch (callState) {
         case VSLCallStateDisconnected: {
             [self stopNetworkMonitoring];
             break;
@@ -763,7 +765,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
         case VSLCallStateConfirmed: {
             if (!self.monitoringCalls) {
                 for (VSLAccount *account in self.accounts) {
-                    if ([account firstActiveCall]) {
+                    if ([self.callManager firstCallForAccount:account]) {
                         VSLLogVerbose(@"Starting network monitor");
                         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ipAddressChanged:) name:VSLNetworkMonitorChangedNotification object:nil];
                         [self.networkMonitor startMonitoring];
@@ -792,7 +794,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
     BOOL activeCallForAnyAccount = NO;
     // Try to find an account which has an active call.
     for (VSLAccount *account in self.accounts) {
-        if ([account firstActiveCall]) {
+        if ([self.callManager firstCallForAccount:account]) {
             activeCallForAnyAccount = YES;
             break;
         }
@@ -809,7 +811,6 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
         [self.networkMonitor stopMonitoring];
         self.networkMonitor = nil;
         self.monitoringCalls = NO;
-        [self callDealloc: nil];
     }
 }
 
@@ -833,7 +834,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info) {
     VSLLogInfo(@"onIpChangeProgress:");
 
-    [VSLEndpoint sharedEndpoint].ipChangeInProgress = TRUE;
+    [VSLEndpoint sharedEndpoint].ipChangeInProgress = YES;
 
     switch (op) {
         case PJSUA_IP_CHANGE_OP_RESTART_LIS: {
@@ -854,7 +855,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
         }
         case PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS: {
             VSLLogInfo(@"Account reinvite calls: %u", status);
-            [VSLEndpoint sharedEndpoint].ipChangeInProgress = FALSE;
+            [VSLEndpoint sharedEndpoint].ipChangeInProgress = NO;
             break;
         }
         default:
@@ -880,8 +881,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
         }
         
         if ([VSLEndpoint sharedEndpoint].missedCallBlock && reason != VSLCallTerminateReasonUnknown) {
-            VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
-            VSLCall *call = [account lookupCall:call_id];
+            VSLCall *call = [[VSLEndpoint sharedEndpoint].callManager callWithCallId:call_id];;
             if (call) {
                 call.terminateReason = reason;
                 VSLLogDebug(@"Call was terminated for reason: %@", VSLCallTerminateReasonString(reason));

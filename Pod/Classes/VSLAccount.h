@@ -90,6 +90,8 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  */
 @property (readonly, nonatomic) VSLAccountConfiguration * _Nonnull accountConfiguration;
 
+@property (readwrite, nonatomic) BOOL forceRegistration;
+
 /**
  * This init is not available.
  */

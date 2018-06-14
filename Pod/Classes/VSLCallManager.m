@@ -66,14 +66,14 @@
     if (account.accountState != VSLAccountStateConnected) {
         [account registerAccountWithCompletion:nil];
     }
-    
+
     VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
     [self addCall:call];
-
+    
     if (@available(iOS 10.0, *)) {
         CXHandle *numberHandle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:call.numberToCall];
         CXAction *startCallAction = [[CXStartCallAction alloc] initWithCallUUID:call.uuid handle:numberHandle];
-
+        
         [self requestCallKitAction:startCallAction completion:^(NSError *error) {
             if (error) {
                 VSLLogError(@"Error requesting \"Start Call Transaction\" error: %@", error);
@@ -203,15 +203,23 @@
 - (void)addCall:(VSLCall *)call {
     [self.calls addObject:call];
     VSLLogVerbose(@"Call(%@) added. Calls count:%ld",call.uuid.UUIDString, (long)[self.calls count]);
-
 }
 
 - (void)removeCall:(VSLCall *)call {
     [self.calls removeObject:call];
+
+    if ([self.calls count] == 0) {
+        self.calls = nil;
+        self.audioController = nil;
+    }
     VSLLogVerbose(@"Call(%@) removed. Calls count: %ld",call.uuid.UUIDString, (long)[self.calls count]);
 }
 
 - (void)endAllCalls {
+    if ([self.calls count] == 0) {
+        return;
+    }
+    
     for (VSLCall *call in self.calls) {
         VSLLogVerbose(@"Ending call: %@", call.uuid.UUIDString);
         NSError *hangupError;
@@ -221,6 +229,7 @@
         } else {
             [self.audioController deactivateAudioSession];
         }
+        [self removeCall:call];
     }
 }
 
@@ -271,6 +280,10 @@
 }
 
 - (NSArray *)callsForAccount:(VSLAccount *)account {
+    if ([self.calls count] == 0) {
+        return nil;
+    }
+
     NSMutableArray *callsForAccount = [[NSMutableArray alloc] init];
     for (VSLCall *call in self.calls) {
         if ([call.account isEqual:account]) {
@@ -304,6 +317,10 @@
 }
 
 - (NSArray <VSLCall *> *)activeCallsForAccount:(VSLAccount *)account {
+    if ([self.calls count] == 0) {
+        
+    }
+
     NSMutableArray *activeCallsForAccount = [[NSMutableArray alloc] init];
     for (VSLCall *call in self.calls) {
         if (call.callState > VSLCallStateNull && call.callState < VSLCallStateDisconnected) {
@@ -335,7 +352,7 @@
 }
 
 - (void)callStateChanged:(NSNotification *)notification {
-    VSLCall *call = [[notification userInfo] objectForKey:VSLNotificationUserInfoCallKey];
+    __weak VSLCall *call = [[notification userInfo] objectForKey:VSLNotificationUserInfoCallKey];
     if (call.callState == VSLCallStateDisconnected) {
         [self removeCall:call];
     }

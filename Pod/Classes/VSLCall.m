@@ -104,7 +104,7 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
     [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDeallocNotification
                                                         object:nil
                                                       userInfo:nil];
-    VSLLogVerbose(@"Dealloc Call uuid:%@ id:%ld", self.uuid.UUIDString, (long)self.callId);
+    VSLLogVerbose(@"Dealloc call with uuid:%@ callId:%ld", self.uuid.UUIDString, (long)self.callId);
 }
 
 #pragma mark - Properties
@@ -142,20 +142,26 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
 
             case VSLCallStateConfirmed: {
                 self.connected = YES;
-                [self.ringback stop];
+                if (!self.incoming) {
+                    // Stop ringback for outgoing calls.
+                    [self.ringback stop];
+                    self.ringback = nil;
+                }
                 // Register for the audio interruption notification to be able to restore the sip audio session after an interruption (incoming call/alarm....).
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:VSLAudioControllerAudioInterrupted object:nil];
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:VSLAudioControllerAudioResumed object:nil];
-//                [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallConnectedNotification object:nil];
             } break;
 
             case VSLCallStateDisconnected: {
                 [self calculateStats];
-                [self.ringback stop];
+                if (!self.incoming) {
+                    // Stop ringback for outgoing calls.
+                    [self.ringback stop];
+                    self.ringback = nil;
+                }
 
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLAudioControllerAudioResumed object:nil];
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:VSLAudioControllerAudioInterrupted object:nil];
-//                [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDisconnectedNotification object:nil];
 
                 if (self.connected && !self.userDidHangUp) {
                     [self.disconnectedSoundPlayer play];
@@ -164,7 +170,10 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
         }
         [self didChangeValueForKey:stringFromCallStateProperty];
 
-        NSDictionary *notificationUserInfo = @{VSLNotificationUserInfoCallKey : self};
+        NSDictionary *notificationUserInfo = @{
+                                               VSLNotificationUserInfoCallKey : self,
+                                               VSLNotificationUserInfoCallStateKey: [NSNumber numberWithInt:callState]
+                                               };
         [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallStateChangedNotification
                                                             object:nil
                                                           userInfo:notificationUserInfo];
@@ -367,12 +376,15 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
     self.callStateText = [NSString stringWithPJString:callInfo.state_text];
     self.lastStatus = callInfo.last_status;
     self.lastStatusText = [NSString stringWithPJString:callInfo.last_status_text];
-    self.localURI = [NSString stringWithPJString:callInfo.local_info];
-    self.remoteURI = [NSString stringWithPJString:callInfo.remote_info];
-    if (self.remoteURI) {
-        NSDictionary *callerInfo = [self getCallerInfoFromRemoteUri:self.remoteURI];
-        self.callerName = callerInfo[@"caller_name"];
-        self.callerNumber = callerInfo[@"caller_number"];
+
+    if (self.callState != VSLCallStateDisconnected) {
+        self.localURI = [NSString stringWithPJString:callInfo.local_info];
+        self.remoteURI = [NSString stringWithPJString:callInfo.remote_info];
+        if (self.remoteURI) {
+            NSDictionary *callerInfo = [self getCallerInfoFromRemoteUri:self.remoteURI];
+            self.callerName = callerInfo[@"caller_name"];
+            self.callerNumber = callerInfo[@"caller_number"];
+        }
     }
 }
 
@@ -386,7 +398,10 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
     self.mediaState = (VSLMediaState)mediaState;
 
     if (self.mediaState == VSLMediaStateActive || self.mediaState == VSLMediaStateRemoteHold) {
-        [self.ringback stop];
+        if (!self.incoming) {
+            // Stop the ringback for outgoing calls.
+            [self.ringback stop];
+        }
         pjsua_conf_connect(callInfo.conf_slot, 0);
         pjsua_conf_connect(0, callInfo.conf_slot);
     }
@@ -405,23 +420,31 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
     pjsua_call_info callInfo;
     pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
 
+    if (self.audioCheckTimerFired > 5) {
+        VSLLogInfo(@"There was audio in the last 10 seconds");
+        [self.audioCheckTimer invalidate];
+        self.audioCheckTimerFired = 0;
+    }
+
+    if (callInfo.media_status != PJSUA_CALL_MEDIA_ACTIVE) {
+        VSLLogDebug(@"Unable to check if audio present no active stream!");
+        self.audioCheckTimerFired++;
+        return;
+    }
+
     pj_status_t status;
     pjsua_stream_stat stream_stat;
     status = pjsua_call_get_stream_stat((pjsua_call_id)self.callId, callInfo.media[0].index, &stream_stat);
 
-    int rxPkt = stream_stat.rtcp.rx.pkt;
-    int txPkt = stream_stat.rtcp.tx.pkt;
+    if (status == PJ_SUCCESS) {
+        int rxPkt = stream_stat.rtcp.rx.pkt;
+        int txPkt = stream_stat.rtcp.tx.pkt;
 
-    if (rxPkt == 0 || txPkt == 0) {
-        VSLLogWarning(@"There is NO audio %f: sec into the call. Trying a reinvite", self.lastSeenConnectDuration);
-        [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallNoAudioForCallNotification object:nil];
-        [self.audioCheckTimer invalidate];
-    }
-
-    if (self.audioCheckTimerFired > 5) {
-        VSLLogInfo(@"There is audio in the last 10 seconds rxPkt: %d and txPkt: %d", rxPkt, txPkt);
-        [self.audioCheckTimer invalidate];
-        self.audioCheckTimerFired = 0;
+        if (rxPkt == 0 || txPkt == 0) {
+            VSLLogInfo(@"There is NO audio %f: sec into the call. Trying a reinvite", self.lastSeenConnectDuration);
+            [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallNoAudioForCallNotification object:nil];
+            [self.audioCheckTimer invalidate];
+        }
     }
 
     self.audioCheckTimerFired++;
@@ -762,18 +785,17 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
     pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
 
     if (callInfo.media_status != PJSUA_CALL_MEDIA_ACTIVE) {
-        VSLLogError(@"Stream is not active!");
-    }
+        VSLLogDebug(@"Stream is not active!");
+    } else {
+        VSLCallStats *callStats = [[VSLCallStats alloc] initWithCall: self];
+        NSDictionary *stats = [callStats generate];
+        if ([stats count] > 0) {
+            self.activeCodec = stats[VSLCallStatsActiveCodec];
+            self.MOS = [[stats objectForKey:VSLCallStatsMOS] floatValue];
+            self.totalMBsUsed = [stats[VSLCallStatsTotalMBsUsed] floatValue];
 
-    VSLCallStats *callStats = [[VSLCallStats alloc] initWithCall: self];
-    NSDictionary *stats = [callStats generate];
-    if ([stats count] > 0) {
-        
-        self.activeCodec = stats[VSLCallStatsActiveCodec];
-        self.MOS = [[stats objectForKey:VSLCallStatsMOS] floatValue];
-        self.totalMBsUsed = [stats[VSLCallStatsTotalMBsUsed] floatValue];
-        
-        VSLLogDebug(@"activeCodec: %@ with MOS score: %f and MBs used: %f", self.activeCodec, self.MOS, self.totalMBsUsed);
+            VSLLogDebug(@"activeCodec: %@ with MOS score: %f and MBs used: %f", self.activeCodec, self.MOS, self.totalMBsUsed);
+        }
     }
     [self.audioCheckTimer invalidate];
 }

@@ -82,18 +82,17 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
     static pj_thread_desc a_thread_desc;
     static pj_thread_t *a_thread;
     if (!pj_thread_is_registered()) {
-        pj_thread_register(NULL, a_thread_desc, &a_thread);
+        pj_thread_register("VialerPJSIP", a_thread_desc, &a_thread);
     }
 }
 
 - (void)activateAudioSession {
     VSLLogDebug(@"Activating audiosession");
     [self checkCurrentThreadIsRegisteredWithPJSUA];
+
     pjsua_set_no_snd_dev();
 
-    pjsua_snd_dev_param snd_dev_param;
-    pjsua_snd_dev_param_default(&snd_dev_param);
-    pj_status_t status = pjsua_set_snd_dev2(&snd_dev_param);
+    pj_status_t status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
 
     if (status != PJ_SUCCESS) {
         VSLLogWarning(@"Failure in enabling sound device");
