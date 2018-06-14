@@ -205,7 +205,6 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     mediaConfig.thread_cnt = 1;
     mediaConfig.no_vad = PJ_TRUE;
 
-
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
     if (status != PJ_SUCCESS) {

@@ -111,6 +111,4 @@ static int const VSLRingbackInterval = 4000;
         pj_thread_register("VialerPJSIP", a_thread_desc, &a_thread);
     }
 }
-
-
 @end
