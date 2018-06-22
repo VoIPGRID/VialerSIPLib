@@ -73,11 +73,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         endpointConfiguration.ipChangeConfiguration = ipChangeConfiguration;
 
+        let codecConfiguration = VSLCodecConfiguration()
+        codecConfiguration.audioCodecs = [
+            VSLAudioCodecs(audioCodec: .ILBC, andPriority: 210),
+            VSLAudioCodecs(audioCodec: .g711a, andPriority: 209)
+        ]
+//        codecConfiguration.videoCodecs = [
+//            VSLVideoCodecs(videoCodec: .H264, andPriority: 210)
+//        ]
+        endpointConfiguration.codecConfiguration = codecConfiguration;
+
         do {
             try VialerSIPLib.sharedInstance().configureLibrary(withEndPointConfiguration: endpointConfiguration)
             // Set your incoming call block here.
             setupIncomingCallBlock()
-            VialerSIPLib.sharedInstance().onlyUseIlbc(true)
         } catch let error {
             DDLogWrapper.logError("Error setting up VialerSIPLib: \(error)")
         }

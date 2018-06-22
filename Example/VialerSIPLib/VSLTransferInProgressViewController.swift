@@ -34,6 +34,12 @@ class VSLTransferInProgressViewController: UIViewController {
         }
     }
 
+    var secondCallBlindNumber: String? {
+        didSet {
+            updateUI()
+        }
+    }
+
     // MARK: - Lifecycle
 
     override func viewWillAppear(_ animated: Bool) {
@@ -78,6 +84,10 @@ class VSLTransferInProgressViewController: UIViewController {
 
         if let call = secondCall, let label = secondCallNumberLabel {
             label.text = call.callerNumber!
+        }
+
+        if let phoneNumber = secondCallBlindNumber, let label = secondCallNumberLabel {
+            label.text = phoneNumber
         }
     }
 

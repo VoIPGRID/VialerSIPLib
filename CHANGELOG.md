@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [3.2.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.2) (06/15/2018)
+Released on Friday, June 15, 2018.
+
+### Added
+- Configurable codecs through the new VSLCodecConfiguration class. (#133)
+- Ability to do a blind transfer of a call (#137)
+- Build in a check to see if there is audio for call. When there is no audio in the first 10 seconds a notification is posted. (#138)
+
+### Fixed
+- First pass of removing the call referencing from the VSLAccount class in favor of the VSLCallManager (#142)
+- Some memory managent for the VSLCall and the VSLRingback classes (#142)
+
 ## [3.1.3](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.2) (04/06/2018)
 Released on Friday, April 6, 2018.
 

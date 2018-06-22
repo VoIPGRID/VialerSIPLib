@@ -22,7 +22,15 @@ extern NSString * _Nonnull const VSLCallStateChangedNotification;
  */
 extern NSString * _Nonnull const VSLNotificationUserInfoVideoSizeRenderKey;
 
+/**
+ *  Notification for when the VSLCall object has been dealloced.
+ */
 extern NSString * _Nonnull const VSLCallDeallocNotification;
+
+/**
+ *  Notification for when there is no audio during a call.
+ */
+extern NSString * _Nonnull const VSLCallNoAudioForCallNotification;
 
 /**
  *  Notification that will be posted when a phonecall is connected.
@@ -33,7 +41,6 @@ extern NSString * _Nonnull const VSLCallConnectedNotification DEPRECATED_MSG_ATT
  *  Notification that will be posted when a phonecall is disconnected locally.
  */
 extern NSString * _Nonnull const VSLCallDisconnectedNotification DEPRECATED_MSG_ATTRIBUTE("Deprecated, listen for VSLCallStateChangedNotification instead");
-
 
 /**
  *  The posible errors VSLCall can return.
@@ -415,6 +422,15 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  @param error     error Pointer to an NSError pointer. Will be set to a NSError instance if cannot send DTMF for the call.
  */
 - (BOOL)sendDTMF:(NSString * _Nonnull)character error:(NSError * _Nullable * _Nullable)error;
+
+/**
+ *  Blind transfer a call with a given number.
+ *
+ *  @param number NSString the number that should be transfered to.
+ *
+ *  @return BOOL success if the transfer has been sent.
+ */
+- (BOOL)blindTransferCallWithNumber:(NSString * _Nonnull)number;
 
 /**
  *  Transfer the call to the given VSLCall.

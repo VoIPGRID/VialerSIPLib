@@ -71,16 +71,19 @@ static int const VSLRingbackInterval = 4000;
 }
 
 -(void)dealloc {
+    [self checkCurrentThreadIsRegisteredWithPJSUA];
     // Destory the conference port otherwise the maximum number of ports will reached and pjsip will crash.
     pj_status_t status = pjsua_conf_remove_port((int)self.ringbackSlot);
     if (status != PJ_SUCCESS) {
         VSLLogWarning(@"Error removing the port!");
+        return;
     }
     
     pjmedia_port_destroy(self.ringbackPort);
 }
 
 -(void)start {
+    VSLLogInfo(@"Start ringback, isPlaying: %@", self.isPlaying ? @"YES" : @"NO");
     if (!self.isPlaying) {
         pjsua_conf_connect((int)self.ringbackSlot, 0);
         self.isPlaying = YES;
@@ -88,6 +91,7 @@ static int const VSLRingbackInterval = 4000;
 }
 
 -(void)stop {
+    VSLLogInfo(@"Stop ringback, isPlaying: %@", self.isPlaying ? @"YES" : @"NO");
     if (self.isPlaying) {
         pjsua_conf_disconnect((int)self.ringbackSlot, 0);
         self.isPlaying = NO;
@@ -100,4 +104,11 @@ static int const VSLRingbackInterval = 4000;
     }
 }
 
+- (void)checkCurrentThreadIsRegisteredWithPJSUA {
+    static pj_thread_desc a_thread_desc;
+    static pj_thread_t *a_thread;
+    if (!pj_thread_is_registered()) {
+        pj_thread_register("VialerPJSIP", a_thread_desc, &a_thread);
+    }
+}
 @end

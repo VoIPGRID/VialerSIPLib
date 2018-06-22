@@ -210,15 +210,13 @@ NSString * const VSLCallStatsTotalMBsUsed = @"VSLCallStatsTotalMBsUsed";
     pjsua_call_get_info((pjsua_call_id)self.call.callId, &callInfo);
 
     if (callInfo.media_status != PJSUA_CALL_MEDIA_ACTIVE) {
-        VSLLogError(@"Stream is not active!");
+        VSLLogDebug(@"Stream is not active!");
         return stats;
     }
-
     
     pj_status_t status;
     pjsua_stream_info stream_info;
     status = pjsua_call_get_stream_info((pjsua_call_id)self.call.callId, callInfo.media[0].index, &stream_info);
-    
 
     if (status == PJ_SUCCESS) {
         self.streamInfo = stream_info;

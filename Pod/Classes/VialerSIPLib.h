@@ -34,6 +34,11 @@ extern NSString * __nonnull const VSLNotificationUserInfoWindowIdKey;
 extern NSString * __nonnull const VSLNotificationUserInfoWindowSizeKey;
 
 /**
+ * Key of be used for retrieving the currentCall state out of the NSSNotification user info dict.
+ */
+extern NSString * __nonnull const VSLNotificationUserInfoCallStateKey;
+
+/**
  *  Possible errors the VialerSIPLib can return.
  */
 typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
@@ -222,7 +227,7 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *  @param completion Completion block which will be executed when registration has completed or failed. 
  *                    It will return the success of the registration and an account if registration was successfull.
  */
-- (void)registerAccountWithUser:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser withCompletion:(void (^_Nullable)(BOOL success, VSLAccount * _Nullable account))completion;
+- (void)registerAccountWithUser:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser forceRegistration:(BOOL)force withCompletion:(void (^_Nullable)(BOOL success, VSLAccount * _Nullable account))completion;
 
 /*
  *  This will return the first account that is available.
@@ -286,6 +291,6 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *
  *  @param activate BOOL, if YES, only iLBC will be used.
  */
-- (void)onlyUseIlbc:(BOOL)activate;
+- (void)onlyUseIlbc:(BOOL)activate __attribute__((deprecated("Deprecated, use VSLCodecConfigurarion to add codecs to the endpoint instead")));
 
 @end
