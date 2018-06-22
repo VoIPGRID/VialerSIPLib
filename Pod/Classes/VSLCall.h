@@ -173,9 +173,14 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 #pragma mark - Properties
 
 /**
- *  The callId which a incoming call receives from PJSIP when it is created.
+ *  The callId which a call receives from PJSIP when it is created.
  */
 @property (readonly, nonatomic) NSInteger callId;
+
+/**
+ * The Call-ID that is present in the SIP messages.
+ */
+@property (readonly, nonatomic) NSString *messageCallId;
 
 /**
  *  All created calls get an unique ID.

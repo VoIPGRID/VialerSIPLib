@@ -37,6 +37,7 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
 @property (readwrite, nonatomic) NSString *callerName;
 @property (readwrite, nonatomic) NSString *callerNumber;
 @property (readwrite, nonatomic) NSInteger callId;
+@property (readwrite, nonatomic) NSString *messageCallId;
 @property (readwrite, nonatomic) NSUUID *uuid;
 @property (readwrite, nonatomic) BOOL incoming;
 @property (strong, nonatomic) VSLRingback *ringback;
@@ -376,6 +377,10 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
     self.callStateText = [NSString stringWithPJString:callInfo.state_text];
     self.lastStatus = callInfo.last_status;
     self.lastStatusText = [NSString stringWithPJString:callInfo.last_status_text];
+
+    if (self.messageCallId == nil) {
+        self.messageCallId = [NSString stringWithPJString:callInfo.call_id];
+    }
 
     if (self.callState != VSLCallStateDisconnected) {
         self.localURI = [NSString stringWithPJString:callInfo.local_info];

@@ -675,7 +675,7 @@ static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_ev
 static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_event *event) {
     pjsua_call_info callInfo;
     pjsua_call_get_info(call_id, &callInfo);
-    
+
     // When a call is in de early state it is possible to check if
     // the call has been completed elsewhere or if the original caller
     // has ended the call.
@@ -866,7 +866,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 + (void)wasCallMissed:(pjsua_call_id)call_id pjsuaCallInfo:(pjsua_call_info)callInfo pjsipEvent:(pjsip_event*)event {
     // Get the packet that belongs to RX transaction.
     NSString *packet =  [NSString stringWithFormat:@"%s", event->body.tsx_state.src.rdata->pkt_info.packet];
-    
+
     if (![packet isEqualToString: @""]) {
         NSString *callCompletedElsewhere = @"Call completed elsewhere";
         NSString *originatorCancel = @"ORIGINATOR_CANCEL";
