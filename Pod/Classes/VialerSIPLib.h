@@ -34,9 +34,14 @@ extern NSString * __nonnull const VSLNotificationUserInfoWindowIdKey;
 extern NSString * __nonnull const VSLNotificationUserInfoWindowSizeKey;
 
 /**
- * Key of be used for retrieving the currentCall state out of the NSSNotification user info dict.
+ * Key to be used for retrieving the currentCall state out of the NSSNotification user info dict.
  */
 extern NSString * __nonnull const VSLNotificationUserInfoCallStateKey;
+
+/**
+ *  Key to be used for retrieving the current audio state for call out of the NSNotificaton user info dict.
+ */
+extern NSString * __nonnull const VSLNotificationUserInfoCallAudioStateKey;
 
 /**
  *  Possible errors the VialerSIPLib can return.
