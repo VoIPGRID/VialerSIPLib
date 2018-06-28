@@ -145,7 +145,7 @@ typedef NS_ENUM(NSInteger, VSLMediaState) {
 };
 #define VSLMediaStateString(VSLMediaState) [@[@"VSLMediaStateNone", @"VSLMediaStateActive", @"VSLMediaStateLocalHold", @"VSLMediaStateRemoteHold", @"VSLMediaStateError"] objectAtIndex:VSLMediaState]
 
-typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
+typedef NS_ENUM(NSInteger, VSLCallTransferState) {
     VSLCallTransferStateUnkown,
     VSLCallTransferStateInitialized,
     VSLCallTransferStateTrying,
@@ -153,6 +153,26 @@ typedef  NS_ENUM(NSInteger, VSLCallTransferState) {
     VSLCallTransferStateRejected,
 };
 #define VSLCallTransferStateString(VSLCallTransferState) [@[@"VSLCallTransferStateUnkown", @"VSLCallTransferStateInitialized", @"VSLCallTransferStateTrying", @"VSLCallTransferStateAccepted", @"VSLCallTransferStateRejected"] objectAtIndex:VSLCallTransferState]
+
+typedef NS_ENUM(NSInteger, VSLCallAudioState) {
+    /**
+     *  There is audio for the call.
+     */
+    VSLCallAudioStateOK,
+    /**
+     *  There hasn't been any audio received during the call.
+     */
+    VSLCallAudioStateNoAudioReceiving,
+    /**
+     *  There wasn't any audio transmitted.
+     */
+    VSLCallAudioStateNoAudioTransmitting,
+    /**
+     *  There wasn't any audio in both directions.
+     */
+    VSLCallAudioStateNoAudioBothDirections,
+};
+#define VSLCallAudioStateString(VSLCallAudioState) [@[@"VSLCallAudioStateOK", @"VSLCallAudioStateNoAudioReceiving", @"VSLCallAudioStateNoAudioTransmitting", @"VSLCallAudioStateNoAudioBothDirections"] objectAtIndex:VSLCallAudioState]
 
 typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
     VSLCallTerminateReasonUnknown,
@@ -173,9 +193,14 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 #pragma mark - Properties
 
 /**
- *  The callId which a incoming call receives from PJSIP when it is created.
+ *  The callId which a call receives from PJSIP when it is created.
  */
 @property (readonly, nonatomic) NSInteger callId;
+
+/**
+ * The Call-ID that is present in the SIP messages.
+ */
+@property (readonly, nonatomic) NSString * _Nonnull messageCallId;
 
 /**
  *  All created calls get an unique ID.
@@ -191,6 +216,11 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  The state in which the call currently has.
  */
 @property (readonly, nonatomic) VSLCallState callState;
+
+/**
+ *  There state in which the audio is for the call.
+ */
+@property (readonly, nonatomic) VSLCallAudioState callAudioState;
 
 /**
  *  The state text which the call currently has.

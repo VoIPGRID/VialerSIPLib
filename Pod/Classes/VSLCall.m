@@ -37,6 +37,7 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
 @property (readwrite, nonatomic) NSString *callerName;
 @property (readwrite, nonatomic) NSString *callerNumber;
 @property (readwrite, nonatomic) NSInteger callId;
+@property (readwrite, nonatomic) NSString *messageCallId;
 @property (readwrite, nonatomic) NSUUID *uuid;
 @property (readwrite, nonatomic) BOOL incoming;
 @property (strong, nonatomic) VSLRingback *ringback;
@@ -54,6 +55,9 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
 @property (nonatomic) BOOL reinviteCall;
 @property (readwrite, nonatomic) NSTimer *audioCheckTimer;
 @property (readwrite, nonatomic) int audioCheckTimerFired;
+@property (readwrite, nonatomic) VSLCallAudioState callAudioState;
+@property (readwrite, nonatomic) int previousRxPkt;
+@property (readwrite, nonatomic) int previousTxPkt;
 /**
  *  Stats
  */
@@ -377,6 +381,10 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
     self.lastStatus = callInfo.last_status;
     self.lastStatusText = [NSString stringWithPJString:callInfo.last_status_text];
 
+    if (self.messageCallId == nil) {
+        self.messageCallId = [NSString stringWithPJString:callInfo.call_id];
+    }
+
     if (self.callState != VSLCallStateDisconnected) {
         self.localURI = [NSString stringWithPJString:callInfo.local_info];
         self.remoteURI = [NSString stringWithPJString:callInfo.remote_info];
@@ -420,12 +428,6 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
     pjsua_call_info callInfo;
     pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
 
-    if (self.audioCheckTimerFired > 5) {
-        VSLLogInfo(@"There was audio in the last 10 seconds");
-        [self.audioCheckTimer invalidate];
-        self.audioCheckTimerFired = 0;
-    }
-
     if (callInfo.media_status != PJSUA_CALL_MEDIA_ACTIVE) {
         VSLLogDebug(@"Unable to check if audio present no active stream!");
         self.audioCheckTimerFired++;
@@ -440,11 +442,24 @@ NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNoti
         int rxPkt = stream_stat.rtcp.rx.pkt;
         int txPkt = stream_stat.rtcp.tx.pkt;
 
-        if (rxPkt == 0 || txPkt == 0) {
-            VSLLogInfo(@"There is NO audio %f: sec into the call. Trying a reinvite", self.lastSeenConnectDuration);
-            [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallNoAudioForCallNotification object:nil];
-            [self.audioCheckTimer invalidate];
+        if ((rxPkt == 0 && txPkt == 0) || (rxPkt == self.previousRxPkt && txPkt == self.previousTxPkt)) {
+            self.callAudioState = VSLCallAudioStateNoAudioBothDirections;
+        } else if (txPkt == 0 || txPkt == self.previousTxPkt) {
+            self.callAudioState = VSLCallAudioStateNoAudioTransmitting;
+        } else if (rxPkt == 0 || rxPkt == self.previousRxPkt) {
+            self.callAudioState = VSLCallAudioStateNoAudioReceiving;
+        } else {
+            self.callAudioState = VSLCallAudioStateOK;
         }
+
+        self.previousRxPkt = rxPkt;
+        self.previousTxPkt = txPkt;
+
+        NSDictionary *notificationUserInfo = @{
+                                               VSLNotificationUserInfoCallKey : self,
+                                               VSLNotificationUserInfoCallAudioStateKey: [NSNumber numberWithInt:self.callAudioState]
+                                               };
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallNoAudioForCallNotification object:notificationUserInfo];
     }
 
     self.audioCheckTimerFired++;
