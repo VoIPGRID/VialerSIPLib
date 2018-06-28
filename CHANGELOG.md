@@ -3,7 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [3.2.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.1.2) (06/15/2018)
+## [3.3.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.3.0) (06/28/2018)
+Released on Thursday, June 28, 2018.
+
+### Added
+- Add a notification and state for audio during a call. (#145)
+- The call-ID is being set in the SIP message is now added to VSLCall. (#144)
+
+## [3.2.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.2.0) (06/15/2018)
 Released on Friday, June 15, 2018.
 
 ### Added
@@ -44,8 +51,8 @@ Released on Monday, February 19, 2018.
 ### Added
 - Ability to use Stun servers.
 
-### 
-- Fixes for the previous release secure calling. Extra file for the IP Change configuration for PJSIP. 
+###
+- Fixes for the previous release secure calling. Extra file for the IP Change configuration for PJSIP.
 
 ## [3.0.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.0.0) (01/22/2018)
 Released on Monday, Januari 22, 2018.
