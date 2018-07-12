@@ -576,6 +576,32 @@ static void logCallBack(int logLevel, const char *data, int len) {
             VSLLogVerbose(@"%@", logString);
             break;
     }
+
+    NSString *searchedString = logString;
+    NSRange searchedRange = NSMakeRange(0, [searchedString length]);
+    NSString *pattern = @"(?:.*)/([A-Z]+)/(?:.*)SIP/2.0 ([4|5]{1}[0-9]{2}) ([A-Za-z ]+)?(?:.*)Call-ID: ([A-Za-z0-9@.]+)?";
+    NSError *error = nil;
+
+    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: pattern options:NSRegularExpressionDotMatchesLineSeparators error:&error];
+    NSArray* matches = [regex matchesInString:searchedString options:0 range: searchedRange];
+    for (NSTextCheckingResult* match in matches) {
+        NSString *method = [searchedString substringWithRange:[match rangeAtIndex:1]];
+        NSString *statusCode = [searchedString substringWithRange:[match rangeAtIndex:2]];
+        NSString *statusMessage = [searchedString substringWithRange:[match rangeAtIndex:3]];
+        NSString *callId = [searchedString substringWithRange:[match rangeAtIndex:4]];
+
+        if (![method isEqualToString:@"REGISTER"]) {
+            NSDictionary *notificationUserInfo = @{
+                                                   VSLNotificationUserInfoErrorStatusCodeKey : statusCode,
+                                                   VSLNotificationUserInfoErrorStatusMessageKey: statusMessage,
+                                                   VSLNotificationUserInfoCallIdKey: callId
+                                                   };
+            [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallErrorDuringSetupCallNotification
+                                                                object:nil
+                                                              userInfo:notificationUserInfo];
+        }
+    }
+
 }
 
 static void onCallState(pjsua_call_id callId, pjsip_event *event) {

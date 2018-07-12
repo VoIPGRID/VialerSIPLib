@@ -25,6 +25,7 @@ NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
 NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
 NSString * const VSLCallDeallocNotification = @"VSLCallDeallocNotification";
 NSString * const VSLCallNoAudioForCallNotification = @"VSLCallNoAudioForCallNotification";
+NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringSetupCallNotification";
 
 @interface VSLCall()
 @property (readwrite, nonatomic) VSLCallState callState;
