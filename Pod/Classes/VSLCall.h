@@ -33,6 +33,11 @@ extern NSString * _Nonnull const VSLCallDeallocNotification;
 extern NSString * _Nonnull const VSLCallNoAudioForCallNotification;
 
 /**
+ * Notification for when there is an error setting up a call.
+ */
+extern NSString * _Nonnull const VSLCallErrorDuringSetupCallNotification;
+
+/**
  *  Notification that will be posted when a phonecall is connected.
  */
 extern NSString * _Nonnull const VSLCallConnectedNotification DEPRECATED_MSG_ATTRIBUTE("Deprecated, listen for VSLCallStateChangedNotification instead");
