@@ -44,6 +44,17 @@ extern NSString * __nonnull const VSLNotificationUserInfoCallStateKey;
 extern NSString * __nonnull const VSLNotificationUserInfoCallAudioStateKey;
 
 /**
+ *  Key to be used for retrieving the status code when there is an error setting up a call.
+ */
+extern NSString * __nonnull const VSLNotificationUserInfoErrorStatusCodeKey;
+
+/**
+ *  Key to be used for retrieving the status message when there is an error setting up a call.
+ */
+extern NSString * __nonnull const VSLNotificationUserInfoErrorStatusMessageKey;
+
+
+/**
  *  Possible errors the VialerSIPLib can return.
  */
 typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {

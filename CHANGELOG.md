@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [3.3.1](https://github.com/VoIPGRID/VialerSIPLib/tree/3.3.1) (07/17/2018)
+Released on Tuesday, July 17, 2018.
+
+### Added
+- Post notification when there is an error aftter an register (#149)
+
 ## [3.3.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.3.0) (06/28/2018)
 Released on Thursday, June 28, 2018.
 
