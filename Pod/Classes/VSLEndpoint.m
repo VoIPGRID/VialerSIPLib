@@ -32,6 +32,7 @@ static void onNatDetect(const pj_stun_nat_detect_result *res);
 static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_event *event);
 static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_event *event);
 static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info);
+static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info);
 
 @interface VSLEndpoint()
 @property (strong, nonatomic) VSLEndpointConfiguration *endpointConfiguration;
@@ -184,6 +185,8 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
     endpointConfig.cb.on_call_media_event = &onCallMediaEvent;
     endpointConfig.cb.on_call_tsx_state = &onTxStateChange;
     endpointConfig.cb.on_ip_change_progress = &onIpChangeProgress;
+    endpointConfig.cb.on_transport_state = &onTransportStateChanged;
+
     endpointConfig.max_calls = (unsigned int)endpointConfiguration.maxCalls;
     endpointConfig.user_agent = endpointConfiguration.userAgent.pjString;
 
@@ -914,6 +917,20 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
                 [VSLEndpoint sharedEndpoint].missedCallBlock(call);
             } else {
                 VSLLogWarning(@"Received updated CallState(%@) for UNKNOWN call(id: %d)", VSLCallStateString(callInfo.state) , call_id);
+            }
+        }
+    }
+}
+
+static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info) {
+    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration]) {
+        VSLCallManager *callManager = [VSLEndpoint sharedEndpoint].callManager;
+        for (VSLAccount *account in [VSLEndpoint sharedEndpoint].accounts) {
+            VSLCall *call = [callManager firstCallForAccount:account];
+            if (call != nil && ![VSLEndpoint sharedEndpoint].ipChangeInProgress && state == PJSIP_TP_STATE_CONNECTED) {
+                VSLLogInfo(@"There has been a new transport created. Reinivite the calls to keep the call going.");
+                [call reinvite];
+                VSLLogError(@"State: %u", state);
             }
         }
     }
