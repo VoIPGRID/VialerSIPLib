@@ -15,15 +15,10 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
 
 @implementation VSLAudioController
 
-- (instancetype)init {
-    if (self = [super init]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioInterruption:) name:AVAudioSessionInterruptionNotification object:nil];
-    }
-    return self;
-}
-
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:AVAudioSessionInterruptionNotification
+                                                  object:nil];
 }
 
 - (BOOL)hasBluetooth {
@@ -86,23 +81,41 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
     }
 }
 
-- (void)activateAudioSession {
+- (BOOL)activateSoundDevice {
     VSLLogDebug(@"Activating audiosession");
     [self checkCurrentThreadIsRegisteredWithPJSUA];
-
     pjsua_set_no_snd_dev();
-
-    pj_status_t status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
-
-    if (status != PJ_SUCCESS) {
+    pj_status_t status;
+    status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
+    if (status == PJ_SUCCESS) {
+        return YES;
+    } else {
         VSLLogWarning(@"Failure in enabling sound device");
+        return NO;
     }
 }
 
-- (void)deactivateAudioSession {
+- (void)activateAudioSession {
+    if ([self activateSoundDevice]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(audioInterruption:)
+                                                     name:AVAudioSessionInterruptionNotification
+                                                   object:nil];
+    }
+}
+
+- (void)deactivateSoundDevice {
     VSLLogDebug(@"Deactivating audiosession");
     [self checkCurrentThreadIsRegisteredWithPJSUA];
     pjsua_set_no_snd_dev();
+
+}
+
+- (void)deactivateAudioSession {
+    [self deactivateSoundDevice];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:AVAudioSessionInterruptionNotification
+                                                  object:nil];
 }
 
 /**
@@ -116,14 +129,13 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
 - (void)audioInterruption:(NSNotification *)notification {
     NSInteger avInteruptionType = [[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] intValue];
     if (avInteruptionType == AVAudioSessionInterruptionTypeBegan) {
-        [self deactivateAudioSession];
+        [self deactivateSoundDevice];
         [[NSNotificationCenter defaultCenter] postNotificationName:VSLAudioControllerAudioInterrupted
                                                             object:self
                                                           userInfo:nil];
 
     } else if (avInteruptionType == AVAudioSessionInterruptionTypeEnded) {
-        // Resume audio
-        [self activateAudioSession];
+        [self activateSoundDevice];
         [[NSNotificationCenter defaultCenter] postNotificationName:VSLAudioControllerAudioResumed
                                                             object:self
                                                           userInfo:nil];
