@@ -582,7 +582,7 @@ static void logCallBack(int logLevel, const char *data, int len) {
 
     NSString *searchedString = logString;
     NSRange searchedRange = NSMakeRange(0, [searchedString length]);
-    NSString *pattern = @"(?:.*)/([A-Z]+)/(?:.*)SIP/2.0 ([4|5]{1}[0-9]{2}) ([A-Za-z ]+)?(?:.*)Call-ID: ([A-Za-z0-9@.]+)?";
+    NSString *pattern = @"(?:.*)/([A-Z]+)/(?:.*)SIP/2.0 ([4|5]{1}[0-9]{2}) ([A-Za-z ]+)?(?:.*)Call-ID: ([A-Za-z0-9-@.]+)?";
     NSError *error = nil;
 
     NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: pattern options:NSRegularExpressionDotMatchesLineSeparators error:&error];
