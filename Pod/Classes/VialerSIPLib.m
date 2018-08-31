@@ -65,6 +65,10 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
     return self.endpointAvailable && self.endpoint.endpointConfiguration.hasTLSConfiguration;
 }
 
+- (BOOL)hasSTUNEnabled {
+    return self.endpointAvailable && self.endpoint.endpointConfiguration.stunConfiguration != nil && self.endpoint.endpointConfiguration.stunConfiguration.stunServers.count > 0;
+}
+
 - (VSLCallManager *)callManager {
     if (!_callManager) {
         _callManager = [[VSLCallManager alloc] init];

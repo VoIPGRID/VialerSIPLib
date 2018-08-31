@@ -200,6 +200,11 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 @property (readonly, nonatomic) BOOL hasTLSTransport;
 
+/**
+ * If the endpoint is configured to use STUN.
+ */
+@property (readonly, nonatomic) BOOL hasSTUNEnabled;
+
 /*
  *  The callManager used by the Lib.
  */
