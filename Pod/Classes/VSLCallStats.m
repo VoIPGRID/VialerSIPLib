@@ -159,8 +159,8 @@ NSString * const VSLCallStatsTotalMBsUsed = @"VSLCallStatsTotalMBsUsed";
                                        VSLCallStatsCodecFrameSize: @4.0
                                        },
                                @"iLBC": @{
-                                       VSLCallStatsCodecImpairments: @11.0,
-                                       VSLCallStatsBPL: @32.0,
+                                       VSLCallStatsCodecImpairments: @32.0,
+                                       VSLCallStatsBPL: @50.0,
                                        VSLCallStatsCodecFrameSize: @25.0
                                        },
                                @"Speex": @{
@@ -172,7 +172,12 @@ NSString * const VSLCallStatsTotalMBsUsed = @"VSLCallStatsTotalMBsUsed";
                                        VSLCallStatsCodecImpairments: @28.0,
                                        VSLCallStatsBPL: @34.0,
                                        VSLCallStatsCodecFrameSize: @25.0
-                                       }
+                                       },
+                               @"opus": @{
+                                       VSLCallStatsCodecImpairments: @11.0,
+                                       VSLCallStatsBPL: @12.0,
+                                       VSLCallStatsCodecFrameSize: @20.0
+                                       },
                                };
 
         //Sane default values based on ITU document G.107.
@@ -406,7 +411,7 @@ NSString * const VSLCallStatsTotalMBsUsed = @"VSLCallStatsTotalMBsUsed";
     float txPacketLoss = self.streamStat.rtcp.tx.loss;
     float rxPacketLossPercentage = rxPackets == 0 ? 100.0 : (rxPacketLoss / rxPackets) * 100.0f;
     float txPacketLossPercentage = txPackets == 0 ? 100.0 : (txPacketLoss / txPackets) * 100.0f;
-    float ppl = rxPacketLossPercentage + txPacketLossPercentage;
+    float ppl = (rxPacketLossPercentage + txPacketLossPercentage) / 2;
     float Ie = codecImpairment + (95 - codecImpairment) * (ppl / (ppl / burstR + bpl));
     
     return Ie;

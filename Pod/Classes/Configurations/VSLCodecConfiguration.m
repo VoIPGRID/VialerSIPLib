@@ -5,8 +5,6 @@
 
 #import "VSLCodecConfiguration.h"
 
-#import "VSLAudioCodecs.h"
-#import "VSLVideoCodecs.h"
 #import "NSString+PJString.h"
 
 @implementation VSLCodecConfiguration
@@ -37,6 +35,13 @@
     return @[
              [[VSLVideoCodecs alloc] initWithVideoCodec:VSLVideoCodecH264 andPriority:210]
              ];
+}
+
+- (VSLOpusConfiguration *)opusConfiguration {
+    if (!_opusConfiguration) {
+        _opusConfiguration = [[VSLOpusConfiguration alloc] init];
+    }
+    return _opusConfiguration;
 }
 
 @end
