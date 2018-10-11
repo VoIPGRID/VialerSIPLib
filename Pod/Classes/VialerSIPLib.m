@@ -99,6 +99,10 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
     }
 }
 
+- (BOOL)updateCodecConfiguration:(VSLCodecConfiguration *)codecConfiguration {
+    return [self.endpoint updateCodecConfiguration:codecConfiguration];
+}
+
 - (VSLAccount *)createAccountWithSipUser:(id<SIPEnabledUser>  _Nonnull __autoreleasing)sipUser error:(NSError * _Nullable __autoreleasing *)error {
     VSLAccount *account = [self.endpoint getAccountWithSipAccount:sipUser.sipAccount];
 
@@ -224,10 +228,6 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
         return YES;
     }
     return NO;
-}
-
-- (void)onlyUseIlbc:(BOOL)activate {
-    [self.endpoint onlyUseILBC:activate];
 }
 
 @end

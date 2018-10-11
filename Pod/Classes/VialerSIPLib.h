@@ -8,6 +8,7 @@
 #import "VSLAccountConfiguration.h"
 #import "VSLCallManager.h"
 #import "VSLCall.h"
+#import "VSLCodecConfiguration.h"
 #import "VSLEndpointConfiguration.h"
 #import "VSLIceConfiguration.h"
 #import "VSLStunConfiguration.h"
@@ -308,10 +309,10 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
 - (BOOL)anotherCallInProgress:(VSLCall * _Nonnull)call;
 
 /**
- *  Call this method to limit the codecs to only iLBC.
+ *  This will update the codec configuration on the SIP endpoint
  *
- *  @param activate BOOL, if YES, only iLBC will be used.
+ *  @param codecConfigration VSLCodecConfiguration Instance of an VSLCodecConfiguration
  */
-- (void)onlyUseIlbc:(BOOL)activate __attribute__((deprecated("Deprecated, use VSLCodecConfigurarion to add codecs to the endpoint instead")));
+- (BOOL)updateCodecConfiguration:(VSLCodecConfiguration * _Nonnull)codecConfiguration;
 
 @end

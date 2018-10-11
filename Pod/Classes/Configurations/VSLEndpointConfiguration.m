@@ -53,6 +53,13 @@ static NSUInteger const VSLEndpointConfigurationSndClockRate = 0;
     return _stunConfiguration;
 }
 
+- (VSLCodecConfiguration *)codecConfiguration {
+    if (!_codecConfiguration) {
+        _codecConfiguration = [[VSLCodecConfiguration alloc] init];
+    }
+    return _codecConfiguration;
+}
+
 - (void)setLogLevel:(NSUInteger)logLevel {
     NSAssert(logLevel > 0, @"Log level needs to be set higher than 0");
     _logLevel = logLevel;

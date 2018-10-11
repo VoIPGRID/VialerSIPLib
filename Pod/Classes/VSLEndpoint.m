@@ -264,13 +264,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     self.endpointConfiguration = endpointConfiguration;
     self.state = VSLEndpointStarted;
 
-    if (self.endpointConfiguration.codecConfiguration != NULL) {
-        [self updateAudioCodecs];
-        [self updateVideoCodecs];
-    } else {
-        [self updateCodecs];
-    }
-
+    [self updateAudioCodecs];
+    [self updateVideoCodecs];
+    
     return YES;
 }
 
@@ -333,6 +329,18 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     self.state = VSLEndpointStopped;
 }
 
+- (BOOL)updateCodecConfiguration:(VSLCodecConfiguration *)codecConfiguration {
+    if (self.state != VSLEndpointStarted) {
+        return NO;
+    }
+
+    self.endpointConfiguration.codecConfiguration = codecConfiguration;
+    [self updateAudioCodecs];
+    [self updateVideoCodecs];
+
+    return YES;
+}
+
 #pragma mark - Account functions
 
 - (void)addAccount:(VSLAccount *)account {
@@ -376,87 +384,6 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
 
 #pragma mark - codecs
 
-- (void)onlyUseILBC:(BOOL)activate {
-    if (self.onlyUseILBC == activate) {
-        return;
-    }
-    self.onlyUseILBC = activate;
-    if (![self updateCodecs]) {
-        self.onlyUseILBC = !activate;
-    }
-}
-
-- (BOOL)updateCodecs {
-    if (self.state != VSLEndpointStarted) {
-        return NO;
-    }
-
-    const unsigned codecInfoSize = 64;
-    pjsua_codec_info codecInfo[codecInfoSize];
-    unsigned codecCount = codecInfoSize;
-    pj_status_t status = pjsua_enum_codecs(codecInfo, &codecCount);
-    if (status != PJ_SUCCESS) {
-        VSLLogError(@"Error getting list of codecs");
-        return NO;
-    } else {
-        for (NSUInteger i = 0; i < codecCount; i++) {
-            NSString *codecIdentifier = [NSString stringWithPJString:codecInfo[i].codec_id];
-            pj_uint8_t priority = [self priorityForCodec:codecIdentifier];
-            status = pjsua_codec_set_priority(&codecInfo[i].codec_id, priority);
-            if (status != PJ_SUCCESS) {
-                VSLLogError(@"Error setting codec priority to the correct value");
-                return NO;
-            }
-        }
-    }
-    return YES;
-}
-
-- (pj_uint8_t)priorityForCodec:(NSString *)identifier {
-    NSDictionary *priorities;
-    if (self.onlyUseILBC) {
-        priorities = @{
-                       // G711a
-                       @"PCMA/8000/1":      @0,
-                       // G722
-                       @"G722/16000/1":     @0,
-                       // iLBC
-                       @"iLBC/8000/1":      @210,
-                       // G711
-                       @"PCMU/8000/1":      @0,
-                       // Speex 8 kHz
-                       @"speex/8000/1":     @0,
-                       // Speex 16 kHz
-                       @"speex/16000/1":    @0,
-                       // Speex 32 kHz
-                       @"speex/32000/1":    @0,
-                       // GSM 8 kHZ
-                       @"GSM/8000/1":       @0,
-                       };
-
-    } else {
-        priorities = @{
-                       // G711a
-                       @"PCMA/8000/1":      @210,
-                       // G722
-                       @"G722/16000/1":     @209,
-                       // iLBC
-                       @"iLBC/8000/1":      @208,
-                       // G711
-                       @"PCMU/8000/1":      @0,
-                       // Speex 8 kHz
-                       @"speex/8000/1":     @0,
-                       // Speex 16 kHz
-                       @"speex/16000/1":    @0,
-                       // Speex 32 kHz
-                       @"speex/32000/1":    @0,
-                       // GSM 8 kHZ
-                       @"GSM/8000/1":       @0,
-                       };
-    }
-    return (pj_uint8_t)[priorities[identifier] unsignedIntegerValue];
-}
-
 -(BOOL)updateAudioCodecs {
     if (self.state != VSLEndpointStarted) {
         return NO;
@@ -474,7 +401,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     for (NSUInteger i = 0; i < audioCodecCount; i++) {
         NSString *codecIdentifier = [NSString stringWithPJString:audioCodecInfo[i].codec_id];
         pj_uint8_t priority = [self priorityForAudioCodec:codecIdentifier];
-        status = pjsua_codec_set_priority(&audioCodecInfo[i].codec_id, priority);
+        pj_str_t codecId = audioCodecInfo[i].codec_id;
+        status = pjsua_codec_set_priority(&codecId, priority);
+        [self updateOpusSettings:codecId];
         if (status != PJ_SUCCESS) {
             VSLLogError(@"Error setting codec priority to the correct value");
             return NO;
@@ -492,6 +421,37 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
         }
     }
     return (pj_uint8_t)priority;
+}
+
+- (void)updateOpusSettings:(pj_str_t)codecId {
+    for (VSLAudioCodecs* audioCodec in self.endpointConfiguration.codecConfiguration.audioCodecs) {
+        if ([VSLAudioCodecString(audioCodec.codec) isEqualToString:VSLAudioCodecString(VSLAudioCodecOpus)]) {
+            VSLOpusConfiguration *opusConfiguration = self.endpointConfiguration.codecConfiguration.opusConfiguration;
+            pjmedia_codec_mgr *endpointMgr = [self getPjMediaCodecManager];
+
+            unsigned count = 1;
+
+            const pjmedia_codec_info *codecInfo;
+            pjmedia_codec_param param;
+            pjmedia_codec_opus_config opus_cfg;
+
+            pjmedia_codec_mgr_find_codecs_by_id(endpointMgr, &codecId, &count, &codecInfo, NULL);
+            pjmedia_codec_mgr_get_default_param(endpointMgr, codecInfo, &param);
+            pjmedia_codec_opus_get_config(&opus_cfg);
+
+            // Set sample rate
+            opus_cfg.sample_rate = opusConfiguration.sampleRate;
+            opus_cfg.cbr = opusConfiguration.constantBitRate ? PJ_TRUE : PJ_FALSE;
+            opus_cfg.frm_ptime = opusConfiguration.frameDuration;
+            opus_cfg.complexity = (int)opusConfiguration.complexity;
+
+            pjmedia_codec_opus_set_default_param(&opus_cfg, &param);
+        }
+    }
+}
+
+-(pjmedia_codec_mgr *)getPjMediaCodecManager {
+    return pjmedia_endpt_get_codec_mgr(pjsua_get_pjmedia_endpt());
 }
 
 -(BOOL)updateVideoCodecs {
