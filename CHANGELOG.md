@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [3.4.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.4.0) (09/11/2018)
+
+Released on Thursday, October 1, 2018.
+
+Removed some old deprecated functions for configuring the codecs.
+See the Example project on how to configure the codecs for the endpoint.
+
+### Added
+
+- Ability to add a configuration for the OPUS codec. (#156)
+
 ## [3.3.4](https://github.com/VoIPGRID/VialerSIPLib/tree/3.3.4) (07/17/2018)
 
 Released on Firday, August 31, 2018.
