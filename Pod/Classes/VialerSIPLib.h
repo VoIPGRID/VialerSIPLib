@@ -311,7 +311,7 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
 /**
  *  This will update the codec configuration on the SIP endpoint
  *
- *  @param codecConfigration VSLCodecConfiguration Instance of an VSLCodecConfiguration
+ *  @param codecConfiguration VSLCodecConfiguration Instance of an VSLCodecConfiguration
  */
 - (BOOL)updateCodecConfiguration:(VSLCodecConfiguration * _Nonnull)codecConfiguration;
 
