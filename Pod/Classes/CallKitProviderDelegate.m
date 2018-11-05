@@ -71,10 +71,15 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 - (void)reportIncomingCall:(VSLCall *)call {
     if (@available(iOS 10.0, *)) {
         CXCallUpdate *update = [[CXCallUpdate alloc] init];
-        CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:call.callerNumber];
-        update.remoteHandle = handle;
         update.localizedCallerName = call.callerName;
         
+        NSString * handleValue = @"";
+        if ([update.localizedCallerName length] == 0) { // Doing this to not let the caller contact name override the platform's one
+            handleValue = call.callerNumber;
+        }
+        CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:handleValue];
+        update.remoteHandle = handle;
+  
         VSLLogVerbose(@"UUID as sent to CallKit provider: %@", call.uuid.UUIDString);
         [self.provider reportNewIncomingCallWithUUID:call.uuid update:update completion:^(NSError * _Nullable error) {
             if (error) {
