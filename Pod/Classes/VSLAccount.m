@@ -305,7 +305,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
     pjsip_status_code code = accountInfo.status;
 
-    if (code == 0 || accountInfo.expires == -1) {
+    if (code == 0 || ((code != PJSIP_SC_FORBIDDEN && code != PJSIP_SC_UNAUTHORIZED) && accountInfo.expires == -1)) {
         self.accountState = VSLAccountStateDisconnected;
         if (self.shouldReregister) {
             [self registerAccountWithCompletion:^(BOOL success, NSError * _Nullable error) {
@@ -334,6 +334,23 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         }
     } else {
         self.accountState = VSLAccountStateDisconnected;
+        // SIP account info is incorrect!
+        if (code == PJSIP_SC_FORBIDDEN || code == PJSIP_SC_UNAUTHORIZED) {
+            VSLLogWarning(@"Account is invalid! SIP info not correct.");
+            // Remove the invalid account.
+            [self removeAccount];
+            // Post a notification so the user could be informed.
+            if (self.registrationCompletionBlock) {
+                NSError *error = [NSError VSLUnderlyingError:nil
+                                    localizedDescriptionKey:NSLocalizedString(@"Account unregistration failed", nil)
+                                localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), code]
+                                                errorDomain:VSLAccountErrorDomain
+                                                  errorCode:VSLAccountErrorRegistrationFailed];
+                self.registrationCompletionBlock(NO, error);
+                self.registrationCompletionBlock = nil;
+                self.registrationInProgress = NO;
+            }
+        }
     }
 }
 

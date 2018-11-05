@@ -160,7 +160,7 @@ typedef NS_ENUM(NSInteger, VSLEndpointState) {
 /**
  *  This will update the codec configuration.
  *
- *  @param codecConfigration VSLCodecConfiguration Instance of an VSLCodecConfiguration
+ *  @param codecConfiguration VSLCodecConfiguration Instance of an VSLCodecConfiguration
  */
 - (BOOL)updateCodecConfiguration:(VSLCodecConfiguration * _Nonnull)codecConfiguration;
 @end
