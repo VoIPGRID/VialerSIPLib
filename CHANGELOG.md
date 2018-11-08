@@ -4,9 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [3.4.1](https://github.com/VoIPGRID/VialerSIPLib/tree/3.4.1) (11/08/2018)
+
+Released on Thursday, November 8, 2018.
+
+### Fixed
+
+- When account registration returns a Forbidden or Unauthorized remove the account from the endpoint (#163)
+- Updated the prioritization that the caller info coming from the PBX has higher priority then the phonebook (#164)
+
 ## [3.4.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.4.0) (09/11/2018)
 
-Released on Thursday, October 1, 2018.
+Released on Thursday, October 11, 2018.
 
 Removed some old deprecated functions for configuring the codecs.
 See the Example project on how to configure the codecs for the endpoint.
