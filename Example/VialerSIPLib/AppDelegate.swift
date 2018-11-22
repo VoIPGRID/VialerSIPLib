@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         setupLogCallBack()
-        setupVialerEndpoint()
+        setupVoIPEndpoint()
         setupAccount()
         return true
     }
@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         providerDelegate = CallKitProviderDelegate(callManager: VialerSIPLib.sharedInstance().callManager)
     }
 
-    func setupVialerEndpoint() {
+    func setupVoIPEndpoint() {
         let prefs = UserDefaults.standard
         let transportType = prefs.string(forKey: "transportType")
         var transportToUse: [VSLTransportConfiguration] {
@@ -90,6 +90,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch let error {
             DDLogWrapper.logError("Error setting up VialerSIPLib: \(error)")
         }
+    }
+
+    func stopVoIPEndPoint() {
+        VialerSIPLib.sharedInstance().removeEndpoint()
     }
 
     func setupAccount() {
