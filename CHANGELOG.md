@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [3.4.2](https://github.com/VoIPGRID/VialerSIPLib/tree/3.4.2) (11/22/2018)
+
+Released on Thursday, November 22, 2018
+
+### Fixed
+- Changed the way how in some VSLAccount functions is being checked on invalid accounts
+
 ## [3.4.1](https://github.com/VoIPGRID/VialerSIPLib/tree/3.4.1) (11/08/2018)
 
 Released on Thursday, November 8, 2018.
