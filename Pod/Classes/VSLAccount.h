@@ -25,11 +25,15 @@ typedef NS_ENUM(NSInteger, VSLAccountErrors) {
      */
     VSLAccountErrorRegistrationFailed,
     /**
+     *  Unable to register the account because account is invalid.
+     */
+    VSLAccountErrorInvalidAccount,
+    /**
      *  When the account has invalid info and registrations fails with a 403.
      */
     VSLAccountErrorRegistrationFailedInvalidAccount
 };
-#define VSLAccountErrorsString(VSLAccountErrors) [@[@"VSLAccountErrorCannotConfigureAccount", @"VSLAccountErrorFailedCallingNumber", @"VSLAccountErrorRegistrationFailed", @"VSLAccountErrorRegistrationFailedInvalidAccount"] objectAtIndex:VSLAccountErrors]
+#define VSLAccountErrorsString(VSLAccountErrors) [@[@"VSLAccountErrorCannotConfigureAccount", @"VSLAccountErrorFailedCallingNumber", @"VSLAccountErrorRegistrationFailed", @"VSLAccountErrorInvalidAccount", @"VSLAccountErrorRegistrationFailedInvalidAccount"] objectAtIndex:VSLAccountErrors]
 
 /**
  *  Possible states for an account.

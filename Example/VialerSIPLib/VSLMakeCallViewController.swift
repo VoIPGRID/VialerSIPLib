@@ -23,16 +23,7 @@ class VSLMakeCallViewController: UIViewController {
     var call: VSLCall?
     var callManager: VSLCallManager!
 
-    fileprivate var number: String {
-        set {
-            numberToDialLabel?.text = newValue
-            callButton?.isEnabled = newValue != ""
-            deleteButton?.isEnabled = newValue != ""
-        }
-        get {
-            return numberToDialLabel.text!
-        }
-    }
+    fileprivate var number: String = "\(Keys.NumberToCall)"
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -64,10 +55,14 @@ class VSLMakeCallViewController: UIViewController {
 
     @IBAction func keypadButtonPressed(_ sender: UIButton) {
         number = number + sender.currentTitle!
+        numberToDialLabel.text = number
+        updateUI()
     }
 
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
         number = number.substring(to: number.characters.index(number.endIndex, offsetBy: -1))
+        numberToDialLabel.text = number
+        updateUI()
     }
 
     @IBAction func callButtonPressed(_ sender: UIButton) {

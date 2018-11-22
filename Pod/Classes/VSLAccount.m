@@ -61,7 +61,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 }
 
 - (NSInteger)registrationStatus {
-    if (self.accountId == PJSUA_INVALID_ID) {
+    if (!self.isAccountValid) {
         return 0;
     }
     pjsua_acc_info accountInfo;
@@ -75,7 +75,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 }
 
 - (NSInteger)registrationExpiresTime {
-    if (self.accountId == PJSUA_INVALID_ID) {
+    if (!self.isAccountValid) {
         return -1;
     }
 
@@ -217,6 +217,21 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 - (void)registerAccountWithCompletion:(RegistrationCompletionBlock)completion {
     VSLLogDebug(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
     VSLLogDebug(@"Should force registration: %@", self.forceRegistration ? @"YES" : @"NO");
+
+    if (!self.isAccountValid) {
+        VSLLogError(@"Account registration failed, invalid account!");
+        NSError *error = [NSError VSLUnderlyingError:nil
+                             localizedDescriptionKey:NSLocalizedString(@"Account is invalid, invalid account!", nil)
+                         localizedFailureReasonError:NSLocalizedString(@"Account is invalid, invalid account!", nil)
+                                         errorDomain:VSLAccountErrorDomain
+                                           errorCode:VSLAccountErrorInvalidAccount];
+        completion(NO, error);
+        if (self.registrationCompletionBlock) {
+            self.registrationCompletionBlock = completion;
+        }
+        return;
+    }
+
     pjsua_acc_info info;
     pjsua_acc_get_info((pjsua_acc_id)self.accountId, &info);
 
