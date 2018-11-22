@@ -92,8 +92,8 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         let prefs = UserDefaults.standard
         prefs.set(sender.isOn, forKey: "useVideo")
         account.removeObserver(self, forKeyPath: #keyPath(VSLAccount.accountState))
-        VialerSIPLib.sharedInstance().removeEndpoint()
-        appDelegate.setupVialerEndpoint()
+        appDelegate.stopVoIPEndPoint();
+        appDelegate.setupVoIPEndpoint()
         appDelegate.setupAccount()
         account.addObserver(self, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
     }
@@ -104,8 +104,8 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             let prefs = UserDefaults.standard
             prefs.set(sender.isOn, forKey: "unregisterAfterCall")
             self!.account.removeObserver(self!, forKeyPath: #keyPath(VSLAccount.accountState))
-            VialerSIPLib.sharedInstance().removeEndpoint()
-            appDelegate.setupVialerEndpoint()
+            appDelegate.stopVoIPEndPoint();
+            appDelegate.setupVoIPEndpoint()
             appDelegate.setupAccount()
             self!.account.addObserver(self!, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
         }
@@ -139,7 +139,8 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         account.removeObserver(self, forKeyPath: #keyPath(VSLAccount.accountState))
         VialerSIPLib.sharedInstance().removeEndpoint()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        appDelegate.setupVialerEndpoint()
+        appDelegate.stopVoIPEndPoint();
+        appDelegate.setupVoIPEndpoint()
         appDelegate.setupAccount()
         account.addObserver(self, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
     }
@@ -177,6 +178,12 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         account.register{ (success, error) in
             DispatchQueue.main.async {
                 self.registerAccountButton.isEnabled = true
+                if (error != nil) {
+
+                    let alert = UIAlertController(title: NSLocalizedString("Account registration failed", comment: ""), message: error?.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                }
             }
         }
     }
