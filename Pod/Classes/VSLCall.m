@@ -403,11 +403,8 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         }
         
         if (self.invite != nil && [self.invite hasRemotePartyId]) {
-            NSLog(@"TEST123: USING REMOTE-PARTY-ID");
             self.callerName = [self.invite getRemotePartyIdName];
             self.callerNumber = [self.invite getRemotePartyIdNumber];
-        } else {
-            NSLog(@"TEST123: NOT USING REMOTE-PARTY-ID");
         }
     }
 }

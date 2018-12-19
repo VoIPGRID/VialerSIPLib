@@ -10,41 +10,20 @@ static NSString *const REMOTE_PARTY_ID_KEY = @"Remote-Party-ID";
 
 @implementation SipInvite
 
-/**
- Create this SipInvite object using the full INVITE packet.
-
- @param packet The full SIP INVITE packet.
- @return An instance of SipInvite
- */
 - (instancetype _Nullable)initWithInvitePacket:(char*)packet {
     [self extractRemotePartyIdFromPacket:packet];
 
     return self;
 }
 
-/**
- Check if this INVITE contained a REMOTE-PARTY-ID SIP header.
-
- @return TRUE if the INVITE contained the header, otherwise FALSE.
- */
 - (bool) hasRemotePartyId {
     return [self.remotePartyId objectForKey:@"caller_number"] != nil;
 }
 
-/**
- Get the caller id from the REMOTE-PARTY-ID SIP header.
- 
- @return The caller id from the REMOTE-PARTY-ID SIP header.
- */
 - (NSString *) getRemotePartyIdNumber {
     return self.remotePartyId[@"caller_number"];
 }
 
-/**
- Get the name from the REMOTE-PARTY-ID SIP header.
-
- @return The name from the REMOTE-PARTY-ID SIP header.
- */
 - (NSString *) getRemotePartyIdName {
     return self.remotePartyId[@"caller_name"];
 }
@@ -97,9 +76,7 @@ static NSString *const REMOTE_PARTY_ID_KEY = @"Remote-Party-ID";
     
     for (id line in lines) {
         if ([line hasPrefix:key]) {
-            NSString *formattedKey = [NSString stringWithFormat:@"%@: ", key];
-            NSLog(@"TEST123: >>>>%@<<<<", formattedKey);
-            return [line stringByReplacingOccurrencesOfString:formattedKey withString:@""];
+            return [line stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@: ", key] withString:@""];
         }
     }
     
