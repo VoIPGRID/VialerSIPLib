@@ -7,6 +7,7 @@
 #import "VSLAccount.h"
 #import "VSLCallStats.h"
 #import <VialerPJSIP/pjsua.h>
+#import "SipInvite.h"
 
 /**
  *  Notification which is posted when the call's state changes.
@@ -371,6 +372,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  @return VSLCall instance
  */
 - (instancetype _Nullable)initInboundCallWithCallId:(NSUInteger)callId account:(VSLAccount * _Nonnull)account;
+- (instancetype _Nullable)initInboundCallWithCallId:(NSUInteger)callId account:(VSLAccount * _Nonnull)account andInvite:(SipInvite *_Nonnull)invite;
 - (instancetype _Nullable)initWithCallId:(NSUInteger)callId accountId:(NSInteger)accountId __attribute__((unavailable("Deprecated, use -initWithCallID: andAccount: instead")));
 
 /*
@@ -494,4 +496,6 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  Will sent the UPDATE message to the call.
  */
 - (void)update;
+
++ (NSDictionary *)getCallerInfoFromRemoteUri:(NSString *)string;
 @end
