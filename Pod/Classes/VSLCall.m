@@ -402,9 +402,14 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
             self.callerNumber = callerInfo[@"caller_number"];
         }
         
-        if (self.invite != nil && [self.invite hasRemotePartyId]) {
-            self.callerName = [self.invite getRemotePartyIdName];
-            self.callerNumber = [self.invite getRemotePartyIdNumber];
+        if (self.invite != nil) {
+            if ([self.invite hasPAssertedIdentity]) {
+                self.callerName = [self.invite getPAssertedIdentityName];
+                self.callerNumber = [self.invite getPAssertedIdentityNumber];
+            } else if ([self.invite hasRemotePartyId]) {
+                self.callerName = [self.invite getRemotePartyIdName];
+                self.callerNumber = [self.invite getRemotePartyIdNumber];
+            }
         }
     }
 }

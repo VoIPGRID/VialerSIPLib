@@ -3,16 +3,19 @@
 #import "VSLCall.h"
 
 static NSString *const REMOTE_PARTY_ID_KEY = @"Remote-Party-ID";
+static NSString *const P_ASSERTED_IDENTITY_KEY = @"P-Asserted-Identity";
 
 @interface SipInvite()
 @property (readwrite, nonatomic) NSDictionary *remotePartyId;
+@property (readwrite, nonatomic) NSDictionary *pAssertedIdentity;
 @end
 
 @implementation SipInvite
 
 - (instancetype _Nullable)initWithInvitePacket:(char*)packet {
-    [self extractRemotePartyIdFromPacket:packet];
-
+    self.remotePartyId = [self extractFromLikeHeader:REMOTE_PARTY_ID_KEY FromPacket:packet];
+    self.pAssertedIdentity = [self extractFromLikeHeader:P_ASSERTED_IDENTITY_KEY FromPacket:packet];
+    
     return self;
 }
 
@@ -28,21 +31,33 @@ static NSString *const REMOTE_PARTY_ID_KEY = @"Remote-Party-ID";
     return self.remotePartyId[@"caller_name"];
 }
 
+- (bool) hasPAssertedIdentity {
+    return [self.pAssertedIdentity objectForKey:@"caller_number"] != nil;
+}
+
+- (NSString *_Nullable) getPAssertedIdentityNumber {
+    return self.pAssertedIdentity[@"caller_number"];
+}
+
+- (NSString *_Nullable) getPAssertedIdentityName {
+    return self.pAssertedIdentity[@"caller_name"];
+}
+
 /**
- Finds the REMOTE-PARTY-ID header in the invite and extracts the relevant data from it.
+ Finds the FROM-like header (i.e. a header that contains information similar to the FROM field) in the invite and extracts the relevant data from it.
 
  @param packet The full INVITE packet.
  */
-- (void) extractRemotePartyIdFromPacket:(char *)packet {
-    NSArray *remotePartyId = [self extractValueForKey:REMOTE_PARTY_ID_KEY fromPacket:packet];
+- (NSDictionary *) extractFromLikeHeader:(NSString *)header FromPacket:(char *)packet {
+    NSArray *remotePartyId = [self extractValueForKey:header fromPacket:packet];
     
     if ([remotePartyId count] <= 0) {
-        return;
+        return nil;
     }
     
     NSString *remotePartyIdAddress = remotePartyId[0];
 
-    self.remotePartyId = [VSLCall getCallerInfoFromRemoteUri:remotePartyIdAddress];
+    return [VSLCall getCallerInfoFromRemoteUri:remotePartyIdAddress];
 }
 
 /**
@@ -58,7 +73,6 @@ static NSString *const REMOTE_PARTY_ID_KEY = @"Remote-Party-ID";
     if (line == nil) {
         return nil;
     }
-    
     
     return [line componentsSeparatedByString:@";"];
 }
