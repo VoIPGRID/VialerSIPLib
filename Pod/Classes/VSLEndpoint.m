@@ -678,7 +678,10 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
     VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
         VSLLogInfo(@"Detected inbound call(%d) for account:%d", call_id, acc_id);
-        VSLCall *call = [[VSLCall alloc] initInboundCallWithCallId:call_id account:account];
+        VSLCall *call = [[VSLCall alloc]
+                         initInboundCallWithCallId:call_id
+                         account:account
+                         andInvite:[[SipInvite alloc] initWithInvitePacket:rdata->pkt_info.packet]];
         if (call) {
             [[[VialerSIPLib sharedInstance] callManager] addCall:call];
             if ([VSLEndpoint sharedEndpoint].incomingCallBlock) {

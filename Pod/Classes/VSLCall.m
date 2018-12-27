@@ -59,6 +59,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) VSLCallAudioState callAudioState;
 @property (readwrite, nonatomic) int previousRxPkt;
 @property (readwrite, nonatomic) int previousTxPkt;
+@property (readwrite, nonatomic) SipInvite *invite;
 /**
  *  Stats
  */
@@ -103,6 +104,12 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         self.numberToCall = [VialerUtils cleanPhoneNumber:number];
     }
     return self;
+}
+
+- (instancetype _Nullable)initInboundCallWithCallId:(NSUInteger)callId account:(VSLAccount * _Nonnull)account andInvite:(SipInvite *)invite {
+    self.invite = invite;
+    
+    return [self initInboundCallWithCallId:callId account:account];
 }
 
 - (void)dealloc {
@@ -390,9 +397,19 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         self.localURI = [NSString stringWithPJString:callInfo.local_info];
         self.remoteURI = [NSString stringWithPJString:callInfo.remote_info];
         if (self.remoteURI) {
-            NSDictionary *callerInfo = [self getCallerInfoFromRemoteUri:self.remoteURI];
+            NSDictionary *callerInfo = [VSLCall getCallerInfoFromRemoteUri:self.remoteURI];
             self.callerName = callerInfo[@"caller_name"];
             self.callerNumber = callerInfo[@"caller_number"];
+        }
+        
+        if (self.invite != nil) {
+            if ([self.invite hasPAssertedIdentity]) {
+                self.callerName = [self.invite getPAssertedIdentityName];
+                self.callerNumber = [self.invite getPAssertedIdentityNumber];
+            } else if ([self.invite hasRemotePartyId]) {
+                self.callerName = [self.invite getRemotePartyIdName];
+                self.callerNumber = [self.invite getRemotePartyIdNumber];
+            }
         }
     }
 }
@@ -694,7 +711,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
  *
  *  @return NSDictionary output like @{"caller_name: name, "caller_number": 42}.
  */
-- (NSDictionary *)getCallerInfoFromRemoteUri:(NSString *)string {
++ (NSDictionary *)getCallerInfoFromRemoteUri:(NSString *)string {
     NSString *callerName = @"";
     NSString *callerNumber = @"";
     NSString *callerHost;
