@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [3.5.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.0) (27/12/2018)
+## [3.5.1](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.0) (27/12/2018)
 
 Released on Thursday, December 27, 2018
 
