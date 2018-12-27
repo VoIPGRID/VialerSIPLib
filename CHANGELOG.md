@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [3.5.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.0) (27/12/2018)
+
+Released on Thursday, December 27, 2018
+
+### Added
+- The caller name and number will now be taken from the P-Asserted-Identity or Remote-Party-ID headers if they are present.
+
 ## [3.4.2](https://github.com/VoIPGRID/VialerSIPLib/tree/3.4.2) (11/22/2018)
 
 Released on Thursday, November 22, 2018
