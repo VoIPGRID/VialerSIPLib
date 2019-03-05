@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [3.5.2](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.2) (5/3/2019)
+
+Released on Tuesday, March 5, 2019
+
+### Fixed
+- Resolved a crash when trying to make an outgoing call after loading the library for the first time 
 
 ## [3.5.1](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.1) (27/12/2018)
 
