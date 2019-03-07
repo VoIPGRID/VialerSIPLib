@@ -579,6 +579,15 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     pjsua_call_info callInfo;
     pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
 
+    if (callInfo.conf_slot <= 0) {
+        if (error != NULL) {
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey:NSLocalizedString(@"Could not toggle mute call", nil)};
+            *error = [NSError errorWithDomain:VSLCallErrorDomain code:VSLCallErrorCannotToggleMute userInfo:userInfo];
+        }
+        VSLLogError(@"Unable to toggle mute, pjsua has not provided a valid conf_slot for this call");
+        return NO;
+    }
+
     pj_status_t status;
     if (!self.muted) {
         status = pjsua_conf_disconnect(0, callInfo.conf_slot);
