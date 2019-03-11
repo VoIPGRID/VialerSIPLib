@@ -429,7 +429,9 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
             [self.ringback stop];
         }
         pjsua_conf_connect(callInfo.conf_slot, 0);
-        pjsua_conf_connect(0, callInfo.conf_slot);
+        if (!self.muted) {
+            pjsua_conf_connect(0, callInfo.conf_slot);
+        }
     }
 
     if (self.mediaState == VSLMediaStateActive && ![self.audioCheckTimer isValid]) {
