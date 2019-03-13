@@ -13,7 +13,7 @@ class SipUser: NSObject, SIPEnabledUser {
     let sipProxy: String?
     let sipRegisterOnAdd: Bool
 
-    init(sipAccount: String, sipPassword: String, sipDomain: String, sipProxy: String) {
+    init(sipAccount: String, sipPassword: String, sipDomain: String, sipProxy: String?) {
         self.sipAccount = sipAccount
         self.sipPassword = sipPassword
         self.sipDomain = sipDomain
@@ -23,6 +23,6 @@ class SipUser: NSObject, SIPEnabledUser {
     }
 
     convenience override init() {
-        self.init(sipAccount: Keys.SIP.Account, sipPassword: Keys.SIP.Password, sipDomain: Keys.SIP.Domain, sipProxy: Keys.SIP.Proxy)
+        self.init(sipAccount: Keys.SIP.Account, sipPassword: Keys.SIP.Password, sipDomain: Keys.SIP.Domain, sipProxy: Keys.SIP.Proxy.isEmpty ? nil : Keys.SIP.Proxy)
     }
 }
