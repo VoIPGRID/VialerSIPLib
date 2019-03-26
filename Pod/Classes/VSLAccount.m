@@ -252,8 +252,8 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     
     // If pjsua_acc_info.expires == -1 the account has a registration but, as it turns out,
     // this is not a valid check whether there is a registration in progress or not, at least,
-    // not wit a connection loss. So, to track a registration in progress, an ivar is used.
-    if (self.forceRegistration || (!self.registrationInProgress && info.expires == -1)) {
+    // not with a connection loss. So, to track a registration in progress, an ivar is used.
+    if ((self.forceRegistration && !self.registrationInProgress) || (!self.registrationInProgress && info.expires == -1)) {
         self.registrationInProgress = YES;
         VSLLogVerbose(@"Sending registration for account: %@", [NSNumber numberWithInteger:self.accountId]);
         
