@@ -170,10 +170,16 @@ class VSLCallViewController: UIViewController, VSLKeypadViewControllerDelegate {
         }
     }
 
-    @objc func noAudioForCall() {
+    @objc func noAudioForCall(_ notification : NSNotification) {
         guard let call = activeCall, call.callState != .disconnected else { return }
-
-        call.reinvite()
+        
+        guard let userData = notification.object as? NSDictionary else { return }
+        
+        guard let audioState = userData[VSLNotificationUserInfoCallAudioStateKey] as? Int else { return }
+        
+        if (audioState == VSLCallAudioState.noAudioBothDirections.rawValue) {
+            call.reinvite();
+        }
     }
 
     @objc func updateUI() {

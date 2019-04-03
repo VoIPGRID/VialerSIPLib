@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [3.5.3](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.3) (3/4/2019)
+
+Released on Tuesday, April 3, 2019
+
+### Fixed
+- Resolved a crash that would sometimes happen when muting a call
+- Network changes will no longer reset the mute status of a call
+
 ## [3.5.2](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.2) (5/3/2019)
 
 Released on Tuesday, March 5, 2019
