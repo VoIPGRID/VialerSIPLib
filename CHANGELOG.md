@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [3.5.4](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.4) (15/4/2019)
+
+Released on Monday, April 15, 2019
+
+### Added
+- Enabled Voice Activity Detection
+
 ## [3.5.3](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.3) (3/4/2019)
 
 Released on Tuesday, April 3, 2019
