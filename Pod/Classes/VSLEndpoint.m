@@ -623,8 +623,7 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
                         [[[VSLEndpoint sharedEndpoint] callManager] reinviteActiveCallsForAccount:account];
                         break;
                     case VSLIpChangeConfigurationIpChangeCallsUpdate:
-                        VSLLogInfo(@"Do a update for all calls of account: %d", acc_id);
-                        [[[VSLEndpoint sharedEndpoint] callManager] updateActiveCallsForAccount:account];
+                        // Do nothing. Update is not implemented by Asterisk.
                         break;
                     case VSLIpChangeConfigurationIpChangeCallsDefault:
                         // Do nothing.
