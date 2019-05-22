@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [3.5.5](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.5) (22/5/2019)
+
+Released on Wednesday, May 22, 2019
+
+### Fixed
+- Removed sending unsupported UPDATE sip message.
+
 ## [3.5.4](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.4) (15/4/2019)
 
 Released on Monday, April 15, 2019
