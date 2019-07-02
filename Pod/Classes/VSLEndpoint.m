@@ -206,7 +206,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     mediaConfig.snd_clock_rate = (unsigned int)endpointConfiguration.sndClockRate;
     mediaConfig.has_ioqueue = PJ_TRUE;
     mediaConfig.thread_cnt = 1;
-    mediaConfig.no_vad = PJ_FALSE;
+    mediaConfig.no_vad = PJ_TRUE;
 
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
@@ -438,6 +438,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
             pjmedia_codec_mgr_find_codecs_by_id(endpointMgr, &codecId, &count, &codecInfo, NULL);
             pjmedia_codec_mgr_get_default_param(endpointMgr, codecInfo, &param);
             pjmedia_codec_opus_get_config(&opus_cfg);
+            
+            // Set VAD
+            param.setting.vad = 0;
 
             // Set sample rate
             opus_cfg.sample_rate = opusConfiguration.sampleRate;
