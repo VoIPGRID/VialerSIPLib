@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.6](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.6) (29/7/2019)
+
+Released on Monday, July 29, 2019
+
+### Fixed
+- Only apply Voice Activity Detection when OPUS is being used.
 ---
 ## [3.5.5](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.5) (22/5/2019)
 
