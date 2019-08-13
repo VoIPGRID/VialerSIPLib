@@ -144,6 +144,11 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
 @property (readonly, nonatomic) VSLIceConfiguration * _Nullable iceConfiguration;
 
 /**
+ *  The TURN Configuration that should be used.
+ */
+@property (readonly, nonatomic) VSLTurnConfiguration * _Nullable turnConfiguration;
+
+/**
  * Specify if source TCP port should be used as the initial Contact
  * address if TCP/TLS transport is used. Note that this feature will
  * be automatically turned off when nameserver is configured because
