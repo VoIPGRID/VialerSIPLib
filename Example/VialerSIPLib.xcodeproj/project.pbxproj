@@ -32,6 +32,24 @@
 		C457E49D1D3D070D0005D4B4 /* VSLTransferCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C457E49C1D3D070D0005D4B4 /* VSLTransferCallViewController.swift */; };
 		C48B488E1D421CB100AB2875 /* SipUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48B488D1D421CB100AB2875 /* SipUser.swift */; };
 		C48B48901D42228900AB2875 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48B488F1D42228900AB2875 /* AppDelegate.swift */; };
+		C91F851E234CCCE5007F6417 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851D234CCCE5007F6417 /* AppDelegate.swift */; };
+		C91F8520234CCCE5007F6417 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851F234CCCE5007F6417 /* SceneDelegate.swift */; };
+		C91F8522234CCCE5007F6417 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8521234CCCE5007F6417 /* ContentView.swift */; };
+		C91F8524234CCCE7007F6417 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8523234CCCE7007F6417 /* Assets.xcassets */; };
+		C91F8527234CCCE7007F6417 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8526234CCCE7007F6417 /* Preview Assets.xcassets */; };
+		C91F852A234CCCE7007F6417 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91F8528234CCCE7007F6417 /* LaunchScreen.storyboard */; };
+		C91F8535234CCCE7007F6417 /* LibExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8534234CCCE7007F6417 /* LibExampleTests.swift */; };
+		C91F853E234CD3E4007F6417 /* SIPApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F853D234CD3E4007F6417 /* SIPApp.swift */; };
+		C91F8540234CD3FD007F6417 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F853F234CD3FD007F6417 /* Message.swift */; };
+		C91F8542234CD421007F6417 /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8541234CD421007F6417 /* Feature.swift */; };
+		C91F8544234CD7F8007F6417 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8543234CD7F8007F6417 /* User.swift */; };
+		C91F8546234CDAD8007F6417 /* TransportOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8545234CDAD8007F6417 /* TransportOption.swift */; };
+		C91F8548234CE0FB007F6417 /* UserHandlingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8547234CE0FB007F6417 /* UserHandlingFeature.swift */; };
+		C91F854A234CE2FB007F6417 /* SettingsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8549234CE2FB007F6417 /* SettingsFeature.swift */; };
+		C91F854C234CE3BC007F6417 /* CallingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F854B234CE3BC007F6417 /* CallingFeature.swift */; };
+		C91F854E234CE50B007F6417 /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F854D234CE50B007F6417 /* UseCase.swift */; };
+		C91F8555234CE6F6007F6417 /* LogIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8554234CE6F6007F6417 /* LogIn.swift */; };
+		C91F8557234CE7EB007F6417 /* LogOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8556234CE7EB007F6417 /* LogOut.swift */; };
 		EE79A6C51E2CFC0F00AC4AC7 /* VSLEndOfCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */; };
 		EF1CD4427B7B17EF4091BEF8 /* libPods-VialerSIPLib_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EDD7E6A0D9160F0800D3A0F0 /* libPods-VialerSIPLib_Example.a */; };
 		F26407E11DA7D6FE00393D4B /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26407E01DA7D6FE00393D4B /* CallKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -57,6 +75,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 6003F589195388D20070C39A;
 			remoteInfo = VialerSIPLib;
+		};
+		C91F8531234CCCE7007F6417 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6003F582195388D10070C39A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C91F851A234CCCE5007F6417;
+			remoteInfo = LibExample;
 		};
 		F271B5501DABD18F0028D620 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -129,6 +154,28 @@
 		C4A5C09D1E3640CF008F5297 /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CONTRIBUTING.md; path = ../Documentation/CONTRIBUTING.md; sourceTree = "<group>"; };
 		C4A5C09F1E364121008F5297 /* ISSUE_TEMPLATE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = ISSUE_TEMPLATE.md; path = ../.github/ISSUE_TEMPLATE.md; sourceTree = "<group>"; };
 		C4A6D7661D5A12720014A4FB /* Keys.swift.example */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Keys.swift.example; sourceTree = "<group>"; };
+		C91F851B234CCCE5007F6417 /* LibExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C91F851D234CCCE5007F6417 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C91F851F234CCCE5007F6417 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		C91F8521234CCCE5007F6417 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C91F8523234CCCE7007F6417 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C91F8526234CCCE7007F6417 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C91F8529234CCCE7007F6417 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C91F852B234CCCE7007F6417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C91F8530234CCCE7007F6417 /* LibExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LibExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C91F8534234CCCE7007F6417 /* LibExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibExampleTests.swift; sourceTree = "<group>"; };
+		C91F8536234CCCE7007F6417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C91F853D234CD3E4007F6417 /* SIPApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIPApp.swift; sourceTree = "<group>"; };
+		C91F853F234CD3FD007F6417 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		C91F8541234CD421007F6417 /* Feature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feature.swift; sourceTree = "<group>"; };
+		C91F8543234CD7F8007F6417 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		C91F8545234CDAD8007F6417 /* TransportOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportOption.swift; sourceTree = "<group>"; };
+		C91F8547234CE0FB007F6417 /* UserHandlingFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHandlingFeature.swift; sourceTree = "<group>"; };
+		C91F8549234CE2FB007F6417 /* SettingsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeature.swift; sourceTree = "<group>"; };
+		C91F854B234CE3BC007F6417 /* CallingFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingFeature.swift; sourceTree = "<group>"; };
+		C91F854D234CE50B007F6417 /* UseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCase.swift; sourceTree = "<group>"; };
+		C91F8554234CE6F6007F6417 /* LogIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogIn.swift; sourceTree = "<group>"; };
+		C91F8556234CE7EB007F6417 /* LogOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOut.swift; sourceTree = "<group>"; };
 		EDD7E6A0D9160F0800D3A0F0 /* libPods-VialerSIPLib_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSLEndOfCallViewController.swift; sourceTree = "<group>"; };
 		EEF1CB7C1FA096F800B5170F /* VialerSIPLib_Example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VialerSIPLib_Example-Prefix.pch"; sourceTree = "<group>"; };
@@ -175,6 +222,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C91F8518234CCCE5007F6417 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C91F852D234CCCE7007F6417 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F271B5481DABD18F0028D620 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -203,6 +264,8 @@
 				6003F593195388D20070C39A /* Example for VialerSIPLib */,
 				6003F5B5195388D20070C39A /* Tests */,
 				F271B54C1DABD18F0028D620 /* IntentsExtension */,
+				C91F851C234CCCE5007F6417 /* LibExample */,
+				C91F8533234CCCE7007F6417 /* LibExampleTests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
 				146AF912F69254077E642415 /* Pods */,
@@ -215,6 +278,8 @@
 				6003F58A195388D20070C39A /* VialerSIPLib_Example.app */,
 				6003F5AE195388D20070C39A /* VialerSIPLib_Tests.xctest */,
 				F271B54B1DABD18F0028D620 /* IntentsExtension.appex */,
+				C91F851B234CCCE5007F6417 /* LibExample.app */,
+				C91F8530234CCCE7007F6417 /* LibExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -370,6 +435,88 @@
 			name = Documentation;
 			sourceTree = "<group>";
 		};
+		C91F851C234CCCE5007F6417 /* LibExample */ = {
+			isa = PBXGroup;
+			children = (
+				C91F854F234CE647007F6417 /* Features */,
+				C91F851D234CCCE5007F6417 /* AppDelegate.swift */,
+				C91F851F234CCCE5007F6417 /* SceneDelegate.swift */,
+				C91F8521234CCCE5007F6417 /* ContentView.swift */,
+				C91F8523234CCCE7007F6417 /* Assets.xcassets */,
+				C91F8528234CCCE7007F6417 /* LaunchScreen.storyboard */,
+				C91F852B234CCCE7007F6417 /* Info.plist */,
+				C91F8525234CCCE7007F6417 /* Preview Content */,
+				C91F853D234CD3E4007F6417 /* SIPApp.swift */,
+				C91F854D234CE50B007F6417 /* UseCase.swift */,
+				C91F853F234CD3FD007F6417 /* Message.swift */,
+				C91F8545234CDAD8007F6417 /* TransportOption.swift */,
+				C91F8541234CD421007F6417 /* Feature.swift */,
+				C91F8543234CD7F8007F6417 /* User.swift */,
+			);
+			path = LibExample;
+			sourceTree = "<group>";
+		};
+		C91F8525234CCCE7007F6417 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				C91F8526234CCCE7007F6417 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C91F8533234CCCE7007F6417 /* LibExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				C91F8534234CCCE7007F6417 /* LibExampleTests.swift */,
+				C91F8536234CCCE7007F6417 /* Info.plist */,
+			);
+			path = LibExampleTests;
+			sourceTree = "<group>";
+		};
+		C91F854F234CE647007F6417 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				C91F8552234CE675007F6417 /* Settings */,
+				C91F8551234CE666007F6417 /* Calling */,
+				C91F8550234CE659007F6417 /* User Handling */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		C91F8550234CE659007F6417 /* User Handling */ = {
+			isa = PBXGroup;
+			children = (
+				C91F8547234CE0FB007F6417 /* UserHandlingFeature.swift */,
+				C91F8553234CE69D007F6417 /* UseCases */,
+			);
+			path = "User Handling";
+			sourceTree = "<group>";
+		};
+		C91F8551234CE666007F6417 /* Calling */ = {
+			isa = PBXGroup;
+			children = (
+				C91F854B234CE3BC007F6417 /* CallingFeature.swift */,
+			);
+			path = Calling;
+			sourceTree = "<group>";
+		};
+		C91F8552234CE675007F6417 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C91F8549234CE2FB007F6417 /* SettingsFeature.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C91F8553234CE69D007F6417 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				C91F8554234CE6F6007F6417 /* LogIn.swift */,
+				C91F8556234CE7EB007F6417 /* LogOut.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
 		F271B54C1DABD18F0028D620 /* IntentsExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -423,6 +570,41 @@
 			productReference = 6003F5AE195388D20070C39A /* VialerSIPLib_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		C91F851A234CCCE5007F6417 /* LibExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C91F853B234CCCE7007F6417 /* Build configuration list for PBXNativeTarget "LibExample" */;
+			buildPhases = (
+				C91F8517234CCCE5007F6417 /* Sources */,
+				C91F8518234CCCE5007F6417 /* Frameworks */,
+				C91F8519234CCCE5007F6417 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LibExample;
+			productName = LibExample;
+			productReference = C91F851B234CCCE5007F6417 /* LibExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C91F852F234CCCE7007F6417 /* LibExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C91F853C234CCCE7007F6417 /* Build configuration list for PBXNativeTarget "LibExampleTests" */;
+			buildPhases = (
+				C91F852C234CCCE7007F6417 /* Sources */,
+				C91F852D234CCCE7007F6417 /* Frameworks */,
+				C91F852E234CCCE7007F6417 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C91F8532234CCCE7007F6417 /* PBXTargetDependency */,
+			);
+			name = LibExampleTests;
+			productName = LibExampleTests;
+			productReference = C91F8530234CCCE7007F6417 /* LibExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F271B54A1DABD18F0028D620 /* IntentsExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F271B5531DABD18F0028D620 /* Build configuration list for PBXNativeTarget "IntentsExtension" */;
@@ -447,12 +629,12 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = VSL;
-				LastSwiftUpdateCheck = 0800;
+				LastSwiftUpdateCheck = 1100;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Harold;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = E2Q9UE8HM6;
+						DevelopmentTeam = L25X5NABU9;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -462,12 +644,24 @@
 						};
 					};
 					6003F5AD195388D20070C39A = {
+						DevelopmentTeam = L25X5NABU9;
 						LastSwiftMigration = 0900;
 						TestTargetID = 6003F589195388D20070C39A;
 					};
+					C91F851A234CCCE5007F6417 = {
+						CreatedOnToolsVersion = 11.0;
+						DevelopmentTeam = L25X5NABU9;
+						ProvisioningStyle = Automatic;
+					};
+					C91F852F234CCCE7007F6417 = {
+						CreatedOnToolsVersion = 11.0;
+						DevelopmentTeam = L25X5NABU9;
+						ProvisioningStyle = Automatic;
+						TestTargetID = C91F851A234CCCE5007F6417;
+					};
 					F271B54A1DABD18F0028D620 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = E2Q9UE8HM6;
+						DevelopmentTeam = L25X5NABU9;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
@@ -478,6 +672,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -489,6 +684,8 @@
 				6003F589195388D20070C39A /* VialerSIPLib_Example */,
 				6003F5AD195388D20070C39A /* VialerSIPLib_Tests */,
 				F271B54A1DABD18F0028D620 /* IntentsExtension */,
+				C91F851A234CCCE5007F6417 /* LibExample */,
+				C91F852F234CCCE7007F6417 /* LibExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -514,6 +711,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C91F8519234CCCE5007F6417 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C91F852A234CCCE7007F6417 /* LaunchScreen.storyboard in Resources */,
+				C91F8527234CCCE7007F6417 /* Preview Assets.xcassets in Resources */,
+				C91F8524234CCCE7007F6417 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C91F852E234CCCE7007F6417 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F271B5491DABD18F0028D620 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -530,7 +744,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/VialerSIPLib/VialerSIPLib.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -539,7 +753,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9867CF3405BE944EA05D1127 /* [CP] Copy Pods Resources */ = {
@@ -548,7 +762,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/VialerSIPLib/VialerSIPLib.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -557,7 +771,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BC456617BB93AA39CD2E063D /* [CP] Check Pods Manifest.lock */ = {
@@ -637,6 +851,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C91F8517234CCCE5007F6417 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C91F8542234CD421007F6417 /* Feature.swift in Sources */,
+				C91F854C234CE3BC007F6417 /* CallingFeature.swift in Sources */,
+				C91F851E234CCCE5007F6417 /* AppDelegate.swift in Sources */,
+				C91F8557234CE7EB007F6417 /* LogOut.swift in Sources */,
+				C91F853E234CD3E4007F6417 /* SIPApp.swift in Sources */,
+				C91F8540234CD3FD007F6417 /* Message.swift in Sources */,
+				C91F8548234CE0FB007F6417 /* UserHandlingFeature.swift in Sources */,
+				C91F8520234CCCE5007F6417 /* SceneDelegate.swift in Sources */,
+				C91F8522234CCCE5007F6417 /* ContentView.swift in Sources */,
+				C91F8544234CD7F8007F6417 /* User.swift in Sources */,
+				C91F854E234CE50B007F6417 /* UseCase.swift in Sources */,
+				C91F8546234CDAD8007F6417 /* TransportOption.swift in Sources */,
+				C91F854A234CE2FB007F6417 /* SettingsFeature.swift in Sources */,
+				C91F8555234CE6F6007F6417 /* LogIn.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C91F852C234CCCE7007F6417 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C91F8535234CCCE7007F6417 /* LibExampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F271B5471DABD18F0028D620 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -653,6 +896,11 @@
 			target = 6003F589195388D20070C39A /* VialerSIPLib_Example */;
 			targetProxy = 6003F5B3195388D20070C39A /* PBXContainerItemProxy */;
 		};
+		C91F8532234CCCE7007F6417 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C91F851A234CCCE5007F6417 /* LibExample */;
+			targetProxy = C91F8531234CCCE7007F6417 /* PBXContainerItemProxy */;
+		};
 		F271B5511DABD18F0028D620 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F271B54A1DABD18F0028D620 /* IntentsExtension */;
@@ -667,6 +915,14 @@
 				6003F5B9195388D20070C39A /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C91F8528234CCCE7007F6417 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C91F8529234CCCE7007F6417 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 		F27386131C170862002C4CD1 /* Main.storyboard */ = {
@@ -800,14 +1056,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = E2Q9UE8HM6;
+				DEVELOPMENT_TEAM = L25X5NABU9;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/VialerSIPLib/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = nl.voipgrid.VialerSIPLib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vs.VialerSIPLib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VialerSIPLib/VialerSIPLib_Example-Bridging-Header.h";
@@ -826,13 +1082,13 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = E2Q9UE8HM6;
+				DEVELOPMENT_TEAM = L25X5NABU9;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/VialerSIPLib/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = nl.voipgrid.VialerSIPLib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vs.VialerSIPLib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VialerSIPLib/VialerSIPLib_Example-Bridging-Header.h";
@@ -847,6 +1103,7 @@
 			baseConfigurationReference = 1EAFF48D5E8CC18B914D3603 /* Pods-VialerSIPLib_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = L25X5NABU9;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -868,6 +1125,7 @@
 			baseConfigurationReference = 00110A8BDA853C5298946A61 /* Pods-VialerSIPLib_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = L25X5NABU9;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
@@ -880,6 +1138,124 @@
 			};
 			name = Release;
 		};
+		C91F8537234CCCE7007F6417 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_ASSET_PATHS = "\"LibExample/Preview Content\"";
+				DEVELOPMENT_TEAM = L25X5NABU9;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LibExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vialer.LibExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C91F8538234CCCE7007F6417 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_ASSET_PATHS = "\"LibExample/Preview Content\"";
+				DEVELOPMENT_TEAM = L25X5NABU9;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LibExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vialer.LibExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C91F8539234CCCE7007F6417 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = L25X5NABU9;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LibExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vialer.LibExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LibExample.app/LibExample";
+			};
+			name = Debug;
+		};
+		C91F853A234CCCE7007F6417 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = L25X5NABU9;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LibExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vialer.LibExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LibExample.app/LibExample";
+			};
+			name = Release;
+		};
 		F271B5541DABD18F0028D620 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -889,12 +1265,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = E2Q9UE8HM6;
+				DEVELOPMENT_TEAM = L25X5NABU9;
 				INFOPLIST_FILE = IntentsExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = nl.voipgrid.VialerSIPLib.IntentsExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vs.VialerSIPLib.IntentsExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -914,12 +1290,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = E2Q9UE8HM6;
+				DEVELOPMENT_TEAM = L25X5NABU9;
 				INFOPLIST_FILE = IntentsExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = nl.voipgrid.VialerSIPLib.IntentsExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vs.VialerSIPLib.IntentsExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -953,6 +1329,24 @@
 			buildConfigurations = (
 				6003F5C3195388D20070C39A /* Debug */,
 				6003F5C4195388D20070C39A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C91F853B234CCCE7007F6417 /* Build configuration list for PBXNativeTarget "LibExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C91F8537234CCCE7007F6417 /* Debug */,
+				C91F8538234CCCE7007F6417 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C91F853C234CCCE7007F6417 /* Build configuration list for PBXNativeTarget "LibExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C91F8539234CCCE7007F6417 /* Debug */,
+				C91F853A234CCCE7007F6417 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
