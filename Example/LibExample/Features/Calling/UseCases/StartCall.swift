@@ -1,33 +1,30 @@
 //
-//  LogIn.swift
+//  StartCall.swift
 //  LibExample
 //
-//  Created by Manuel on 08/10/2019.
+//  Created by Manuel on 10/10/2019.
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-class LogIn: UseCase {
+class StartCall: UseCase {
     typealias RequestType = Request
     typealias ResponseType = Response
     
     enum Request {
-        case logIn(String, String)
+        case startCall
     }
     
     enum Response {
-        case logInConfirmed(User)
+        case callDidStart
     }
     
     required init(responseHandler: @escaping ((Response) -> ())) {
         self.responseHandler = responseHandler
     }
     
-    let responseHandler: ((Response) -> ())
-    
+    private let responseHandler: ((Response) -> ())
+
     func handle(request: Request) {
-        switch request {
-        case .logIn(_,_)://(let username, let password):
-            responseHandler(.logInConfirmed(User()))
-        }
+        
     }
 }

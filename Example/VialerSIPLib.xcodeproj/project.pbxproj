@@ -50,6 +50,9 @@
 		C91F854E234CE50B007F6417 /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F854D234CE50B007F6417 /* UseCase.swift */; };
 		C91F8555234CE6F6007F6417 /* LogIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8554234CE6F6007F6417 /* LogIn.swift */; };
 		C91F8557234CE7EB007F6417 /* LogOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8556234CE7EB007F6417 /* LogOut.swift */; };
+		C97E4E0E234F49DB00767A20 /* StartCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E0D234F49DB00767A20 /* StartCall.swift */; };
+		C97E4E10234F4A6800767A20 /* EndCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E0F234F4A6800767A20 /* EndCall.swift */; };
+		C97E4E13234F666300767A20 /* SwitchTransportMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E12234F666300767A20 /* SwitchTransportMode.swift */; };
 		EE79A6C51E2CFC0F00AC4AC7 /* VSLEndOfCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */; };
 		EF1CD4427B7B17EF4091BEF8 /* libPods-VialerSIPLib_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EDD7E6A0D9160F0800D3A0F0 /* libPods-VialerSIPLib_Example.a */; };
 		F26407E11DA7D6FE00393D4B /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26407E01DA7D6FE00393D4B /* CallKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -176,6 +179,9 @@
 		C91F854D234CE50B007F6417 /* UseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCase.swift; sourceTree = "<group>"; };
 		C91F8554234CE6F6007F6417 /* LogIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogIn.swift; sourceTree = "<group>"; };
 		C91F8556234CE7EB007F6417 /* LogOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOut.swift; sourceTree = "<group>"; };
+		C97E4E0D234F49DB00767A20 /* StartCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartCall.swift; sourceTree = "<group>"; };
+		C97E4E0F234F4A6800767A20 /* EndCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndCall.swift; sourceTree = "<group>"; };
+		C97E4E12234F666300767A20 /* SwitchTransportMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTransportMode.swift; sourceTree = "<group>"; };
 		EDD7E6A0D9160F0800D3A0F0 /* libPods-VialerSIPLib_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSLEndOfCallViewController.swift; sourceTree = "<group>"; };
 		EEF1CB7C1FA096F800B5170F /* VialerSIPLib_Example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VialerSIPLib_Example-Prefix.pch"; sourceTree = "<group>"; };
@@ -496,6 +502,7 @@
 			isa = PBXGroup;
 			children = (
 				C91F854B234CE3BC007F6417 /* CallingFeature.swift */,
+				C97E4E0C234F497800767A20 /* UseCases */,
 			);
 			path = Calling;
 			sourceTree = "<group>";
@@ -504,6 +511,7 @@
 			isa = PBXGroup;
 			children = (
 				C91F8549234CE2FB007F6417 /* SettingsFeature.swift */,
+				C97E4E11234F664200767A20 /* UseCases */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -513,6 +521,23 @@
 			children = (
 				C91F8554234CE6F6007F6417 /* LogIn.swift */,
 				C91F8556234CE7EB007F6417 /* LogOut.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		C97E4E0C234F497800767A20 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				C97E4E0D234F49DB00767A20 /* StartCall.swift */,
+				C97E4E0F234F4A6800767A20 /* EndCall.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		C97E4E11234F664200767A20 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				C97E4E12234F666300767A20 /* SwitchTransportMode.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -863,10 +888,13 @@
 				C91F8540234CD3FD007F6417 /* Message.swift in Sources */,
 				C91F8548234CE0FB007F6417 /* UserHandlingFeature.swift in Sources */,
 				C91F8520234CCCE5007F6417 /* SceneDelegate.swift in Sources */,
+				C97E4E13234F666300767A20 /* SwitchTransportMode.swift in Sources */,
 				C91F8522234CCCE5007F6417 /* ContentView.swift in Sources */,
 				C91F8544234CD7F8007F6417 /* User.swift in Sources */,
 				C91F854E234CE50B007F6417 /* UseCase.swift in Sources */,
+				C97E4E10234F4A6800767A20 /* EndCall.swift in Sources */,
 				C91F8546234CDAD8007F6417 /* TransportOption.swift in Sources */,
+				C97E4E0E234F49DB00767A20 /* StartCall.swift in Sources */,
 				C91F854A234CE2FB007F6417 /* SettingsFeature.swift in Sources */,
 				C91F8555234CE6F6007F6417 /* LogIn.swift in Sources */,
 			);

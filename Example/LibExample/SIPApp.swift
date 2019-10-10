@@ -6,11 +6,11 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-protocol MessageHandling {
+protocol MessageHandling: class {
     func handle(msg: Message)
 }
 
-protocol App: class, MessageHandling{
+protocol App: MessageHandling{
 }
 
 

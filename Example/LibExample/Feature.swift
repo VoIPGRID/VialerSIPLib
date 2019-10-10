@@ -7,6 +7,6 @@
 //
 
 protocol Feature {
-    init(with app:App)
+    init(with rootMessageHandler:MessageHandling)
     func handle(feature: Message.Feature)
 }

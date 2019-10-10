@@ -53,12 +53,12 @@ enum Message {
                 case unregister(Unregister)
             }
             
-            
             enum Transport {
                 case action(Action)
                 
                 enum Action {
                     case activate(TransportOption)
+                    case didActivate(TransportOption)
                 }
             }
             
@@ -77,7 +77,9 @@ enum Message {
                     
                     enum Action {
                         case start
+                        case callDidStart
                         case stop
+                        case callDidStop
                     }
                 }
             }

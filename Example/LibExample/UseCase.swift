@@ -10,7 +10,6 @@ protocol UseCase {
     associatedtype RequestType
     associatedtype ResponseType
     
-    var reponseHandler: ((ResponseType) -> ())? { get set }
-    
+    init(responseHandler: @escaping ((ResponseType) -> ()))
     func handle(request: RequestType)
 }

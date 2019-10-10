@@ -8,24 +8,19 @@
 
 class UserHandlingFeature: Feature {
     
-    required init(with app: App) {
-        self.app = app
-        logIn.reponseHandler = { [weak self] response in self?.handle(response: response) }
-        logOut.reponseHandler = { [weak self] response in self?.handle(response: response) }
+    required init(with rootMessageHandler: MessageHandling) {
+        self.rootMessageHandler = rootMessageHandler
     }
     
-    private weak var app: App?
+    private weak var rootMessageHandler: MessageHandling?
     
     // useCases
-    private let logIn = LogIn()
-    private let logOut = LogOut()
+    private lazy var logIn  = LogIn()  { [weak self] response in self?.handle(response: response) }
+    private lazy var logOut = LogOut() { [weak self] response in self?.handle(response: response) }
     
     func handle(feature: Message.Feature) {
-        switch feature {
-        case .userHandling(.useCase(let useCase)):
+        if case .userHandling(.useCase(let useCase)) = feature {
             handle(useCase: useCase)
-        default:
-            break
         }
     }
     
@@ -43,14 +38,18 @@ class UserHandlingFeature: Feature {
     private func handle(response: LogIn.Response) {
         switch response {
         case .logInConfirmed(let user):
-            app?.handle(msg: .feature(.userHandling(.useCase(.login(.action(.logInConfirmed(user)))))))
+            rootMessageHandler?.handle(msg:
+                .feature(.userHandling(.useCase(.login(.action(.logInConfirmed(user))))))
+            )
         }
     }
     
     private func handle(response: LogOut.Response) {
         switch response {
         case .logOutConfirmed(let user):
-            app?.handle(msg: .feature(.userHandling(.useCase(.logout(.action(.logOutConfirmed(user)))))))
+            rootMessageHandler?.handle(msg:
+                .feature(.userHandling(.useCase(.logout(.action(.logOutConfirmed(user))))))
+            )
         }
     }
 }

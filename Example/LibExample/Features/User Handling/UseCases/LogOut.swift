@@ -7,23 +7,27 @@
 //
 
 class LogOut: UseCase {
-    
     typealias RequestType = Request
     typealias ResponseType = Response
     
     enum Request {
         case logOut(User)
     }
+    
     enum Response {
         case logOutConfirmed(User)
     }
     
-    var reponseHandler: ((Response) -> ())?
+    required init(responseHandler: @escaping ((Response) -> ())) {
+        self.responseHandler = responseHandler
+    }
+    
+    let responseHandler: ((Response) -> ())
     
     func handle(request: Request) {
         switch request {
         case .logOut(let user):
-            reponseHandler?(.logOutConfirmed(user))
+            responseHandler(.logOutConfirmed(user))
         }
     }
 }
