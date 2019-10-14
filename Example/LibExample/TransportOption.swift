@@ -8,6 +8,6 @@
 
 enum TransportOption {
     case tcp
-    case upd
+    case udp
     case tls
 }

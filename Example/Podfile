@@ -15,6 +15,21 @@ target 'VialerSIPLib_Tests' do
     pod 'OCMock'
 end
 
+
+target 'LibExample' do
+  pods_for_all_targets
+  # Pods for Todo
+
+  target 'LibExampleTests' do
+    inherit! :search_paths
+
+    pod 'Quick'
+    pod 'Nimble'
+  end
+
+end
+
+
 post_install do |installer_representation|
     installer_representation.pods_project.targets.each do |target|
         target.build_configurations.each do |config|

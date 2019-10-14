@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		57B24BA5A9C89003B4F06629 /* libPods-VialerSIPLib_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2918FD02F7F72DB3A125794F /* libPods-VialerSIPLib_Tests.a */; };
+		5E7112C09D0B3DDCF1660645 /* libPods-LibExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 915779FE3CF5EA1D9854E94D /* libPods-LibExample.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -16,6 +17,7 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
+		C30A7DA96511EED5406C0F27 /* libPods-LibExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B50363FFE5030F926A0659FD /* libPods-LibExampleTests.a */; };
 		C4021B691D426D5B003560F6 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C4021B681D426D5B003560F6 /* .gitignore */; };
 		C4021B6B1D426F22003560F6 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4021B6A1D426F22003560F6 /* Keys.swift */; };
 		C424B50B1C3BD27500178E52 /* VSLAccountConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C424B50A1C3BD27500178E52 /* VSLAccountConfigurationTests.m */; };
@@ -32,13 +34,21 @@
 		C457E49D1D3D070D0005D4B4 /* VSLTransferCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C457E49C1D3D070D0005D4B4 /* VSLTransferCallViewController.swift */; };
 		C48B488E1D421CB100AB2875 /* SipUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48B488D1D421CB100AB2875 /* SipUser.swift */; };
 		C48B48901D42228900AB2875 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48B488F1D42228900AB2875 /* AppDelegate.swift */; };
+		C902B1CC23549D37001FAFA9 /* LogInSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1CB23549D37001FAFA9 /* LogInSpec.swift */; };
+		C902B1CE2354A0B4001FAFA9 /* LogOutSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1CD2354A0B4001FAFA9 /* LogOutSpec.swift */; };
+		C902B1D02354A233001FAFA9 /* UserHandlingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1CF2354A233001FAFA9 /* UserHandlingSpec.swift */; };
+		C902B1D42354B223001FAFA9 /* SwitchTransportModeSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1D32354B223001FAFA9 /* SwitchTransportModeSpec.swift */; };
+		C902B1D62354B5AE001FAFA9 /* SettingsFeatureSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1D52354B5AE001FAFA9 /* SettingsFeatureSpec.swift */; };
+		C902B1D82354C7F1001FAFA9 /* Call.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1D72354C7F1001FAFA9 /* Call.swift */; };
+		C902B1DC2354CA39001FAFA9 /* StartCallSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1DB2354CA39001FAFA9 /* StartCallSpec.swift */; };
+		C902B1DE2354CB4F001FAFA9 /* EndCallSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1DD2354CB4F001FAFA9 /* EndCallSpec.swift */; };
+		C902B1E02354CC81001FAFA9 /* CallingFeatureSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1DF2354CC81001FAFA9 /* CallingFeatureSpec.swift */; };
 		C91F851E234CCCE5007F6417 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851D234CCCE5007F6417 /* AppDelegate.swift */; };
 		C91F8520234CCCE5007F6417 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851F234CCCE5007F6417 /* SceneDelegate.swift */; };
 		C91F8522234CCCE5007F6417 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8521234CCCE5007F6417 /* ContentView.swift */; };
 		C91F8524234CCCE7007F6417 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8523234CCCE7007F6417 /* Assets.xcassets */; };
 		C91F8527234CCCE7007F6417 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8526234CCCE7007F6417 /* Preview Assets.xcassets */; };
 		C91F852A234CCCE7007F6417 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91F8528234CCCE7007F6417 /* LaunchScreen.storyboard */; };
-		C91F8535234CCCE7007F6417 /* LibExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8534234CCCE7007F6417 /* LibExampleTests.swift */; };
 		C91F853E234CD3E4007F6417 /* SIPApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F853D234CD3E4007F6417 /* SIPApp.swift */; };
 		C91F8540234CD3FD007F6417 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F853F234CD3FD007F6417 /* Message.swift */; };
 		C91F8542234CD421007F6417 /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8541234CD421007F6417 /* Feature.swift */; };
@@ -113,6 +123,7 @@
 		00110A8BDA853C5298946A61 /* Pods-VialerSIPLib_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		1EAFF48D5E8CC18B914D3603 /* Pods-VialerSIPLib_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		2918FD02F7F72DB3A125794F /* libPods-VialerSIPLib_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5370ED1528D1F00B924067A8 /* Pods-LibExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LibExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LibExampleTests/Pods-LibExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5D24E0A5A14D1689830035B2 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* VialerSIPLib_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VialerSIPLib_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -125,8 +136,12 @@
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		6C2BDA96E327E375E1F67F5D /* Pods-LibExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LibExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-LibExample/Pods-LibExample.release.xcconfig"; sourceTree = "<group>"; };
 		751644FF6D649E93790619BF /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		8524306085F26B608E868F80 /* Pods-LibExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LibExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LibExample/Pods-LibExample.debug.xcconfig"; sourceTree = "<group>"; };
 		8F7041AC1F0A372AC0CD4BD1 /* Pods-VialerSIPLib_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VialerSIPLib_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-VialerSIPLib_Example/Pods-VialerSIPLib_Example.release.xcconfig"; sourceTree = "<group>"; };
+		915779FE3CF5EA1D9854E94D /* libPods-LibExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LibExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B50363FFE5030F926A0659FD /* libPods-LibExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LibExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4021B681D426D5B003560F6 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
 		C4021B6A1D426F22003560F6 /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		C424B50A1C3BD27500178E52 /* VSLAccountConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountConfigurationTests.m; sourceTree = "<group>"; };
@@ -157,6 +172,15 @@
 		C4A5C09D1E3640CF008F5297 /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CONTRIBUTING.md; path = ../Documentation/CONTRIBUTING.md; sourceTree = "<group>"; };
 		C4A5C09F1E364121008F5297 /* ISSUE_TEMPLATE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = ISSUE_TEMPLATE.md; path = ../.github/ISSUE_TEMPLATE.md; sourceTree = "<group>"; };
 		C4A6D7661D5A12720014A4FB /* Keys.swift.example */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Keys.swift.example; sourceTree = "<group>"; };
+		C902B1CB23549D37001FAFA9 /* LogInSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInSpec.swift; sourceTree = "<group>"; };
+		C902B1CD2354A0B4001FAFA9 /* LogOutSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOutSpec.swift; sourceTree = "<group>"; };
+		C902B1CF2354A233001FAFA9 /* UserHandlingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHandlingSpec.swift; sourceTree = "<group>"; };
+		C902B1D32354B223001FAFA9 /* SwitchTransportModeSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTransportModeSpec.swift; sourceTree = "<group>"; };
+		C902B1D52354B5AE001FAFA9 /* SettingsFeatureSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeatureSpec.swift; sourceTree = "<group>"; };
+		C902B1D72354C7F1001FAFA9 /* Call.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Call.swift; sourceTree = "<group>"; };
+		C902B1DB2354CA39001FAFA9 /* StartCallSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartCallSpec.swift; sourceTree = "<group>"; };
+		C902B1DD2354CB4F001FAFA9 /* EndCallSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndCallSpec.swift; sourceTree = "<group>"; };
+		C902B1DF2354CC81001FAFA9 /* CallingFeatureSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingFeatureSpec.swift; sourceTree = "<group>"; };
 		C91F851B234CCCE5007F6417 /* LibExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C91F851D234CCCE5007F6417 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C91F851F234CCCE5007F6417 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -166,7 +190,6 @@
 		C91F8529234CCCE7007F6417 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C91F852B234CCCE7007F6417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C91F8530234CCCE7007F6417 /* LibExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LibExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C91F8534234CCCE7007F6417 /* LibExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibExampleTests.swift; sourceTree = "<group>"; };
 		C91F8536234CCCE7007F6417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C91F853D234CD3E4007F6417 /* SIPApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIPApp.swift; sourceTree = "<group>"; };
 		C91F853F234CD3FD007F6417 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -196,6 +219,7 @@
 		F2800BB41DCB448F009B6361 /* NSUserActivity+StartCallConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+StartCallConvertible.swift"; sourceTree = "<group>"; };
 		F2800BB51DCB448F009B6361 /* StartCallConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartCallConvertible.swift; sourceTree = "<group>"; };
 		F2800BBA1DCBCF47009B6361 /* VSLCallManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLCallManagerTests.m; sourceTree = "<group>"; };
+		F479AC15A4646314C9E42D69 /* Pods-LibExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LibExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LibExampleTests/Pods-LibExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		F951E38C1C56214300FA480F /* VialerSIPLibTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VialerSIPLibTests.m; sourceTree = "<group>"; };
 		F95AFD261C7F39BC005FC8CD /* VSLCallTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLCallTests.m; sourceTree = "<group>"; };
 		F9906C201C3A85AC0044EA99 /* VSLAccountTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLAccountTests.m; sourceTree = "<group>"; };
@@ -232,6 +256,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E7112C09D0B3DDCF1660645 /* libPods-LibExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +264,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C30A7DA96511EED5406C0F27 /* libPods-LibExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +285,10 @@
 				8F7041AC1F0A372AC0CD4BD1 /* Pods-VialerSIPLib_Example.release.xcconfig */,
 				1EAFF48D5E8CC18B914D3603 /* Pods-VialerSIPLib_Tests.debug.xcconfig */,
 				00110A8BDA853C5298946A61 /* Pods-VialerSIPLib_Tests.release.xcconfig */,
+				8524306085F26B608E868F80 /* Pods-LibExample.debug.xcconfig */,
+				6C2BDA96E327E375E1F67F5D /* Pods-LibExample.release.xcconfig */,
+				5370ED1528D1F00B924067A8 /* Pods-LibExampleTests.debug.xcconfig */,
+				F479AC15A4646314C9E42D69 /* Pods-LibExampleTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -300,6 +330,8 @@
 				6003F5AF195388D20070C39A /* XCTest.framework */,
 				EDD7E6A0D9160F0800D3A0F0 /* libPods-VialerSIPLib_Example.a */,
 				2918FD02F7F72DB3A125794F /* libPods-VialerSIPLib_Tests.a */,
+				915779FE3CF5EA1D9854E94D /* libPods-LibExample.a */,
+				B50363FFE5030F926A0659FD /* libPods-LibExampleTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -441,6 +473,59 @@
 			name = Documentation;
 			sourceTree = "<group>";
 		};
+		C902B1C923549CE2001FAFA9 /* UserHandling */ = {
+			isa = PBXGroup;
+			children = (
+				C902B1CF2354A233001FAFA9 /* UserHandlingSpec.swift */,
+				C902B1CA23549D02001FAFA9 /* UseCases */,
+			);
+			path = UserHandling;
+			sourceTree = "<group>";
+		};
+		C902B1CA23549D02001FAFA9 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				C902B1CB23549D37001FAFA9 /* LogInSpec.swift */,
+				C902B1CD2354A0B4001FAFA9 /* LogOutSpec.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		C902B1D12354B1FC001FAFA9 /* SettingsFeature */ = {
+			isa = PBXGroup;
+			children = (
+				C902B1D52354B5AE001FAFA9 /* SettingsFeatureSpec.swift */,
+				C902B1D22354B20C001FAFA9 /* UseCases */,
+			);
+			path = SettingsFeature;
+			sourceTree = "<group>";
+		};
+		C902B1D22354B20C001FAFA9 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				C902B1D32354B223001FAFA9 /* SwitchTransportModeSpec.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		C902B1D92354CA08001FAFA9 /* CallingFeature */ = {
+			isa = PBXGroup;
+			children = (
+				C902B1DF2354CC81001FAFA9 /* CallingFeatureSpec.swift */,
+				C902B1DA2354CA16001FAFA9 /* UseCases */,
+			);
+			path = CallingFeature;
+			sourceTree = "<group>";
+		};
+		C902B1DA2354CA16001FAFA9 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				C902B1DB2354CA39001FAFA9 /* StartCallSpec.swift */,
+				C902B1DD2354CB4F001FAFA9 /* EndCallSpec.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
 		C91F851C234CCCE5007F6417 /* LibExample */ = {
 			isa = PBXGroup;
 			children = (
@@ -458,6 +543,7 @@
 				C91F8545234CDAD8007F6417 /* TransportOption.swift */,
 				C91F8541234CD421007F6417 /* Feature.swift */,
 				C91F8543234CD7F8007F6417 /* User.swift */,
+				C902B1D72354C7F1001FAFA9 /* Call.swift */,
 			);
 			path = LibExample;
 			sourceTree = "<group>";
@@ -473,7 +559,9 @@
 		C91F8533234CCCE7007F6417 /* LibExampleTests */ = {
 			isa = PBXGroup;
 			children = (
-				C91F8534234CCCE7007F6417 /* LibExampleTests.swift */,
+				C902B1D92354CA08001FAFA9 /* CallingFeature */,
+				C902B1D12354B1FC001FAFA9 /* SettingsFeature */,
+				C902B1C923549CE2001FAFA9 /* UserHandling */,
 				C91F8536234CCCE7007F6417 /* Info.plist */,
 			);
 			path = LibExampleTests;
@@ -599,9 +687,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C91F853B234CCCE7007F6417 /* Build configuration list for PBXNativeTarget "LibExample" */;
 			buildPhases = (
+				236DAB9B84790A31EEA198F6 /* [CP] Check Pods Manifest.lock */,
 				C91F8517234CCCE5007F6417 /* Sources */,
 				C91F8518234CCCE5007F6417 /* Frameworks */,
 				C91F8519234CCCE5007F6417 /* Resources */,
+				853C1245A20B349357AAB118 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -616,6 +706,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C91F853C234CCCE7007F6417 /* Build configuration list for PBXNativeTarget "LibExampleTests" */;
 			buildPhases = (
+				7B21C03490C978D8A12FE23A /* [CP] Check Pods Manifest.lock */,
 				C91F852C234CCCE7007F6417 /* Sources */,
 				C91F852D234CCCE7007F6417 /* Frameworks */,
 				C91F852E234CCCE7007F6417 /* Resources */,
@@ -681,6 +772,7 @@
 					C91F852F234CCCE7007F6417 = {
 						CreatedOnToolsVersion = 11.0;
 						DevelopmentTeam = L25X5NABU9;
+						LastSwiftMigration = 1110;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C91F851A234CCCE5007F6417;
 					};
@@ -763,6 +855,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		236DAB9B84790A31EEA198F6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LibExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4CC6A93B1A74CE8A94C2B1D1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -779,6 +893,46 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VialerSIPLib_Tests/Pods-VialerSIPLib_Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7B21C03490C978D8A12FE23A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LibExampleTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		853C1245A20B349357AAB118 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LibExample/Pods-LibExample-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/VialerSIPLib/VialerSIPLib.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/VialerSIPLib.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LibExample/Pods-LibExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9867CF3405BE944EA05D1127 /* [CP] Copy Pods Resources */ = {
@@ -887,6 +1041,7 @@
 				C91F853E234CD3E4007F6417 /* SIPApp.swift in Sources */,
 				C91F8540234CD3FD007F6417 /* Message.swift in Sources */,
 				C91F8548234CE0FB007F6417 /* UserHandlingFeature.swift in Sources */,
+				C902B1D82354C7F1001FAFA9 /* Call.swift in Sources */,
 				C91F8520234CCCE5007F6417 /* SceneDelegate.swift in Sources */,
 				C97E4E13234F666300767A20 /* SwitchTransportMode.swift in Sources */,
 				C91F8522234CCCE5007F6417 /* ContentView.swift in Sources */,
@@ -904,7 +1059,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C91F8535234CCCE7007F6417 /* LibExampleTests.swift in Sources */,
+				C902B1DE2354CB4F001FAFA9 /* EndCallSpec.swift in Sources */,
+				C902B1CE2354A0B4001FAFA9 /* LogOutSpec.swift in Sources */,
+				C902B1D02354A233001FAFA9 /* UserHandlingSpec.swift in Sources */,
+				C902B1CC23549D37001FAFA9 /* LogInSpec.swift in Sources */,
+				C902B1E02354CC81001FAFA9 /* CallingFeatureSpec.swift in Sources */,
+				C902B1D42354B223001FAFA9 /* SwitchTransportModeSpec.swift in Sources */,
+				C902B1D62354B5AE001FAFA9 /* SettingsFeatureSpec.swift in Sources */,
+				C902B1DC2354CA39001FAFA9 /* StartCallSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1168,6 +1330,7 @@
 		};
 		C91F8537234CCCE7007F6417 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8524306085F26B608E868F80 /* Pods-LibExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1198,6 +1361,7 @@
 		};
 		C91F8538234CCCE7007F6417 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C2BDA96E327E375E1F67F5D /* Pods-LibExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1227,12 +1391,14 @@
 		};
 		C91F8539234CCCE7007F6417 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5370ED1528D1F00B924067A8 /* Pods-LibExampleTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
@@ -1257,12 +1423,14 @@
 		};
 		C91F853A234CCCE7007F6417 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F479AC15A4646314C9E42D69 /* Pods-LibExampleTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;

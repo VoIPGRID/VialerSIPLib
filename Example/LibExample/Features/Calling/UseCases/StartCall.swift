@@ -15,7 +15,7 @@ class StartCall: UseCase {
     }
     
     enum Response {
-        case callDidStart
+        case callDidStart(Call)
     }
     
     required init(responseHandler: @escaping ((Response) -> ())) {
@@ -25,6 +25,6 @@ class StartCall: UseCase {
     private let responseHandler: ((Response) -> ())
 
     func handle(request: Request) {
-        
+        responseHandler(.callDidStart(Call()))
     }
 }

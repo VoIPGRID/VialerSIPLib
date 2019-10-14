@@ -25,6 +25,9 @@ class SwitchTransportMode: UseCase {
     private let responseHandler: ((Response) -> ())
 
     func handle(request: Request) {
-        
+        switch request {
+        case .setMode(let option):
+            responseHandler(.modeWasActivated(option))
+        }
     }
 }

@@ -26,8 +26,8 @@ class LogIn: UseCase {
     
     func handle(request: Request) {
         switch request {
-        case .logIn(_,_)://(let username, let password):
-            responseHandler(.logInConfirmed(User()))
+        case .logIn(let username,_)://(let username, let password):
+            responseHandler(.logInConfirmed(User(name: username)))
         }
     }
 }

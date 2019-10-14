@@ -70,16 +70,16 @@ enum Message {
             case useCase(UseCase)
             
             enum UseCase {
-                case call(Call)
+                case call(Calling)
                 
-                enum Call {
+                enum Calling {
                     case action(Action)
                     
                     enum Action {
                         case start
-                        case callDidStart
-                        case stop
-                        case callDidStop
+                        case callDidStart(Call)
+                        case stop(Call)
+                        case callDidStop(Call)
                     }
                 }
             }

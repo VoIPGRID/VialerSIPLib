@@ -11,11 +11,11 @@ class EndCall: UseCase {
     typealias ResponseType = Response
     
     enum Request {
-        case stop
+        case stop(Call)
     }
     
     enum Response {
-        case callDidStop
+        case callDidStop(Call)
     }
     
     required init(responseHandler: @escaping ((ResponseType) -> ())) {
@@ -25,6 +25,9 @@ class EndCall: UseCase {
     private let responseHandler: ((Response) -> ())
 
     func handle(request: Request) {
-        
+        switch request {
+        case .stop(let call):
+            responseHandler(.callDidStop(call))
+        }
     }
 }

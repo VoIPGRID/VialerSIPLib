@@ -28,8 +28,8 @@ class CallingFeature: Feature {
         switch useCase {
         case .call(.action(.start)):
             startCall.handle(request: .startCall)
-        case .call(.action(.stop)):
-            endCall.handle(request: .stop)
+        case .call(.action(.stop(let call))):
+            endCall.handle(request: .stop(call))
         default:
             break
         }
@@ -37,15 +37,15 @@ class CallingFeature: Feature {
     
     private func handle(response: StartCall.Response) {
         switch response {
-        case .callDidStart:
-            rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStart))))))
+        case .callDidStart(let call):
+            rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStart(call)))))))
         }
     }
 
     private func handle(response: EndCall.Response) {
         switch response {
-        case .callDidStop:
-            rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStop))))))
+        case .callDidStop(let call):
+            rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStop(call)))))))
         }
     }
 }
