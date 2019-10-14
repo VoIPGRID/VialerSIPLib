@@ -25,13 +25,11 @@ class UserHandlingFeature: Feature {
     }
     
     private func handle(useCase: Message.Feature.UserHandling.UseCase) {
-        switch useCase {
-        case .login(.action(.logIn(let username, let password))):
+        if case .login(.action(.logIn(let username, let password))) = useCase {
             logIn.handle(request: .logIn(username, password))
-        case .logout(.action(.logOut(let user))):
+        } else
+            if case .logout(.action(.logOut(let user))) = useCase {
             logOut.handle(request: .logOut(user))
-        default:
-            break
         }
     }
     

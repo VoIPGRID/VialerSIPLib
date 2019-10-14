@@ -25,13 +25,11 @@ class CallingFeature: Feature {
     }
     
     private func handle(useCase: Message.Feature.Calling.UseCase) {
-        switch useCase {
-        case .call(.action(.start)):
+        if case .call(.action(.start)) = useCase {
             startCall.handle(request: .startCall)
-        case .call(.action(.stop(let call))):
+        } else
+            if case .call(.action(.stop(let call))) = useCase {
             endCall.handle(request: .stop(call))
-        default:
-            break
         }
     }
     

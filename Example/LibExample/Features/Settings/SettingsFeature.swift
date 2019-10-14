@@ -23,11 +23,8 @@ class SettingsFeature: Feature {
     }
     
     private func handle(useCase: Message.Feature.Settings.UseCase) {
-        switch useCase {
-        case .transport(.action(.activate(let mode))):
+        if case .transport(.action(.activate(let mode))) = useCase {
             switchTransportMode.handle(request: .setMode(mode))
-        default:
-            break
         }
     }
     
