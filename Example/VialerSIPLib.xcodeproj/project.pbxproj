@@ -43,6 +43,9 @@
 		C902B1DC2354CA39001FAFA9 /* StartCallSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1DB2354CA39001FAFA9 /* StartCallSpec.swift */; };
 		C902B1DE2354CB4F001FAFA9 /* EndCallSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1DD2354CB4F001FAFA9 /* EndCallSpec.swift */; };
 		C902B1E02354CC81001FAFA9 /* CallingFeatureSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1DF2354CC81001FAFA9 /* CallingFeatureSpec.swift */; };
+		C902B1E22354DA30001FAFA9 /* CreateCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E12354DA30001FAFA9 /* CreateCall.swift */; };
+		C902B1E42354DC68001FAFA9 /* CreateCallSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E32354DC68001FAFA9 /* CreateCallSpec.swift */; };
+		C902B1E723551353001FAFA9 /* SIPAppSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E623551353001FAFA9 /* SIPAppSpec.swift */; };
 		C91F851E234CCCE5007F6417 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851D234CCCE5007F6417 /* AppDelegate.swift */; };
 		C91F8520234CCCE5007F6417 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851F234CCCE5007F6417 /* SceneDelegate.swift */; };
 		C91F8522234CCCE5007F6417 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8521234CCCE5007F6417 /* ContentView.swift */; };
@@ -181,6 +184,9 @@
 		C902B1DB2354CA39001FAFA9 /* StartCallSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartCallSpec.swift; sourceTree = "<group>"; };
 		C902B1DD2354CB4F001FAFA9 /* EndCallSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndCallSpec.swift; sourceTree = "<group>"; };
 		C902B1DF2354CC81001FAFA9 /* CallingFeatureSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingFeatureSpec.swift; sourceTree = "<group>"; };
+		C902B1E12354DA30001FAFA9 /* CreateCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCall.swift; sourceTree = "<group>"; };
+		C902B1E32354DC68001FAFA9 /* CreateCallSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCallSpec.swift; sourceTree = "<group>"; };
+		C902B1E623551353001FAFA9 /* SIPAppSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIPAppSpec.swift; sourceTree = "<group>"; };
 		C91F851B234CCCE5007F6417 /* LibExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C91F851D234CCCE5007F6417 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C91F851F234CCCE5007F6417 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -522,8 +528,17 @@
 			children = (
 				C902B1DB2354CA39001FAFA9 /* StartCallSpec.swift */,
 				C902B1DD2354CB4F001FAFA9 /* EndCallSpec.swift */,
+				C902B1E32354DC68001FAFA9 /* CreateCallSpec.swift */,
 			);
 			path = UseCases;
+			sourceTree = "<group>";
+		};
+		C902B1E523551332001FAFA9 /* SIPApp */ = {
+			isa = PBXGroup;
+			children = (
+				C902B1E623551353001FAFA9 /* SIPAppSpec.swift */,
+			);
+			path = SIPApp;
 			sourceTree = "<group>";
 		};
 		C91F851C234CCCE5007F6417 /* LibExample */ = {
@@ -559,6 +574,7 @@
 		C91F8533234CCCE7007F6417 /* LibExampleTests */ = {
 			isa = PBXGroup;
 			children = (
+				C902B1E523551332001FAFA9 /* SIPApp */,
 				C902B1D92354CA08001FAFA9 /* CallingFeature */,
 				C902B1D12354B1FC001FAFA9 /* SettingsFeature */,
 				C902B1C923549CE2001FAFA9 /* UserHandling */,
@@ -618,6 +634,7 @@
 			children = (
 				C97E4E0D234F49DB00767A20 /* StartCall.swift */,
 				C97E4E0F234F4A6800767A20 /* EndCall.swift */,
+				C902B1E12354DA30001FAFA9 /* CreateCall.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1049,6 +1066,7 @@
 				C91F854E234CE50B007F6417 /* UseCase.swift in Sources */,
 				C97E4E10234F4A6800767A20 /* EndCall.swift in Sources */,
 				C91F8546234CDAD8007F6417 /* TransportOption.swift in Sources */,
+				C902B1E22354DA30001FAFA9 /* CreateCall.swift in Sources */,
 				C97E4E0E234F49DB00767A20 /* StartCall.swift in Sources */,
 				C91F854A234CE2FB007F6417 /* SettingsFeature.swift in Sources */,
 				C91F8555234CE6F6007F6417 /* LogIn.swift in Sources */,
@@ -1061,12 +1079,14 @@
 			files = (
 				C902B1DE2354CB4F001FAFA9 /* EndCallSpec.swift in Sources */,
 				C902B1CE2354A0B4001FAFA9 /* LogOutSpec.swift in Sources */,
+				C902B1E42354DC68001FAFA9 /* CreateCallSpec.swift in Sources */,
 				C902B1D02354A233001FAFA9 /* UserHandlingSpec.swift in Sources */,
 				C902B1CC23549D37001FAFA9 /* LogInSpec.swift in Sources */,
 				C902B1E02354CC81001FAFA9 /* CallingFeatureSpec.swift in Sources */,
 				C902B1D42354B223001FAFA9 /* SwitchTransportModeSpec.swift in Sources */,
 				C902B1D62354B5AE001FAFA9 /* SettingsFeatureSpec.swift in Sources */,
 				C902B1DC2354CA39001FAFA9 /* StartCallSpec.swift in Sources */,
+				C902B1E723551353001FAFA9 /* SIPAppSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

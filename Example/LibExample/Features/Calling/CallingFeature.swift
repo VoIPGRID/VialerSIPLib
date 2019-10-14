@@ -15,9 +15,10 @@ class CallingFeature: Feature {
     private weak var rootMessageHandler:MessageHandling?
     
     // useCases
-    private lazy var startCall = StartCall(){ [weak self] response in self?.handle(response: response) }
-    private lazy var endCall   = EndCall()  { [weak self] response in self?.handle(response: response) }
-    
+    private lazy var startCall  = StartCall() { [weak self] response in self?.handle(response: response) }
+    private lazy var endCall    = EndCall()   { [weak self] response in self?.handle(response: response) }
+    private lazy var createCall = CreateCall(){ [weak self] response in self?.handle(response: response) }
+
     func handle(feature: Message.Feature) {
         if case .calling(.useCase(let useCase)) = feature {
             handle(useCase: useCase)
@@ -26,7 +27,7 @@ class CallingFeature: Feature {
     
     private func handle(useCase: Message.Feature.Calling.UseCase) {
         if case .call(.action(.start)) = useCase {
-            startCall.handle(request: .startCall)
+            createCall.handle(request: .createCall)
         } else
             if case .call(.action(.stop(let call))) = useCase {
             endCall.handle(request: .stop(call))
@@ -44,6 +45,13 @@ class CallingFeature: Feature {
         switch response {
         case .callDidStop(let call):
             rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStop(call)))))))
+        }
+    }
+    
+    private func handle(response: CreateCall.Response) {
+        switch response {
+        case .callCreated(let call):
+            startCall.handle(request: .startCall(call))
         }
     }
 }

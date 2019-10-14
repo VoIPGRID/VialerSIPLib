@@ -86,3 +86,23 @@ enum Message {
         }
     }
 }
+
+extension Message.Feature.Calling.UseCase.Calling.Action: Equatable {
+
+    static func == (
+        lhs: Message.Feature.Calling.UseCase.Calling.Action,
+        rhs: Message.Feature.Calling.UseCase.Calling.Action
+    ) -> Bool
+    {
+        let compare: (Call, Call) -> Bool = { $0.uuid == $1.uuid }
+        
+        switch (lhs, rhs) {
+        case (.start,                     .start):                     return true
+        case (.callDidStart(let lhsCall), .callDidStart(let rhsCall)): return compare(lhsCall, rhsCall)
+        case (        .stop(let lhsCall),         .stop(let rhsCall)): return compare(lhsCall, rhsCall)
+        case ( .callDidStop(let lhsCall),  .callDidStop(let rhsCall)): return compare(lhsCall, rhsCall)
+        default:
+            return false
+        }
+    }
+}

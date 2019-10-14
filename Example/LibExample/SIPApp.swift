@@ -13,8 +13,15 @@ protocol MessageHandling: class {
 protocol App: MessageHandling{
 }
 
+protocol MessageSubscriber:MessageHandling {
+    
+}
 
-class SIPApp: App {
+protocol MessageProvider {
+    func add(subscriber:MessageSubscriber)
+}
+
+class SIPApp: App, MessageProvider {
     
     private lazy var features: [Feature] = [
         UserHandlingFeature(with: self),
@@ -23,11 +30,18 @@ class SIPApp: App {
     ]
     
     func handle(msg: Message) {
+        subscribers.forEach { $0.handle(msg: msg) }
+        
         switch msg {
         case .feature(let feature):
             features.forEach {
                 $0.handle(feature: feature)
             }
         }
+    }
+    
+    private var subscribers: [MessageSubscriber] = []
+    func add(subscriber: MessageSubscriber) {
+        subscribers.append(subscriber)
     }
 }

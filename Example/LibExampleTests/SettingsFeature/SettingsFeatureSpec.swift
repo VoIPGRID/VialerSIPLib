@@ -11,7 +11,7 @@ import Nimble
 @testable import LibExample
 
 class Mock {
-        class MessageHandler: MessageHandling {
+        class MessageHandler: MessageHandling, MessageSubscriber {
         
         init(callBack: @escaping (Message) -> ()) {
             self.callBack = callBack

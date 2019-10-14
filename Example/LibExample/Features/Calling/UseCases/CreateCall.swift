@@ -1,33 +1,33 @@
 //
-//  StartCall.swift
+//  CreateCall.swift
 //  LibExample
 //
-//  Created by Manuel on 10/10/2019.
+//  Created by Manuel on 14/10/2019.
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-class StartCall: UseCase {
+class CreateCall: UseCase {
+    
+    
     typealias RequestType = Request
     typealias ResponseType = Response
     
     enum Request {
-        case startCall(Call)
+        case createCall
     }
-    
     enum Response {
-        case callDidStart(Call)
+        case callCreated(Call)
     }
     
-    required init(responseHandler: @escaping ((Response) -> ())) {
+    required init(responseHandler: @escaping ((CreateCall.Response) -> ())) {
         self.responseHandler = responseHandler
     }
-    
     private let responseHandler: ((Response) -> ())
-
-    func handle(request: Request) {
+    
+    func handle(request: CreateCall.Request) {
         switch request {
-        case .startCall(let call):
-            responseHandler(.callDidStart(call))
+        case .createCall:
+            responseHandler(.callCreated(Call()))
         }
     }
 }
