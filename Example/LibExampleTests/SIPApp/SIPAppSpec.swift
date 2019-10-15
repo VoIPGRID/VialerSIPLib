@@ -19,27 +19,19 @@ class SIPAppSpec: QuickSpec {
             var messageHandler: Mock.MessageHandler!
             
             context("Calling") {
-                var receivedCallinActions: [Message.Feature.Calling.UseCase.Calling.Action]!
+                var receivedCallingActions: [Message.Feature.Calling.UseCase.Calling.Action]!
                 var didStartCall: Call!
                 var stopCall: Call!
                 var didStopCall: Call!
                 
                 beforeEach {
-                    receivedCallinActions = []
+                    receivedCallingActions = []
                     messageHandler = Mock.MessageHandler {
                         if case .feature(.calling(.useCase(.call(.action(let action))))) = $0 {
-                            receivedCallinActions.append(action)
-                            if case .callDidStart(let call) = action {
-                                didStartCall = call
-                            }
-                            
-                            if case .stop(let call) = action {
-                                stopCall = call
-                            }
-                            
-                            if case .callDidStop(let call) = action {
-                                didStopCall = call
-                            }
+                            receivedCallingActions.append(action)
+                            if case .callDidStart(let call) = action { didStartCall = call }
+                            if case         .stop(let call) = action { stopCall     = call }
+                            if case  .callDidStop(let call) = action { didStopCall  = call }
                         }
                     }
                     sut = SIPApp()
@@ -49,20 +41,23 @@ class SIPAppSpec: QuickSpec {
                 afterEach {
                     sut = nil
                     messageHandler = nil
-                    receivedCallinActions = nil
+                    receivedCallingActions = nil
+                    didStopCall = nil
+                    stopCall = nil
+                    didStartCall = nil
                 }
                 
                 
                 it("starts a call") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start))))))
                     
-                    expect(receivedCallinActions).to(equal([.start, .callDidStart(didStartCall)]))
+                    expect(receivedCallingActions).to(equal([.start, .callDidStart(didStartCall)]))
                 }
                 
                 it("ends a call") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.stop(Call())))))))
                     
-                    expect(receivedCallinActions).to(equal([.stop(stopCall), .callDidStop(didStopCall)]))
+                    expect(receivedCallingActions).to(equal([.stop(stopCall), .callDidStop(didStopCall)]))
                 }
             }
         }

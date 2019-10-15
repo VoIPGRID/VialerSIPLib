@@ -34,9 +34,7 @@ class SIPApp: App, MessageProvider {
         
         switch msg {
         case .feature(let feature):
-            features.forEach {
-                $0.handle(feature: feature)
-            }
+            features.forEach { $0.handle(feature: feature) }
         }
     }
     

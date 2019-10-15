@@ -10,21 +10,6 @@ import Quick
 import Nimble
 @testable import LibExample
 
-class Mock {
-        class MessageHandler: MessageHandling, MessageSubscriber {
-        
-        init(callBack: @escaping (Message) -> ()) {
-            self.callBack = callBack
-        }
-        
-        let callBack: (Message) -> ()
-        
-        func handle(msg: Message) {
-            callBack(msg)
-        }
-    }
-}
-
 class SettingsFeatureSpec: QuickSpec {
     override func spec() {
         describe("the SettingsFeature UseCase") {

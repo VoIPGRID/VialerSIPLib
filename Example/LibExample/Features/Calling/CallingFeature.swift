@@ -26,11 +26,14 @@ class CallingFeature: Feature {
     }
     
     private func handle(useCase: Message.Feature.Calling.UseCase) {
-        if case .call(.action(.start)) = useCase {
-            createCall.handle(request: .createCall)
-        } else
-            if case .call(.action(.stop(let call))) = useCase {
-            endCall.handle(request: .stop(call))
+        if case .call(.action(.start))          = useCase { createCall.handle(request: .createCall) }
+        if case .call(.action(.stop(let call))) = useCase {    endCall.handle(request: .stop(call)) }
+    }
+    
+    private func handle(response: CreateCall.Response) {
+        switch response {
+        case .callCreated(let call):
+            startCall.handle(request: .startCall(call))
         }
     }
     
@@ -45,13 +48,6 @@ class CallingFeature: Feature {
         switch response {
         case .callDidStop(let call):
             rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStop(call)))))))
-        }
-    }
-    
-    private func handle(response: CreateCall.Response) {
-        switch response {
-        case .callCreated(let call):
-            startCall.handle(request: .startCall(call))
         }
     }
 }
