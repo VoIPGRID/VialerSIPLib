@@ -10,7 +10,7 @@ import Quick
 import Nimble
 @testable import LibExample
 
-class UserHandlingSpec: QuickSpec, MessageHandling {
+class UserHandlingFeatureSpec: QuickSpec, MessageHandling {
     
     var loggedInUser:User!
     var loggedOutUser:User!

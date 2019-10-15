@@ -11,3 +11,13 @@ import Foundation
 struct Call {
     let uuid = UUID()
 }
+
+extension Call: Equatable {
+    static func == (
+        lhs: Call,
+        rhs: Call
+    ) -> Bool
+    {
+        return lhs.uuid == rhs.uuid
+    }
+}

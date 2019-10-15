@@ -17,7 +17,6 @@ class SIPAppSpec: QuickSpec {
             var sut: SIPApp!
             
             var messageHandler: Mock.MessageHandler!
-            
             context("Calling") {
                 var receivedCallingActions: [Message.Feature.Calling.UseCase.Calling.Action]!
                 var didStartCall: Call!
@@ -57,6 +56,7 @@ class SIPAppSpec: QuickSpec {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.stop(Call())))))))
                     
                     expect(receivedCallingActions).to(equal([.stop(stopCall), .callDidStop(didStopCall)]))
+                    expect(stopCall).to(equal(didStopCall))
                 }
             }
         }
