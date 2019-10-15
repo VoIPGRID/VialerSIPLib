@@ -10,18 +10,16 @@ protocol MessageHandling: class {
     func handle(msg: Message)
 }
 
-protocol App: MessageHandling{
-}
-
-protocol MessageSubscriber:MessageHandling {
-    
-}
 
 protocol MessageProvider {
     func add(subscriber:MessageSubscriber)
 }
 
-class SIPApp: App, MessageProvider {
+protocol MessageSubscriber: MessageHandling { }
+
+protocol App: MessageHandling, MessageProvider { }
+
+class SIPApp: App {
     
     private lazy var features: [Feature] = [
         UserHandlingFeature(with: self),
