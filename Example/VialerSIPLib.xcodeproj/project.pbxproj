@@ -638,9 +638,9 @@
 		C97E4E0C234F497800767A20 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				C902B1E12354DA30001FAFA9 /* CreateCall.swift */,
 				C97E4E0D234F49DB00767A20 /* StartCall.swift */,
 				C97E4E0F234F4A6800767A20 /* EndCall.swift */,
-				C902B1E12354DA30001FAFA9 /* CreateCall.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";

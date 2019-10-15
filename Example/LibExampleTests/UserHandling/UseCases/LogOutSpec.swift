@@ -14,25 +14,22 @@ class LogOutSpec: QuickSpec {
     override func spec() {
         describe("the LogOut UseCase") {
             var sut: LogOut!
-            var logOutResponse: LogOut.Response?
+            
+            var user: User!
             
             beforeEach {
-                sut = LogOut { logOutResponse = $0 }
+                sut = LogOut { if case .logOutConfirmed(let u) = $0 { user = u }}
             }
             
             afterEach {
-                logOutResponse = nil
+                user = nil
                 sut = nil
             }
             
             it("logs user out") {
                 sut.handle(request: .logOut(User(name: "the brain")))
                 
-                if case .logOutConfirmed(let user) = logOutResponse {
-                    expect(user.name) == "the brain"
-                } else {
-                    fail()
-                }
+                expect(user.name) == "the brain"
             }
         }
     }

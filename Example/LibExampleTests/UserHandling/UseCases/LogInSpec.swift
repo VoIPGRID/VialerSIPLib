@@ -15,25 +15,21 @@ class LogInSpec: QuickSpec {
         describe("the LogIn UseCase") {
             var sut: LogIn!
             
-            var logInResponse: LogIn.Response?
+            var user: User!
             
             beforeEach {
-                sut = LogIn { logInResponse = $0 }
+                sut = LogIn { if case .logInConfirmed(let u) = $0 { user = u }}
             }
             
             afterEach {
                 sut = nil
-                logInResponse = nil
+                user = nil
             }
             
             it("logs user in"){
                 sut.handle(request: .logIn("the brain", "password"))
                 
-                if case .logInConfirmed(let user) = logInResponse {
-                    expect(user.name).to(equal("the brain"))
-                } else {
-                    fail()
-                }
+                expect(user.name).to(equal("the brain"))
             }
         }
     }

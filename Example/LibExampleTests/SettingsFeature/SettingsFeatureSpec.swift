@@ -20,11 +20,7 @@ class SettingsFeatureSpec: QuickSpec {
             
             beforeEach {
                 receivedModes = []
-                messageHandler = Mock.MessageHandler {
-                    if case .feature(.settings(.useCase(.transport(.action(.didActivate(let m)))))) = $0 {
-                        receivedModes.append(m)
-                    }
-                }
+                messageHandler = Mock.MessageHandler { if case .feature(.settings(.useCase(.transport(.action(.didActivate(let m)))))) = $0 { receivedModes.append(m)}}
                 sut = SettingsFeature(with: messageHandler)
             }
             

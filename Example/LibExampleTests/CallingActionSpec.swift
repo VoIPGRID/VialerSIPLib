@@ -12,10 +12,8 @@ import Nimble
 
 
 class CallingActionSpec: QuickSpec {
-    
-    
     override func spec() {
-        describe("the Call type") {
+        describe("the Calling Action") {
             var sut: Message.Feature.Calling.UseCase.Calling.Action!
             
             var newCall: Call { return Call() }
@@ -23,6 +21,10 @@ class CallingActionSpec: QuickSpec {
             context(".start"){
                 beforeEach {
                     sut = .start
+                }
+                
+                afterEach {
+                    sut = nil
                 }
                 
                 it("equals .start"){
@@ -39,8 +41,8 @@ class CallingActionSpec: QuickSpec {
             }
             
             context(".stop"){
-                
                 var call: Call!
+                
                 beforeEach {
                     call = Call()
                     sut = .stop(call)

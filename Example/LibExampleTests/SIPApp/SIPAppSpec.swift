@@ -47,7 +47,6 @@ class SIPAppSpec: QuickSpec {
                     didStartCall = nil
                 }
                 
-                
                 it("starts a call") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start))))))
                     

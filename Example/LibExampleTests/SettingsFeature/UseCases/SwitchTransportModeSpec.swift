@@ -15,43 +15,33 @@ class SwitchTransportModeSpec: QuickSpec {
         describe("the SwitchTransportMode UseCase") {
             var sut: SwitchTransportMode!
             
-            var receivedResponse: SwitchTransportMode.Response!
+            var mode: TransportOption!
             
             beforeEach {
-                sut = SwitchTransportMode { receivedResponse = $0 }
+                sut = SwitchTransportMode { if case .modeWasActivated(let m) = $0 { mode = m } }
             }
             
             afterEach {
-                receivedResponse = nil
+                mode = nil
                 sut = nil
             }
             
             it("switches transport mode to tcp"){
                 sut.handle(request: .setMode(.tcp))
                 
-                if case .modeWasActivated(let mode) = receivedResponse {
-                    expect(mode) == .tcp
-                } else {
-                    fail()
-                }
+                expect(mode) == .tcp
             }
+            
             it("switches transport mode to udp"){
                 sut.handle(request: .setMode(.udp))
                 
-                if case .modeWasActivated(let mode) = receivedResponse {
-                    expect(mode) == .udp
-                } else {
-                    fail()
-                }
+                expect(mode) == .udp
             }
+            
             it("switches transport mode to tls"){
                 sut.handle(request: .setMode(.tls))
                 
-                if case .modeWasActivated(let mode) = receivedResponse {
-                    expect(mode) == .tls
-                } else {
-                    fail()
-                }
+                expect(mode) == .tls
             }
         }
     }

@@ -11,25 +11,19 @@ import Nimble
 @testable import LibExample
 
 class UserHandlingSpec: QuickSpec, MessageHandling {
-        
+    
     var loggedInUser:User!
     var loggedOutUser:User!
-
+    
     func handle(msg: Message) {
-        switch msg {
-        case .feature(.userHandling(.useCase(.login(.action(.logInConfirmed(let user)))))):
-            self.loggedInUser = user
-        case .feature(.userHandling(.useCase(.logout(.action(.logOutConfirmed(let user)))))):
-            self.loggedOutUser = user
-        default:
-            break
-        }
+        if case .feature(.userHandling(.useCase(.login (.action(.logInConfirmed (let user)))))) = msg { self.loggedInUser  = user }
+        if case .feature(.userHandling(.useCase(.logout(.action(.logOutConfirmed(let user)))))) = msg { self.loggedOutUser = user }
     }
     
     override func spec() {
         describe("the UserHandling Feature") {
             var sut: UserHandlingFeature!
-
+            
             beforeEach {
                 sut = UserHandlingFeature(with: self)
             }

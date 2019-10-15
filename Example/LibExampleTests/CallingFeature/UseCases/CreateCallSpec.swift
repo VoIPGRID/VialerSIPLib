@@ -6,7 +6,6 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-
 import Quick
 import Nimble
 @testable import LibExample
