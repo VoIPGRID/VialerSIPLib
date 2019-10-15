@@ -10,7 +10,6 @@ protocol MessageHandling: class {
     func handle(msg: Message)
 }
 
-
 protocol MessageProvider {
     func add(subscriber:MessageSubscriber)
 }
