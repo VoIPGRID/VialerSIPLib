@@ -9,6 +9,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CallingViewController" customModule="LibExample" customModuleProvider="target">
             <connections>
+                <outlet property="hangUp" destination="sqZ-zB-ZdW" id="rn9-Jn-qVs"/>
+                <outlet property="makeCall" destination="P8i-6a-Fjv" id="x6N-gJ-cE8"/>
                 <outlet property="phoneNumberField" destination="qXc-pG-0Ce" id="SIV-Up-o9y"/>
                 <outlet property="view" destination="HpG-q8-aFf" id="IBz-WY-2ef"/>
             </connections>
@@ -27,29 +29,60 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P8i-6a-Fjv">
-                    <rect key="frame" x="167" y="453" width="80" height="30"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OAc-gL-y6E">
+                    <rect key="frame" x="122.5" y="382" width="169" height="73"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P8i-6a-Fjv">
+                            <rect key="frame" x="0.0" y="0.0" width="73" height="73"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="73" id="0Qs-Sx-vgr"/>
+                                <constraint firstAttribute="width" constant="73" id="HXD-oc-ab6"/>
+                            </constraints>
+                            <state key="normal" title="call number" image="acceptCall">
+                                <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                            </state>
+                            <connections>
+                                <action selector="call:" destination="-1" eventType="touchUpInside" id="8xs-tS-lHC"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sqZ-zB-ZdW">
+                            <rect key="frame" x="96" y="0.0" width="73" height="73"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="73" id="PCA-6x-WJn"/>
+                                <constraint firstAttribute="height" constant="73" id="jPT-Gl-IKr"/>
+                            </constraints>
+                            <state key="normal" image="declineCall"/>
+                            <connections>
+                                <action selector="endCall:" destination="-1" eventType="touchUpInside" id="11a-qv-mCm"/>
+                            </connections>
+                        </button>
+                    </subviews>
                     <constraints>
-                        <constraint firstAttribute="width" constant="80" id="FBD-dT-ci8"/>
-                        <constraint firstAttribute="height" constant="30" id="ZpC-db-ioI"/>
+                        <constraint firstItem="sqZ-zB-ZdW" firstAttribute="top" secondItem="OAc-gL-y6E" secondAttribute="top" id="Dp7-WE-dX1"/>
+                        <constraint firstItem="sqZ-zB-ZdW" firstAttribute="leading" secondItem="OAc-gL-y6E" secondAttribute="leading" constant="96" id="Jat-wr-q4x"/>
+                        <constraint firstItem="sqZ-zB-ZdW" firstAttribute="leading" secondItem="P8i-6a-Fjv" secondAttribute="trailing" constant="23" id="NT8-uq-fcP"/>
+                        <constraint firstItem="P8i-6a-Fjv" firstAttribute="top" secondItem="OAc-gL-y6E" secondAttribute="top" id="Uy5-oD-TVU"/>
+                        <constraint firstItem="P8i-6a-Fjv" firstAttribute="leading" secondItem="OAc-gL-y6E" secondAttribute="leading" id="Ywc-9Z-nyg"/>
+                        <constraint firstAttribute="trailing" secondItem="sqZ-zB-ZdW" secondAttribute="trailing" id="a8N-Wd-eae"/>
+                        <constraint firstAttribute="height" constant="73" id="sk1-VV-dgl"/>
+                        <constraint firstAttribute="width" constant="169" id="wAO-2W-A3B"/>
+                        <constraint firstAttribute="trailing" secondItem="P8i-6a-Fjv" secondAttribute="trailing" constant="96" id="zSh-Fz-nbe"/>
                     </constraints>
-                    <state key="normal" title="call number">
-                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                    </state>
-                    <connections>
-                        <action selector="call:" destination="-1" eventType="touchUpInside" id="8xs-tS-lHC"/>
-                    </connections>
-                </button>
+                </view>
             </subviews>
             <color key="backgroundColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="P8i-6a-Fjv" firstAttribute="centerX" secondItem="HpG-q8-aFf" secondAttribute="centerX" id="SPB-vv-LAG"/>
-                <constraint firstItem="P8i-6a-Fjv" firstAttribute="top" secondItem="qXc-pG-0Ce" secondAttribute="bottom" constant="93" id="UZ4-bZ-Se1"/>
+                <constraint firstItem="OAc-gL-y6E" firstAttribute="top" secondItem="qXc-pG-0Ce" secondAttribute="bottom" constant="22" id="3N8-CH-GkX"/>
                 <constraint firstItem="qXc-pG-0Ce" firstAttribute="centerX" secondItem="HpG-q8-aFf" secondAttribute="centerX" id="Vdt-e9-nXN"/>
                 <constraint firstItem="qXc-pG-0Ce" firstAttribute="top" secondItem="YkF-e9-TZD" secondAttribute="top" constant="282" id="cLl-75-91u"/>
+                <constraint firstItem="OAc-gL-y6E" firstAttribute="centerX" secondItem="HpG-q8-aFf" secondAttribute="centerX" id="dTb-QL-6ru"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="YkF-e9-TZD"/>
-            <point key="canvasLocation" x="-777" y="86"/>
+            <point key="canvasLocation" x="-778.26086956521749" y="85.714285714285708"/>
         </view>
     </objects>
+    <resources>
+        <image name="acceptCall" width="73" height="73"/>
+        <image name="declineCall" width="83" height="83"/>
+    </resources>
 </document>
