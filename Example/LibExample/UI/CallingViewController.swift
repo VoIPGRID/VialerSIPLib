@@ -14,6 +14,7 @@ class CallingViewController: MessageViewController {
     // MARK: - View State
     private enum CallState {
         case idle
+        case dialing
         case calling
         case failed
     }
@@ -43,9 +44,10 @@ class CallingViewController: MessageViewController {
     // MARK: - Incomming Messages
     override func handle(msg: Message) {
         super.handle(msg: msg)
+        if case .feature(.calling(.useCase(.call(.action(.callDidStop (let call)))))) = msg { update(call: call, newState:    .idle) }
+        if case .feature(.calling(.useCase(.call(.action(.dialing     (let call)))))) = msg { update(call: call, newState: .dialing) }
         if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = msg { update(call: call, newState: .calling) }
-        if case .feature(.calling(.useCase(.call(.action(.callFailed  (let call)))))) = msg { update(call: call, newState: .failed)  }
-        if case .feature(.calling(.useCase(.call(.action(.callDidStop (let call)))))) = msg { update(call: call, newState: .idle)    }
+        if case .feature(.calling(.useCase(.call(.action(.callFailed  (let call)))))) = msg { update(call: call, newState:  .failed) }
     }
     
     //MARK: - State Handling
@@ -60,8 +62,9 @@ class CallingViewController: MessageViewController {
         
         switch state {
         case .idle   : updateUI(enableHangUpButton: false, enabledMakeCallButton: true,  numberFieldColor: .white)
+        case .dialing: updateUI(enableHangUpButton: true,  enabledMakeCallButton: true,  numberFieldColor:  .cyan)
         case .calling: updateUI(enableHangUpButton: true,  enabledMakeCallButton: false, numberFieldColor: .green)
-        case .failed : updateUI(enableHangUpButton: false, enabledMakeCallButton: true,  numberFieldColor: .red)
+        case .failed : updateUI(enableHangUpButton: false, enabledMakeCallButton: true,  numberFieldColor:   .red)
         }
     }
 }

@@ -17,6 +17,7 @@ class StartCall: UseCase {
     }
     
     enum Response {
+        case dialing(Call)
         case callDidStart(Call)
         case failedStarting(Call)
     }
@@ -37,9 +38,12 @@ class StartCall: UseCase {
         switch request {
         case .startCall(let call):
             if(handleChecker(normalise(call.handle))) {
-                responseHandler(.callDidStart(transform(call, with: .started)))
+                dispatch(in: .milliseconds(.random(in: 500..<1500)))
+                    { [weak self] in self?.responseHandler(.callDidStart(transform(call, with: .started))) }
+                responseHandler(.dialing(call))
             } else {
-                responseHandler(.failedStarting(transform(call, with: .failed)))
+                dispatch(in: .milliseconds(.random(in: 150..<500)))
+                { [weak self] in self?.responseHandler(.failedStarting(transform(call, with: .failed)))}
             }
         }
     }
@@ -47,6 +51,10 @@ class StartCall: UseCase {
 
 
 //MARK: -
+fileprivate func dispatch(in timeInterval:DispatchTimeInterval, callback:@escaping () ->()) {
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + timeInterval, execute: callback)
+}
+
 fileprivate
 func checkHandle(_ handle:String) -> Bool {
     return CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn:handle))

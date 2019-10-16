@@ -17,7 +17,7 @@ class SIPAppSpec: QuickSpec {
             
             var messageHandler: Mock.MessageHandler!
             context("Calling") {
-                var receivedCallingActions: [Message.Feature.Calling.UseCase.Calling.Action]!
+                var receivedCallingActions: [String]!
                 var didStartCall: Call!
                 var failedCall: Call!
                 
@@ -28,11 +28,10 @@ class SIPAppSpec: QuickSpec {
                     receivedCallingActions = []
                     messageHandler = Mock.MessageHandler {
                         if case .feature(.calling(.useCase(.call(.action(let action))))) = $0 {
-                            receivedCallingActions.append(action)
-                            if case .callDidStart(let call) = action { didStartCall = call }
-                            if case   .callFailed(let call) = action {   failedCall = call }
-                            if case         .stop(let call) = action {     stopCall = call }
-                            if case  .callDidStop(let call) = action {  didStopCall = call }
+                            if case .callDidStart(let call) = action { didStartCall = call;  receivedCallingActions.append("didStart")}
+                            if case   .callFailed(let call) = action {   failedCall = call;  receivedCallingActions.append("failed") }
+                            if case         .stop(let call) = action {     stopCall = call;  receivedCallingActions.append("stop") }
+                            if case  .callDidStop(let call) = action {  didStopCall = call;  receivedCallingActions.append("didStop") }
                         }
                     }
                     sut = SIPApp()
@@ -51,19 +50,19 @@ class SIPAppSpec: QuickSpec {
                 it("starts a call with valid number") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start("12345")))))))
                     
-                    expect(receivedCallingActions).to(equal([.start("12345"), .callDidStart(didStartCall)]))
+                    expect(receivedCallingActions).toEventually(equal(["didStart"]), timeout: 5, pollInterval: 0.2)
                 }
                 
                 it("starts a failing call with malformed number") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start("")))))))
                     
-                    expect(receivedCallingActions[1]).to(equal(.callFailed(failedCall)))
+                    expect(receivedCallingActions).toEventually(equal(["failed"]), timeout: 5, pollInterval: 0.2)
                 }
                 
                 it("ends a call") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.stop(transform(Call(handle: "12345"), with: .started) )))))))
                     
-                    expect(receivedCallingActions).to(equal([.stop(stopCall), .callDidStop(didStopCall)]))
+                    expect(receivedCallingActions).to(equal(["stop", "didStop"]))
                     expect(stopCall.uuid).to(equal(didStopCall.uuid))
                 }
             }

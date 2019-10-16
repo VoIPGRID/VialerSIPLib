@@ -76,6 +76,7 @@ enum Message {
                     
                     enum Action {
                         case start(String)
+                        case dialing(Call)
                         case callDidStart(Call)
                         case callFailed(Call)
                         case stop(Call)

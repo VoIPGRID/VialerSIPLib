@@ -15,11 +15,11 @@ class RootAppSpec: QuickSpec {
         describe("the RootApp") {
             var sut: RootApp!
             var messageHandler: Mock.MessageHandler!
-            var interceptedCall: Call!
+            var interceptedHandle: String?
 
             beforeEach {
                 messageHandler = Mock.MessageHandler {
-                    if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = $0 { interceptedCall = call }
+                    if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = $0 { interceptedHandle = call.handle }
                 }
                 sut = RootApp()
                 sut.add(subscriber: messageHandler)
@@ -28,14 +28,14 @@ class RootAppSpec: QuickSpec {
             afterEach {
                 sut = nil
                 messageHandler = nil
-                interceptedCall = nil
+                interceptedHandle = nil
             }
             
             context("Message Passing") {
                 it("passes to and receives message from SIPApp"){
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start("2312")))))))
                     
-                    expect(interceptedCall.handle) == "2312"
+                    expect(interceptedHandle).toEventually(equal("2312"), timeout: 5.0, pollInterval: 0.2)
                 }
             }
         }

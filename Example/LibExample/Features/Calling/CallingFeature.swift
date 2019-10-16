@@ -27,22 +27,20 @@ final class CallingFeature: Feature {
     
     private func handle(useCase: Message.Feature.Calling.UseCase) {
         if case .call(.action(.start(let handle))) = useCase { createCall.handle(request: .createCall(handle)) }
-        if case .call(.action(.stop(let call)))    = useCase {    endCall.handle(request: .stop(call)) }
+        if case .call(.action(.stop (let call)))   = useCase {    endCall.handle(request:       .stop  (call)) }
     }
     
     private func handle(response: CreateCall.Response) {
         switch response {
-        case .callCreated(let call):
-            startCall.handle(request: .startCall(call))
+        case .callCreated(let call): startCall.handle(request: .startCall(call))
         }
     }
     
     private func handle(response: StartCall.Response) {
         switch response {
-        case .callDidStart(let call):
-            rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStart(call)))))))
-        case .failedStarting(let call):
-            rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callFailed(call)))))))
+        case        .dialing(let call): rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(     .dialing(call)))))))
+        case   .callDidStart(let call): rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStart(call)))))))
+        case .failedStarting(let call): rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(  .callFailed(call)))))))
         }
     }
 

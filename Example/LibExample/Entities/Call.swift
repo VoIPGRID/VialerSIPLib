@@ -29,6 +29,7 @@ struct Call {
     enum State {
         case uninitialized
         case initialized
+        case dialing
         case started
         case ended
         case failed

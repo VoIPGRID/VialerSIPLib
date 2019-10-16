@@ -15,47 +15,47 @@ class StartCallSpec: QuickSpec {
         describe("the StartCall UseCase") {
             var sut: StartCall!
             
-            var receivedCall: Call!
-            
+            var startedCalls: [Call]!
+            var failedCalls: [Call]!
             beforeEach {
+                startedCalls = []
+                failedCalls = []
                 sut = StartCall {
-                    let setReceivedCall:(Call) -> Void = { receivedCall = $0}
                     switch $0 {
-                    case   .callDidStart(let call): setReceivedCall(call)
-                    case .failedStarting(let call): setReceivedCall(call)
+                    case   .callDidStart(let call): startedCalls.append(call)
+                    case .failedStarting(let call): failedCalls.append(call)
+                    default:
+                        break
                     }
                 }
             }
             
             afterEach {
-                receivedCall = nil
                 sut = nil
+                startedCalls = nil
+                failedCalls = nil
             }
             
-            it("starts calls successfully with valid numbers"){
+            it("calls successfully with valid numbers"){
                 
-                let validNumbers = ["1236865", "21.7", "217-12", "217   12", "  12121212 ", "+1721998983"]
-                
-                var responseStates: [Call.State] = []
+                let validNumbers = ["1236865", "21.7", "217-12", "217   12", "  12121212 ", "+1721998983(9)"]
                 validNumbers.forEach {
                     let newCall = Call(handle: $0)
                     sut.handle(request: .startCall(newCall))
-                    
-                    responseStates.append(receivedCall!.state)
                 }
-                expect(responseStates) == [.started, .started, .started, .started, .started, .started]
+                expect(startedCalls.compactMap{ (call) -> Call.State in return call.state })
+                    .toEventually(equal([.started, .started, .started, .started, .started, .started]), timeout: 5, pollInterval: 0.2)
             }
             
-            it("starts calls unsuccessfully with malformed numbers"){
+            it("fails to call with malformed numbers"){
                 
                 let malformedNumber = ["12QQ45", "", " \n  "]
-                var responseStates: [Call.State] = []
                 malformedNumber.forEach {
                     let newCall = Call(handle: $0)
                     sut.handle(request: .startCall(newCall))
-                    responseStates.append(receivedCall!.state)
                 }
-                expect(responseStates) == [.failed, .failed, .failed]
+                expect(failedCalls.compactMap{ (call) -> Call.State in return call.state })
+                    .toEventually(equal([.failed, .failed, .failed]), timeout: 5, pollInterval: 0.2)
             }
         }
     }
