@@ -7,7 +7,6 @@
 //
 
 
-
 enum Message {
 
     case feature(Feature)
@@ -76,8 +75,9 @@ enum Message {
                     case action(Action)
                     
                     enum Action {
-                        case start
+                        case start(String)
                         case callDidStart(Call)
+                        case failedToStartCall(Call)
                         case stop(Call)
                         case callDidStop(Call)
                     }
@@ -97,10 +97,11 @@ extension Message.Feature.Calling.UseCase.Calling.Action: Equatable {
         let compare: (Call, Call) -> Bool = { $0.uuid == $1.uuid }
         
         switch (lhs, rhs) {
-        case (.start,                     .start):                     return true
-        case (.callDidStart(let lhsCall), .callDidStart(let rhsCall)): return compare(lhsCall, rhsCall)
-        case (        .stop(let lhsCall),         .stop(let rhsCall)): return compare(lhsCall, rhsCall)
-        case ( .callDidStop(let lhsCall),  .callDidStop(let rhsCall)): return compare(lhsCall, rhsCall)
+        case (            .start,                          .start)             : return true
+        case (     .callDidStart(let lhsCall),      .callDidStart(let rhsCall)): return compare(lhsCall, rhsCall)
+        case (             .stop(let lhsCall),              .stop(let rhsCall)): return compare(lhsCall, rhsCall)
+        case (      .callDidStop(let lhsCall),       .callDidStop(let rhsCall)): return compare(lhsCall, rhsCall)
+        case (.failedToStartCall(let lhsCall), .failedToStartCall(let rhsCall)): return compare(lhsCall, rhsCall)
         default:
             return false
         }

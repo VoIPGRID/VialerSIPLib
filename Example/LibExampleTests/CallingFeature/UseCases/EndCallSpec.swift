@@ -32,7 +32,7 @@ class EndCallSpec: QuickSpec {
             }
             
             it("ends a call"){
-                sut.handle(request: .stop(Call()))
+                sut.handle(request: .stop(Call(handle: "12345")))
                 
                 expect(receivedCall).toNot(beNil())
             }

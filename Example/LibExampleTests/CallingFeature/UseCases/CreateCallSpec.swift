@@ -32,7 +32,7 @@ class CreateCallSpec: QuickSpec {
             }
             
             it("creates call object") {
-                sut.handle(request: .createCall)
+                sut.handle(request: .createCall("12345"))
                 
                 expect(createdCall).toNot(beNil())
             }

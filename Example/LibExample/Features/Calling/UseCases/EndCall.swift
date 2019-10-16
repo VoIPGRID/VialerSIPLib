@@ -6,6 +6,7 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
+final
 class EndCall: UseCase {
     typealias RequestType = Request
     typealias ResponseType = Response
@@ -27,7 +28,7 @@ class EndCall: UseCase {
     func handle(request: Request) {
         switch request {
         case .stop(let call):
-            responseHandler(.callDidStop(call))
+            responseHandler(.callDidStop(transform(call, with: .ended)))
         }
     }
 }

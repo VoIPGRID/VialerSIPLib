@@ -35,13 +35,13 @@ class CallingFeatureSpec: QuickSpec {
             }
             
             it("creates a call object for started call") {
-                sut.handle(feature: .calling(.useCase(.call(.action(.start)))))
+                sut.handle(feature: .calling(.useCase(.call(.action(.start("12345"))))))
                 
                 expect(startedCall).toNot(beNil())
             }
             
             it("creates a call obect for started call") {
-                sut.handle(feature: .calling(.useCase(.call(.action(.start)))))
+                sut.handle(feature: .calling(.useCase(.call(.action(.start("12345"))))))
                 sut.handle(feature: .calling(.useCase(.call(.action(.stop(startedCall))))))
                 
                 expect(endedCall).toNot(beNil())

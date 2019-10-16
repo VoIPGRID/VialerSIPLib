@@ -6,14 +6,13 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-class CreateCall: UseCase {
-    
-    
+final
+class CreateCall: UseCase {    
     typealias RequestType = Request
     typealias ResponseType = Response
     
     enum Request {
-        case createCall
+        case createCall(String)
     }
     enum Response {
         case callCreated(Call)
@@ -26,8 +25,8 @@ class CreateCall: UseCase {
     
     func handle(request: CreateCall.Request) {
         switch request {
-        case .createCall:
-            responseHandler(.callCreated(Call()))
+        case .createCall(let handle):
+            responseHandler(.callCreated(Call(handle: handle)))
         }
     }
 }

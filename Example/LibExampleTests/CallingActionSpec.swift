@@ -16,11 +16,11 @@ class CallingActionSpec: QuickSpec {
         describe("the Calling Action") {
             var sut: Message.Feature.Calling.UseCase.Calling.Action!
             
-            var newCall: Call { return Call() }
+            var newCall: Call { return Call(handle: "12345") }
             
             context(".start"){
                 beforeEach {
-                    sut = .start
+                    sut = .start("12345")
                 }
                 
                 afterEach {
@@ -28,7 +28,7 @@ class CallingActionSpec: QuickSpec {
                 }
                 
                 it("equals .start"){
-                    expect(sut) == .start
+                    expect(sut) == .start("12345")
                 }
                 
                 it("doesnt equal .stop"){
@@ -44,12 +44,12 @@ class CallingActionSpec: QuickSpec {
                 var call: Call!
                 
                 beforeEach {
-                    call = Call()
+                    call = Call(handle: "12345")
                     sut = .stop(call)
                 }
                 
                 it("doesnt equal .start"){
-                    expect(sut) != .start
+                    expect(sut) != .start("12345")
                 }
                 
                 it("equals .stop with same call"){

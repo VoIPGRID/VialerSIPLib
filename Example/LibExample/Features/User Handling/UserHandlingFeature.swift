@@ -6,6 +6,7 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
+final
 class UserHandlingFeature: Feature {
     
     required init(with rootMessageHandler: MessageHandling) {
@@ -27,8 +28,8 @@ class UserHandlingFeature: Feature {
     private func handle(useCase: Message.Feature.UserHandling.UseCase) {
         if case .login(.action(.logIn(let username, let password))) = useCase {
             logIn.handle(request: .logIn(username, password))
-        } else
-            if case .logout(.action(.logOut(let user))) = useCase {
+        } else if
+            case .logout(.action(.logOut(let user))) = useCase {
             logOut.handle(request: .logOut(user))
         }
     }

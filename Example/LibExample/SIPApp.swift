@@ -18,6 +18,7 @@ protocol MessageSubscriber: MessageHandling { }
 
 protocol App: MessageHandling, MessageProvider { }
 
+final
 class SIPApp: App {
     
     private lazy var features: [Feature] = [

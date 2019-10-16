@@ -6,6 +6,7 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
+final
 class LogIn: UseCase {
     typealias RequestType = Request
     typealias ResponseType = Response

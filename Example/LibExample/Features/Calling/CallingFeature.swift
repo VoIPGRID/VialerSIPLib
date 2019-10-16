@@ -6,7 +6,7 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-class CallingFeature: Feature {
+final class CallingFeature: Feature {
     
     required init(with rootMessageHandler: MessageHandling) {
         self.rootMessageHandler = rootMessageHandler
@@ -26,8 +26,8 @@ class CallingFeature: Feature {
     }
     
     private func handle(useCase: Message.Feature.Calling.UseCase) {
-        if case .call(.action(.start))          = useCase { createCall.handle(request: .createCall) }
-        if case .call(.action(.stop(let call))) = useCase {    endCall.handle(request: .stop(call)) }
+        if case .call(.action(.start(let handle))) = useCase { createCall.handle(request: .createCall(handle)) }
+        if case .call(.action(.stop(let call)))    = useCase {    endCall.handle(request: .stop(call)) }
     }
     
     private func handle(response: CreateCall.Response) {
@@ -41,6 +41,8 @@ class CallingFeature: Feature {
         switch response {
         case .callDidStart(let call):
             rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStart(call)))))))
+        case .failedStarting(let call):
+            rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.failedToStartCall(call)))))))
         }
     }
 
