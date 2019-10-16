@@ -23,5 +23,4 @@ class MessageTabBarController: UITabBarController, MessageHandling, ResponseHand
     func handle(msg: Message) {
         viewControllers?.compactMap { $0 as? MessageHandling}.forEach { $0.handle(msg: msg)}
     }
-    
 }
