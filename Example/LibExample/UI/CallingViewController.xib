@@ -9,8 +9,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CallingViewController" customModule="LibExample" customModuleProvider="target">
             <connections>
-                <outlet property="hangUp" destination="sqZ-zB-ZdW" id="rn9-Jn-qVs"/>
-                <outlet property="makeCall" destination="P8i-6a-Fjv" id="x6N-gJ-cE8"/>
+                <outlet property="hangUpButton" destination="sqZ-zB-ZdW" id="rn9-Jn-qVs"/>
+                <outlet property="makeCallButton" destination="P8i-6a-Fjv" id="x6N-gJ-cE8"/>
                 <outlet property="phoneNumberField" destination="qXc-pG-0Ce" id="SIV-Up-o9y"/>
                 <outlet property="view" destination="HpG-q8-aFf" id="IBz-WY-2ef"/>
             </connections>
@@ -20,7 +20,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="111" borderStyle="roundedRect" placeholder="enter phone number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qXc-pG-0Ce">
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1234-12345-123(0)" borderStyle="roundedRect" placeholder="enter phone number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qXc-pG-0Ce">
                     <rect key="frame" x="99.5" y="326" width="215" height="34"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="34" id="cZH-2d-jWT"/>
@@ -42,7 +42,7 @@
                                 <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                             </state>
                             <connections>
-                                <action selector="call:" destination="-1" eventType="touchUpInside" id="8xs-tS-lHC"/>
+                                <action selector="makeCall:" destination="-1" eventType="touchUpInside" id="8xs-tS-lHC"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sqZ-zB-ZdW">
@@ -70,7 +70,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.52399506118555184" green="0.53127077037405079" blue="0.61652088165283203" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="OAc-gL-y6E" firstAttribute="top" secondItem="qXc-pG-0Ce" secondAttribute="bottom" constant="22" id="3N8-CH-GkX"/>
                 <constraint firstItem="qXc-pG-0Ce" firstAttribute="centerX" secondItem="HpG-q8-aFf" secondAttribute="centerX" id="Vdt-e9-nXN"/>

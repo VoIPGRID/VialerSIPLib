@@ -42,7 +42,7 @@ final class CallingFeature: Feature {
         case .callDidStart(let call):
             rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStart(call)))))))
         case .failedStarting(let call):
-            rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.failedToStartCall(call)))))))
+            rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callFailed(call)))))))
         }
     }
 

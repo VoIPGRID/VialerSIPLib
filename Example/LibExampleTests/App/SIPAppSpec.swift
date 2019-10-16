@@ -29,10 +29,10 @@ class SIPAppSpec: QuickSpec {
                     messageHandler = Mock.MessageHandler {
                         if case .feature(.calling(.useCase(.call(.action(let action))))) = $0 {
                             receivedCallingActions.append(action)
-                            if case      .callDidStart(let call) = action { didStartCall = call }
-                            if case .failedToStartCall(let call) = action {   failedCall = call }
-                            if case              .stop(let call) = action {     stopCall = call }
-                            if case       .callDidStop(let call) = action { didStopCall  = call }
+                            if case .callDidStart(let call) = action { didStartCall = call }
+                            if case   .callFailed(let call) = action {   failedCall = call }
+                            if case         .stop(let call) = action {     stopCall = call }
+                            if case  .callDidStop(let call) = action {  didStopCall = call }
                         }
                     }
                     sut = SIPApp()
@@ -57,7 +57,7 @@ class SIPAppSpec: QuickSpec {
                 it("starts a failing call with malformed number") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start("")))))))
                     
-                    expect(receivedCallingActions[1]).to(equal(.failedToStartCall(failedCall)))
+                    expect(receivedCallingActions[1]).to(equal(.callFailed(failedCall)))
                 }
                 
                 it("ends a call") {
