@@ -10,7 +10,7 @@
 enum Message {
 
     case feature(Feature)
-    
+    case appUpdate(AppUpdate)
     enum Feature {
         case userHandling(UserHandling)
         case settings(Settings)
@@ -84,6 +84,9 @@ enum Message {
                 }
             }
         }
+    }
+    enum AppUpdate {
+        case updated
     }
 }
 

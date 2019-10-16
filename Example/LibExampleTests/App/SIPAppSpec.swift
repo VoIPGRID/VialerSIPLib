@@ -2,14 +2,13 @@
 //  SIPAppSpec.swift
 //  LibExampleTests
 //
-//  Created by Manuel on 14/10/2019.
+//  Created by Manuel on 16/10/2019.
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
 import Quick
 import Nimble
 @testable import LibExample
-
 
 class SIPAppSpec: QuickSpec {
     override func spec() {
@@ -21,7 +20,7 @@ class SIPAppSpec: QuickSpec {
                 var receivedCallingActions: [Message.Feature.Calling.UseCase.Calling.Action]!
                 var didStartCall: Call!
                 var failedCall: Call!
-
+                
                 var stopCall: Call!
                 var didStopCall: Call!
                 
@@ -71,3 +70,4 @@ class SIPAppSpec: QuickSpec {
         }
     }
 }
+

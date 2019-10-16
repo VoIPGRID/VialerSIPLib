@@ -55,7 +55,7 @@ func checkHandle(_ handle:String) -> Bool {
 
 fileprivate
 func normalise(_ handle:String) -> String {
-    return cleanSeperators(normaliseInternational(trim(handle)))
+    return removeNonAlphanumericCharacters(normaliseInternational(trim(handle)))
 }
 
 fileprivate
@@ -64,8 +64,8 @@ func trim(_ handle:String) -> String {
 }
 
 fileprivate
-func cleanSeperators(_ handle:String) -> String {
-    return handle.components(separatedBy: CharacterSet(charactersIn: ".-").union(.whitespacesAndNewlines)).joined(separator: "")
+func removeNonAlphanumericCharacters(_ handle:String) -> String {
+    return handle.components(separatedBy: CharacterSet.alphanumerics.inverted).joined(separator: "")
 }
 
 fileprivate

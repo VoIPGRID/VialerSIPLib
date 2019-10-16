@@ -10,28 +10,39 @@ protocol MessageHandling: class {
     func handle(msg: Message)
 }
 
+protocol ResponseHandling {
+    var responseHandler: MessageHandling? { get set }
+}
+
+
 protocol MessageProvider {
     func add(subscriber:MessageSubscriber)
 }
 
 protocol MessageSubscriber: MessageHandling { }
 
-protocol App: MessageHandling, MessageProvider { }
-
+protocol App: MessageHandling { }
+protocol SubscribableApp: App, MessageProvider {}
 final
-class SIPApp: App {
+class SIPApp: SubscribableApp {
+    
+    init(rootMessageHandler: MessageHandling? = nil) {
+        self.privateRootMessageHandler = rootMessageHandler
+    }
+    
+    var rootMessageHandler: MessageHandling { return privateRootMessageHandler ?? self }
+    private let privateRootMessageHandler: MessageHandling?
     
     private lazy var features: [Feature] = [
-        UserHandlingFeature(with: self),
-        SettingsFeature(with: self),
-        CallingFeature(with: self)
+        UserHandlingFeature(with: rootMessageHandler),
+        SettingsFeature(with: rootMessageHandler),
+        CallingFeature(with: rootMessageHandler)
     ]
     
     func handle(msg: Message) {
         subscribers.forEach { $0.handle(msg: msg) }
         
-        switch msg {
-        case .feature(let feature):
+        if case .feature(let feature) = msg {
             features.forEach { $0.handle(feature: feature) }
         }
     }
