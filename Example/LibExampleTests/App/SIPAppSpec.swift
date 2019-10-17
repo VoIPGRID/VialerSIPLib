@@ -28,10 +28,10 @@ class SIPAppSpec: QuickSpec {
                     receivedCallingActions = []
                     messageHandler = Mock.MessageHandler {
                         if case .feature(.calling(.useCase(.call(.action(let action))))) = $0 {
-                            if case .callDidStart(let call) = action { didStartCall = call;  receivedCallingActions.append("didStart")}
-                            if case   .callFailed(let call) = action {   failedCall = call;  receivedCallingActions.append("failed") }
-                            if case         .stop(let call) = action {     stopCall = call;  receivedCallingActions.append("stop") }
-                            if case  .callDidStop(let call) = action {  didStopCall = call;  receivedCallingActions.append("didStop") }
+                            if case .callDidStart(let call) = action { didStartCall = call;  receivedCallingActions.append("didStart") }
+                            if case   .callFailed(let call) = action {   failedCall = call;  receivedCallingActions.append(  "failed") }
+                            if case         .stop(let call) = action {     stopCall = call;  receivedCallingActions.append(    "stop") }
+                            if case  .callDidStop(let call) = action {  didStopCall = call;  receivedCallingActions.append( "didStop") }
                         }
                     }
                     sut = SIPApp()
@@ -50,13 +50,15 @@ class SIPAppSpec: QuickSpec {
                 it("starts a call with valid number") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start("12345")))))))
                     
-                    expect(receivedCallingActions).toEventually(equal(["didStart"]), timeout: 5, pollInterval: 0.2)
+                    expect(didStartCall).toEventuallyNot(beNil())
+                    expect(receivedCallingActions).toEventually(equal(["didStart"]))
                 }
                 
                 it("starts a failing call with malformed number") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start("")))))))
                     
-                    expect(receivedCallingActions).toEventually(equal(["failed"]), timeout: 5, pollInterval: 0.2)
+                    expect(failedCall).toEventuallyNot(beNil())
+                    expect(receivedCallingActions).toEventually(equal(["failed"]))
                 }
                 
                 it("ends a call") {
@@ -67,6 +69,7 @@ class SIPAppSpec: QuickSpec {
                 }
             }
         }
+        Nimble.AsyncDefaults.Timeout = 2
     }
 }
 

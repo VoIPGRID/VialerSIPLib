@@ -44,7 +44,7 @@ class StartCallSpec: QuickSpec {
                     sut.handle(request: .startCall(newCall))
                 }
                 expect(startedCalls.compactMap{ (call) -> Call.State in return call.state })
-                    .toEventually(equal([.started, .started, .started, .started, .started, .started]), timeout: 5, pollInterval: 0.2)
+                    .toEventually(equal([.started, .started, .started, .started, .started, .started]))
             }
             
             it("fails to call with malformed numbers"){
@@ -55,8 +55,9 @@ class StartCallSpec: QuickSpec {
                     sut.handle(request: .startCall(newCall))
                 }
                 expect(failedCalls.compactMap{ (call) -> Call.State in return call.state })
-                    .toEventually(equal([.failed, .failed, .failed]), timeout: 5, pollInterval: 0.2)
+                    .toEventually(equal([.failed, .failed, .failed]))
             }
         }
+        Nimble.AsyncDefaults.Timeout = 2
     }
 }

@@ -37,7 +37,7 @@ class CallingFeatureSpec: QuickSpec {
             it("creates a call object for started call") {
                 sut.handle(feature: .calling(.useCase(.call(.action(.start("12345"))))))
                 
-                expect(startedCall).toEventuallyNot(beNil(), timeout: 5)
+                expect(startedCall).toEventuallyNot(beNil())
             }
             
             it("creates a call obect for started call") {
@@ -46,5 +46,6 @@ class CallingFeatureSpec: QuickSpec {
                 expect(endedCall).toNot(beNil())
             }
         }
+        Nimble.AsyncDefaults.Timeout = 2
     }
 }

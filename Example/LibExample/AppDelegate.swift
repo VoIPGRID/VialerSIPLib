@@ -15,11 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let viewController = CallingViewController()
-        let navigationController = MessageNavigationController()
+        let navigationController = MessageNavigationController(rootViewController:  CallingViewController())
         let tabBarController = MessageTabBarController()
         
-        navigationController.setViewControllers([viewController], animated: false)
         tabBarController.setViewControllers([navigationController], animated: false)
 
         tabBarController.responseHandler = app

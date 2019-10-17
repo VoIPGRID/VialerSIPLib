@@ -11,13 +11,7 @@ import UIKit
 class MessageTabBarController: UITabBarController, MessageHandling, ResponseHandling, MessageSubscriber {
     
     var responseHandler: MessageHandling? {
-        didSet {
-            viewControllers?.forEach {
-                if var handler = $0 as? ResponseHandling  {
-                    handler.responseHandler = responseHandler
-                }
-            }
-        }
+        didSet { viewControllers?.compactMap { $0 as? ResponseHandling }.forEach { var x = $0; x.responseHandler = responseHandler } }
     }
     
     func handle(msg: Message) {

@@ -33,12 +33,12 @@ class CallingViewController: MessageViewController {
     }
 
     //MARK: - Call Making
-    @IBAction func endCall(_ sender: Any) {
-        if let c = currentCall { responseHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.stop(c))))))) }
-    }
-    
     @IBAction func makeCall(_ sender: Any) {
         responseHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.start(phoneNumberField.text ?? "")))))))
+    }
+    
+    @IBAction func endCall(_ sender: Any) {
+        if let c = currentCall { responseHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.stop(c))))))) }
     }
     
     // MARK: - Incomming Messages
@@ -56,8 +56,8 @@ class CallingViewController: MessageViewController {
     private func stateChanged() {
         func updateUI(enableHangUpButton:Bool, enabledMakeCallButton: Bool, numberFieldColor: UIColor) {
             phoneNumberField.layer.borderColor = numberFieldColor.cgColor
-            hangUpButton    .isEnabled         = enableHangUpButton
-            makeCallButton  .isEnabled         = enabledMakeCallButton
+                hangUpButton.isEnabled         = enableHangUpButton
+              makeCallButton.isEnabled         = enabledMakeCallButton
         }
         
         switch state {

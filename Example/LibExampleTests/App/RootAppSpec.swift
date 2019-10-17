@@ -35,10 +35,11 @@ class RootAppSpec: QuickSpec {
                 it("passes to and receives message from SIPApp"){
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start("2312")))))))
                     
-                    expect(interceptedHandle).toEventually(equal("2312"), timeout: 5.0, pollInterval: 0.2)
+                    expect(interceptedHandle).toEventually(equal("2312"))
                 }
             }
         }
+        Nimble.AsyncDefaults.Timeout = 2
     }
 }
 
