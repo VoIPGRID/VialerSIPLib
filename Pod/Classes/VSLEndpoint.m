@@ -686,18 +686,14 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
     VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
         VSLLogInfo(@"Detected inbound call(%d) for account:%d", call_id, acc_id);
-//        VSLCall *call = [[VSLCall alloc]    // TODO: Instead of creating a call here, the call is alrady created at 'didReceiveIncomingPushWith', so retrieve it by callWithUUID / callWithID. Probably update some fields now the sip invite packet is here.
-//                         initInboundCallWithCallId:call_id
-//                         account:account
-//                         andInvite:[[SipInvite alloc] initWithInvitePacket:rdata->pkt_info.packet]];
         
         VSLCallManager *callManager = [VialerSIPLib sharedInstance].callManager;
         NSArray *calls = [callManager callsForAccount:account];
-//        NSString *payloadUUID = payload[@"unique_key"];
-        VSLCall *call = [callManager callWithUUID:[[NSUUID alloc] initWithUUIDString:payloadUUID]];
-        
+        VSLCall *call = [calls lastObject]; // TODO: save to say that the last one is the right one?
+        call.callId = call_id;
+        call.invite = [[SipInvite alloc] initWithInvitePacket:rdata->pkt_info.packet];
+     
         if (call) {
-            [[[VialerSIPLib sharedInstance] callManager] addCall:call]; // Don't add here, should be done already in 'didReceiveIncomingPushWith'
             if ([VSLEndpoint sharedEndpoint].incomingCallBlock) {
                 [VSLEndpoint sharedEndpoint].incomingCallBlock(call);
             }

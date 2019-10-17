@@ -37,7 +37,6 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) NSString *remoteURI;
 @property (readwrite, nonatomic) NSString *callerName;
 @property (readwrite, nonatomic) NSString *callerNumber;
-@property (readwrite, nonatomic) NSInteger callId;
 @property (readwrite, nonatomic) NSString *messageCallId;
 @property (readwrite, nonatomic) NSUUID *uuid;
 @property (readwrite, nonatomic) BOOL incoming;
@@ -52,14 +51,13 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) VSLCallTransferState transferStatus;
 @property (readwrite, nonatomic) NSTimeInterval lastSeenConnectDuration;
 @property (strong, nonatomic) NSString *numberToCall;
-@property (weak, nonatomic) VSLAccount *account;
+//@property (weak, nonatomic) VSLAccount *account;
 @property (nonatomic) BOOL reinviteCall; // Not used, but also never set to NO, so also useless is used.
 @property (readwrite, nonatomic) NSTimer *audioCheckTimer;
 @property (readwrite, nonatomic) int audioCheckTimerFired;
 @property (readwrite, nonatomic) VSLCallAudioState callAudioState;
 @property (readwrite, nonatomic) int previousRxPkt;
 @property (readwrite, nonatomic) int previousTxPkt;
-@property (readwrite, nonatomic) SipInvite *invite;
 /**
  *  Stats
  */

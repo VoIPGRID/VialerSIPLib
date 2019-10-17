@@ -201,7 +201,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 /**
  *  The callId which a call receives from PJSIP when it is created.
  */
-@property (readonly, nonatomic) NSInteger callId;
+@property (nonatomic) NSInteger callId;
 
 /**
  * The Call-ID that is present in the SIP messages.
@@ -216,7 +216,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 /**
  *  The VSLAccount the call belongs to.
  */
-@property (weak, nonatomic) VSLAccount * _Nullable account; // TODO: leave read only and make a setter.
+@property (weak, nonatomic) VSLAccount * _Nullable account; // TODO: ok?
 
 /**
  *  The state in which the call currently has.
@@ -305,6 +305,8 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 @property (readonly) BOOL userDidHangUp;
 
 @property (readonly) BOOL connected;
+
+@property (readwrite, nonatomic) SipInvite * _Nullable invite;
 
 #pragma mark - Stats
 
