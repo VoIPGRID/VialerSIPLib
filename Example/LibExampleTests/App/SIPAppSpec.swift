@@ -69,7 +69,7 @@ class SIPAppSpec: QuickSpec {
                 }
             }
         }
-        Nimble.AsyncDefaults.Timeout = 2
+        Nimble.AsyncDefaults.Timeout = 5
     }
 }
 

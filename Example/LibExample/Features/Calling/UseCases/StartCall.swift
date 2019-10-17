@@ -7,11 +7,26 @@
 //
 import Foundation
 
+// MARK: - UseCase
 final
 class StartCall: UseCase {
     typealias RequestType = Request
     typealias ResponseType = Response
     
+    required init(responseHandler: @escaping ((Response) -> ())) {
+        self.responseHandler = responseHandler
+    }
+    
+    private let responseHandler: ((Response) -> ())
+    private lazy var interactor = StartCall.Interactor { self.responseHandler($0) }
+    
+    func handle(request: Request) {
+        interactor.handle(request: request)
+    }
+}
+
+// MARK: - Request & Response
+extension StartCall {
     enum Request {
         case startCall(Call)
     }
@@ -21,65 +36,27 @@ class StartCall: UseCase {
         case callDidStart(Call)
         case failedStarting(Call)
     }
-    
-    convenience init(responseHandler: @escaping ((Response) -> ())) {
-        self.init(handleChecker: checkHandle , responseHandler: responseHandler)
-    }
-    
-    required init(handleChecker: @escaping (String) -> Bool, responseHandler: @escaping ((Response) -> ())) {
-        self.handleChecker = handleChecker
-        self.responseHandler = responseHandler
-    }
-    
-    private let responseHandler: ((Response) -> ())
-    private let handleChecker: (String) -> Bool
-    
-    func handle(request: Request) {
-        switch request {
-        case .startCall(let call):
-            if(handleChecker(normalise(call.handle))) {
-                responseHandler(.dialing(call))
-                dispatch(in: .milliseconds(.random(in: 250..<750))) { self.responseHandler(.callDidStart(  transform(call, with: .started))) }
-            } else {
-                dispatch(in: .milliseconds(.random(in: 150..<500))) { self.responseHandler(.failedStarting(transform(call, with:  .failed))) }
+}
+
+// MARK: - Interactor
+extension StartCall {
+    private class Interactor {
+        
+        init(response: @escaping (StartCall.Response) -> Void) {
+            self.response = response
+        }
+
+        let response: (StartCall.Response) -> Void
+
+        func handle(request:StartCall.Request) {
+            switch request {
+            case .startCall(let call):
+                response(.dialing(call))
+                
+                checkHandle(normalise(call.handle))
+                ? delay(by: .milliseconds(.random(in: 100..<500))) { self.response(.callDidStart  (transform(call, with: .started))) }
+                : delay(by: .milliseconds(.random(in: 100..<200))) { self.response(.failedStarting(transform(call, with:  .failed))) }
             }
         }
     }
-}
-
-
-//MARK: -
-fileprivate func dispatch(in timeInterval:DispatchTimeInterval, callback:@escaping () ->()) {
-    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + timeInterval, execute: callback)
-}
-
-fileprivate
-func checkHandle(_ handle:String) -> Bool {
-    return CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn:handle))
-        && handle != ""
-}
-
-fileprivate
-func normalise(_ handle:String) -> String {
-    return removeNonAlphanumericCharacters(normaliseInternational(trim(handle)))
-}
-
-fileprivate
-func trim(_ handle:String) -> String {
-    return handle.trimmingCharacters(in: .whitespacesAndNewlines)
-}
-
-fileprivate
-func removeNonAlphanumericCharacters(_ handle:String) -> String {
-    return handle.components(separatedBy: CharacterSet.alphanumerics.inverted).joined(separator: "")
-}
-
-fileprivate
-func normaliseInternational(_ handle:String) -> String {
-    var handle = handle
-    if handle.hasPrefix("+") {
-        let range = handle.startIndex..<handle.index(after: handle.startIndex)
-        handle = handle.replacingCharacters(in: range, with: "00")
-    }
-    return handle
 }

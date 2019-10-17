@@ -74,6 +74,7 @@
 		C9ADE20123575A78002D813B /* RootApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ADE20023575A78002D813B /* RootApp.swift */; };
 		C9ADE20423575BE5002D813B /* CallingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ADE20223575BE5002D813B /* CallingViewController.swift */; };
 		C9ADE20523575BE5002D813B /* CallingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9ADE20323575BE5002D813B /* CallingViewController.xib */; };
+		C9CFBD8C2358AAFF005A3267 /* toolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CFBD8B2358AAFF005A3267 /* toolbox.swift */; };
 		EE79A6C51E2CFC0F00AC4AC7 /* VSLEndOfCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */; };
 		EF1CD4427B7B17EF4091BEF8 /* libPods-VialerSIPLib_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EDD7E6A0D9160F0800D3A0F0 /* libPods-VialerSIPLib_Example.a */; };
 		F26407E11DA7D6FE00393D4B /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26407E01DA7D6FE00393D4B /* CallKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -227,6 +228,7 @@
 		C9ADE20023575A78002D813B /* RootApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootApp.swift; sourceTree = "<group>"; };
 		C9ADE20223575BE5002D813B /* CallingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingViewController.swift; sourceTree = "<group>"; };
 		C9ADE20323575BE5002D813B /* CallingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CallingViewController.xib; sourceTree = "<group>"; };
+		C9CFBD8B2358AAFF005A3267 /* toolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toolbox.swift; sourceTree = "<group>"; };
 		EDD7E6A0D9160F0800D3A0F0 /* libPods-VialerSIPLib_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VialerSIPLib_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE79A6C41E2CFC0E00AC4AC7 /* VSLEndOfCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSLEndOfCallViewController.swift; sourceTree = "<group>"; };
 		EEF1CB7C1FA096F800B5170F /* VialerSIPLib_Example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VialerSIPLib_Example-Prefix.pch"; sourceTree = "<group>"; };
@@ -562,6 +564,7 @@
 			isa = PBXGroup;
 			children = (
 				C91F851D234CCCE5007F6417 /* AppDelegate.swift */,
+				C9CFBD8B2358AAFF005A3267 /* toolbox.swift */,
 				C9ADE1F723574B18002D813B /* UI */,
 				C9ADE1F323573849002D813B /* App */,
 				C9ADE1F223573807002D813B /* Entities */,
@@ -1131,6 +1134,7 @@
 				C9ADE1FD23574BE9002D813B /* MessageNavigationController.swift in Sources */,
 				C9ADE20423575BE5002D813B /* CallingViewController.swift in Sources */,
 				C91F854E234CE50B007F6417 /* UseCase.swift in Sources */,
+				C9CFBD8C2358AAFF005A3267 /* toolbox.swift in Sources */,
 				C97E4E10234F4A6800767A20 /* EndCall.swift in Sources */,
 				C91F8546234CDAD8007F6417 /* TransportOption.swift in Sources */,
 				C9ADE1FA23574B5B002D813B /* MessageViewController.swift in Sources */,
