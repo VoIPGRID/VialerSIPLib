@@ -216,7 +216,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 /**
  *  The VSLAccount the call belongs to.
  */
-@property (readonly, weak, nonatomic) VSLAccount * _Nullable account;
+@property (weak, nonatomic) VSLAccount * _Nullable account; // TODO: leave read only and make a setter.
 
 /**
  *  The state in which the call currently has.
@@ -382,6 +382,9 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  @return VSLCall instance
  */
 - (instancetype _Nullable)initInboundCallWithCallId:(NSUInteger)callId account:(VSLAccount * _Nonnull)account andInvite:(SipInvite *_Nonnull)invite;
+
+// TODO: add comment
+- (instancetype _Nullable)initInboundCallWithUUIDandNumber:(NSUUID * _Nonnull)uuid number:(NSString * _Nonnull)number;
 
 - (instancetype _Nullable)initWithCallId:(NSUInteger)callId accountId:(NSInteger)accountId __attribute__((unavailable("Deprecated, use -initWithCallID: andAccount: instead")));
 

@@ -53,7 +53,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) NSTimeInterval lastSeenConnectDuration;
 @property (strong, nonatomic) NSString *numberToCall;
 @property (weak, nonatomic) VSLAccount *account;
-@property (nonatomic) BOOL reinviteCall;
+@property (nonatomic) BOOL reinviteCall; // Not used, but also never set to NO, so also useless is used.
 @property (readwrite, nonatomic) NSTimer *audioCheckTimer;
 @property (readwrite, nonatomic) int audioCheckTimerFired;
 @property (readwrite, nonatomic) VSLCallAudioState callAudioState;
@@ -96,6 +96,14 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         }
     }
     VSLLogVerbose(@"Inbound call init with uuid:%@ and id:%ld", self.uuid.UUIDString, (long)self.callId);
+    return self;
+}
+
+- (instancetype _Nullable)initInboundCallWithUUIDandNumber:(NSUUID * _Nonnull)uuid number:(NSString * _Nonnull)number {
+    self.uuid = uuid;
+    self.numberToCall = [VialerUtils cleanPhoneNumber:number];
+    self.incoming = YES;
+    
     return self;
 }
 

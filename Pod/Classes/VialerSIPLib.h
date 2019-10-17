@@ -14,6 +14,7 @@
 #import "VSLStunConfiguration.h"
 #import "VSLTransportConfiguration.h"
 #import "CallKitProviderDelegate.h"
+#import "VSLEndpoint.h"
 
 
 /**
@@ -210,6 +211,8 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *  The callManager used by the Lib.
  */
 @property (readonly, nonatomic) VSLCallManager * _Nonnull callManager;
+
+@property (readonly, nonatomic) VSLEndpoint * _Nonnull endpoint;
 
 /**
  *  The shared instance for the sip library.

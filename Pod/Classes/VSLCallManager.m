@@ -68,7 +68,7 @@
             VSLLogError(@"Error registering the account: %@", error);
             VSLBlockSafeRun(completion, nil, error);
         } else {
-             VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
+            VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
             [self addCall:call];
 
             if (@available(iOS 10.0, *)) {
@@ -256,7 +256,7 @@
             return YES;
         }
         return NO;
-    }];
+    }]; //TODO HUH?
 
     if (callIndex != NSNotFound) {
         VSLCall *call = [self.calls objectAtIndex:callIndex];
@@ -274,7 +274,7 @@
             return YES;
         }
         return NO;
-    }];
+    }]; // TODO: huh?
 
     if (callIndex != NSNotFound) {
         return [self.calls objectAtIndex:callIndex];
