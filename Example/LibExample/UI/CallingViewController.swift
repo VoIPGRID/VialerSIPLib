@@ -32,12 +32,14 @@ class CallingViewController: MessageViewController {
         state = .idle
     }
 
-    //MARK: - Call Making
-    @IBAction func makeCall(_ sender: Any) {
+    // MARK: - Call Making
+    @IBAction 
+    func makeCall(_ sender: Any) {
         responseHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.start(phoneNumberField.text ?? "")))))))
     }
     
-    @IBAction func endCall(_ sender: Any) {
+    @IBAction
+    func endCall(_ sender: Any) {
         if let c = currentCall { responseHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.stop(c))))))) }
     }
 
@@ -50,14 +52,14 @@ class CallingViewController: MessageViewController {
         if case .feature(.calling(.useCase(.call(.action(  .callFailed(let call)))))) = msg { update(call: call, newState:  .failed) }
     }
 
-    //MARK: - State Handling
+    // MARK: - State Handling
     private func update(call: Call?, newState: CallState) { currentCall = call; state = newState }
 
     private func stateChanged() {
         func updateUI(enabledMakeCallButton: Bool, enableHangUpButton:Bool, numberFieldColor: UIColor) {
             phoneNumberField.layer.borderColor = numberFieldColor.cgColor
-                hangUpButton.isEnabled         = enableHangUpButton
-              makeCallButton.isEnabled         = enabledMakeCallButton
+                        hangUpButton.isEnabled = enableHangUpButton
+                      makeCallButton.isEnabled = enabledMakeCallButton
         }
 
         switch state {
@@ -69,7 +71,7 @@ class CallingViewController: MessageViewController {
     }
 }
 
-//MARK: - Configure Functions
+// MARK: - Configure Functions
 private func configure(phoneNumberField field: UITextField) {
     field.layer.borderColor  = UIColor.clear.cgColor
     field.layer.borderWidth  = 3

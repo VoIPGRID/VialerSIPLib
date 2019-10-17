@@ -22,7 +22,9 @@ protocol MessageProvider {
 protocol MessageSubscriber: MessageHandling { }
 
 protocol App: MessageHandling { }
+
 protocol SubscribableApp: App, MessageProvider {}
+
 final
 class SIPApp: SubscribableApp {
     

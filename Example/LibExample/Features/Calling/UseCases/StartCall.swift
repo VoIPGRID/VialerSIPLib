@@ -39,9 +39,9 @@ class StartCall: UseCase {
         case .startCall(let call):
             if(handleChecker(normalise(call.handle))) {
                 responseHandler(.dialing(call))
-                dispatch(in: .milliseconds(.random(in: 500..<1500))) { [weak self] in self?.responseHandler(.callDidStart(  transform(call, with: .started))) }
+                dispatch(in: .milliseconds(.random(in: 250..<750))) { self.responseHandler(.callDidStart(  transform(call, with: .started))) }
             } else {
-                dispatch(in: .milliseconds(.random(in:  150..<500))) { [weak self] in self?.responseHandler(.failedStarting(transform(call, with:  .failed))) }
+                dispatch(in: .milliseconds(.random(in: 150..<500))) { self.responseHandler(.failedStarting(transform(call, with:  .failed))) }
             }
         }
     }
