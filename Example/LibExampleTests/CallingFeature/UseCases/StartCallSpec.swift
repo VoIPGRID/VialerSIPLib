@@ -25,12 +25,8 @@ class StartCallSpec: QuickSpec {
                 depend = Dependencies(callStarter: Mock.CallStarter())
 
                 sut = StartCall(dependencies:depend) {
-                    switch $0 {
-                    case   .callDidStart(let call): startedCalls.append(call)
-                    case .failedStarting(let call): failedCalls.append(call)
-                    default:
-                        break
-                    }
+                    if case   .callDidStart(let call) = $0 { startedCalls.append(call) }
+                    if case .failedStarting(let call) = $0 {  failedCalls.append(call) }
                 }
             }
             
