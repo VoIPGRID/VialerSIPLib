@@ -5,7 +5,6 @@
 //  Created by Manuel on 10/10/2019.
 //  Copyright © 2019 Harold. All rights reserved.
 //
-import Foundation
 
 // MARK: - UseCase
 final
@@ -13,13 +12,16 @@ class StartCall: UseCase {
     typealias RequestType = Request
     typealias ResponseType = Response
     
-    required init(responseHandler: @escaping ((Response) -> ())) {
+    required init(dependencies:Dependencies, responseHandler: @escaping ((Response) -> ())) {
         self.responseHandler = responseHandler
+        self.dependencies = dependencies
+
     }
     
     private let responseHandler: ((Response) -> ())
-    private lazy var interactor = StartCall.Interactor { self.responseHandler($0) }
-    
+    private lazy var interactor = StartCall.Interactor(callStarter: dependencies.callStarter) { self.responseHandler($0) }
+    private let dependencies: Dependencies
+
     func handle(request: Request) {
         interactor.handle(request: request)
     }
@@ -42,21 +44,37 @@ extension StartCall {
 extension StartCall {
     private class Interactor {
         
-        init(response: @escaping (StartCall.Response) -> Void) {
+        init(callStarter:CallStarting ,response: @escaping (StartCall.Response) -> Void) {
             self.response = response
+            var callStarter = callStarter
+            callStarter.callback = { [weak self] success, call in
+                self?.handle(result: (success: success, call: call))
+            }
+            self.callStarter = callStarter
         }
-
-        let response: (StartCall.Response) -> Void
-
+        
+        private let response: (StartCall.Response) -> Void
+        private var callStarter: CallStarting?
+        
         func handle(request:StartCall.Request) {
             switch request {
             case .startCall(let call):
                 response(.dialing(call))
-                
-                checkHandle(normalise(call.handle))
-                ? delay(by: .milliseconds(.random(in: 100..<500))) { self.response(.callDidStart  (transform(call, with: .started))) }
-                : delay(by: .milliseconds(.random(in: 100..<200))) { self.response(.failedStarting(transform(call, with:  .failed))) }
+                callStarter?.start(call: call)
+            }
+        }
+        
+        private func handle(result: (success:Bool, call: Call)) {
+            switch result.success {
+            case  true: self.response(  .callDidStart(transform(result.call, with: .started)))
+            case false: self.response(.failedStarting(transform(result.call, with:  .failed)))
             }
         }
     }
 }
+
+protocol CallStarting {
+    var callback: ((Bool, Call) -> Void)? { get set }
+    func start(call:Call)
+}
+

@@ -13,8 +13,9 @@ func delay(by timeInterval:DispatchTimeInterval, callback:@escaping () ->()) {
 }
 
 func checkHandle(_ handle:String) -> Bool {
-    return CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn:handle))
-        && handle != ""
+    let b = CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: normalise(handle)))
+        && trim(handle) != ""
+    return b
 }
 
 func normalise(_ handle:String) -> String {

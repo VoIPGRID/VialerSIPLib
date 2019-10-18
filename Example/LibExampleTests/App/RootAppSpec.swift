@@ -39,7 +39,6 @@ class RootAppSpec: QuickSpec {
                 }
             }
         }
-        Nimble.AsyncDefaults.Timeout = 2
     }
 }
 

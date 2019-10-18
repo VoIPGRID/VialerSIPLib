@@ -28,17 +28,19 @@ protocol SubscribableApp: App, MessageProvider {}
 final
 class SIPApp: SubscribableApp {
     
-    init(rootMessageHandler: MessageHandling? = nil) {
+    init(rootMessageHandler: MessageHandling? = nil, dependencies: Dependencies) {
         self.privateRootMessageHandler = rootMessageHandler
+        self.dependencies = dependencies
     }
     
     var rootMessageHandler: MessageHandling { return privateRootMessageHandler ?? self }
     private let privateRootMessageHandler: MessageHandling?
+    private let dependencies: Dependencies
     
     private lazy var features: [Feature] = [
-        UserHandlingFeature(with: rootMessageHandler),
-        SettingsFeature(with: rootMessageHandler),
-        CallingFeature(with: rootMessageHandler)
+        UserHandlingFeature(with: rootMessageHandler, dependencies: dependencies),
+        SettingsFeature(with: rootMessageHandler, dependencies: dependencies),
+        CallingFeature(with: rootMessageHandler, dependencies: dependencies)
     ]
     
     func handle(msg: Message) {

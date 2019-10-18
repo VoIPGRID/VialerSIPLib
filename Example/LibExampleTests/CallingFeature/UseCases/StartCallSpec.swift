@@ -17,10 +17,14 @@ class StartCallSpec: QuickSpec {
             
             var startedCalls: [Call]!
             var failedCalls: [Call]!
+            var depend: Dependencies!
+
             beforeEach {
                 startedCalls = []
                 failedCalls = []
-                sut = StartCall {
+                depend = Dependencies(callStarter: Mock.CallStarter())
+
+                sut = StartCall(dependencies:depend) {
                     switch $0 {
                     case   .callDidStart(let call): startedCalls.append(call)
                     case .failedStarting(let call): failedCalls.append(call)
@@ -34,6 +38,7 @@ class StartCallSpec: QuickSpec {
                 sut = nil
                 startedCalls = nil
                 failedCalls = nil
+                depend = nil
             }
             
             it("calls successfully with valid numbers"){
@@ -58,6 +63,5 @@ class StartCallSpec: QuickSpec {
                     .toEventually(equal([.failed, .failed, .failed]))
             }
         }
-        Nimble.AsyncDefaults.Timeout = 2
     }
 }

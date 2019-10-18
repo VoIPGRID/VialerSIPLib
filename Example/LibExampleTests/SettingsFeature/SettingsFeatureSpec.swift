@@ -17,11 +17,13 @@ class SettingsFeatureSpec: QuickSpec {
             
             var messageHandler: Mock.MessageHandler!
             var receivedModes: [TransportOption]!
-            
+            var depend: Dependencies!
+
             beforeEach {
+                depend = Dependencies(callStarter: Mock.CallStarter())
                 receivedModes = []
                 messageHandler = Mock.MessageHandler { if case .feature(.settings(.useCase(.transport(.action(.didActivate(let m)))))) = $0 { receivedModes.append(m)}}
-                sut = SettingsFeature(with: messageHandler)
+                sut = SettingsFeature(with: messageHandler, dependencies: depend)
             }
             
             afterEach {

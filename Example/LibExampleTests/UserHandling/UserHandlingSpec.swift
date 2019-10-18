@@ -14,7 +14,8 @@ class UserHandlingFeatureSpec: QuickSpec, MessageHandling {
     
     var loggedInUser:User!
     var loggedOutUser:User!
-    
+    var depend: Dependencies!
+
     func handle(msg: Message) {
         if case .feature(.userHandling(.useCase(.login (.action(.logInConfirmed (let user)))))) = msg { self.loggedInUser  = user }
         if case .feature(.userHandling(.useCase(.logout(.action(.logOutConfirmed(let user)))))) = msg { self.loggedOutUser = user }
@@ -25,13 +26,15 @@ class UserHandlingFeatureSpec: QuickSpec, MessageHandling {
             var sut: UserHandlingFeature!
             
             beforeEach {
-                sut = UserHandlingFeature(with: self)
+                self.depend = Dependencies(callStarter: Mock.CallStarter())
+                sut = UserHandlingFeature(with: self, dependencies: self.depend)
             }
             
             afterEach {
                 sut = nil
                 self.loggedOutUser = nil
                 self.loggedInUser = nil
+                self.depend = nil
             }
             
             it("logs in user"){

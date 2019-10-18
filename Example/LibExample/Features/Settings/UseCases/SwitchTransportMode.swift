@@ -18,11 +18,13 @@ class SwitchTransportMode: UseCase {
         case modeWasActivated(TransportOption)
     }
     
-    required init(responseHandler: @escaping ((ResponseType) -> ())) {
+    required init(dependencies: Dependencies, responseHandler: @escaping ((ResponseType) -> ())) {
         self.responseHandler = responseHandler
+        self.dependencies = dependencies
     }
     
     private let responseHandler: ((Response) -> ())
+    private let dependencies: Dependencies
 
     func handle(request: Request) {
         switch request {

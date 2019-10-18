@@ -23,9 +23,12 @@ class SIPAppSpec: QuickSpec {
                 
                 var stopCall: Call!
                 var didStopCall: Call!
-                
+                var depend: Dependencies!
+
                 beforeEach {
                     receivedCallingActions = []
+                    depend = Dependencies(callStarter: Mock.CallStarter())
+
                     messageHandler = Mock.MessageHandler {
                         if case .feature(.calling(.useCase(.call(.action(let action))))) = $0 {
                             if case .callDidStart(let call) = action { didStartCall = call;  receivedCallingActions.append("didStart") }
@@ -34,7 +37,7 @@ class SIPAppSpec: QuickSpec {
                             if case  .callDidStop(let call) = action {  didStopCall = call;  receivedCallingActions.append( "didStop") }
                         }
                     }
-                    sut = SIPApp()
+                    sut = SIPApp(dependencies: depend)
                     sut.add(subscriber: messageHandler)
                 }
                 
@@ -61,6 +64,13 @@ class SIPAppSpec: QuickSpec {
                     expect(receivedCallingActions).toEventually(equal(["failed"]))
                 }
                 
+                it("starts a failing call with malformed number") {
+                    sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start("QQQ")))))))
+                    
+                    expect(failedCall).toEventuallyNot(beNil())
+                    expect(receivedCallingActions).toEventually(equal(["failed"]))
+                }
+                
                 it("ends a call") {
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.stop(transform(Call(handle: "12345"), with: .started) )))))))
                     
@@ -69,7 +79,6 @@ class SIPAppSpec: QuickSpec {
                 }
             }
         }
-        Nimble.AsyncDefaults.Timeout = 5
     }
 }
 

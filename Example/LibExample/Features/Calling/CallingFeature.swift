@@ -6,18 +6,22 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-final class CallingFeature: Feature {
+final
+class CallingFeature: Feature {
     
-    required init(with rootMessageHandler: MessageHandling) {
+    required init(with rootMessageHandler: MessageHandling, dependencies: Dependencies) {
         self.rootMessageHandler = rootMessageHandler
+        self.dependencies = dependencies
+
     }
     
     private weak var rootMessageHandler:MessageHandling?
-    
+    private let dependencies: Dependencies
+
     // useCases
-    private lazy var startCall  = StartCall() { [weak self] response in self?.handle(response: response) }
-    private lazy var endCall    = EndCall()   { [weak self] response in self?.handle(response: response) }
-    private lazy var createCall = CreateCall(){ [weak self] response in self?.handle(response: response) }
+    private lazy var startCall  = StartCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
+    private lazy var endCall    = EndCall(dependencies: self.dependencies)   { [weak self] response in self?.handle(response: response) }
+    private lazy var createCall = CreateCall(dependencies: self.dependencies){ [weak self] response in self?.handle(response: response) }
 
     func handle(feature: Message.Feature) {
         if case .calling(.useCase(let useCase)) = feature {

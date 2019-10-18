@@ -19,12 +19,16 @@ class CallingFeatureSpec: QuickSpec {
             var startedCall: Call!
             var endedCall: Call!
             
+            var depend: Dependencies!
+
             beforeEach {
+                depend = Dependencies(callStarter: Mock.CallStarter())
+
                 messageHandler = Mock.MessageHandler {
                     if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = $0 { startedCall = call }
                     if case .feature(.calling(.useCase(.call(.action(.callDidStop (let call)))))) = $0 { endedCall   = call }
                 }
-                sut = CallingFeature(with: messageHandler)
+                sut = CallingFeature(with: messageHandler, dependencies:depend)
             }
             
             afterEach {
@@ -46,6 +50,5 @@ class CallingFeatureSpec: QuickSpec {
                 expect(endedCall).toNot(beNil())
             }
         }
-        Nimble.AsyncDefaults.Timeout = 2
     }
 }

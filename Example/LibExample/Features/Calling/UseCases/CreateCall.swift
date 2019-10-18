@@ -18,10 +18,14 @@ class CreateCall: UseCase {
         case callCreated(Call)
     }
     
-    required init(responseHandler: @escaping ((CreateCall.Response) -> ())) {
+    required init(dependencies: Dependencies, responseHandler: @escaping ((CreateCall.Response) -> ())) {
         self.responseHandler = responseHandler
+        self.dependencies = dependencies
     }
+
     private let responseHandler: ((Response) -> ())
+    private let dependencies: Dependencies
+
     
     func handle(request: CreateCall.Request) {
         switch request {

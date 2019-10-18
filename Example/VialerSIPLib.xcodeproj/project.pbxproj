@@ -48,6 +48,8 @@
 		C902B1E723551353001FAFA9 /* RootAppSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E623551353001FAFA9 /* RootAppSpec.swift */; };
 		C902B1E923552B97001FAFA9 /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E823552B97001FAFA9 /* Mock.swift */; };
 		C902B1EB23552D82001FAFA9 /* CallingActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */; };
+		C9060ABB2359C1A100914898 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABA2359C1A100914898 /* Dependencies.swift */; };
+		C9060ABE2359C2F600914898 /* CallStarter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABD2359C2F600914898 /* CallStarter.swift */; };
 		C91F851E234CCCE5007F6417 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851D234CCCE5007F6417 /* AppDelegate.swift */; };
 		C91F8524234CCCE7007F6417 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8523234CCCE7007F6417 /* Assets.xcassets */; };
 		C91F8527234CCCE7007F6417 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8526234CCCE7007F6417 /* Preview Assets.xcassets */; };
@@ -198,6 +200,8 @@
 		C902B1E623551353001FAFA9 /* RootAppSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAppSpec.swift; sourceTree = "<group>"; };
 		C902B1E823552B97001FAFA9 /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 		C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingActionSpec.swift; sourceTree = "<group>"; };
+		C9060ABA2359C1A100914898 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		C9060ABD2359C2F600914898 /* CallStarter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStarter.swift; sourceTree = "<group>"; };
 		C91F851B234CCCE5007F6417 /* LibExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C91F851D234CCCE5007F6417 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C91F8523234CCCE7007F6417 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -560,9 +564,18 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		C9060ABC2359C2E600914898 /* Gateways */ = {
+			isa = PBXGroup;
+			children = (
+				C9060ABD2359C2F600914898 /* CallStarter.swift */,
+			);
+			path = Gateways;
+			sourceTree = "<group>";
+		};
 		C91F851C234CCCE5007F6417 /* LibExample */ = {
 			isa = PBXGroup;
 			children = (
+				C9060ABC2359C2E600914898 /* Gateways */,
 				C91F851D234CCCE5007F6417 /* AppDelegate.swift */,
 				C9CFBD8B2358AAFF005A3267 /* toolbox.swift */,
 				C9ADE1F723574B18002D813B /* UI */,
@@ -692,6 +705,7 @@
 				C91F854D234CE50B007F6417 /* UseCase.swift */,
 				C91F8541234CD421007F6417 /* Feature.swift */,
 				C9ADE20023575A78002D813B /* RootApp.swift */,
+				C9060ABA2359C1A100914898 /* Dependencies.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1119,6 +1133,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9060ABE2359C2F600914898 /* CallStarter.swift in Sources */,
 				C91F8542234CD421007F6417 /* Feature.swift in Sources */,
 				C9ADE20123575A78002D813B /* RootApp.swift in Sources */,
 				C91F854C234CE3BC007F6417 /* CallingFeature.swift in Sources */,
@@ -1131,6 +1146,7 @@
 				C902B1D82354C7F1001FAFA9 /* Call.swift in Sources */,
 				C97E4E13234F666300767A20 /* SwitchTransportMode.swift in Sources */,
 				C91F8544234CD7F8007F6417 /* User.swift in Sources */,
+				C9060ABB2359C1A100914898 /* Dependencies.swift in Sources */,
 				C9ADE1FD23574BE9002D813B /* MessageNavigationController.swift in Sources */,
 				C9ADE20423575BE5002D813B /* CallingViewController.swift in Sources */,
 				C91F854E234CE50B007F6417 /* UseCase.swift in Sources */,

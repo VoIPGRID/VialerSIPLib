@@ -16,9 +16,11 @@ class EndCallSpec: QuickSpec {
             var sut: EndCall!
 
             var receivedCall: Call!
-            
+            var depend: Dependencies!
+
             beforeEach {
-                sut = EndCall {
+                depend = Dependencies(callStarter: Mock.CallStarter())
+                sut = EndCall(dependencies:depend) {
                     switch $0 {
                     case .callDidStop(let call):
                         receivedCall = call
@@ -27,6 +29,7 @@ class EndCallSpec: QuickSpec {
             }
             
             afterEach {
+                depend = nil
                 receivedCall = nil
                 sut = nil
             }

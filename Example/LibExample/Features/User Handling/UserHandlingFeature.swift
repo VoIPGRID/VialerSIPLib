@@ -9,15 +9,16 @@
 final
 class UserHandlingFeature: Feature {
     
-    required init(with rootMessageHandler: MessageHandling) {
+    required init(with rootMessageHandler: MessageHandling, dependencies: Dependencies) {
         self.rootMessageHandler = rootMessageHandler
+        self.dependencies = dependencies
     }
     
     private weak var rootMessageHandler: MessageHandling?
-    
+    private let dependencies: Dependencies
     // useCases
-    private lazy var logIn  = LogIn()  { [weak self] response in self?.handle(response: response) }
-    private lazy var logOut = LogOut() { [weak self] response in self?.handle(response: response) }
+    private lazy var logIn  = LogIn(dependencies: self.dependencies)  { [weak self] response in self?.handle(response: response) }
+    private lazy var logOut = LogOut(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
     
     func handle(feature: Message.Feature) {
         if case .userHandling(.useCase(let useCase)) = feature {

@@ -6,16 +6,16 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-import Foundation
-
 final
 class RootApp: SubscribableApp {
     
-    private lazy var apps: [App] = [SIPApp(rootMessageHandler: self)]
+    private lazy var apps: [App] = [SIPApp(rootMessageHandler: self, dependencies: dependencies)]
+    private var receivers: [MessageHandling] { return subscribers + apps}
+    private lazy var dependencies = Dependencies(callStarter: self.callstarter)
+    private let callstarter = CallStarter()
     
     func handle(msg: Message) {
-        subscribers.forEach { $0.handle(msg: msg) }
-        apps.forEach { $0.handle(msg:msg) }
+        receivers.forEach { $0.handle(msg: msg) }
     }
     
     private var subscribers: [MessageSubscriber] = []

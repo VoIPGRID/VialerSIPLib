@@ -16,9 +16,11 @@ class CreateCallSpec: QuickSpec {
             var sut: CreateCall!
             
             var createdCall: Call!
+            var depend: Dependencies!
             
             beforeEach {
-                sut = CreateCall {
+                depend = Dependencies(callStarter: Mock.CallStarter())
+                sut = CreateCall(dependencies:depend) {
                     switch $0 {
                     case .callCreated(let call):
                         createdCall = call
@@ -27,6 +29,7 @@ class CreateCallSpec: QuickSpec {
             }
             
             afterEach {
+                depend = nil
                 createdCall = nil
                 sut = nil
             }

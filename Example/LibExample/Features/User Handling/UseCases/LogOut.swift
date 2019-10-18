@@ -19,11 +19,14 @@ class LogOut: UseCase {
         case logOutConfirmed(User)
     }
     
-    required init(responseHandler: @escaping ((Response) -> ())) {
+    required init(dependencies: Dependencies, responseHandler: @escaping ((Response) -> ())) {
         self.responseHandler = responseHandler
+        self.dependencies = dependencies
     }
     
-    let responseHandler: ((Response) -> ())
+    private let responseHandler: ((Response) -> ())
+    private let dependencies: Dependencies
+
     
     func handle(request: Request) {
         switch request {

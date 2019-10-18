@@ -8,13 +8,16 @@
 
 class SettingsFeature: Feature {
     
-    required init(with rootMessageHandler: MessageHandling) {
+    required init(with rootMessageHandler: MessageHandling, dependencies: Dependencies) {
         self.rootMessageHandler = rootMessageHandler
+        self.dependencies = dependencies
+
     }
     
     private weak var rootMessageHandler: MessageHandling?
-    
-    private lazy var switchTransportMode = SwitchTransportMode(){[weak self] response in self?.handle(response: response)}
+    private let dependencies: Dependencies
+
+    private lazy var switchTransportMode = SwitchTransportMode(dependencies: self.dependencies){[weak self] response in self?.handle(response: response)}
 
     func handle(feature: Message.Feature) {
         if case .settings(.useCase(let useCase)) = feature {

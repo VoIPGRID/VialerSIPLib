@@ -16,12 +16,15 @@ class LogInSpec: QuickSpec {
             var sut: LogIn!
             
             var user: User!
-            
+            var depend: Dependencies!
+
             beforeEach {
-                sut = LogIn { if case .logInConfirmed(let u) = $0 { user = u }}
+                depend = Dependencies(callStarter: Mock.CallStarter())
+                sut = LogIn(dependencies:depend) { if case .logInConfirmed(let u) = $0 { user = u }}
             }
             
             afterEach {
+                depend = nil
                 sut = nil
                 user = nil
             }
