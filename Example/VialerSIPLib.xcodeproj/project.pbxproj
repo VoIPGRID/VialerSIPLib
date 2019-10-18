@@ -52,7 +52,6 @@
 		C9060ABE2359C2F600914898 /* CallStarter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABD2359C2F600914898 /* CallStarter.swift */; };
 		C91F851E234CCCE5007F6417 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851D234CCCE5007F6417 /* AppDelegate.swift */; };
 		C91F8524234CCCE7007F6417 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8523234CCCE7007F6417 /* Assets.xcassets */; };
-		C91F8527234CCCE7007F6417 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8526234CCCE7007F6417 /* Preview Assets.xcassets */; };
 		C91F852A234CCCE7007F6417 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91F8528234CCCE7007F6417 /* LaunchScreen.storyboard */; };
 		C91F853E234CD3E4007F6417 /* SIPApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F853D234CD3E4007F6417 /* SIPApp.swift */; };
 		C91F8540234CD3FD007F6417 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F853F234CD3FD007F6417 /* Message.swift */; };
@@ -205,7 +204,6 @@
 		C91F851B234CCCE5007F6417 /* LibExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C91F851D234CCCE5007F6417 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C91F8523234CCCE7007F6417 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		C91F8526234CCCE7007F6417 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C91F8529234CCCE7007F6417 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C91F852B234CCCE7007F6417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C91F8530234CCCE7007F6417 /* LibExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LibExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -572,30 +570,27 @@
 			path = Gateways;
 			sourceTree = "<group>";
 		};
-		C91F851C234CCCE5007F6417 /* LibExample */ = {
+		C9060ABF2359FBFC00914898 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C9060ABC2359C2E600914898 /* Gateways */,
-				C91F851D234CCCE5007F6417 /* AppDelegate.swift */,
-				C9CFBD8B2358AAFF005A3267 /* toolbox.swift */,
-				C9ADE1F723574B18002D813B /* UI */,
-				C9ADE1F323573849002D813B /* App */,
-				C9ADE1F223573807002D813B /* Entities */,
-				C91F854F234CE647007F6417 /* Features */,
 				C91F8523234CCCE7007F6417 /* Assets.xcassets */,
 				C91F8528234CCCE7007F6417 /* LaunchScreen.storyboard */,
 				C91F852B234CCCE7007F6417 /* Info.plist */,
-				C91F8525234CCCE7007F6417 /* Preview Content */,
 			);
-			path = LibExample;
+			path = Resources;
 			sourceTree = "<group>";
 		};
-		C91F8525234CCCE7007F6417 /* Preview Content */ = {
+		C91F851C234CCCE5007F6417 /* LibExample */ = {
 			isa = PBXGroup;
 			children = (
-				C91F8526234CCCE7007F6417 /* Preview Assets.xcassets */,
+				C9ADE1F323573849002D813B /* App */,
+				C9ADE1F223573807002D813B /* Entities */,
+				C9060ABC2359C2E600914898 /* Gateways */,
+				C91F854F234CE647007F6417 /* Features */,
+				C9ADE1F723574B18002D813B /* UI */,
+				C9060ABF2359FBFC00914898 /* Resources */,
 			);
-			path = "Preview Content";
+			path = LibExample;
 			sourceTree = "<group>";
 		};
 		C91F8533234CCCE7007F6417 /* LibExampleTests */ = {
@@ -701,6 +696,8 @@
 		C9ADE1F323573849002D813B /* App */ = {
 			isa = PBXGroup;
 			children = (
+				C91F851D234CCCE5007F6417 /* AppDelegate.swift */,
+				C9CFBD8B2358AAFF005A3267 /* toolbox.swift */,
 				C91F853D234CD3E4007F6417 /* SIPApp.swift */,
 				C91F854D234CE50B007F6417 /* UseCase.swift */,
 				C91F8541234CD421007F6417 /* Feature.swift */,
@@ -932,7 +929,6 @@
 			files = (
 				C9ADE20523575BE5002D813B /* CallingViewController.xib in Resources */,
 				C91F852A234CCCE7007F6417 /* LaunchScreen.storyboard in Resources */,
-				C91F8527234CCCE7007F6417 /* Preview Assets.xcassets in Resources */,
 				C91F8524234CCCE7007F6417 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1453,11 +1449,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_ASSET_PATHS = "\"LibExample/Preview Content\"";
 				DEVELOPMENT_TEAM = L25X5NABU9;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = LibExample/Info.plist;
+				INFOPLIST_FILE = LibExample/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -1485,11 +1480,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_ASSET_PATHS = "\"LibExample/Preview Content\"";
 				DEVELOPMENT_TEAM = L25X5NABU9;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = LibExample/Info.plist;
+				INFOPLIST_FILE = LibExample/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
