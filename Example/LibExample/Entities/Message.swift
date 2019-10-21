@@ -8,7 +8,7 @@
 
 
 enum Message {
-
+    
     case feature(Feature)
     case appUpdate(AppUpdate)
     enum Feature {
@@ -92,22 +92,27 @@ enum Message {
 }
 
 extension Message.Feature.Calling.UseCase.Calling.Action: Equatable {
-
+    
     static func == (
         lhs: Message.Feature.Calling.UseCase.Calling.Action,
         rhs: Message.Feature.Calling.UseCase.Calling.Action
     ) -> Bool
     {
-        let compare: (Call, Call) -> Bool = { $0.uuid == $1.uuid }
+        func compare<T:Equatable>(_ lhs:T, _ rhs:T) -> Bool { lhs == rhs }
         
         switch (lhs, rhs) {
-        case (       .start,                     .start)             : return true
-        case (.callDidStart(let lhsCall), .callDidStart(let rhsCall)): return compare(lhsCall, rhsCall)
-        case (        .stop(let lhsCall),         .stop(let rhsCall)): return compare(lhsCall, rhsCall)
-        case ( .callDidStop(let lhsCall),  .callDidStop(let rhsCall)): return compare(lhsCall, rhsCall)
-        case (  .callFailed(let lhsCall),  .callFailed(let rhsCall)): return compare(lhsCall, rhsCall)
-        default:
-            return false
+        case (       .start(let   lhsNo),        .start(let   rhsNo)) : return compare(  lhsNo,   rhsNo)
+        case (     .dialing(let lhsCall),      .dialing(let rhsCall)) : return compare(lhsCall, rhsCall)
+        case (.callDidStart(let lhsCall), .callDidStart(let rhsCall)) : return compare(lhsCall, rhsCall)
+        case (        .stop(let lhsCall),         .stop(let rhsCall)) : return compare(lhsCall, rhsCall)
+        case ( .callDidStop(let lhsCall),  .callDidStop(let rhsCall)) : return compare(lhsCall, rhsCall)
+        case (  .callFailed(let lhsCall),   .callFailed(let rhsCall)) : return compare(lhsCall, rhsCall)
+        case (		  .start, _) : return false
+        case (		.dialing, _) : return false
+        case ( .callDidStart, _) : return false
+        case (         .stop, _) : return false
+        case (  .callDidStop, _) : return false
+        case (   .callFailed, _) : return false
         }
     }
 }

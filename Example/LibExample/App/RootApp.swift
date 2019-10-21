@@ -9,10 +9,13 @@
 final
 class RootApp: SubscribableApp {
     
+    init(dependencies: Dependencies) {
+        self.dependencies = dependencies
+    }
+
     private lazy var apps: [App] = [SIPApp(rootMessageHandler: self, dependencies: dependencies)]
     private var receivers: [MessageHandling] { return subscribers + apps}
-    private lazy var dependencies = Dependencies(callStarter: self.callstarter)
-    private let callstarter = CallStarter()
+    private let dependencies: Dependencies
     
     func handle(msg: Message) {
         receivers.forEach { $0.handle(msg: msg) }

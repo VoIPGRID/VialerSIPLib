@@ -17,7 +17,7 @@ struct CallStarter: CallStarting {
     
     func start(call: Call) {
         checkHandle(call.handle)
-            ? delay(by: .milliseconds(.random(in: 100..<1500))) { self.callback?(true,  call)}
-            : delay(by: .milliseconds(.random(in: 100..<0750))) { self.callback?(false, call)}
+            ? delay(by: .milliseconds(.random(in: 1000..<2500))) { self.callback?(true,  call)}
+            : delay(by: .milliseconds(.random(in:  100..<0750))) { self.callback?(false, call)}
     }
 }

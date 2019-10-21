@@ -47,9 +47,10 @@
 		C902B1E42354DC68001FAFA9 /* CreateCallSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E32354DC68001FAFA9 /* CreateCallSpec.swift */; };
 		C902B1E723551353001FAFA9 /* RootAppSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E623551353001FAFA9 /* RootAppSpec.swift */; };
 		C902B1E923552B97001FAFA9 /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E823552B97001FAFA9 /* Mock.swift */; };
-		C902B1EB23552D82001FAFA9 /* CallingActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */; };
 		C9060ABB2359C1A100914898 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABA2359C1A100914898 /* Dependencies.swift */; };
 		C9060ABE2359C2F600914898 /* CallStarter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABD2359C2F600914898 /* CallStarter.swift */; };
+		C9060AC3235A030700914898 /* CallStarterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060AC2235A030700914898 /* CallStarterSpec.swift */; };
+		C9060AC5235A063200914898 /* CallingActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */; };
 		C91F851E234CCCE5007F6417 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851D234CCCE5007F6417 /* AppDelegate.swift */; };
 		C91F8524234CCCE7007F6417 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8523234CCCE7007F6417 /* Assets.xcassets */; };
 		C91F852A234CCCE7007F6417 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91F8528234CCCE7007F6417 /* LaunchScreen.storyboard */; };
@@ -201,6 +202,7 @@
 		C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingActionSpec.swift; sourceTree = "<group>"; };
 		C9060ABA2359C1A100914898 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		C9060ABD2359C2F600914898 /* CallStarter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStarter.swift; sourceTree = "<group>"; };
+		C9060AC2235A030700914898 /* CallStarterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStarterSpec.swift; sourceTree = "<group>"; };
 		C91F851B234CCCE5007F6417 /* LibExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C91F851D234CCCE5007F6417 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C91F8523234CCCE7007F6417 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 		C902B1E523551332001FAFA9 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				C9060AC4235A05E700914898 /* Messages */,
 				C902B1E623551353001FAFA9 /* RootAppSpec.swift */,
 				C9ADE1F523573FF1002D813B /* SIPAppSpec.swift */,
 			);
@@ -580,13 +583,39 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		C9060AC0235A026800914898 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				C902B1D92354CA08001FAFA9 /* CallingFeature */,
+				C902B1D12354B1FC001FAFA9 /* SettingsFeature */,
+				C902B1C923549CE2001FAFA9 /* UserHandling */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		C9060AC1235A02E500914898 /* Gateways */ = {
+			isa = PBXGroup;
+			children = (
+				C9060AC2235A030700914898 /* CallStarterSpec.swift */,
+			);
+			path = Gateways;
+			sourceTree = "<group>";
+		};
+		C9060AC4235A05E700914898 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */,
+			);
+			path = Messages;
+			sourceTree = "<group>";
+		};
 		C91F851C234CCCE5007F6417 /* LibExample */ = {
 			isa = PBXGroup;
 			children = (
 				C9ADE1F323573849002D813B /* App */,
 				C9ADE1F223573807002D813B /* Entities */,
-				C9060ABC2359C2E600914898 /* Gateways */,
 				C91F854F234CE647007F6417 /* Features */,
+				C9060ABC2359C2E600914898 /* Gateways */,
 				C9ADE1F723574B18002D813B /* UI */,
 				C9060ABF2359FBFC00914898 /* Resources */,
 			);
@@ -597,12 +626,10 @@
 			isa = PBXGroup;
 			children = (
 				C902B1E823552B97001FAFA9 /* Mock.swift */,
-				C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */,
-				C9ADE1F4235738CF002D813B /* Entities */,
 				C902B1E523551332001FAFA9 /* App */,
-				C902B1D92354CA08001FAFA9 /* CallingFeature */,
-				C902B1D12354B1FC001FAFA9 /* SettingsFeature */,
-				C902B1C923549CE2001FAFA9 /* UserHandling */,
+				C9ADE1F4235738CF002D813B /* Entities */,
+				C9060AC0235A026800914898 /* Features */,
+				C9060AC1235A02E500914898 /* Gateways */,
 				C91F8536234CCCE7007F6417 /* Info.plist */,
 			);
 			path = LibExampleTests;
@@ -1163,11 +1190,11 @@
 			files = (
 				C902B1E923552B97001FAFA9 /* Mock.swift in Sources */,
 				C902B1DE2354CB4F001FAFA9 /* EndCallSpec.swift in Sources */,
+				C9060AC3235A030700914898 /* CallStarterSpec.swift in Sources */,
 				C9ADE1F12357339B002D813B /* CallSpec.swift in Sources */,
 				C9ADE1F623573FF1002D813B /* SIPAppSpec.swift in Sources */,
 				C902B1CE2354A0B4001FAFA9 /* LogOutSpec.swift in Sources */,
 				C902B1E42354DC68001FAFA9 /* CreateCallSpec.swift in Sources */,
-				C902B1EB23552D82001FAFA9 /* CallingActionSpec.swift in Sources */,
 				C902B1D02354A233001FAFA9 /* UserHandlingSpec.swift in Sources */,
 				C902B1CC23549D37001FAFA9 /* LogInSpec.swift in Sources */,
 				C902B1E02354CC81001FAFA9 /* CallingFeatureSpec.swift in Sources */,
@@ -1175,6 +1202,7 @@
 				C902B1D62354B5AE001FAFA9 /* SettingsFeatureSpec.swift in Sources */,
 				C902B1DC2354CA39001FAFA9 /* StartCallSpec.swift in Sources */,
 				C902B1E723551353001FAFA9 /* RootAppSpec.swift in Sources */,
+				C9060AC5235A063200914898 /* CallingActionSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

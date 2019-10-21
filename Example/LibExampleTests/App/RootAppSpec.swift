@@ -21,7 +21,7 @@ class RootAppSpec: QuickSpec {
                 messageHandler = Mock.MessageHandler {
                     if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = $0 { interceptedHandle = call.handle }
                 }
-                sut = RootApp()
+                sut = RootApp(dependencies: Dependencies(callStarter: Mock.CallStarter()))
                 sut.add(subscriber: messageHandler)
             }
             
@@ -35,7 +35,7 @@ class RootAppSpec: QuickSpec {
                 it("passes to and receives message from SIPApp"){
                     sut.handle(msg: .feature(.calling(.useCase(.call(.action(.start("2312")))))))
                     
-                    expect(interceptedHandle).toEventually(equal("2312"), timeout: 3    )
+                    expect(interceptedHandle).toEventually(equal("2312"), timeout: 3)
                 }
             }
         }
