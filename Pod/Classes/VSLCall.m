@@ -99,7 +99,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 
 - (instancetype _Nullable)initInboundCallWithUUIDandNumber:(NSUUID * _Nonnull)uuid number:(NSString * _Nonnull)number {
     self.uuid = uuid;
-    self.numberToCall = [VialerUtils cleanPhoneNumber:number];
+    self.callerNumber = [VialerUtils cleanPhoneNumber:number];
     self.incoming = YES;
     
     return self;
