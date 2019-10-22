@@ -687,6 +687,10 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
     if (account) {
         VSLLogInfo(@"Detected inbound call(%d) for account:%d", call_id, acc_id);
         
+        pjsua_call_info callInfo;
+        pjsua_call_get_info(call_id, &callInfo);
+        NSString *callerNumber = [NSString stringWithUTF8String:callInfo.remote_info.ptr];
+        
         VSLCallManager *callManager = [VialerSIPLib sharedInstance].callManager;
         NSArray *calls = [callManager callsForAccount:account];
         VSLCall *call = [calls lastObject]; // TODO: save to say that the last one is the right one?

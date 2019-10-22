@@ -252,11 +252,11 @@
 - (VSLCall *)callWithUUID:(NSUUID *)uuid {
     VSLLogVerbose(@"Looking for a call with UUID:%@", uuid.UUIDString);
     NSUInteger callIndex = [self.calls indexOfObjectPassingTest:^BOOL(VSLCall* _Nonnull call, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([call.uuid isEqual:uuid]) {
+        if ([call.uuid isEqual:uuid] && uuid) {
             return YES;
         }
         return NO;
-    }]; //TODO HUH?
+    }];
 
     if (callIndex != NSNotFound) {
         VSLCall *call = [self.calls objectAtIndex:callIndex];
@@ -274,7 +274,7 @@
             return YES;
         }
         return NO;
-    }]; // TODO: huh?
+    }];
 
     if (callIndex != NSNotFound) {
         return [self.calls objectAtIndex:callIndex];
