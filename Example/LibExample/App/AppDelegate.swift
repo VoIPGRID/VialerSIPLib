@@ -11,8 +11,29 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    private let app = RootApp(dependencies: Dependencies(callStarter: CallStarter()))
+    private let app: RootApp
+    
+    override init() {
+        
+        let sipLib = VialerSIPLib.sharedInstance()
+        let endPoint =  VSLEndpointConfiguration()
+        let transport = VSLTransportConfiguration(transportType: .UDP)!
+        endPoint.transportConfigurations.append(transport)
+        endPoint.userAgent = "VialerSIPLib Example App"
+        endPoint.unregisterAfterCall = true
+        
+    
+       do {
+           try sipLib.configureLibrary(withEndPointConfiguration: endPoint)
 
+       } catch let error {
+           print("Error setting up VialerSIPLib: \(error)")
+       }
+        app = RootApp(dependencies: Dependencies(callStarter: CallStarter(vialerSipLib: sipLib)))
+        super.init()
+        
+        
+    }
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

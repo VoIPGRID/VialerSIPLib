@@ -227,7 +227,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 }
 
 - (void)registerAccountWithCompletion:(RegistrationCompletionBlock)completion {
-    VSLLogDebug(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
+        VSLLogDebug(@"Account valid: %@", self.isAccountValid ? @"YES": @"NO");
     VSLLogDebug(@"Should force registration: %@", self.forceRegistration ? @"YES" : @"NO");
     
     if (!self.isAccountValid) {
@@ -263,12 +263,22 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         
         if (status != PJ_SUCCESS) {
             VSLLogError(@"Account registration failed");
-            NSError *error = [NSError VSLUnderlyingError:nil
-                                 localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
-                             localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
-                                             errorDomain:VSLAccountErrorDomain
-                                               errorCode:VSLAccountErrorRegistrationFailed];
-            completion(NO, error);
+
+            if (status == PJSIP_EBUSY) {
+                NSError *error = [NSError VSLUnderlyingError:nil
+                                     localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
+                                 localizedFailureReasonError:NSLocalizedString(@"PJSIP status code:PJSIP_EBUSY", nil)
+                                                 errorDomain:VSLAccountErrorDomain
+                                                   errorCode:VSLAccountErrorRegistrationFailed];
+                completion(NO, error);
+            } else {
+                NSError *error = [NSError VSLUnderlyingError:nil
+                                     localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
+                                 localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                                 errorDomain:VSLAccountErrorDomain
+                                                   errorCode:VSLAccountErrorRegistrationFailed];
+                completion(NO, error);
+            }
         }
     } else {
         VSLLogVerbose(@"VSLAccount registered or registration in progress, cannot sent another registration");
@@ -279,6 +289,15 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     if (self.accountState == VSLAccountStateConnected) {
         completion(YES, nil);
     } else {
+        
+        NSError *error = [NSError VSLUnderlyingError:nil
+            localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
+        localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), self.accountState]
+                        errorDomain:VSLAccountErrorDomain
+                          errorCode:VSLAccountErrorRegistrationFailed];
+        
+        
+        completion(NO, error);
         self.registrationCompletionBlock = completion;
     }
 }
@@ -309,7 +328,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
         if (error != nil) {
             *error = [NSError VSLUnderlyingError:nil
                          localizedDescriptionKey:NSLocalizedString(@"Account unregistration failed", nil)
-                     localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                     localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), self.accountState]
                                      errorDomain:VSLAccountErrorDomain
                                        errorCode:VSLAccountErrorRegistrationFailed];
         }

@@ -18,7 +18,7 @@ class CallStarterSpec: QuickSpec {
             var receivedCall: Call!
             var successfully:Bool = false
             beforeEach {
-                sut = CallStarter()
+                sut = CallStarter(callManager: Mock.CallManager(shouldSucceed: true))
                 sut.callback = { (success, call) in
                     receivedCall = call
                     successfully = success

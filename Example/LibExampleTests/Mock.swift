@@ -25,7 +25,7 @@ class Mock {
         
         var deferResponse: ((Bool) -> DispatchTimeInterval) = {
             switch $0 {
-            case true: return .milliseconds(10)
+            case  true: return .milliseconds(10)
             case false: return .milliseconds(7)
             }
         }
@@ -35,6 +35,19 @@ class Mock {
             checkHandle(call.handle)
                 ? delay(by: deferResponse( true)) { self.callback?( true, call)}
                 : delay(by: deferResponse(false)) { self.callback?(false, call)}
+        }
+    }
+    
+    struct CallManager: CallManaging {
+        
+        init(shouldSucceed: Bool) {
+            self.shouldSucceed = shouldSucceed
+        }
+        let shouldSucceed: Bool
+        func startCall(toNumber: String, for: VSLAccount, completion: @escaping ((VSLCall?, Error?) -> ())) {
+            shouldSucceed
+                ? completion(VSLCall(inboundCallWithCallId: 9, account: VSLAccount(callManager: VSLCallManager())), nil)
+                : completion(nil, NSError())
         }
     }
 }

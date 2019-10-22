@@ -60,24 +60,25 @@ class VSLMakeCallViewController: UIViewController {
     }
 
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
-        number = number.substring(to: number.characters.index(number.endIndex, offsetBy: -1))
+        number = number.substring(to: number.index(number.endIndex, offsetBy: -1))
         numberToDialLabel.text = number
         updateUI()
     }
 
-    @IBAction func callButtonPressed(_ sender: UIButton) {
-        self.callButton.isEnabled = false
-        if account.isRegistered {
-            setupCall()
-        } else {
-            account.register { (success, error) in
-                self.setupCall()
+        @IBAction func callButtonPressed(_ sender: UIButton) {
+            self.callButton.isEnabled = false
+            if account.isRegistered {
+                setupCall()
+            } else {
+                account.register { (success, error) in
+                    self.setupCall()
 
+                }
             }
         }
-    }
 
     fileprivate func setupCall() {
+        
         self.callManager.startCall(toNumber: number, for: account ) { (call, error) in
             if error != nil {
                 DDLogWrapper.logError("Could not start call")

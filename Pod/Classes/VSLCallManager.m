@@ -66,7 +66,11 @@
     [account registerAccountWithCompletion:^(BOOL success, NSError * _Nullable error) {
         if (!success) {
             VSLLogError(@"Error registering the account: %@", error);
-            VSLBlockSafeRun(completion, nil, error);
+            
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                VSLBlockSafeRun(completion, nil, error);
+            });
         } else {
              VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
             [self addCall:call];
@@ -79,10 +83,17 @@
                     if (error) {
                         VSLLogError(@"Error requesting \"Start Call Transaction\" error: %@", error);
                         [self removeCall:call];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+
                         VSLBlockSafeRun(completion, nil, error);
+                            });
+
                     } else {
                         VSLLogInfo(@"\"Start Call Transaction\" requested succesfully for Call(%@) with account(%ld)", call.uuid.UUIDString, (long)account.accountId);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+
                         VSLBlockSafeRun(completion, call, nil);
+                        });
                     }
                 }];
             } else {
@@ -91,11 +102,15 @@
                 [call startWithCompletion:^(NSError *error) {
                     if (error) {
                         VSLLogError(@"Error starting call(%@): %@", call.uuid.UUIDString, error);
-                        VSLBlockSafeRun(completion, nil, error);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            VSLBlockSafeRun(completion, nil, error);
+                        });
                     } else {
                         VSLLogInfo(@"Call(%@) started", call.uuid.UUIDString);
                         [self.audioController activateAudioSession];
-                        VSLBlockSafeRun(completion, call, nil);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            VSLBlockSafeRun(completion, call, nil);
+                        });
                     }
                 }];
             }

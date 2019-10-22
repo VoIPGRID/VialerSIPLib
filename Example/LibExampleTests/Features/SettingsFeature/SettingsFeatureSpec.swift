@@ -33,10 +33,9 @@ class SettingsFeatureSpec: QuickSpec {
             }
             
             it("switches transport modes") {
-                sut.handle(feature: .settings(.useCase(.transport(.action(.activate(.udp))))))
-                sut.handle(feature: .settings(.useCase(.transport(.action(.activate(.tcp))))))
-                sut.handle(feature: .settings(.useCase(.transport(.action(.activate(.tls))))))
-                sut.handle(feature: .settings(.useCase(.transport(.action(.activate(.udp))))))
+                [TransportOption.udp, .tcp, .tls, .udp].forEach {
+                    sut.handle(feature: .settings(.useCase(.transport(.action(.activate($0))))))
+                }
                 
                 expect(receivedModes) == [.udp, .tcp, .tls, .udp]
             }

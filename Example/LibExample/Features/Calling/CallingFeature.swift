@@ -19,9 +19,9 @@ class CallingFeature: Feature {
     private let dependencies: Dependencies
 
     // useCases
-    private lazy var startCall  = StartCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
-    private lazy var endCall    = EndCall(dependencies: self.dependencies)   { [weak self] response in self?.handle(response: response) }
-    private lazy var createCall = CreateCall(dependencies: self.dependencies){ [weak self] response in self?.handle(response: response) }
+    private lazy var startCall  =  StartCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
+    private lazy var endCall    =    EndCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
+    private lazy var createCall = CreateCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
 
     func handle(feature: Message.Feature) {
         if case .calling(.useCase(let useCase)) = feature {
@@ -31,7 +31,7 @@ class CallingFeature: Feature {
     
     private func handle(useCase: Message.Feature.Calling.UseCase) {
         if case .call(.action(.start(let handle))) = useCase { createCall.handle(request: .createCall(handle)) }
-        if case .call(.action(.stop (let call)))   = useCase {    endCall.handle(request:       .stop  (call)) }
+        if case .call(.action( .stop(let   call))) = useCase {    endCall.handle(request:       .stop(  call)) }
     }
     
     private func handle(response: CreateCall.Response) {
