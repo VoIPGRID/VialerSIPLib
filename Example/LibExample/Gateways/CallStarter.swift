@@ -52,15 +52,6 @@ struct CallStarter: CallStarting {
     
     func start(call: Call) {
         let user = EnabledUser(sipAccount: Keys.SIP.Account, sipPassword: Keys.SIP.Password, sipDomain: Keys.SIP.Domain)
-//        sipLib.registerAccount(with: user, forceRegistration: true) { (success, account) in
-//            if success {
-//
-//            }  else {
-//                print(account ?? "no account")
-//            }
-//        }
-//
-//
         var account: VSLAccount? = nil
         do {
             account = try sipLib.createAccount(withSip: user)
@@ -78,9 +69,6 @@ struct CallStarter: CallStarting {
                     }
                 }
             }
-//            self.callManager.startCall(toNumber: call.handle, for: account) { (vCall, error) in
-//                
-//            }
         }
     }
     
