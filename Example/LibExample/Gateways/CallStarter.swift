@@ -14,18 +14,18 @@ import Foundation
 
 class EnabledUser:NSObject, SIPEnabledUser {
     
-    init(sipAccount: String, sipPassword: String, sipDomain: String) {
+    init(sipAccount: String, sipPassword: String, sipDomain: String, proxy: String?) {
         self.sipAccount = sipAccount
         self.sipPassword = sipPassword
         self.sipDomain = sipDomain
-//        self.sipProxy = proxy
+        self.sipProxy = proxy
     }
     var sipAccount: String
     
     var sipPassword: String
     
     var sipDomain: String
-//    var sipProxy: String?
+    var sipProxy: String?
     
 }
 
@@ -51,7 +51,13 @@ struct CallStarter: CallStarting {
     private let callManager: VSLCallManager
     
     func start(call: Call) {
-        let user = EnabledUser(sipAccount: Keys.SIP.Account, sipPassword: Keys.SIP.Password, sipDomain: Keys.SIP.Domain)
+        let user = EnabledUser(
+                         sipAccount: Keys.SIP.Account,
+                        sipPassword: Keys.SIP.Password,
+                          sipDomain: Keys.SIP.Domain,
+                              proxy: Keys.SIP.Proxy
+        )
+        
         var account: VSLAccount? = nil
         do {
             account = try sipLib.createAccount(withSip: user)
