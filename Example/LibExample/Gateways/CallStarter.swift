@@ -41,16 +41,8 @@ struct CallStarter: CallStarting {
     init(vialerSipLib: VialerSIPLib) {
         self.sipLib = vialerSipLib
         self.callManager = sipLib.callManager
-    }
-    
-    
-    private let sipLib:VialerSIPLib
-
-    
-    var callback: ((Bool, Call) -> Void)?
-    private let callManager: VSLCallManager
-    
-    func start(call: Call) {
+        
+        
         let user = EnabledUser(
                          sipAccount: Keys.SIP.Account,
                         sipPassword: Keys.SIP.Password,
@@ -58,21 +50,42 @@ struct CallStarter: CallStarting {
                               proxy: Keys.SIP.Proxy
         )
         
-        var account: VSLAccount? = nil
         do {
             account = try sipLib.createAccount(withSip: user)
         } catch let error {
             print("Could not create account. Error: \(error)")
         }
+    }
+    
+    
+    private let sipLib:VialerSIPLib
+    private var account: VSLAccount?
+
+    
+    var callback: ((Bool, Call) -> Void)?
+    private let callManager: VSLCallManager
+    
+    func start(call: Call) {
+        
         
         if let account = account {
-            self.callManager.startCall(toNumber: call.handle, for: account) { (vCall, error) in
-                if let e = error {
-                    self.call(call, failed: e)}
-                else {
-                    if let _ = vCall {
-                        self.callStarted(call: call)
-                    }
+            account.register { (success, error) in
+                
+                success
+                    ? self.makeCall(call, account: account)
+                    : self.call(call, failed: error!)
+                    
+            }
+        }
+    }
+    
+    private func makeCall(_ call: Call, account: VSLAccount) {
+        self.callManager.startCall(toNumber: call.handle, for: account) { (vCall, error) in
+            if let e = error {
+                self.call(call, failed: e)}
+            else {
+                if let _ = vCall {
+                    self.callStarted(call: call)
                 }
             }
         }

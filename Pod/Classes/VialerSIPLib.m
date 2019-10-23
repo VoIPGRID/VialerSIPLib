@@ -113,7 +113,10 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
         accountConfiguration.sipDomain = sipUser.sipDomain;
 
         if ([sipUser respondsToSelector:@selector(sipProxy)]) {
-            accountConfiguration.sipProxyServer = sipUser.sipProxy;
+            NSString *proxy = sipUser.sipProxy;
+            if (proxy && ![proxy isEqualToString:@""]) {
+                accountConfiguration.sipProxyServer = proxy;
+            }
         }
 
         if ([sipUser respondsToSelector:@selector(sipRegisterOnAdd)]) {
