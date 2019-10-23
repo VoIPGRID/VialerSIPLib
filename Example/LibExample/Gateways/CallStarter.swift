@@ -62,7 +62,7 @@ struct CallStarter: CallStarting {
         do {
             account = try sipLib.createAccount(withSip: user)
         } catch let error {
-            print("Could not create account. Error:\(error)\nExiting")
+            print("Could not create account. Error: \(error)")
         }
         
         if let account = account {

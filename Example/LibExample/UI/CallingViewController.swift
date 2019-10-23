@@ -55,18 +55,33 @@ class CallingViewController: MessageViewController {
     // MARK: - State Handling
     private func update(call: Call?, newState: CallState) { currentCall = call; state = newState }
 
+    
+    
+    private var resetTimer: Timer?
     private func stateChanged() {
-        func updateUI(enabledMakeCallButton: Bool, enableHangUpButton:Bool, numberFieldColor: UIColor) {
+        func updateUI(enabledMakeCallButton: Bool, enableHangUpButton:Bool, numberFieldColor: UIColor, resetToIdle: Bool) {
+            
+            if true == resetTimer?.isValid {
+                resetTimer?.invalidate()
+                resetTimer = nil
+            }
+            
             phoneNumberField.layer.borderColor = numberFieldColor.cgColor
                         hangUpButton.isEnabled = enableHangUpButton
                       makeCallButton.isEnabled = enabledMakeCallButton
+            
+            if resetToIdle {
+                resetTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false){ [weak self] _ in
+                    self?.state = .idle
+                }
+            }
         }
 
         switch state {
-        case .idle   : updateUI(enabledMakeCallButton:  true, enableHangUpButton: false, numberFieldColor: .white)
-        case .dialing: updateUI(enabledMakeCallButton:  true, enableHangUpButton:  true, numberFieldColor:  .cyan)
-        case .calling: updateUI(enabledMakeCallButton: false, enableHangUpButton:  true, numberFieldColor: .green)
-        case .failed : updateUI(enabledMakeCallButton:  true, enableHangUpButton: false, numberFieldColor:   .red)
+        case .idle   : updateUI(enabledMakeCallButton:  true, enableHangUpButton: false, numberFieldColor: .white, resetToIdle: false)
+        case .dialing: updateUI(enabledMakeCallButton:  true, enableHangUpButton:  true, numberFieldColor:  .cyan, resetToIdle: false)
+        case .calling: updateUI(enabledMakeCallButton: false, enableHangUpButton:  true, numberFieldColor: .green, resetToIdle: false)
+        case .failed : updateUI(enabledMakeCallButton:  true, enableHangUpButton: false, numberFieldColor:   .red, resetToIdle: true)
         }
     }
 }
