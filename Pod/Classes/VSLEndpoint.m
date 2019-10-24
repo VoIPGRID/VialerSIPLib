@@ -514,7 +514,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
 
 static void logCallBack(int logLevel, const char *data, int len) {
     NSString *logString = [[NSString alloc] initWithUTF8String:data];
-
+   
     // Strip time stamp from the front
     // TODO: check that the logmessage actually has a timestamp before removing.
     logString = [logString substringFromIndex:13];

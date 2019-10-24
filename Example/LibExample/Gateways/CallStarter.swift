@@ -88,6 +88,20 @@ struct CallStarter: CallStarting {
                     self.callStarted(call: call)
                 }
             }
+        })
+
+    }
+    
+    func startCall(call: Call, account: VSLAccount) {
+        self.callManager.startCall(toNumber: call.handle, for: account) { (vCall, error) in
+            
+            guard vCall != nil else {
+                NSLog("Call failed " + (error?.localizedDescription ?? "no error"))
+                return
+            }
+            
+            NSLog("Got call")
+           
         }
     }
     
