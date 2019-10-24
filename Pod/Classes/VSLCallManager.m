@@ -73,13 +73,13 @@
             });
         } else {
              VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
-            NSLog(@"got call with state= %@", call.callStateText);
+
             [self addCall:call];
 
             if (@available(iOS 10.0, *)) {
                 CXHandle *numberHandle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:call.numberToCall];
                 CXAction *startCallAction = [[CXStartCallAction alloc] initWithCallUUID:call.uuid handle:numberHandle];
-                NSLog(@"Nuumber: @%", call.numberToCall);
+
                 [self requestCallKitAction:startCallAction completion:^(NSError *error) {
                     if (error) {
                         NSLog(@"Error requesting \"Start Call Transaction\" error: %@", error);
