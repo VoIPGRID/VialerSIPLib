@@ -65,16 +65,26 @@ struct CallStarter: CallStarting {
             print("Could not create account. Error: \(error)")
         }
         
-        if let account = account {
-            self.callManager.startCall(toNumber: call.handle, for: account) { (vCall, error) in
-                if let e = error {
-                    self.call(call, failed: e)}
-                else {
-                    if let _ = vCall {
-                        self.callStarted(call: call)
-                    }
-                }
+        account?.register(completion: { (success, error) in
+            if (success) {
+                NSLog("Starting call")
+                self.startCall(call: call, account: account!)
+            } else {
             }
+        })
+
+    }
+    
+    func startCall(call: Call, account: VSLAccount) {
+        self.callManager.startCall(toNumber: call.handle, for: account) { (vCall, error) in
+            
+            guard vCall != nil else {
+                NSLog("Call failed " + (error?.localizedDescription ?? "no error"))
+                return
+            }
+            
+            NSLog("Got call")
+           
         }
     }
     

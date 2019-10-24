@@ -73,15 +73,16 @@
             });
         } else {
              VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
+            NSLog(@"got call with state= %@", call.callStateText);
             [self addCall:call];
 
             if (@available(iOS 10.0, *)) {
                 CXHandle *numberHandle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:call.numberToCall];
                 CXAction *startCallAction = [[CXStartCallAction alloc] initWithCallUUID:call.uuid handle:numberHandle];
-
+                NSLog(@"Nuumber: @%", call.numberToCall);
                 [self requestCallKitAction:startCallAction completion:^(NSError *error) {
                     if (error) {
-                        VSLLogError(@"Error requesting \"Start Call Transaction\" error: %@", error);
+                        NSLog(@"Error requesting \"Start Call Transaction\" error: %@", error);
                         [self removeCall:call];
                         dispatch_async(dispatch_get_main_queue(), ^{
 
@@ -90,10 +91,7 @@
 
                     } else {
                         VSLLogInfo(@"\"Start Call Transaction\" requested succesfully for Call(%@) with account(%ld)", call.uuid.UUIDString, (long)account.accountId);
-                        dispatch_async(dispatch_get_main_queue(), ^{
-
-                        VSLBlockSafeRun(completion, call, nil);
-                        });
+                        
                     }
                 }];
             } else {
