@@ -41,7 +41,8 @@ struct CallStarter: CallStarting {
     init(vialerSipLib: VialerSIPLib) {
         self.sipLib = vialerSipLib
         self.callManager = sipLib.callManager
-        
+        providerDelegate = CallKitProviderDelegate(callManager: self.callManager)
+
         
         let user = EnabledUser(
                          sipAccount: Keys.SIP.Account,
@@ -60,21 +61,17 @@ struct CallStarter: CallStarting {
     
     private let sipLib:VialerSIPLib
     private var account: VSLAccount?
+    private var providerDelegate: CallKitProviderDelegate?
 
-    
     var callback: ((Bool, Call) -> Void)?
     private let callManager: VSLCallManager
     
     func start(call: Call) {
-        
-        
         if let account = account {
             account.register { (success, error) in
-                
                 success
                     ? self.makeCall(call, account: account)
                     : self.call(call, failed: error!)
-                    
             }
         }
     }
@@ -88,8 +85,7 @@ struct CallStarter: CallStarting {
                     self.callStarted(call: call)
                 }
             }
-        })
-
+        }
     }
     
     func startCall(call: Call, account: VSLAccount) {
