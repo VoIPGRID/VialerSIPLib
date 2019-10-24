@@ -696,6 +696,8 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
         VSLCall *call = [calls lastObject]; // TODO: save to say that the last one is the right one?
         call.callId = call_id;
         call.invite = [[SipInvite alloc] initWithInvitePacket:rdata->pkt_info.packet];
+        
+        VSLLogVerbose(@"AFV onIncomingCall: %@", call.uuid.UUIDString);
      
         if (call) {
             if ([VSLEndpoint sharedEndpoint].incomingCallBlock) {

@@ -79,7 +79,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
         CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:handleValue];
         update.remoteHandle = handle;
   
-        VSLLogVerbose(@"UUID as sent to CallKit provider: %@", call.uuid.UUIDString);
+        VSLLogVerbose(@"Updating CallKit provider with UUID: %@", call.uuid.UUIDString);
         [self.provider reportCallWithUUID:call.uuid updated:update];
     }
 }
@@ -117,7 +117,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 
 /**
  * Delegate method called when the user declines the incoming call from within the
- * "native" CallKit interface.
+ * "native" CallKit interface, and from our own call interface.
  */
 - (void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action NS_AVAILABLE_IOS(10.0){
     // Find call.
@@ -252,6 +252,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
             break;
 
         case VSLCallStateIncoming:
+            // An incoming call is reported to the provider immediately after the push message is received in the APDNHandler.
             break;
 
         case VSLCallStateEarly:
@@ -302,6 +303,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
                                                reason:CXCallEndedReasonRemoteEnded];
                 }
             }
+            // TODO: would this be a better place for reporting to the provider that the call ended instead of CallManager.endCall?
             break;
     }
 }

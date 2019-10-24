@@ -139,7 +139,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 
             } break;
             case VSLCallStateIncoming: {
-                pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_RINGING, NULL, NULL);
+                pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_RINGING, NULL, NULL);  // TODO: is this still being called? If not where else?
                 if (status != PJ_SUCCESS) {
                     VSLLogWarning(@"Error %d while sending status code PJSIP_SC_RINGING", status);
                 }
@@ -558,15 +558,15 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
                 }
             }
             
-            // When there is bad or no internet connection, try to set the call to be disconnected when the user presses the hangup button.
-            // To make sure the correct flow is followed to dispatch screens.
+            // When there is bad or no internet connection, try to set the call to be disconnected when the user presses the hangup button. TODO: is there (here) a flow for a good internet connection?
+            // To make sure the correct flow is followed to dispatch screens. TODO: how is it made sure here?
             __weak VSLCall *weakSelf = self;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(VSLCallDelayTimeCheckSuccessfullHangup * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 if (!weakSelf || weakSelf.callState == VSLCallStateDisconnected) {
                     return;
                 }
                 
-                VSLLogDebug(@"Bad or no internet connection, setting call manual to disconnect.");
+                VSLLogDebug(@"Bad or no internet connection, setting call manual to disconnect.");  // TODO: I don't get this message - what didn't work due to a bad connection?
                 
                 // Mute the call to make sure the other party can't hear the user anymore.
                 if (!weakSelf.muted) {
