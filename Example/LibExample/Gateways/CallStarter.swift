@@ -67,7 +67,7 @@ struct CallStarter: CallStarting {
         
         account?.register(completion: { (success, error) in
             if (success) {
-                NSLog("Starting call")VS
+                NSLog("Starting call")
                 self.startCall(call: call, account: account!)
             } else {
             }
