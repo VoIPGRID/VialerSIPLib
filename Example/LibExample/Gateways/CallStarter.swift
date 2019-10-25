@@ -37,7 +37,7 @@ protocol CallManaging {
 extension VSLCallManager: CallManaging {}
 
 
-struct CallStarter: CallStarting {
+class CallStarter: CallStarting {
     init(vialerSipLib: VialerSIPLib) {
         self.sipLib = vialerSipLib
         self.callManager = sipLib.callManager
@@ -56,10 +56,30 @@ struct CallStarter: CallStarting {
         } catch let error {
             print("Could not create account. Error: \(error)")
         }
+    
+               // If we are CallKit compatible
+               if #available(iOS 10.0, *) {
+                   NotificationCenter.default.addObserver(self,
+                                                          selector: #selector(outboundCallStarted(_:)),
+                                                          name: Notification.Name.CallKitProviderDelegateOutboundCallStarted,
+                                                          object: nil)
+               }
     }
     
     
-    private let sipLib:VialerSIPLib
+    @objc func outboundCallStarted(_ notification: NSNotification){
+        guard
+            let _ = notification.userInfo?[VSLNotificationUserInfoCallKey] as? VSLCall,
+            let call = self.call
+        else { return }
+        self.callStarted(call: call)
+    }
+    
+    deinit {
+        print("CallStarter deinit")
+    }
+    
+    private let sipLib : VialerSIPLib
     private var account: VSLAccount?
     private var providerDelegate: CallKitProviderDelegate?
 
@@ -76,13 +96,17 @@ struct CallStarter: CallStarting {
         }
     }
     
+//    var vCall: VSLCall?
+    var call: Call?
+    
     private func makeCall(_ call: Call, account: VSLAccount) {
         self.callManager.startCall(toNumber: call.handle, for: account) { (vCall, error) in
+            self.call = call
             if let e = error {
                 self.call(call, failed: e)}
             else {
                 if let _ = vCall {
-                    self.callStarted(call: call)
+                    self.startCall(call: call, account: account)
                 }
             }
         }
@@ -92,12 +116,9 @@ struct CallStarter: CallStarting {
         self.callManager.startCall(toNumber: call.handle, for: account) { (vCall, error) in
             
             guard vCall != nil else {
-                NSLog("Call failed " + (error?.localizedDescription ?? "no error"))
+                self.call(call, failed: error!)
                 return
             }
-            
-            NSLog("Got call")
-           
         }
     }
     

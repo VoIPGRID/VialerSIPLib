@@ -25,6 +25,10 @@ class StartCall: UseCase {
     func handle(request: Request) {
         interactor.handle(request: request)
     }
+    
+    deinit {
+        print("dealloc StartCall")
+    }
 }
 
 // MARK: - Request & Response
@@ -69,6 +73,10 @@ extension StartCall {
             case  true: self.response(  .callDidStart(transform(result.call, with: .started)))
             case false: self.response(.failedStarting(transform(result.call, with:  .failed)))
             }
+        }
+        
+        deinit {
+            print("dealloc StartCall.Interactor")
         }
     }
 }

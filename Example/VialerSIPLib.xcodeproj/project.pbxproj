@@ -51,6 +51,9 @@
 		C9060ABB2359C1A100914898 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABA2359C1A100914898 /* Dependencies.swift */; };
 		C9060ABE2359C2F600914898 /* CallStarter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABD2359C2F600914898 /* CallStarter.swift */; };
 		C9060AC5235A063200914898 /* CallingActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */; };
+		C911C2182361C6910024BA5D /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26407E01DA7D6FE00393D4B /* CallKit.framework */; };
+		C911C2192361C6E40024BA5D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
+		C911C21A2361D2D90024BA5D /* ringtone.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9D9EE551C51058800E10546 /* ringtone.wav */; };
 		C91F851E234CCCE5007F6417 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F851D234CCCE5007F6417 /* AppDelegate.swift */; };
 		C91F8524234CCCE7007F6417 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91F8523234CCCE7007F6417 /* Assets.xcassets */; };
 		C91F852A234CCCE7007F6417 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91F8528234CCCE7007F6417 /* LaunchScreen.storyboard */; };
@@ -294,6 +297,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E7112C09D0B3DDCF1660645 /* libPods-LibExample.a in Frameworks */,
+				C911C2192361C6E40024BA5D /* UIKit.framework in Frameworks */,
+				C911C2182361C6910024BA5D /* CallKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,6 +973,7 @@
 			files = (
 				C9ADE20523575BE5002D813B /* CallingViewController.xib in Resources */,
 				C91F852A234CCCE7007F6417 /* LaunchScreen.storyboard in Resources */,
+				C911C21A2361D2D90024BA5D /* ringtone.wav in Resources */,
 				C91F8524234CCCE7007F6417 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1507,7 +1513,7 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LibExample/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1540,7 +1546,7 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LibExample/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

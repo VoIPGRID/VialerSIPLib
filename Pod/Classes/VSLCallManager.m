@@ -66,13 +66,11 @@
     [account registerAccountWithCompletion:^(BOOL success, NSError * _Nullable error) {
         if (!success) {
             VSLLogError(@"Error registering the account: %@", error);
-            
-
             dispatch_async(dispatch_get_main_queue(), ^{
                 VSLBlockSafeRun(completion, nil, error);
             });
         } else {
-             VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
+            VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
 
             [self addCall:call];
 
@@ -85,13 +83,17 @@
                         NSLog(@"Error requesting \"Start Call Transaction\" error: %@", error);
                         [self removeCall:call];
                         dispatch_async(dispatch_get_main_queue(), ^{
-
-                        VSLBlockSafeRun(completion, nil, error);
-                            });
-
+                            if(completion)
+                                completion(nil, error);
+                            
+                        });
+                        
                     } else {
                         VSLLogInfo(@"\"Start Call Transaction\" requested succesfully for Call(%@) with account(%ld)", call.uuid.UUIDString, (long)account.accountId);
-                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if(completion)
+                                completion(call, nil);
+                        });
                     }
                 }];
             } else {
@@ -223,7 +225,7 @@
 
 - (void)removeCall:(VSLCall *)call {
     [self.calls removeObject:call];
-
+    
     if ([self.calls count] == 0) {
         self.calls = nil;
         self.audioController = nil;
@@ -270,7 +272,7 @@
         }
         return NO;
     }];
-
+    
     if (callIndex != NSNotFound) {
         VSLCall *call = [self.calls objectAtIndex:callIndex];
         VSLLogDebug(@"VSLCall found for UUID:%@ VSLCall:%@", uuid.UUIDString, call);
@@ -288,7 +290,7 @@
         }
         return NO;
     }];
-
+    
     if (callIndex != NSNotFound) {
         return [self.calls objectAtIndex:callIndex];
     }
@@ -299,14 +301,14 @@
     if ([self.calls count] == 0) {
         return nil;
     }
-
+    
     NSMutableArray *callsForAccount = [[NSMutableArray alloc] init];
     for (VSLCall *call in self.calls) {
         if ([call.account isEqual:account]) {
             [callsForAccount addObject:call];
         }
     }
-
+    
     if ([callsForAccount count]) {
         return callsForAccount;
     } else {
@@ -336,7 +338,7 @@
     if ([self.calls count] == 0) {
         
     }
-
+    
     NSMutableArray *activeCallsForAccount = [[NSMutableArray alloc] init];
     for (VSLCall *call in self.calls) {
         if (call.callState > VSLCallStateNull && call.callState < VSLCallStateDisconnected) {
@@ -345,7 +347,7 @@
             }
         }
     }
-
+    
     if ([activeCallsForAccount count]) {
         return activeCallsForAccount;
     } else {

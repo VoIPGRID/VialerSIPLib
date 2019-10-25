@@ -290,15 +290,6 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     if (self.accountState == VSLAccountStateConnected) {
         completion(YES, nil);
     } else {
-        
-        NSError *error = [NSError VSLUnderlyingError:nil
-            localizedDescriptionKey:NSLocalizedString(@"Account registration failed", nil)
-        localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), self.accountState]
-                        errorDomain:VSLAccountErrorDomain
-                          errorCode:VSLAccountErrorRegistrationFailed];
-        
-        
-        completion(NO, error);
         self.registrationCompletionBlock = completion;
     }
 }

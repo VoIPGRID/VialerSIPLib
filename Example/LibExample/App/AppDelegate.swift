@@ -17,10 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let sipLib = VialerSIPLib.sharedInstance()
         let endPoint =  VSLEndpointConfiguration()
-        let transport = VSLTransportConfiguration(transportType: .UDP)!
+        let transport = VSLTransportConfiguration(transportType: .TLS)!
         endPoint.transportConfigurations = [transport]
-        endPoint.userAgent = "VialerSIPLib Example App"
-        endPoint.unregisterAfterCall = true
+        endPoint.userAgent = "VialerSIPLib New Example App"
+        endPoint.unregisterAfterCall = false
         
         let ipChhageConf = VSLIpChangeConfiguration()
         ipChhageConf.ipChangeCallsUpdate = .update
