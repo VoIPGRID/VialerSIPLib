@@ -16,7 +16,6 @@ NSString * const CallKitProviderDelegateInboundCallAcceptedNotification = @"Call
 NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"CallKitProviderDelegateInboundCallRejected";
 
 @interface CallKitProviderDelegate()
-@property (strong, nonatomic) CXProvider *provider NS_AVAILABLE_IOS(10.0);
 @property (weak, nonatomic) VSLCallManager *callManager;
 @end
 
@@ -68,30 +67,20 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 /**
  * This causes CallKit to show the "native" call screen.
  */
-- (void)reportIncomingCall:(VSLCall *)call {
+- (void)reportIncomingCall:(VSLCall *)call {  // TODO should be 'renamed' to updateIncomingCall, not sure
     if (@available(iOS 10.0, *)) {
         CXCallUpdate *update = [[CXCallUpdate alloc] init];
         update.localizedCallerName = call.callerName;
         
         NSString * handleValue = @"";
-        if ([update.localizedCallerName length] == 0) { // Doing this to not let the caller contact name override the platform's one
+        if ([update.localizedCallerName length] == 0) { // Doing this to not let the caller contact name override the platform's one // TODO: not sure if this is still working, with using 'Connecting Call...' as a placeholder for the CallKit UI at setup.
             handleValue = call.callerNumber;
         }
         CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:handleValue];
         update.remoteHandle = handle;
   
-        VSLLogVerbose(@"UUID as sent to CallKit provider: %@", call.uuid.UUIDString);
-        [self.provider reportNewIncomingCallWithUUID:call.uuid update:update completion:^(NSError * _Nullable error) {
-            if (error) {
-                VSLLogError(@"Call(%@). CallKit report incoming call error: %@", call.uuid.UUIDString, error);
-                NSError *hangupError;
-                [call hangup:&hangupError];
-                
-                if (hangupError){
-                    VSLLogError(@"Error hanging up call(%@) after CallKit error:%@", call.uuid.UUIDString, error);
-                }
-            }
-        }];
+        VSLLogVerbose(@"Updating CallKit provider with UUID: %@", call.uuid.UUIDString);
+        [self.provider reportCallWithUUID:call.uuid updated:update];
     }
 }
 
@@ -128,7 +117,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 
 /**
  * Delegate method called when the user declines the incoming call from within the
- * "native" CallKit interface.
+ * "native" CallKit interface, and from our own call interface.
  */
 - (void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action NS_AVAILABLE_IOS(10.0){
     // Find call.
@@ -263,6 +252,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
             break;
 
         case VSLCallStateIncoming:
+            // An incoming call is reported to the provider immediately after the push message is received in the APDNHandler.
             break;
 
         case VSLCallStateEarly:
@@ -313,6 +303,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
                                                reason:CXCallEndedReasonRemoteEnded];
                 }
             }
+            // TODO: would this be a better place for reporting to the provider that the call ended instead of CallManager.endCall?
             break;
     }
 }

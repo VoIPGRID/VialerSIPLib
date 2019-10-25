@@ -201,7 +201,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 /**
  *  The callId which a call receives from PJSIP when it is created.
  */
-@property (readonly, nonatomic) NSInteger callId;
+@property (nonatomic) NSInteger callId;
 
 /**
  * The Call-ID that is present in the SIP messages.
@@ -216,7 +216,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 /**
  *  The VSLAccount the call belongs to.
  */
-@property (readonly, weak, nonatomic) VSLAccount * _Nullable account;
+@property (weak, nonatomic) VSLAccount * _Nullable account; // TODO: ok?
 
 /**
  *  The state in which the call currently has.
@@ -306,6 +306,8 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 
 @property (readonly) BOOL connected;
 
+@property (readwrite, nonatomic) SipInvite * _Nullable invite;
+
 #pragma mark - Stats
 
 /**
@@ -382,6 +384,9 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  @return VSLCall instance
  */
 - (instancetype _Nullable)initInboundCallWithCallId:(NSUInteger)callId account:(VSLAccount * _Nonnull)account andInvite:(SipInvite *_Nonnull)invite;
+
+// TODO: add comment
+- (instancetype _Nullable)initInboundCallWithUUIDandNumber:(NSUUID * _Nonnull)uuid number:(NSString * _Nonnull)number;
 
 - (instancetype _Nullable)initWithCallId:(NSUInteger)callId accountId:(NSInteger)accountId __attribute__((unavailable("Deprecated, use -initWithCallID: andAccount: instead")));
 

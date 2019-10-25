@@ -207,6 +207,10 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     mediaConfig.has_ioqueue = PJ_TRUE;
     mediaConfig.thread_cnt = 1;
     mediaConfig.no_vad = PJ_TRUE;
+    mediaConfig.jb_init = 2;
+    mediaConfig.jb_min_pre = 1;
+    mediaConfig.jb_max_pre = 3;
+    mediaConfig.jb_max = 4;
 
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
@@ -587,6 +591,7 @@ static void onCallState(pjsua_call_id callId, pjsip_event *event) {
 }
 
 static void onCallMediaState(pjsua_call_id call_id) {
+    VSLLogVerbose(@"onCallMediaState");
     pjsua_call_info callInfo;
     pjsua_call_get_info(call_id, &callInfo);
 
@@ -675,17 +680,26 @@ static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_
     }
 }
 
+// Method being called after sip invite is received.
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
     VSLEndpoint *endpoint = [VSLEndpoint sharedEndpoint];
     VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
         VSLLogInfo(@"Detected inbound call(%d) for account:%d", call_id, acc_id);
-        VSLCall *call = [[VSLCall alloc]
-                         initInboundCallWithCallId:call_id
-                         account:account
-                         andInvite:[[SipInvite alloc] initWithInvitePacket:rdata->pkt_info.packet]];
+        
+        pjsua_call_info callInfo;
+        pjsua_call_get_info(call_id, &callInfo);
+        NSString *callerNumber = [NSString stringWithUTF8String:callInfo.remote_info.ptr];
+        
+        VSLCallManager *callManager = [VialerSIPLib sharedInstance].callManager;
+        NSArray *calls = [callManager callsForAccount:account];
+        VSLCall *call = [calls lastObject]; // TODO: save to say that the last one is the right one?
+        call.callId = call_id;
+        call.invite = [[SipInvite alloc] initWithInvitePacket:rdata->pkt_info.packet];
+        
+        VSLLogVerbose(@"AFV onIncomingCall: %@", call.uuid.UUIDString);
+     
         if (call) {
-            [[[VialerSIPLib sharedInstance] callManager] addCall:call];
             if ([VSLEndpoint sharedEndpoint].incomingCallBlock) {
                 [VSLEndpoint sharedEndpoint].incomingCallBlock(call);
             }
@@ -704,21 +718,23 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 }
 
 - (void)callDealloc:(NSNotification *)notification {
+    // Called when a call is deallocated.
+    
     if (!self.endpointConfiguration.unregisterAfterCall || self.state != VSLEndpointStarted) {
         return;
     }
 
-    for (VSLAccount *account in self.accounts) {
-        if (![self.callManager firstActiveCallForAccount:account]) {
+    for (VSLAccount *account in self.accounts) {  // TODO: why or how multiple accounts?
+        if (![self.callManager firstActiveCallForAccount:account]) {  // TODO: when is this true? Is it True when 1 call is dealloc and posted a notification to this method?
             NSArray *calls = [self.callManager callsForAccount:account];
             if (calls.count == 0) {
                 NSError *error;
-                [account unregisterAccount:&error];
+                [account unregisterAccount:&error];  // TODO: I think the whish is to unregister an account when is has not 1 call active. Does this for-if-if achieve that?
             }
         }
     }
     
-    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
+    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {  // TODO: Why this if, if you want to remove all transports, check if there are situations it's False.
         // Remove all current transports.
         pjsua_transport_id transportIds[32];
         unsigned count = PJ_ARRAY_SIZE(transportIds);
@@ -730,10 +746,10 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
                 pjsua_transport_id tId = transportIds[i];
                 pjsua_transport_info info;
                 pj_status_t status = pjsua_transport_get_info(tId, &info);
-                if (status == PJ_SUCCESS) {
-                    VSLLogError(@"SUCCESS: Destoryed transport: %d", i);
+                if (status == PJ_SUCCESS) {  // TODO: success in retrieving info, not closing / removing transport.
+                    VSLLogInfo(@"SUCCESS: Destroyed transport: %d", i); // TODO: to me it looks like there is nothing destroyed, should pjsua_transport_close() be called for each tId? Or not? https://trac.pjsip.org/repos/ticket/1840 '2018: need to deprecate this API'
                 } else {
-                    VSLLogError(@"FAILED: Destoryed transport: %d", i);
+                    VSLLogError(@"FAILED: Destroyed transport: %d", i);
                 }
             }
         }

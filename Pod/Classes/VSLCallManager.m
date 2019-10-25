@@ -71,7 +71,6 @@
             });
         } else {
             VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
-
             [self addCall:call];
 
             if (@available(iOS 10.0, *)) {
@@ -136,6 +135,7 @@
 
 - (void)endCall:(VSLCall *)call completion:(void (^)(NSError *error))completion {
     if (@available(iOS 10.0, *)) {
+        VSLLogVerbose(@"AFV Ending call: %@", call.uuid.UUIDString);
         CXAction *endCallAction = [[CXEndCallAction alloc] initWithCallUUID:call.uuid];
         [self requestCallKitAction:endCallAction completion:completion];
     } else {
@@ -267,7 +267,7 @@
 - (VSLCall *)callWithUUID:(NSUUID *)uuid {
     VSLLogVerbose(@"Looking for a call with UUID:%@", uuid.UUIDString);
     NSUInteger callIndex = [self.calls indexOfObjectPassingTest:^BOOL(VSLCall* _Nonnull call, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([call.uuid isEqual:uuid]) {
+        if ([call.uuid isEqual:uuid] && uuid) {
             return YES;
         }
         return NO;
