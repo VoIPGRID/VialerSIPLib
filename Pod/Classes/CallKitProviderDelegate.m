@@ -71,14 +71,14 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     if (@available(iOS 10.0, *)) {
         CXCallUpdate *update = [[CXCallUpdate alloc] init];
         update.localizedCallerName = call.callerName;
-        
+
         NSString * handleValue = @"";
         if ([update.localizedCallerName length] == 0) { // Doing this to not let the caller contact name override the platform's one // TODO: not sure if this is still working, with using 'Connecting Call...' as a placeholder for the CallKit UI at setup.
             handleValue = call.callerNumber;
         }
         CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:handleValue];
         update.remoteHandle = handle;
-  
+
         VSLLogVerbose(@"Updating CallKit provider with UUID: %@", call.uuid.UUIDString);
         [self.provider reportCallWithUUID:call.uuid updated:update];
     }

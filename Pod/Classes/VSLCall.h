@@ -386,7 +386,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 - (instancetype _Nullable)initInboundCallWithCallId:(NSUInteger)callId account:(VSLAccount * _Nonnull)account andInvite:(SipInvite *_Nonnull)invite;
 
 // TODO: add comment
-- (instancetype _Nullable)initInboundCallWithUUIDandNumber:(NSUUID * _Nonnull)uuid number:(NSString * _Nonnull)number;
+- (instancetype _Nullable)initInboundCallWithUUID:(NSUUID * _Nonnull)uuid number:(NSString * _Nonnull)number name:(NSString * _Nonnull)name;
 
 - (instancetype _Nullable)initWithCallId:(NSUInteger)callId accountId:(NSInteger)accountId __attribute__((unavailable("Deprecated, use -initWithCallID: andAccount: instead")));
 
