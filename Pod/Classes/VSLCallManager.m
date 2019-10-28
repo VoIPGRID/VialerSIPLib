@@ -304,11 +304,7 @@
 
 - (VSLCall *)firstCallForAccount:(VSLAccount *)account {
     NSArray *callsForAccount = [self callsForAccount:account];
-    if (callsForAccount > 0) {
-        return callsForAccount[0];
-    } else {
-        return nil;
-    }
+    return [callsForAccount firstObject];
 }
 
 - (VSLCall *)firstActiveCallForAccount:(VSLAccount *)account {
@@ -318,6 +314,11 @@
         }
     }
     return nil;
+}
+
+- (VSLCall *)lastCallForAccount:(VSLAccount *)account {
+    NSArray *callsForAccount = [self callsForAccount:account];
+    return [callsForAccount lastObject];
 }
 
 - (NSArray <VSLCall *> *)activeCallsForAccount:(VSLAccount *)account {

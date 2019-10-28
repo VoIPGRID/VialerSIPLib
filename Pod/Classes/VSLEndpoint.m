@@ -680,29 +680,28 @@ static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_
     }
 }
 
-// Method being called after sip invite is received.
+// Method being called after SIP INVITE is received.
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
     VSLEndpoint *endpoint = [VSLEndpoint sharedEndpoint];
     VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
-        VSLLogInfo(@"Detected inbound call(%d) for account:%d", call_id, acc_id);
+        VSLLogInfo(@"Detected inbound call(%d) for account:%d", call_id, acc_id); // call_id is [0..VSLEndpointConfigurationMaxCalls]
         
         pjsua_call_info callInfo;
         pjsua_call_get_info(call_id, &callInfo);
-        NSString *callerNumber = [NSString stringWithUTF8String:callInfo.remote_info.ptr];
         
         VSLCallManager *callManager = [VialerSIPLib sharedInstance].callManager;
-        NSArray *calls = [callManager callsForAccount:account];
-        VSLCall *call = [calls lastObject]; // TODO: save to say that the last one is the right one?
-        call.callId = call_id;
-        call.invite = [[SipInvite alloc] initWithInvitePacket:rdata->pkt_info.packet];
-        
-        VSLLogVerbose(@"AFV onIncomingCall: %@", call.uuid.UUIDString);
+        VSLCall *call = [callManager lastCallForAccount:account]; // TODO: save to say that the last one is the right one?
      
         if (call) {
+            call.callId = call_id;
+            call.invite = [[SipInvite alloc] initWithInvitePacket:rdata->pkt_info.packet];
+
             if ([VSLEndpoint sharedEndpoint].incomingCallBlock) {
                 [VSLEndpoint sharedEndpoint].incomingCallBlock(call);
             }
+        } else {
+            VSLLogWarning(@"Could not find a call with if %d.", call_id);
         }
         call = nil;
     } else {

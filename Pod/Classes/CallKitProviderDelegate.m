@@ -65,7 +65,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 }
 
 /**
- * This causes CallKit to show the "native" call screen.
+ * This causes CallKit to update the "native" call screen.
  */
 - (void)reportIncomingCall:(VSLCall *)call {  // TODO should be 'renamed' to updateIncomingCall, not sure
     if (@available(iOS 10.0, *)) {
