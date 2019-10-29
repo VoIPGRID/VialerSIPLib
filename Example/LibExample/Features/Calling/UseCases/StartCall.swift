@@ -48,7 +48,7 @@ extension StartCall {
 extension StartCall {
     private class Interactor {
         
-        init(callStarter:CallStarting ,response: @escaping (StartCall.Response) -> Void) {
+        init(callStarter:CallStarting, response: @escaping (StartCall.Response) -> Void) {
             self.response = response
             var callStarter = callStarter
             callStarter.callback = { [weak self] success, call in

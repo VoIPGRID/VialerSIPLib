@@ -2,7 +2,7 @@ platform :ios, '9.0'
 #use_frameworks! #!! Do not enable, causes an error about "target has transitive dependencies that include static binaries.... "
 
 def pods_for_all_targets
-    pod 'VialerSIPLib'#, :path => '../'
+    pod 'VialerSIPLib', :path => '../'
 end
 
 target 'VialerSIPLib_Example' do

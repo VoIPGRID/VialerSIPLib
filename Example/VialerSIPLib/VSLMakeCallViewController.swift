@@ -8,7 +8,6 @@ import UIKit
 class VSLMakeCallViewController: UIViewController {
 
     // MARK: - Configuration
-
     fileprivate struct Configuration {
         struct Segues {
             static let UnwindToMainViewController = "UnwindToMainViewControllerSegue"
@@ -17,7 +16,6 @@ class VSLMakeCallViewController: UIViewController {
     }
 
     // MARK: - Properties
-
     var account: VSLAccount!
 
     var call: VSLCall?
@@ -37,7 +35,6 @@ class VSLMakeCallViewController: UIViewController {
     }
 
     // MARK: - Outlets
-
     @IBOutlet weak var numberToDialLabel: UILabel! {
         didSet {
             numberToDialLabel.text = "\(Keys.NumberToCall)"
@@ -48,7 +45,6 @@ class VSLMakeCallViewController: UIViewController {
     @IBOutlet weak var deleteButton: UIButton!
 
     // MARK: - Actions
-
     @IBAction func backButtonPressed(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: Configuration.Segues.UnwindToMainViewController, sender: nil)
     }
@@ -65,17 +61,16 @@ class VSLMakeCallViewController: UIViewController {
         updateUI()
     }
 
-        @IBAction func callButtonPressed(_ sender: UIButton) {
-            self.callButton.isEnabled = false
-            if account.isRegistered {
-                setupCall()
-            } else {
-                account.register { (success, error) in
-                    self.setupCall()
-
-                }
+    @IBAction func callButtonPressed(_ sender: UIButton) {
+        self.callButton.isEnabled = false
+        if account.isRegistered {
+            setupCall()
+        } else {
+            account.register { (success, error) in
+                self.setupCall()
             }
         }
+    }
 
     fileprivate func setupCall() {
         
@@ -97,11 +92,9 @@ class VSLMakeCallViewController: UIViewController {
     }
 
     // MARK: - Segues
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let callViewController = segue.destination as? VSLCallViewController {
             callViewController.activeCall = call
         }
     }
-
 }

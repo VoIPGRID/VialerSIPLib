@@ -76,7 +76,7 @@
             if (@available(iOS 10.0, *)) {
                 CXHandle *numberHandle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:call.numberToCall];
                 CXAction *startCallAction = [[CXStartCallAction alloc] initWithCallUUID:call.uuid handle:numberHandle];
-                NSLog(@"Nuumber: @%", call.numberToCall);
+                NSLog(@"Number: %@", call.numberToCall);
                 [self requestCallKitAction:startCallAction completion:^(NSError *error) {
                     if (error) {
                         NSLog(@"Error requesting \"Start Call Transaction\" error: %@", error);
