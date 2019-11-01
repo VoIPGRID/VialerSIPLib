@@ -25,10 +25,6 @@ class StartCall: UseCase {
     func handle(request: Request) {
         interactor.handle(request: request)
     }
-    
-    deinit {
-        print("dealloc StartCall")
-    }
 }
 
 // MARK: - Request & Response

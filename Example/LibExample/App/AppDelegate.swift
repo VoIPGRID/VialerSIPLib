@@ -12,7 +12,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     override init() {
-        app = RootApp(dependencies: Dependencies(callStarter: CallStarter(vialerSipLib: instantiateSipLib())))
+        app = RootApp(dependencies: Dependencies(callStarter: CallStarter(vialerSipLib: createSipLib())))
         super.init()
     }
     
@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-private func instantiateSipLib() -> VialerSIPLib {
+private func createSipLib() -> VialerSIPLib {
     let sipLib = VialerSIPLib.sharedInstance()
     let endPoint =  VSLEndpointConfiguration()
     let transport = VSLTransportConfiguration(transportType: .TLS)!

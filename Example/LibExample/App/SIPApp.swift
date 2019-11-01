@@ -14,7 +14,6 @@ protocol ResponseHandling {
     var responseHandler: MessageHandling? { get set }
 }
 
-
 protocol MessageProvider {
     func add(subscriber:MessageSubscriber)
 }
