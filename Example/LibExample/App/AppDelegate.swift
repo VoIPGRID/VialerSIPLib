@@ -12,8 +12,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     override init() {
-        app = RootApp(dependencies:
-            Dependencies(
+        app = RootApp(
+            dependencies: Dependencies(
                 callStarter: CallStarter(vialerSipLib: createSipLib()),
                 statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager())
             )
