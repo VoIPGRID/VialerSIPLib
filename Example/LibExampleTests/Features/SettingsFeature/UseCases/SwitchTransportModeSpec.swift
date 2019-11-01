@@ -15,7 +15,7 @@ class SwitchTransportModeSpec: QuickSpec {
         describe("the SwitchTransportMode UseCase") {
             var sut: SwitchTransportMode!
             
-            var mode: TransportOption!
+            var mode: TransportMode!
             var depend: Dependencies!
 
             beforeEach {

@@ -14,6 +14,16 @@ enum Message {
         case userHandling(UserHandling)
         case settings(Settings)
         case calling(Calling)
+        case state(StateKeeping)
+        
+        enum StateKeeping {
+            case useCase(UseCase)
+            
+            enum UseCase {
+                case stateChanged(AppState)
+                case persistingFailed(AppState, Error)
+            }
+        }
         
         enum UserHandling {
             case useCase(UseCase)
@@ -55,8 +65,8 @@ enum Message {
                 case action(Action)
                 
                 enum Action {
-                    case activate(TransportOption)
-                    case didActivate(TransportOption)
+                    case activate(TransportMode)
+                    case didActivate(TransportMode)
                 }
             }
             

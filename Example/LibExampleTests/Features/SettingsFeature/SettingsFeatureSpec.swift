@@ -16,7 +16,7 @@ class SettingsFeatureSpec: QuickSpec {
             var sut: SettingsFeature!
             
             var messageHandler: Mock.MessageHandler!
-            var receivedModes: [TransportOption]!
+            var receivedModes: [TransportMode]!
             var depend: Dependencies!
 
             beforeEach {
@@ -33,7 +33,7 @@ class SettingsFeatureSpec: QuickSpec {
             }
             
             it("switches transport modes") {
-                [TransportOption.udp, .tcp, .tls, .udp].forEach {
+                [TransportMode.udp, .tcp, .tls, .udp].forEach {
                     sut.handle(feature: .settings(.useCase(.transport(.action(.activate($0))))))
                 }
                 

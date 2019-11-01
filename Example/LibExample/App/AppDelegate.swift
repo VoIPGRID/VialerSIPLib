@@ -12,7 +12,12 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     override init() {
-        app = RootApp(dependencies: Dependencies(callStarter: CallStarter(vialerSipLib: createSipLib())))
+        app = RootApp(dependencies:
+            Dependencies(
+                callStarter: CallStarter(vialerSipLib: createSipLib()),
+                statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager())
+            )
+        )
         super.init()
     }
     
@@ -23,8 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController = MessageNavigationController(rootViewController:  CallingViewController())
         let tabBarController = MessageTabBarController()
         
-        tabBarController.setViewControllers([navigationController], animated: false)
-        
+        tabBarController.setViewControllers([navigationController, SettingsViewController()], animated: false)
+        tabBarController.tabBar.items?[0].title = "Calling"
+        tabBarController.tabBar.items?[1].title = "Settings"
         tabBarController.responseHandler = app
         app.add(subscriber: tabBarController)
         window = UIWindow(frame: UIScreen.main.bounds)

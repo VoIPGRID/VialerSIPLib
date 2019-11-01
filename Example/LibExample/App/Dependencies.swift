@@ -8,4 +8,5 @@
 
 struct Dependencies {
     var callStarter: CallStarting!
+    var statePersister: StatePersisting!
 }

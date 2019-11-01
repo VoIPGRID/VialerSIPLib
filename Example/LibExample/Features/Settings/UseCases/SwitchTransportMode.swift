@@ -11,11 +11,11 @@ class SwitchTransportMode: UseCase {
     typealias ResponseType = Response
     
     enum Request {
-        case setMode(TransportOption)
+        case setMode(TransportMode)
     }
     
     enum Response {
-        case modeWasActivated(TransportOption)
+        case modeWasActivated(TransportMode)
     }
     
     required init(dependencies: Dependencies, responseHandler: @escaping ((ResponseType) -> ())) {

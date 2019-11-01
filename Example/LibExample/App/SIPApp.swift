@@ -39,7 +39,8 @@ class SIPApp: SubscribableApp {
     private lazy var features: [Feature] = [
         UserHandlingFeature(with: rootMessageHandler, dependencies: dependencies),
         SettingsFeature(with: rootMessageHandler, dependencies: dependencies),
-        CallingFeature(with: rootMessageHandler, dependencies: dependencies)
+        CallingFeature(with: rootMessageHandler, dependencies: dependencies),
+        StateKeeperFeature(with: rootMessageHandler, dependencies: dependencies)
     ]
     
     func handle(msg: Message) {
