@@ -6,14 +6,6 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-struct AppState {
-    let transportMode: TransportMode
-    
-    var dictionary: [String : String] {
-        return ["transportMode": "\(transportMode)"]
-    }
-}
-
 class KeepState: UseCase {
     typealias RequestType = Request
     typealias ResponseType = Response
@@ -24,10 +16,10 @@ class KeepState: UseCase {
     }
     
     enum Response {
-        case stateChanged(AppState)
-        case stateLoaded(AppState)
-        case failedPersisting(AppState, Error)
-        case failedLoadingState(Error)
+        case       stateChanged(AppState)
+        case        stateLoaded(AppState)
+        case   failedPersisting(AppState, Error)
+        case failedLoadingState(          Error)
     }
     
     required init(dependencies: Dependencies, responseHandler: @escaping ((KeepState.Response) -> ())) {
