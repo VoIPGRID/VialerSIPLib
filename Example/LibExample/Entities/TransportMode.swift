@@ -6,7 +6,7 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
-enum TransportMode: CaseIterable {
+enum TransportMode: String, CaseIterable {
     case tcp
     case udp
     case tls

@@ -26,10 +26,14 @@ struct PathBuilder: PathBuilding {
 
 protocol StatePersisting {
     func persist(state: AppState) throws
+    func loadState() throws -> AppState?
 }
 
 
 struct StateDiskPersister: StatePersisting {
+    
+    let dirName = "state"
+    let fileName = "state.xml"
     
     init(pathBuilder: PathBuilding, fileManager: FileManager) {
         self.pathBuilder = pathBuilder
@@ -40,9 +44,23 @@ struct StateDiskPersister: StatePersisting {
     private let pathBuilder: PathBuilding
     
     func persist(state: AppState) throws {
-        let dir =  try pathBuilder.dictionaryInDocuments(named: "state", fileManger: fileManager)
+        let dir =  try pathBuilder.dictionaryInDocuments(named: dirName, fileManger: fileManager)
         let data = try PropertyListSerialization.data(fromPropertyList: state.dictionary, format: .xml, options: 0)
-        try data.write(to: dir.appendingPathComponent("state.xml"))
+        try data.write(to: dir.appendingPathComponent(fileName))
+    }
+    
+    func loadState() throws -> AppState? {
+        let dir =  try pathBuilder.dictionaryInDocuments(named: dirName, fileManger: fileManager)
+        if let data = fileManager.contents(atPath: dir.appendingPathComponent(fileName).path) {
+            if let dict = try PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String : String] {
+                if let modeString = dict["transportMode"] {
+                    if let mode = TransportMode(rawValue: modeString) {
+                        return AppState(transportMode: mode)
+                    }
+                }
+            }
+        }
+        return nil
     }
 }
 
@@ -60,12 +78,15 @@ class StateKeeperFeature: Feature {
 
     func handle(feature: Message.Feature) {
         if case .settings(.useCase(.transport(.action(.didActivate(let mode))))) = feature { keepState.handle(request: .setTransportMode(mode)) }
+        if case    .state(.useCase(.loadState))                                  = feature { keepState.handle(request: .loadState)              }
     }
     
     private func handle(response: KeepState.Response) {
         switch response {
-        case     .stateChanged(let state)           : rootMessageHandler?.handle(msg: .feature(.state(.useCase(.stateChanged    (state)))))
-        case .failedPersisting(let state, let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(.persistingFailed(state, error)))))
+        case       .stateChanged(let state)           : rootMessageHandler?.handle(msg: .feature(.state(.useCase(      .stateChanged(state       )))))
+        case        .stateLoaded(let state)           : rootMessageHandler?.handle(msg: .feature(.state(.useCase(       .stateLoaded(state       )))))
+        case   .failedPersisting(let state, let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(  .persistingFailed(state, error)))))
+        case .failedLoadingState(           let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(.stateLoadingFailed(       error)))))
         }
     }
 }

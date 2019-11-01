@@ -42,6 +42,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        app.handle(msg: .feature(.state(.useCase(.loadState))))
+    }
 }
 
 private func createSipLib() -> VialerSIPLib {

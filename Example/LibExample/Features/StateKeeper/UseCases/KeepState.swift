@@ -20,11 +20,14 @@ class KeepState: UseCase {
     
     enum Request {
         case setTransportMode(TransportMode)
+        case loadState
     }
     
     enum Response {
         case stateChanged(AppState)
+        case stateLoaded(AppState)
         case failedPersisting(AppState, Error)
+        case failedLoadingState(Error)
     }
     
     required init(dependencies: Dependencies, responseHandler: @escaping ((KeepState.Response) -> ())) {
@@ -45,6 +48,13 @@ class KeepState: UseCase {
     private func handle(response: KeepState.Response) {
         if case     .stateChanged(let state)            = response {          handleChanged(state: state)             }
         if case .failedPersisting(let state, let error) = response { handleFailedPersisting(state: state, with: error)}
+        
+        switch response {
+        case       .stateChanged(let state)           : handleChanged(state: state)
+        case        .stateLoaded(let state)           : handleStateLoaded(state: state)
+        case   .failedPersisting(let state, let error): handleFailedPersisting(state: state, with: error)
+        case .failedLoadingState(           let error): handleFailedLoadingState(error: error)
+        }
     }
     
     private func handleChanged(state: AppState) {
@@ -55,6 +65,15 @@ class KeepState: UseCase {
     private func handleFailedPersisting(state: AppState, with error: Error) {
         self.state = state
         responseHandler(.failedPersisting(state, error))
+    }
+    
+    private func handleStateLoaded(state: AppState) {
+        self.state = state
+        responseHandler(.stateLoaded(state))
+    }
+    
+    private func handleFailedLoadingState(error: Error) {
+        responseHandler(.failedLoadingState(error))
     }
 }
 
@@ -76,6 +95,14 @@ extension KeepState {
                     response(.stateChanged(s))
                 } catch let error {
                     response(.failedPersisting(s, error))
+                }
+            case .loadState:
+                do {
+                    if let state = try statePersister.loadState() {
+                        response(.stateLoaded(state))
+                    }
+                } catch let error {
+                    response(.failedLoadingState(error))
                 }
             }
         }

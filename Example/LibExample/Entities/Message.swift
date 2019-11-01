@@ -20,8 +20,11 @@ enum Message {
             case useCase(UseCase)
             
             enum UseCase {
+                case loadState
                 case stateChanged(AppState)
                 case persistingFailed(AppState, Error)
+                case stateLoaded(AppState)
+                case stateLoadingFailed(Error)
             }
         }
         
