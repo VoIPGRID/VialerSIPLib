@@ -50,4 +50,27 @@ class Mock {
                 : completion(nil, NSError())
         }
     }
+    
+    class StatePersister: StatePersisting  {
+        
+        var shouldFailLoading = false
+        var shouldFailPersisting = false
+
+        private var appState: AppState! = AppState(transportMode: .udp)
+        func persist(state: AppState) throws {
+            if shouldFailPersisting {
+                throw NSError(domain: "failed loading", code: 501, userInfo: nil)
+            }
+            appState = state
+        }
+        
+        func loadState() throws -> AppState? {
+            
+            if shouldFailLoading {
+                throw NSError(domain: "failed loading", code: 501, userInfo: nil)
+            }
+            
+            return appState
+        }
+    }
 }

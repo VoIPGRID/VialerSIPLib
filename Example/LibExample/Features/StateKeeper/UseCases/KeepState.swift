@@ -38,9 +38,6 @@ class KeepState: UseCase {
     }
     
     private func handle(response: KeepState.Response) {
-        if case     .stateChanged(let state)            = response {          handleChanged(state: state)             }
-        if case .failedPersisting(let state, let error) = response { handleFailedPersisting(state: state, with: error)}
-        
         switch response {
         case       .stateChanged(let state)           : handleChanged(state: state)
         case        .stateLoaded(let state)           : handleStateLoaded(state: state)

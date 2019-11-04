@@ -70,10 +70,6 @@ extension StartCall {
             case false: self.response(.failedStarting(transform(result.call, with:  .failed)))
             }
         }
-        
-        deinit {
-            print("dealloc StartCall.Interactor")
-        }
     }
 }
 

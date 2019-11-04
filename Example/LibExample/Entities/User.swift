@@ -26,6 +26,11 @@ struct SipUser {
     }
 
     init() {
-        self.init(sipAccount: Keys.SIP.Account, sipPassword: Keys.SIP.Password, sipDomain: Keys.SIP.Domain, sipProxy: Keys.SIP.Proxy.isEmpty ? nil : Keys.SIP.Proxy)
+        self.init(
+            sipAccount: Keys.SIP.Account,
+            sipPassword: Keys.SIP.Password,
+            sipDomain: Keys.SIP.Domain,
+            sipProxy: Keys.SIP.Proxy.isEmpty ? nil : Keys.SIP.Proxy
+        )
     }
 }
