@@ -18,14 +18,16 @@ class StateKeeperFeature: Feature {
     private lazy var keepState = KeepState(dependencies: self.dependencies){[weak self] response in self?.handle(response: response)}
 
     func handle(feature: Message.Feature) {
-        if case .settings(.useCase(.transport(.action(.didActivate(let mode))))) = feature { keepState.handle(request: .setTransportMode(mode)) }
-        if case    .state(.useCase(.loadState))                                  = feature { keepState.handle(request: .loadState)              }
+        if case .settings(.useCase(.transport(.action(.didActivate(let mode))))) = feature { keepState.handle(request: .setTransportMode(mode, keepState.state)) }
+        if case    .state(.useCase(.loadInitialState))                           = feature { keepState.handle(request:        .loadState                       ) }
+        if case .state(.useCase(.fetchCurrentState))                             = feature { keepState.handle(request:.fetchCurrentState                       ) }
     }
     
     private func handle(response: KeepState.Response) {
         switch response {
         case       .stateChanged(let state)           : rootMessageHandler?.handle(msg: .feature(.state(.useCase(      .stateChanged(state       )))))
         case        .stateLoaded(let state)           : rootMessageHandler?.handle(msg: .feature(.state(.useCase(       .stateLoaded(state       )))))
+        case            .fetched(let state           ): rootMessageHandler?.handle(msg: .feature(.state(.useCase(           .fetched(state       )))))
         case   .failedPersisting(let state, let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(  .persistingFailed(state, error)))))
         case .failedLoadingState(           let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(.stateLoadingFailed(       error)))))
         }

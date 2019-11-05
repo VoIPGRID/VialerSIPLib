@@ -21,6 +21,8 @@ class Mock {
     }
     
     struct CallStarter: CallStarting {
+        var appState: AppState?
+        
         init() {}
         
         var deferResponse: ((Bool) -> DispatchTimeInterval) = {
@@ -56,7 +58,7 @@ class Mock {
         var shouldFailLoading = false
         var shouldFailPersisting = false
 
-        private var appState: AppState! = AppState(transportMode: .udp)
+        private var appState: AppState! = AppState(transportMode: .udp, accountNumber: "0815")
         func persist(state: AppState) throws {
             if shouldFailPersisting {
                 throw NSError(domain: "failed loading", code: 501, userInfo: nil)

@@ -17,6 +17,7 @@ class KeepStateSpec: QuickSpec {
             var retrievedError: Error?
             var retrievedTransportModes: [TransportMode]?
             var loadedState: AppState?
+            var fetchedState: AppState?
             var statePesister: Mock.StatePersister?
             
             beforeEach {
@@ -33,6 +34,8 @@ class KeepStateSpec: QuickSpec {
                         retrievedError = error
                     case .failedLoadingState(let error):
                         retrievedError = error
+                    case .fetched(let state):
+                        fetchedState = state
                     }
                 }
             }
@@ -46,9 +49,9 @@ class KeepStateSpec: QuickSpec {
             }
             
             it("keeps the changed transport mode") {
-                sut.handle(request: .setTransportMode(.tcp))
-                sut.handle(request: .setTransportMode(.udp))
-                sut.handle(request: .setTransportMode(.tls))
+                sut.handle(request: .setTransportMode(.tcp, sut.state))
+                sut.handle(request: .setTransportMode(.udp, sut.state))
+                sut.handle(request: .setTransportMode(.tls, sut.state))
                 
                 expect(retrievedTransportModes) == [.tcp, .udp, .tls]
                 expect(retrievedError).to(beNil())
@@ -69,9 +72,15 @@ class KeepStateSpec: QuickSpec {
             
             it("receives an error if it fails to persist state") {
                 statePesister?.shouldFailPersisting = true
-                sut.handle(request: .setTransportMode(.tcp))
+                sut.handle(request: .setTransportMode(.tcp, sut.state))
 
                 expect(retrievedError).toNot(beNil())
+            }
+            
+            it("fetches the current app state") {
+                sut.handle(request: .fetchCurrentState)
+                
+                expect(fetchedState).toNot(beNil())
             }
         }
     }

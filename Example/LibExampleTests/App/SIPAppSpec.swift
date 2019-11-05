@@ -27,7 +27,10 @@ class SIPAppSpec: QuickSpec {
 
                 beforeEach {
                     receivedCallingActions = []
-                    depend = Dependencies(callStarter: Mock.CallStarter())
+                    depend = Dependencies(
+                           callStarter: Mock.CallStarter(),
+                        statePersister: Mock.StatePersister()
+                    )
 
                     messageHandler = Mock.MessageHandler {
                         if case .feature(.calling(.useCase(.call(.action(let action))))) = $0 {

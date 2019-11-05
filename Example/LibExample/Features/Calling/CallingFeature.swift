@@ -19,14 +19,13 @@ class CallingFeature: Feature {
     private let dependencies: Dependencies
 
     // useCases
-    private lazy var startCall  =  StartCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
-    private lazy var endCall    =    EndCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
+    private lazy var  startCall =  StartCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
+    private lazy var    endCall =    EndCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
     private lazy var createCall = CreateCall(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
 
     func handle(feature: Message.Feature) {
-        if case .calling(.useCase(let useCase)) = feature {
-            handle(useCase: useCase)
-        }
+        if case .calling(.useCase(let useCase)) = feature { handle(useCase: useCase) }
+        if case   .state(.useCase(let useCase)) = feature { handle(useCase: useCase) }
     }
     
     private func handle(useCase: Message.Feature.Calling.UseCase) {
@@ -34,9 +33,19 @@ class CallingFeature: Feature {
         if case .call(.action( .stop(let   call))) = useCase {    endCall.handle(request:       .stop(  call)) }
     }
     
+
+    private func handle(useCase: Message.Feature.StateKeeping.UseCase) {
+        if case .fetched(let appState) = useCase {
+            if let call = self.call { start(call: call, appState: appState) }
+        }
+    }
+
+    private var call: Call?
     private func handle(response: CreateCall.Response) {
         switch response {
-        case .callCreated(let call): startCall.handle(request: .startCall(call))
+        case .callCreated(let c):
+            call = c
+            rootMessageHandler?.handle(msg: .feature(.state(.useCase(.fetchCurrentState))))
         }
     }
     
@@ -53,5 +62,9 @@ class CallingFeature: Feature {
         case .callDidStop(let call):
             rootMessageHandler?.handle(msg: .feature(.calling(.useCase(.call(.action(.callDidStop(call)))))))
         }
+    }
+    
+    private func start(call: Call, appState: AppState) {
+        startCall.handle(request: .startCall(call, appState))
     }
 }

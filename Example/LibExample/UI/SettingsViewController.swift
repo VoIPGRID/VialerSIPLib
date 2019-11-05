@@ -11,6 +11,7 @@ import UIKit
 final
 class SettingsViewController: MessageViewController {
 
+    @IBOutlet weak var accountNumberTextField: UITextField!
     @IBOutlet weak var modePicker: UIPickerView!
 
     private var modes: [TransportMode] = TransportMode.allCases
@@ -20,6 +21,8 @@ class SettingsViewController: MessageViewController {
         }
     }
 
+    private var accountNumber: String = "" { didSet { configureAccountNumber() } }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         modePicker.delegate = self
@@ -28,14 +31,15 @@ class SettingsViewController: MessageViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureAccountNumber()
         configureModePicker()
     }
 
     override func handle(msg: Message) {
         super.handle(msg: msg)
-        if case .feature(.settings(.useCase(.transport(.action(.didActivate(let mode)))))) = msg { selectedMode = mode }
-        if case .feature(   .state(.useCase(            .persistingFailed(_, let error)))) = msg { show(error: error)}
-        if case .feature(   .state(.useCase(                    .stateLoaded(let state)))) = msg { selectedMode = state.transportMode }
+        if case .feature(.settings(.useCase(.transport(.action(.didActivate(let mode)))))) = msg { select(  mode:  mode ) }
+        if case .feature(   .state(.useCase(            .persistingFailed(_, let error)))) = msg {   show( error: error ) }
+        if case .feature(   .state(.useCase(                    .stateLoaded(let state)))) = msg { loaded( state: state ) }
     }
     
     private func show(error: Error) {
@@ -43,9 +47,23 @@ class SettingsViewController: MessageViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
+    
+    private func loaded(state: AppState) {
+        selectedMode = state.transportMode
+        accountNumber = state.accountNumber
+    }
+    
+    private func select(mode: TransportMode) {
+        selectedMode = mode
+    }
 }
 
 extension SettingsViewController {
+    
+    private func configureAccountNumber() {
+        accountNumberTextField?.text = accountNumber
+    }
+    
     private func configureModePicker() {
         if
             let selectedMode = self.selectedMode,
@@ -76,6 +94,5 @@ extension SettingsViewController: UIPickerViewDataSource  {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return "\(modes[row])".uppercased()
     }
-
 }
 

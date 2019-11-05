@@ -14,37 +14,29 @@ class CallingFeatureSpec: QuickSpec {
     override func spec() {
         describe("the CallingFeature") {
             var sut: CallingFeature!
-            
             var messageHandler: Mock.MessageHandler!
-            var startedCall: Call!
             var endedCall: Call!
-            
             var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter())
-
+                depend = Dependencies(
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+                )
+                depend.callStarter.appState = AppState(transportMode: .udp, accountNumber: "0815")
                 messageHandler = Mock.MessageHandler {
-                    if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = $0 { startedCall = call }
                     if case .feature(.calling(.useCase(.call(.action(.callDidStop (let call)))))) = $0 { endedCall   = call }
                 }
                 sut = CallingFeature(with: messageHandler, dependencies:depend)
             }
             
             afterEach {
-                startedCall = nil
                 endedCall = nil
                 messageHandler = nil
                 sut = nil
             }
-            
-            it("creates a call object for started call") {
-                sut.handle(feature: .calling(.useCase(.call(.action(.start("12345"))))))
-                
-                expect(startedCall).toEventuallyNot(beNil())
-            }
-            
-            it("creates a call obect for started call") {
+
+            it("end call") {
                 sut.handle(feature: .calling(.useCase(.call(.action(.stop(transform(Call(handle:"4567"), with: .started)))))))
                 
                 expect(endedCall).toNot(beNil())

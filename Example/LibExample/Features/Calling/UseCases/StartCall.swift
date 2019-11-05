@@ -30,7 +30,7 @@ class StartCall: UseCase {
 // MARK: - Request & Response
 extension StartCall {
     enum Request {
-        case startCall(Call)
+        case startCall(Call, AppState)
     }
     
     enum Response {
@@ -58,8 +58,9 @@ extension StartCall {
         
         func handle(request:StartCall.Request) {
             switch request {
-            case .startCall(let call):
+            case .startCall(let call, let appState):
                 response(.dialing(call))
+                callStarter?.appState = appState
                 callStarter?.start(call: call)
             }
         }
@@ -76,5 +77,6 @@ extension StartCall {
 protocol CallStarting {
     var callback: ((Bool, Call) -> Void)? { get set }
     func start(call:Call)
+    var appState: AppState? { get set }
 }
 

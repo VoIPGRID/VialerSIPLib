@@ -9,11 +9,7 @@
 import Foundation
 
 
-// - (void)startCallToNumber:(NSString * _Nonnull)number forAccount:(VSLAccount * _Nonnull)account completion:(void (^_Nonnull )(VSLCall * _Nullable call, NSError * _Nullable error))completion;
-
-
 class SIPUser: NSObject, SIPEnabledUser {
-
     init(sipAccount: String, sipPassword: String, sipDomain: String, proxy: String?) {
         self.sipAccount = sipAccount
         self.sipPassword = sipPassword
@@ -34,13 +30,15 @@ protocol CallManaging {
 extension VSLCallManager: CallManaging {}
 
 class CallStarter: CallStarting {
+    var appState: AppState?
+    
     init(vialerSipLib: VialerSIPLib) {
         self.sipLib = vialerSipLib
         self.callManager = sipLib.callManager
         providerDelegate = CallKitProviderDelegate(callManager: self.callManager)
-
+        
         let user = SIPUser(
-            sipAccount: Keys.SIP.Account,
+            sipAccount: appState?.accountNumber ?? Keys.SIP.Account,
             sipPassword: Keys.SIP.Password,
             sipDomain: Keys.SIP.Domain,
             proxy: Keys.SIP.Proxy
@@ -61,12 +59,12 @@ class CallStarter: CallStarting {
         }
     }
 
+    var callback: ((Bool, Call) -> Void)?
     private var vCall: VSLCall?
     private let sipLib : VialerSIPLib
     private let callManager: VSLCallManager
     private var account: VSLAccount?
     private var providerDelegate: CallKitProviderDelegate?
-    var callback: ((Bool, Call) -> Void)?
 
     @objc func outboundCallStarted(_ notification: NSNotification){
         guard

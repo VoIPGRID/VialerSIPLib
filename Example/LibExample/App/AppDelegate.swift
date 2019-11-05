@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        app.handle(msg: .feature(.state(.useCase(.loadState))))
+        app.handle(msg: .feature(.state(.useCase(.loadInitialState))))
     }
 }
 
