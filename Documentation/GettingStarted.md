@@ -16,7 +16,7 @@ After these steps, the library is up and running and ready for action. We sugges
 #### CocoaPods
 
 ```ruby
-    platform :ios, '9.0'
+    platform :ios, '10.0'
     pod 'VialerSIPLib'
 ```
 

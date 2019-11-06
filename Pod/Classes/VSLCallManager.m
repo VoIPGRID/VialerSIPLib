@@ -121,7 +121,6 @@
 
 - (void)endCall:(VSLCall *)call completion:(void (^)(NSError *error))completion {
     if (@available(iOS 10.0, *)) {
-        VSLLogVerbose(@"AFV Ending call: %@", call.uuid.UUIDString);
         CXAction *endCallAction = [[CXEndCallAction alloc] initWithCallUUID:call.uuid];
         [self requestCallKitAction:endCallAction completion:completion];
     } else {

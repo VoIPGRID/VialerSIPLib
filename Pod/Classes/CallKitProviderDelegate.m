@@ -5,13 +5,12 @@
 //
 
 #import "CallKitProviderDelegate.h"
-
 #import "VialerSIPLib.h"
 #import "VSLAudioController.h"
 #import "VSLEndpoint.h"
 #import "VSLLogging.h"
 
-NSString * const CallKitProviderDelegateOutboundCallStartedNotification = @"CallKitProviderDelegateOutboundCallStarted";
+NSString * const CallKitProviderDelegateOutboundCallStartedNotification = @"CallKitProviderDelegate§OutboundCallStarted";
 NSString * const CallKitProviderDelegateInboundCallAcceptedNotification = @"CallKitProviderDelegateInboundCallAccepted";
 NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"CallKitProviderDelegateInboundCallRejected";
 
@@ -25,7 +24,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     if (self = [super init]) {
         self.callManager = callManager;
         
-        if (@available(iOS 10.0, *)) {
+//        if (@available(iOS 10.0, *)) {
             self.provider = [[CXProvider alloc] initWithConfiguration:[self providerConfiguration]];
             [self.provider setDelegate:self queue:nil];
             
@@ -33,7 +32,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
                                                      selector:@selector(callStateChanged:)
                                                          name:VSLCallStateChangedNotification
                                                        object:nil];
-        }
+//        }
     }
     return self;
 }
@@ -123,7 +122,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     // Find call.
     __weak VSLCall *call = [self.callManager callWithUUID:action.callUUID];
     if (!call) {
-        VSLLogInfo(@"Error hanging up call(%@). No call found", action.callUUID.UUIDString);
+        VSLLogInfo(@"Error hanging up call(%@). No call found.", action.callUUID.UUIDString);
         [action fulfill];
         return;
     }
