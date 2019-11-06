@@ -12,11 +12,5 @@ class MessageViewController: UIViewController, MessageHandling, ResponseHandling
     
     var responseHandler: MessageHandling?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    func handle(msg: Message) {
-        
-    }
+    func handle(msg: Message) { }
 }

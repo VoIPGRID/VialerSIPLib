@@ -8,20 +8,14 @@
 
 import UIKit
 
-final
-class SettingsViewController: MessageViewController {
+final class SettingsViewController: MessageViewController {
 
     @IBOutlet weak var accountNumberTextField: UITextField!
     @IBOutlet weak var modePicker: UIPickerView!
 
-    private var modes: [TransportMode] = TransportMode.allCases
-    private var selectedMode: TransportMode? {
-        didSet {
-            configureModePicker()
-        }
-    }
-
-    private var accountNumber: String = "" { didSet { configureAccountNumber() } }
+    private var         modes: [TransportMode] = TransportMode.allCases
+    private var  selectedMode: TransportMode?   { didSet { configureModePicker() } }
+    private var accountNumber: String = ""      { didSet { configureAccountNumber() } }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +61,7 @@ extension SettingsViewController {
     private func configureModePicker() {
         if
             let selectedMode = self.selectedMode,
-            let idx = modes.firstIndex(where: { $0 == selectedMode})
+            let idx = modes.firstIndex(where: { $0 == selectedMode })
         {
             modePicker?.selectRow(idx, inComponent: 0, animated: false)
         }
@@ -75,14 +69,12 @@ extension SettingsViewController {
 }
 
 extension SettingsViewController: UIPickerViewDelegate {
-
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         responseHandler?.handle(msg: .feature(.settings(.useCase(.transport(.action(.activate(modes[row])))))))
     }
 }
 
 extension SettingsViewController: UIPickerViewDataSource  {
-    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -95,4 +87,3 @@ extension SettingsViewController: UIPickerViewDataSource  {
         return "\(modes[row])".uppercased()
     }
 }
-

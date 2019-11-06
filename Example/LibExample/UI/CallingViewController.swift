@@ -60,16 +60,13 @@ class CallingViewController: MessageViewController {
     private var resetTimer: Timer?
     private func stateChanged() {
         func updateUI(enabledMakeCallButton: Bool, enableHangUpButton:Bool, numberFieldColor: UIColor, resetToIdle: Bool) {
-            
             if true == resetTimer?.isValid {
                 resetTimer?.invalidate()
                 resetTimer = nil
             }
-            
             phoneNumberField.layer.borderColor = numberFieldColor.cgColor
                         hangUpButton.isEnabled = enableHangUpButton
                       makeCallButton.isEnabled = enabledMakeCallButton
-            
             if resetToIdle {
                 resetTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false){ [weak self] _ in self?.state = .idle }
             }

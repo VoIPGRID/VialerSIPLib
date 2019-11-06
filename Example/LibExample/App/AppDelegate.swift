@@ -11,17 +11,10 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    override init() {
-        
-        let currentAppStateFetcher = CurrentAppStateFetcher()
-        app = RootApp(
-            dependencies: Dependencies(
-                callStarter: CallStarter(vialerSipLib: createSipLib()),
-                statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager()),
-                currentAppStateFetcher:  currentAppStateFetcher
-            )
-        )
-        app.add(subscriber: currentAppStateFetcher)
+    override init() {        
+        let dependencies = createDependencies()
+        app = RootApp(dependencies:dependencies)
+        app.add(subscriber: dependencies.currentAppStateFetcher)
         super.init()
     }
     
@@ -76,10 +69,18 @@ private func createSipLib() -> VialerSIPLib {
     
     do {
         try sipLib.configureLibrary(withEndPointConfiguration: endPoint)
-        
-        
     } catch let error {
         print("Error setting up VialerSIPLib: \(error)")
     }
     return sipLib
+}
+
+private func createDependencies() -> Dependencies {
+    let currentAppStateFetcher = CurrentAppStateFetcher()
+
+    return Dependencies(
+        callStarter: CallStarter(vialerSipLib: createSipLib()),
+        statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager()),
+        currentAppStateFetcher:  currentAppStateFetcher
+    )
 }
