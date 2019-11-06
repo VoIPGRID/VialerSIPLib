@@ -19,7 +19,7 @@ class EndCallSpec: QuickSpec {
             var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter())
+                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
                 sut = EndCall(dependencies:depend) {
                     switch $0 {
                     case .callDidStop(let call):

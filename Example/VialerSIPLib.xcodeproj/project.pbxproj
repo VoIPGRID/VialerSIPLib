@@ -72,6 +72,7 @@
 		C97E4E10234F4A6800767A20 /* EndCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E0F234F4A6800767A20 /* EndCall.swift */; };
 		C97E4E13234F666300767A20 /* SwitchTransportMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E12234F666300767A20 /* SwitchTransportMode.swift */; };
 		C99C2BDA2370490D00258041 /* KeepStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C2BD92370490D00258041 /* KeepStateSpec.swift */; };
+		C99C2BDC2372F19500258041 /* CurrentAppStateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C2BDB2372F19500258041 /* CurrentAppStateFetcher.swift */; };
 		C9ADE1F12357339B002D813B /* CallSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ADE1F02357339B002D813B /* CallSpec.swift */; };
 		C9ADE1F623573FF1002D813B /* SIPAppSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ADE1F523573FF1002D813B /* SIPAppSpec.swift */; };
 		C9ADE1FA23574B5B002D813B /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ADE1F823574B5B002D813B /* MessageViewController.swift */; };
@@ -246,6 +247,7 @@
 		C97E4E0F234F4A6800767A20 /* EndCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndCall.swift; sourceTree = "<group>"; };
 		C97E4E12234F666300767A20 /* SwitchTransportMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTransportMode.swift; sourceTree = "<group>"; };
 		C99C2BD92370490D00258041 /* KeepStateSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepStateSpec.swift; sourceTree = "<group>"; };
+		C99C2BDB2372F19500258041 /* CurrentAppStateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentAppStateFetcher.swift; sourceTree = "<group>"; };
 		C9ADE1F02357339B002D813B /* CallSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallSpec.swift; sourceTree = "<group>"; };
 		C9ADE1F523573FF1002D813B /* SIPAppSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIPAppSpec.swift; sourceTree = "<group>"; };
 		C9ADE1F823574B5B002D813B /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
@@ -777,6 +779,7 @@
 				C9ADE20023575A78002D813B /* RootApp.swift */,
 				C9060ABA2359C1A100914898 /* Dependencies.swift */,
 				C9F0CFF1236C84DB00C57AB3 /* PathBuilder.swift */,
+				C99C2BDB2372F19500258041 /* CurrentAppStateFetcher.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1254,6 +1257,7 @@
 				C9F0CFEE236C47D800C57AB3 /* KeepState.swift in Sources */,
 				C91F8540234CD3FD007F6417 /* Message.swift in Sources */,
 				C91F8548234CE0FB007F6417 /* UserHandlingFeature.swift in Sources */,
+				C99C2BDC2372F19500258041 /* CurrentAppStateFetcher.swift in Sources */,
 				C902B1D82354C7F1001FAFA9 /* Call.swift in Sources */,
 				C97E4E13234F666300767A20 /* SwitchTransportMode.swift in Sources */,
 				C91F8544234CD7F8007F6417 /* User.swift in Sources */,

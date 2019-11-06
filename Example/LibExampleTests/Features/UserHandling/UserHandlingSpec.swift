@@ -26,7 +26,7 @@ class UserHandlingFeatureSpec: QuickSpec, MessageHandling {
             var sut: UserHandlingFeature!
             
             beforeEach {
-                self.depend = Dependencies(callStarter: Mock.CallStarter())
+                self.depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
                 sut = UserHandlingFeature(with: self, dependencies: self.depend)
             }
             

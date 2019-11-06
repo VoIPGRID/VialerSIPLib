@@ -24,7 +24,7 @@ class KeepStateSpec: QuickSpec {
                 
                 retrievedTransportModes = []
                 statePesister = Mock.StatePersister()
-                sut = KeepState(dependencies: Dependencies(statePersister: statePesister)) { response in
+                sut = KeepState(dependencies: Dependencies(callStarter: Mock.CallStarter(), statePersister: statePesister!, currentAppStateFetcher: CurrentAppStateFetcher())) { response in
                     switch response {
                     case .stateChanged(let state):
                         retrievedTransportModes?.append(state.transportMode)

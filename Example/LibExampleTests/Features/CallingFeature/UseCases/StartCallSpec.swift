@@ -22,7 +22,7 @@ class StartCallSpec: QuickSpec {
             beforeEach {
                 startedCalls = []
                 failedCalls = []
-                depend = Dependencies(callStarter: Mock.CallStarter())
+                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
 
                 sut = StartCall(dependencies:depend) {
                     if case   .callDidStart(let call) = $0 { startedCalls.append(call.state) }

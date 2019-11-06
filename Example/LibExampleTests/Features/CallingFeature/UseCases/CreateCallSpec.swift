@@ -19,7 +19,7 @@ class CreateCallSpec: QuickSpec {
             var depend: Dependencies!
             
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter())
+                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
                 sut = CreateCall(dependencies:depend) {
                     switch $0 {
                     case .callCreated(let call):

@@ -16,19 +16,21 @@ class RootAppSpec: QuickSpec {
             var sut: RootApp!
             var messageHandler: Mock.MessageHandler!
             var interceptedHandle: String?
-            var statePersister: Mock.StatePersister?
 
             beforeEach {
-                statePersister = Mock.StatePersister()
                 messageHandler = Mock.MessageHandler {
                     if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = $0 { interceptedHandle = call.handle }
                 }
-                sut = RootApp(dependencies: Dependencies(callStarter: Mock.CallStarter(), statePersister: statePersister))
+
+                let csf = Mock.CurrentAppStateFetcher()
+                csf.appState = AppState(transportMode: .udp, accountNumber:"4711")
+                let dependencies = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: csf)
+
+                sut = RootApp(dependencies: dependencies)
                 sut.add(subscriber: messageHandler)
             }
             
             afterEach {
-                statePersister = nil
                 sut = nil
                 messageHandler = nil
                 interceptedHandle = nil

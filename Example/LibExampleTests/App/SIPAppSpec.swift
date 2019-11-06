@@ -27,11 +27,10 @@ class SIPAppSpec: QuickSpec {
 
                 beforeEach {
                     receivedCallingActions = []
-                    depend = Dependencies(
-                           callStarter: Mock.CallStarter(),
-                        statePersister: Mock.StatePersister()
-                    )
-
+                    let csf = Mock.CurrentAppStateFetcher()
+                    csf.appState = AppState(transportMode: .udp, accountNumber:"4711")
+                    depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: csf)
+                    
                     messageHandler = Mock.MessageHandler {
                         if case .feature(.calling(.useCase(.call(.action(let action))))) = $0 {
                             if case .callDidStart(let call) = action { didStartCall = call;  receivedCallingActions.append("didStart") }
@@ -45,6 +44,7 @@ class SIPAppSpec: QuickSpec {
                 }
                 
                 afterEach {
+                    depend = nil
                     sut = nil
                     messageHandler = nil
                     receivedCallingActions = nil

@@ -23,7 +23,7 @@ class StateKeeperFeatureSpec: QuickSpec {
                 messageHandler = Mock.MessageHandler() { msg in
                     if case .feature(.state(.useCase(.stateChanged(let state)))) = msg { changedState = state }
                 }
-                sut = StateKeeperFeature(with: messageHandler, dependencies: Dependencies(statePersister: Mock.StatePersister()))
+                sut = StateKeeperFeature(with: messageHandler, dependencies: Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher()))
             }
             
             afterEach {

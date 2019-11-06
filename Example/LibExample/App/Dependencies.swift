@@ -7,6 +7,7 @@
 //
 
 struct Dependencies {
-    var callStarter: CallStarting!
-    var statePersister: StatePersisting!
+    var callStarter: CallStarting
+    var statePersister: StatePersisting
+    var currentAppStateFetcher: CurrentAppStateFetching
 }

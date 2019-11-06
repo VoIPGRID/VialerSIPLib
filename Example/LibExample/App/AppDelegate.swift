@@ -12,12 +12,16 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     override init() {
+        
+        let currentAppStateFetcher = CurrentAppStateFetcher()
         app = RootApp(
             dependencies: Dependencies(
                 callStarter: CallStarter(vialerSipLib: createSipLib()),
-                statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager())
+                statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager()),
+                currentAppStateFetcher:  currentAppStateFetcher
             )
         )
+        app.add(subscriber: currentAppStateFetcher)
         super.init()
     }
     

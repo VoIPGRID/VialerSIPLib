@@ -20,7 +20,7 @@ class SettingsFeatureSpec: QuickSpec {
             var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter())
+                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
                 receivedModes = []
                 messageHandler = Mock.MessageHandler { if case .feature(.settings(.useCase(.transport(.action(.didActivate(let m)))))) = $0 { receivedModes.append(m)}}
                 sut = SettingsFeature(with: messageHandler, dependencies: depend)

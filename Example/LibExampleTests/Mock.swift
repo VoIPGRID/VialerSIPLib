@@ -75,4 +75,12 @@ class Mock {
             return appState
         }
     }
+    
+    class CurrentAppStateFetcher: CurrentAppStateFetching {
+        var appState: AppState?
+        
+        func handle(msg: Message) {
+            
+        }
+    }
 }

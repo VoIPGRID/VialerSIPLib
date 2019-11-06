@@ -19,7 +19,7 @@ class LogOutSpec: QuickSpec {
             var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter())
+                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
                 sut = LogOut(dependencies:depend) { if case .logOutConfirmed(let u) = $0 { user = u }}
             }
             

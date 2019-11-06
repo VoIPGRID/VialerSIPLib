@@ -19,7 +19,7 @@ class SwitchTransportModeSpec: QuickSpec {
             var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter())
+                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
                 sut = SwitchTransportMode(dependencies:depend) { if case .modeWasActivated(let m) = $0 { mode = m } }
             }
             
