@@ -82,26 +82,7 @@ Swift
 Objective-C
 ```objective-c
     [VialerSIPLib sharedInstance].incomingCallBlock = ^(VSLCall * _Nonnull call) {
-        if ([VialerSIPLib callKitAvailable]) {
-            [self.callKitProviderDelegate reportIncomingCall:call];
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                __weak AppDelegate *weakSelf = self;
-                if ([SIPUtils anotherCallInProgress:call]) {
-                    NSError *error;
-                    [call decline:&error];
-                    if (error) {
-                        NSLog(@"Error declining call: %@", error);
-                    }
-                } else {
-                    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-                        // Your code here
-                    } else {
-                        // Your code here
-                    }
-                }
-            });
-        }
+        [self.callKitProviderDelegate reportIncomingCall:call];
     };
 ```
 

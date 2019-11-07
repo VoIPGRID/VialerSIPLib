@@ -38,18 +38,6 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
     return sharedInstance;
 }
 
-+ (BOOL)callKitAvailable {
-    // Check if Callkit is available by checking the CallKit classes used
-    if (@available(iOS 10.0, *)) {
-        if ([CXAction class] && [CXTransaction class] && [CXCall class]) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    return false;
-}
-
 - (VSLEndpoint *)endpoint {
     if (!_endpoint) {
         _endpoint = [VSLEndpoint sharedEndpoint];

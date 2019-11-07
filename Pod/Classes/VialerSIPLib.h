@@ -220,12 +220,6 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
 + (instancetype _Nonnull)sharedInstance;
 
 /**
- *  Classbased function to check if CallKit can be used
- *  @return BOOL true if the iOS version support CallKit, otherwise false.
- **/
-+ (BOOL)callKitAvailable;
-
-/**
  *  This will configure the basic Endpoint to use with pjsip.
  *
  *  @param endpointConfiguration Instance of an endpoint configuration.
