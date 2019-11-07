@@ -9,11 +9,13 @@
 struct AppState {
     let transportMode: TransportMode
     let accountNumber: String
-    
+    let serverAddress: String
+
     var dictionary: [String : String] {
         return [
             "transportMode": "\(transportMode)",
-            "accountNumber": accountNumber
+            "accountNumber": accountNumber,
+            "serverAddress": serverAddress
         ]
     }
 }

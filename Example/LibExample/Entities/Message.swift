@@ -64,6 +64,17 @@ enum Message {
                 case transport(Transport)
                 case register(Register)
                 case unregister(Unregister)
+                case server(Server)
+            }
+            
+            enum Server {
+                case action(Action)
+                
+                enum Action {
+                    case changeAddress(String)
+                    case addressChanged(String)
+                    case addressChangeFailed(String)
+                }
             }
             
             enum Transport {

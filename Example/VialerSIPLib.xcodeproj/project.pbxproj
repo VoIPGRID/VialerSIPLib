@@ -68,6 +68,7 @@
 		C91F854E234CE50B007F6417 /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F854D234CE50B007F6417 /* UseCase.swift */; };
 		C91F8555234CE6F6007F6417 /* LogIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8554234CE6F6007F6417 /* LogIn.swift */; };
 		C91F8557234CE7EB007F6417 /* LogOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91F8556234CE7EB007F6417 /* LogOut.swift */; };
+		C94DA21B23745A3500429DCF /* ChangeServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94DA21A23745A3500429DCF /* ChangeServer.swift */; };
 		C97E4E0E234F49DB00767A20 /* StartCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E0D234F49DB00767A20 /* StartCall.swift */; };
 		C97E4E10234F4A6800767A20 /* EndCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E0F234F4A6800767A20 /* EndCall.swift */; };
 		C97E4E13234F666300767A20 /* SwitchTransportMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E12234F666300767A20 /* SwitchTransportMode.swift */; };
@@ -243,6 +244,7 @@
 		C91F854D234CE50B007F6417 /* UseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCase.swift; sourceTree = "<group>"; };
 		C91F8554234CE6F6007F6417 /* LogIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogIn.swift; sourceTree = "<group>"; };
 		C91F8556234CE7EB007F6417 /* LogOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOut.swift; sourceTree = "<group>"; };
+		C94DA21A23745A3500429DCF /* ChangeServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeServer.swift; sourceTree = "<group>"; };
 		C97E4E0D234F49DB00767A20 /* StartCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartCall.swift; sourceTree = "<group>"; };
 		C97E4E0F234F4A6800767A20 /* EndCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndCall.swift; sourceTree = "<group>"; };
 		C97E4E12234F666300767A20 /* SwitchTransportMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTransportMode.swift; sourceTree = "<group>"; };
@@ -743,6 +745,7 @@
 			isa = PBXGroup;
 			children = (
 				C97E4E12234F666300767A20 /* SwitchTransportMode.swift */,
+				C94DA21A23745A3500429DCF /* ChangeServer.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1273,6 +1276,7 @@
 				C91F8546234CDAD8007F6417 /* TransportMode.swift in Sources */,
 				C9ADE1FA23574B5B002D813B /* MessageViewController.swift in Sources */,
 				C902B1E22354DA30001FAFA9 /* CreateCall.swift in Sources */,
+				C94DA21B23745A3500429DCF /* ChangeServer.swift in Sources */,
 				C97E4E0E234F49DB00767A20 /* StartCall.swift in Sources */,
 				C91F854A234CE2FB007F6417 /* SettingsFeature.swift in Sources */,
 				C91F8555234CE6F6007F6417 /* LogIn.swift in Sources */,

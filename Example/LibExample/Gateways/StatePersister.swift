@@ -36,14 +36,18 @@ struct StateDiskPersister: StatePersisting {
         let dir =  try pathBuilder.dictionaryInDocuments(named: dirName, fileManger: fileManager)
         if let data = fileManager.contents(atPath: dir.appendingPathComponent(fileName).path) {
             if let dict = try PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String : String] {
-                if let modeString = dict["transportMode"], let accountNumber = dict["accountNumber"] {
+                if
+                    let modeString = dict["transportMode"],
+                    let accountNumber = dict["accountNumber"],
+                    let serverAddress = dict["serverAddress"]
+                {
                     if let mode = TransportMode(rawValue: modeString) {
-                        return AppState(transportMode: mode, accountNumber: accountNumber)
+                        return AppState(transportMode: mode, accountNumber: accountNumber, serverAddress: serverAddress)
                     }
                 }
             }
         } else {
-            return AppState(transportMode: .udp, accountNumber: Keys.SIP.Account)
+            return AppState(transportMode: .udp, accountNumber: Keys.SIP.Account, serverAddress: Keys.SIP.Domain)
         }
         return nil
     }

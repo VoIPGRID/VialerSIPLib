@@ -17,7 +17,8 @@ class SettingsFeature: Feature {
     private weak var rootMessageHandler: MessageHandling?
     private let dependencies: Dependencies
 
-    private lazy var switchTransportMode = SwitchTransportMode(dependencies: self.dependencies){[weak self] response in self?.handle(response: response)}
+    private lazy var switchTransportMode = SwitchTransportMode(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
+    private lazy var        changeServer =        ChangeServer(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
 
     func handle(feature: Message.Feature) {
         if case .settings(.useCase(let useCase)) = feature {
@@ -26,15 +27,21 @@ class SettingsFeature: Feature {
     }
     
     private func handle(useCase: Message.Feature.Settings.UseCase) {
-        if case .transport(.action(.activate(let mode))) = useCase {
-            switchTransportMode.handle(request: .setMode(mode))
-        }
+        if case .transport(.action(     .activate(let    mode))) = useCase { switchTransportMode.handle(request: .setMode(mode)         ) }
+        if case    .server(.action(.changeAddress(let address))) = useCase {        changeServer.handle(request: .changeAddress(address)) }
     }
     
     private func handle(response: SwitchTransportMode.Response) {
         switch response {
         case .modeWasActivated(let mode):
             rootMessageHandler?.handle(msg: .feature(.settings(.useCase(.transport(.action(.didActivate(mode)))))))
+        }
+    }
+    
+    private func handle(response: ChangeServer.Response) {
+        switch response {
+        case .addressChanged(let address):
+            rootMessageHandler?.handle(msg: .feature(.settings(.useCase(.server(.action(.addressChanged(address)))))))
         }
     }
 }

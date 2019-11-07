@@ -19,6 +19,7 @@ class StateKeeperFeature: Feature {
 
     func handle(feature: Message.Feature) {
         if case .settings(.useCase(.transport(.action(.didActivate(let mode))))) = feature { keepState.handle(request: .setTransportMode(mode, keepState.state)) }
+        if case .settings(.useCase(.server(.action(.addressChanged(let address))))) = feature { keepState.handle(request: .setServerAddress(address, keepState.state)) }
         if case    .state(.useCase(.loadInitialState))                           = feature { keepState.handle(request:        .loadState                       ) }
         if case .state(.useCase(.fetchCurrentState))                             = feature { keepState.handle(request:.fetchCurrentState                       ) }
     }

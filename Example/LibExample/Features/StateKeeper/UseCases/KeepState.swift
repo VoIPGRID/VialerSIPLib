@@ -12,6 +12,7 @@ class KeepState: UseCase {
     
     enum Request {
         case setTransportMode(TransportMode, AppState)
+        case setServerAddress(String, AppState)
         case setAccounNumber(String, AppState)
         case loadState
         case fetchCurrentState
@@ -34,7 +35,7 @@ class KeepState: UseCase {
     private let dependencies: Dependencies
     private lazy var interactor: KeepState.Interactor = Interactor(statePersister: self.dependencies.statePersister)
     
-    var state: AppState = AppState(transportMode: .tcp, accountNumber: Keys.SIP.Account)
+    var state: AppState = AppState(transportMode: .tcp, accountNumber: Keys.SIP.Account, serverAddress: Keys.SIP.Domain)
 
     func handle(request: KeepState.Request) {
         interactor.state = state
@@ -63,7 +64,7 @@ class KeepState: UseCase {
     }
     
     private func handleStateLoaded(state: AppState) {
-        self.state = state
+        self.state = state  
         responseHandler(.stateLoaded(state))
     }
     
@@ -78,55 +79,64 @@ class KeepState: UseCase {
 }
 
 extension KeepState {
-    private class Interactor {
-        
+    fileprivate class Interactor {
         init(statePersister: StatePersisting) {
             self.statePersister = statePersister
         }
         
-        let statePersister: StatePersisting
-        
-        fileprivate var state: AppState!
-        
-        fileprivate func set(mode: TransportMode, previousState: AppState, response: ((KeepState.Response) -> ())) {
-            let s = AppState(transportMode: mode, accountNumber: previousState.accountNumber)
-            do {
-                try statePersister.persist(state: s)
-                response(.stateChanged(s))
-            } catch let error {
-                response(.failedPersisting(s, error))
-            }
-        }
-        
-        fileprivate func loadState(response: ((KeepState.Response) -> ())) {
-            do {
-                if let state = try statePersister.loadState() {
-                    response(.stateLoaded(state))
-                }
-            } catch let error {
-                response(.failedLoadingState(error))
-            }
-        }
-        
-        fileprivate func persist(previousState: AppState, accountNumber: String, response: ((KeepState.Response) -> ())) {
-            let s = AppState(transportMode: previousState.transportMode, accountNumber: accountNumber)
-            
-            do {
-                try statePersister.persist(state: s)
-                response(.stateChanged(s))
-            } catch let error {
-                response(.failedPersisting(s, error))
-            }
-        }
-        
         func handle(request: KeepState.Request, response: @escaping ((KeepState.Response) -> ())) {
             switch request {
-            case        .loadState                                      : loadState(response: response)
-            case .fetchCurrentState                                     :  response(.fetched(state))
-            case  .setAccounNumber(let accountNumber, let previousState):   persist(previousState: previousState, accountNumber:accountNumber, response:response)
-            case .setTransportMode(         let mode, let previousState):       set(mode:mode, previousState:previousState,response:response)
+            case         .loadState                                      : loadState(response: response)
+            case .fetchCurrentState                                      :  response(.fetched(state))
+            case   .setAccounNumber(let accountNumber, let previousState):   persist(previousState: previousState, accountNumber:accountNumber, response:response)
+            case  .setTransportMode(         let mode, let previousState):       set(mode:mode, previousState:previousState,response:response)
+            case  .setServerAddress(      let address, let previousState):       set(serverAddress: address, previousState: previousState, response: response)
             }
         }
+        
+        private let statePersister: StatePersisting
+        fileprivate var state: AppState!
     }
 }
 
+extension KeepState.Interactor {
+    private func set(mode: TransportMode, previousState: AppState, response: ((KeepState.Response) -> ())) {
+        let s = AppState(transportMode: mode, accountNumber: previousState.accountNumber, serverAddress: previousState.serverAddress)
+        do {
+            try statePersister.persist(state: s)
+            response(.stateChanged(s))
+        } catch let error {
+            response(.failedPersisting(s, error))
+        }
+    }
+    
+    private func set(serverAddress:String, previousState: AppState, response: ((KeepState.Response) -> ())) {
+        let s = AppState(transportMode: previousState.transportMode, accountNumber: previousState.accountNumber, serverAddress: serverAddress)
+        do {
+            try statePersister.persist(state: s)
+            response(.stateChanged(s))
+        } catch let error {
+            response(.failedPersisting(s, error))
+        }
+    }
+    
+    fileprivate func loadState(response: ((KeepState.Response) -> ())) {
+        do {
+            if let state = try statePersister.loadState() {
+                response(.stateLoaded(state))
+            }
+        } catch let error {
+            response(.failedLoadingState(error))
+        }
+    }
+    
+    fileprivate func persist(previousState: AppState, accountNumber: String, response: ((KeepState.Response) -> ())) {
+        let s = AppState(transportMode: previousState.transportMode, accountNumber: accountNumber, serverAddress: previousState.serverAddress)
+        do {
+            try statePersister.persist(state: s)
+            response(.stateChanged(s))
+        } catch let error {
+            response(.failedPersisting(s, error))
+        }
+    }
+}

@@ -11,12 +11,14 @@ import UIKit
 final class SettingsViewController: MessageViewController {
 
     @IBOutlet weak var accountNumberTextField: UITextField!
+    @IBOutlet weak var serverAddressField: UITextField!
     @IBOutlet weak var modePicker: UIPickerView!
 
     private var         modes: [TransportMode] = TransportMode.allCases
     private var  selectedMode: TransportMode?   { didSet { configureModePicker() } }
     private var accountNumber: String = ""      { didSet { configureAccountNumber() } }
-
+    private var  serverAdress: String?          { didSet { configureServerAddress() } }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         modePicker.delegate = self
@@ -27,15 +29,24 @@ final class SettingsViewController: MessageViewController {
         super.viewWillAppear(animated)
         configureAccountNumber()
         configureModePicker()
+        configureServerAddress()
     }
 
     override func handle(msg: Message) {
         super.handle(msg: msg)
-        if case .feature(.settings(.useCase(.transport(.action(.didActivate(let mode)))))) = msg { select(  mode:  mode ) }
-        if case .feature(   .state(.useCase(            .persistingFailed(_, let error)))) = msg {   show( error: error ) }
-        if case .feature(   .state(.useCase(                    .stateLoaded(let state)))) = msg { loaded( state: state ) }
+        if case .feature(.settings(.useCase(.server(   .action(.addressChanged(let newAddress)))))) = msg {    set(address: newAddress ) }
+        if case .feature(.settings(.useCase(.transport(.action(   .didActivate(     let mode )))))) = msg { select(   mode: mode       ) }
+        if case .feature(   .state(.useCase(                  .persistingFailed(_ , let error  )))) = msg {   show(  error: error      ) }
+        if case .feature(   .state(.useCase(                  .stateLoaded(         let state  )))) = msg { loaded(  state: state      ) }
+    
     }
     
+    @IBAction func setServerAddressTapped(_ sender: Any) {
+        
+        if let address = serverAddressField.text {
+            responseHandler?.handle(msg: .feature(.settings(.useCase(.server(.action(.changeAddress(address)))))))
+        }
+    }
     private func show(error: Error) {
         let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -45,10 +56,15 @@ final class SettingsViewController: MessageViewController {
     private func loaded(state: AppState) {
         selectedMode = state.transportMode
         accountNumber = state.accountNumber
+        serverAdress = state.serverAddress
     }
     
     private func select(mode: TransportMode) {
         selectedMode = mode
+    }
+    
+    private func set(address: String) {
+        self.serverAdress = address
     }
 }
 
@@ -64,6 +80,13 @@ extension SettingsViewController {
             let idx = modes.firstIndex(where: { $0 == selectedMode })
         {
             modePicker?.selectRow(idx, inComponent: 0, animated: false)
+        }
+    }
+    
+    private func configureServerAddress() {
+        if
+            let serverAdress = serverAdress {
+            serverAddressField?.text = serverAdress
         }
     }
 }
