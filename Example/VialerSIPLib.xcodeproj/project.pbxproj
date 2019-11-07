@@ -49,7 +49,7 @@
 		C902B1E723551353001FAFA9 /* RootAppSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E623551353001FAFA9 /* RootAppSpec.swift */; };
 		C902B1E923552B97001FAFA9 /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1E823552B97001FAFA9 /* Mock.swift */; };
 		C9060ABB2359C1A100914898 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABA2359C1A100914898 /* Dependencies.swift */; };
-		C9060ABE2359C2F600914898 /* CallStarter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABD2359C2F600914898 /* CallStarter.swift */; };
+		C9060ABE2359C2F600914898 /* VialerSIPCallStarter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9060ABD2359C2F600914898 /* VialerSIPCallStarter.swift */; };
 		C9060AC5235A063200914898 /* CallingActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */; };
 		C911C2182361C6910024BA5D /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26407E01DA7D6FE00393D4B /* CallKit.framework */; };
 		C911C2192361C6E40024BA5D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -222,7 +222,7 @@
 		C902B1E823552B97001FAFA9 /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 		C902B1EA23552D82001FAFA9 /* CallingActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingActionSpec.swift; sourceTree = "<group>"; };
 		C9060ABA2359C1A100914898 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
-		C9060ABD2359C2F600914898 /* CallStarter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStarter.swift; sourceTree = "<group>"; };
+		C9060ABD2359C2F600914898 /* VialerSIPCallStarter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VialerSIPCallStarter.swift; sourceTree = "<group>"; };
 		C9060AC2235A030700914898 /* CallStarterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStarterSpec.swift; sourceTree = "<group>"; };
 		C9060AC8235DEA6D00914898 /* LibExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LibExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		C91F851B234CCCE5007F6417 /* LibExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -602,7 +602,7 @@
 		C9060ABC2359C2E600914898 /* Gateways */ = {
 			isa = PBXGroup;
 			children = (
-				C9060ABD2359C2F600914898 /* CallStarter.swift */,
+				C9060ABD2359C2F600914898 /* VialerSIPCallStarter.swift */,
 				C9F0CFF3236C861600C57AB3 /* StatePersister.swift */,
 			);
 			path = Gateways;
@@ -1246,7 +1246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9F0CFEB236C464D00C57AB3 /* StateKeeperFeature.swift in Sources */,
-				C9060ABE2359C2F600914898 /* CallStarter.swift in Sources */,
+				C9060ABE2359C2F600914898 /* VialerSIPCallStarter.swift in Sources */,
 				C91F8542234CD421007F6417 /* Feature.swift in Sources */,
 				C9ADE20123575A78002D813B /* RootApp.swift in Sources */,
 				C91F854C234CE3BC007F6417 /* CallingFeature.swift in Sources */,

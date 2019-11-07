@@ -15,7 +15,6 @@ class StartCall: UseCase {
     required init(dependencies:Dependencies, responseHandler: @escaping ((Response) -> ())) {
         self.responseHandler = responseHandler
         self.dependencies = dependencies
-
     }
     
     private let responseHandler: ((Response) -> ())
