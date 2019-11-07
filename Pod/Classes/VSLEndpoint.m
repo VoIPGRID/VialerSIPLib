@@ -574,8 +574,11 @@ static void logCallBack(int logLevel, const char *data, int len) {
 
 }
 
+/**
+ * Notify application when call state has changed.
+ */
 static void onCallState(pjsua_call_id callId, pjsip_event *event) {
-    VSLLogVerbose(@"onCallState");
+    VSLLogVerbose(@"PJSUA callback: call state changed.");
     pjsua_call_info callInfo;
     pjsua_call_get_info(callId, &callInfo);
 
@@ -590,8 +593,11 @@ static void onCallState(pjsua_call_id callId, pjsip_event *event) {
     }
 }
 
+/**
+ * Notify application when media state in the call has changed.
+ */
 static void onCallMediaState(pjsua_call_id call_id) {
-    VSLLogVerbose(@"onCallMediaState");
+    VSLLogVerbose(@"PJSUA callback: media state in the call has changed.");
     pjsua_call_info callInfo;
     pjsua_call_get_info(call_id, &callInfo);
 
@@ -605,12 +611,18 @@ static void onCallMediaState(pjsua_call_id call_id) {
     }
 }
 
+/**
+ * Notify application when registration or unregistration has been initiated.
+ */
 static void onRegStarted2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
-    VSLLogVerbose(@"onRegStarted2");
+    VSLLogVerbose(@"PJSUA callback: registration or unregistration has been initiated.");
 }
 
+/**
+ * Notify application when registration status has changed.
+ */
 static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
-    VSLLogVerbose(@"onRegState2");
+    VSLLogVerbose(@"PJSUA callback: registration status has changed.");
 
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:acc_id];
     if (account) {
@@ -642,12 +654,16 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
     }
 }
 
-/* Callback on media events. Adjust renderer window size to original video size */
+/**
+ * Notification about media events such as video notifications. Adjust renderer window size to original video size.
+ */
 static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_event *event) {
+    VSLLogVerbose(@"PJSUA callback: media event.");
+    
     #if PJSUA_HAS_VIDEO
         if (event->type == PJMEDIA_EVENT_FMT_CHANGED) {
             char event_name[5];
-            VSLLogVerbose(@"Event Media %s", pjmedia_fourcc_name(event->type, event_name));
+            VSLLogVerbose(@"Media event %s", pjmedia_fourcc_name(event->type, event_name));
             pjsua_call_info ci;
             pjsua_vid_win_id wid;
             pjmedia_rect_size size;
@@ -668,7 +684,11 @@ static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_ev
     #endif
 }
 
+/**
+ * This is a general notification callback which is called whenever a transaction within the call has changed state.
+ */
 static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_event *event) {
+    VSLLogVerbose(@"PJSUA callback: transaction within the call has changed state.");
     pjsua_call_info callInfo;
     pjsua_call_get_info(call_id, &callInfo);
 
@@ -680,8 +700,11 @@ static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_
     }
 }
 
-// Method being called after SIP INVITE is received.
+/**
+ * Notify application on incoming call, a SIP INVITE is received.
+ */
 static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_data *rdata) {
+    VSLLogVerbose(@"PJSUA callback: incoming call.");
     VSLEndpoint *endpoint = [VSLEndpoint sharedEndpoint];
     VSLAccount *account = [endpoint lookupAccount:acc_id];
     if (account) {
@@ -709,7 +732,11 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
     }
 }
 
+/**
+ * Notify application of the status of previously sent call transfer request.
+ */
 static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_str_t *statusText, pj_bool_t final, pj_bool_t *continueNotifications) {
+    VSLLogVerbose(@"PJSUA callback: the status of previously sent call transfer request.");
     VSLCall *call = [[VSLEndpoint sharedEndpoint].callManager callWithCallId:callId];
     if (call) {
         [call callTransferStatusChangedWithStatusCode:statusCode statusText:[NSString stringWithPJString:*statusText] final:final == 1];
