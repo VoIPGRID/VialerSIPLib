@@ -5,7 +5,6 @@
 //
 
 #import "VSLCallManager.h"
-
 @import CallKit;
 #import "Constants.h"
 #import <CocoaLumberJack/CocoaLumberjack.h>
@@ -16,10 +15,10 @@
 #import "VSLLogging.h"
 #import "VialerSIPLib.h"
 
-
 #define VSLBlockSafeRun(block, ...) block ? block(__VA_ARGS__) : nil
 @interface VSLCallManager()
 @property (strong, nonatomic) NSMutableArray *calls;
+@property (strong, nonatomic) VSLAudioController *audioController; //orp readded
 @property (strong, nonatomic) CXCallController *callController;
 @end
 
@@ -43,6 +42,13 @@
         _calls = [[NSMutableArray alloc] init];
     }
     return _calls;
+}
+
+- (VSLAudioController *)audioController { //orp readded
+    if (!_audioController) {
+        _audioController = [[VSLAudioController alloc] init];
+    }
+    return _audioController;
 }
 
 - (CXCallController *)callController {
@@ -128,6 +134,7 @@
 
     if ([self.calls count] == 0) {
         self.calls = nil;
+        self.audioController = nil;
     }
     VSLLogVerbose(@"Call(%@) removed. Calls count: %ld",call.uuid.UUIDString, (long)[self.calls count]);
 }
