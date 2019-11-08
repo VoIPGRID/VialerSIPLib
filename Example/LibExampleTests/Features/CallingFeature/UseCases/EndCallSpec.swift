@@ -16,11 +16,9 @@ class EndCallSpec: QuickSpec {
             var sut: EndCall!
 
             var receivedCall: Call!
-            var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
-                sut = EndCall(dependencies:depend) {
+                sut = EndCall(dependencies:self.dependencies) {
                     switch $0 {
                     case .callDidStop(let call):
                         receivedCall = call
@@ -29,7 +27,6 @@ class EndCallSpec: QuickSpec {
             }
             
             afterEach {
-                depend = nil
                 receivedCall = nil
                 sut = nil
             }
@@ -40,5 +37,13 @@ class EndCallSpec: QuickSpec {
                 expect(receivedCall).toNot(beNil())
             }
         }
+    }
+    
+    var dependencies: Dependencies {
+        Dependencies(
+            currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+        )
     }
 }

@@ -14,13 +14,10 @@ class SwitchTransportModeSpec: QuickSpec {
     override func spec() {
         describe("the SwitchTransportMode UseCase") {
             var sut: SwitchTransportMode!
-            
             var mode: TransportMode!
-            var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
-                sut = SwitchTransportMode(dependencies:depend) { if case .modeWasActivated(let m) = $0 { mode = m } }
+                sut = SwitchTransportMode(dependencies: self.dependencies) { if case .modeWasActivated(let m) = $0 { mode = m } }
             }
             
             afterEach {
@@ -46,5 +43,13 @@ class SwitchTransportModeSpec: QuickSpec {
                 expect(mode) == .tls
             }
         }
+    }
+    
+    var dependencies: Dependencies {
+        Dependencies(
+            currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+        )
     }
 }

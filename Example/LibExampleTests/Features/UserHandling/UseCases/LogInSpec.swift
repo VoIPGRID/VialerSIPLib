@@ -14,17 +14,13 @@ class LogInSpec: QuickSpec {
     override func spec() {
         describe("the LogIn UseCase") {
             var sut: LogIn!
-            
             var user: User!
-            var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
-                sut = LogIn(dependencies:depend) { if case .logInConfirmed(let u) = $0 { user = u }}
+                sut = LogIn(dependencies:self.dependencies) { if case .logInConfirmed(let u) = $0 { user = u }}
             }
             
             afterEach {
-                depend = nil
                 sut = nil
                 user = nil
             }
@@ -35,5 +31,13 @@ class LogInSpec: QuickSpec {
                 expect(user.name).to(equal("the brain"))
             }
         }
+    }
+    
+    var dependencies: Dependencies {
+        Dependencies(
+            currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+        )
     }
 }

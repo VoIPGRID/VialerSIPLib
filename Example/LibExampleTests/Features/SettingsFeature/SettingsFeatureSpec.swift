@@ -14,16 +14,13 @@ class SettingsFeatureSpec: QuickSpec {
     override func spec() {
         describe("the SettingsFeature UseCase") {
             var sut: SettingsFeature!
-            
             var messageHandler: Mock.MessageHandler!
             var receivedModes: [TransportMode]!
-            var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
                 receivedModes = []
                 messageHandler = Mock.MessageHandler { if case .feature(.settings(.useCase(.transport(.action(.didActivate(let m)))))) = $0 { receivedModes.append(m)}}
-                sut = SettingsFeature(with: messageHandler, dependencies: depend)
+                sut = SettingsFeature(with: messageHandler, dependencies: self.dependencies)
             }
             
             afterEach {
@@ -33,12 +30,20 @@ class SettingsFeatureSpec: QuickSpec {
             }
             
             it("switches transport modes") {
-                [TransportMode.udp, .tcp, .tls, .udp].forEach {
+                [.udp, .tcp, .tls, .udp].forEach {
                     sut.handle(feature: .settings(.useCase(.transport(.action(.activate($0))))))
                 }
                 
                 expect(receivedModes) == [.udp, .tcp, .tls, .udp]
             }
         }
+    }
+    
+    var dependencies: Dependencies {
+        Dependencies(
+            currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+        )
     }
 }

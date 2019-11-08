@@ -47,8 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 private func createDependencies() -> Dependencies {
     return Dependencies(
-        callStarter: VialerSIPCallStarter(),
-        statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager()),
-        currentAppStateFetcher:  CurrentAppStateFetcher()
+        currentAppStateFetcher: CurrentAppStateFetcher(),
+                   callStarter: VialerSIPCallStarter(),
+                statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager())
     )
 }

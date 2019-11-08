@@ -16,11 +16,9 @@ class LogOutSpec: QuickSpec {
             var sut: LogOut!
             
             var user: User!
-            var depend: Dependencies!
 
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
-                sut = LogOut(dependencies:depend) { if case .logOutConfirmed(let u) = $0 { user = u }}
+                sut = LogOut(dependencies:self.dependencies) { if case .logOutConfirmed(let u) = $0 { user = u }}
             }
             
             afterEach {
@@ -34,5 +32,13 @@ class LogOutSpec: QuickSpec {
                 expect(user.name) == "the brain"
             }
         }
+    }
+    
+    var dependencies: Dependencies {
+        return Dependencies(
+            currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+        )
     }
 }

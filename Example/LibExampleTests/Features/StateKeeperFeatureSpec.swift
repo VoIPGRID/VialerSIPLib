@@ -14,16 +14,18 @@ class StateKeeperFeatureSpec: QuickSpec {
     
     override func spec() {
         describe("StateKeeperFeature"){
-            
             var sut: StateKeeperFeature!
             var messageHandler: Mock.MessageHandler!
-            
             var changedState: AppState?
+            
             beforeEach {
                 messageHandler = Mock.MessageHandler() { msg in
                     if case .feature(.state(.useCase(.stateChanged(let state)))) = msg { changedState = state }
                 }
-                sut = StateKeeperFeature(with: messageHandler, dependencies: Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher()))
+                sut = StateKeeperFeature(
+                    with: messageHandler,
+                    dependencies: self.dependencies
+                )
             }
             
             afterEach {
@@ -31,13 +33,20 @@ class StateKeeperFeatureSpec: QuickSpec {
                 messageHandler = nil
                 sut = nil
             }
-
+            
             it("track changes for transport mode") {
                 sut.handle(feature: .settings(.useCase(.transport(.action(.didActivate(.udp))))))
                 
                 expect(changedState?.transportMode).to(equal(.udp))
             }
-            
         }
+    }
+    
+    var dependencies: Dependencies {
+        Dependencies(
+            currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+        )
     }
 }

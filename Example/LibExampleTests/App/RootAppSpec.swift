@@ -21,12 +21,8 @@ class RootAppSpec: QuickSpec {
                 messageHandler = Mock.MessageHandler {
                     if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = $0 { interceptedHandle = call.handle }
                 }
-
-                let csf = Mock.CurrentAppStateFetcher()
-                csf.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: "server")
-                let dependencies = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: csf)
-
-                sut = RootApp(dependencies: dependencies)
+                
+                sut = RootApp(dependencies: self.dependencies)
                 sut.add(subscriber: messageHandler)
             }
             
@@ -45,5 +41,24 @@ class RootAppSpec: QuickSpec {
             }
         }
     }
+    
+    var stateFetcher: CurrentAppStateFetching {
+        let f = Mock.CurrentAppStateFetcher()
+        f.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: "server")
+        return f
+    }
+    
+    var dependencies: Dependencies {
+        let csf = Mock.CurrentAppStateFetcher()
+        csf.appState = AppState(
+            transportMode: .udp,
+            accountNumber:"4711",
+            serverAddress: "server"
+        )
+        return Dependencies(
+            currentAppStateFetcher: csf,
+            callStarter: Mock.CallStarter(),
+            statePersister: Mock.StatePersister()
+        )
+    }
 }
-

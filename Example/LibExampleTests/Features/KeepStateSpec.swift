@@ -11,6 +11,7 @@ import Nimble
 @testable import LibExample
 
 class KeepStateSpec: QuickSpec {
+    
     override func spec() {
         describe("KeepState"){
             var sut:KeepState!
@@ -23,7 +24,7 @@ class KeepStateSpec: QuickSpec {
                 
                 retrievedTransportModes = []
                 statePesister = Mock.StatePersister()
-                sut = KeepState(dependencies: Dependencies(callStarter: Mock.CallStarter(), statePersister: statePesister!, currentAppStateFetcher: CurrentAppStateFetcher())) { response in
+                sut = KeepState(dependencies: Dependencies(currentAppStateFetcher: CurrentAppStateFetcher(), callStarter: Mock.CallStarter(), statePersister: statePesister!)) { response in
                     switch response {
                     case .stateChanged(let state):
                         retrievedTransportModes?.append(state.transportMode)
@@ -70,7 +71,7 @@ class KeepStateSpec: QuickSpec {
             it("receives an error if it fails to persist state") {
                 statePesister?.shouldFailPersisting = true
                 sut.handle(request: .setTransportMode(.tcp, sut.state))
-
+                
                 expect(retrievedError).toNot(beNil())
             }
         }

@@ -16,11 +16,9 @@ class CreateCallSpec: QuickSpec {
             var sut: CreateCall!
             
             var createdCall: Call!
-            var depend: Dependencies!
             
             beforeEach {
-                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
-                sut = CreateCall(dependencies:depend) {
+                sut = CreateCall(dependencies:self.dependencies) {
                     switch $0 {
                     case .callCreated(let call):
                         createdCall = call
@@ -29,7 +27,6 @@ class CreateCallSpec: QuickSpec {
             }
             
             afterEach {
-                depend = nil
                 createdCall = nil
                 sut = nil
             }
@@ -40,5 +37,13 @@ class CreateCallSpec: QuickSpec {
                 expect(createdCall).toNot(beNil())
             }
         }
+    }
+    
+    var dependencies: Dependencies {
+        Dependencies(
+            currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+        )
     }
 }

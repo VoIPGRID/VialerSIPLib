@@ -14,7 +14,6 @@ class UserHandlingFeatureSpec: QuickSpec, MessageHandling {
     
     var loggedInUser:User!
     var loggedOutUser:User!
-    var depend: Dependencies!
 
     func handle(msg: Message) {
         if case .feature(.userHandling(.useCase(.login (.action(.logInConfirmed (let user)))))) = msg { self.loggedInUser  = user }
@@ -26,15 +25,13 @@ class UserHandlingFeatureSpec: QuickSpec, MessageHandling {
             var sut: UserHandlingFeature!
             
             beforeEach {
-                self.depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
-                sut = UserHandlingFeature(with: self, dependencies: self.depend)
+                sut = UserHandlingFeature(with: self, dependencies: self.dependencies)
             }
             
             afterEach {
                 sut = nil
                 self.loggedOutUser = nil
                 self.loggedInUser = nil
-                self.depend = nil
             }
             
             it("logs in user"){
@@ -49,5 +46,13 @@ class UserHandlingFeatureSpec: QuickSpec, MessageHandling {
                 expect(self.loggedOutUser.name) == "the brain"
             }
         }
+    }
+    
+    var dependencies: Dependencies {
+        Dependencies(
+            currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+        )
     }
 }

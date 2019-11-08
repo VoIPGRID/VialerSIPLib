@@ -14,8 +14,8 @@ class SIPAppSpec: QuickSpec {
     override func spec() {
         describe("the SIPApp") {
             var sut: SIPApp!
-            
             var messageHandler: Mock.MessageHandler!
+
             context("Calling") {
                 var receivedCallingActions: [String]!
                 var didStartCall: Call!
@@ -23,14 +23,10 @@ class SIPAppSpec: QuickSpec {
                 
                 var stopCall: Call!
                 var didStopCall: Call!
-                var depend: Dependencies!
 
                 beforeEach {
                     receivedCallingActions = []
-                    let csf = Mock.CurrentAppStateFetcher()
-                    csf.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: Keys.SIP.Domain)
-                    depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: csf)
-                    
+
                     messageHandler = Mock.MessageHandler {
                         if case .feature(.calling(.useCase(.call(.action(let action))))) = $0 {
                             if case .callDidStart(let call) = action { didStartCall = call;  receivedCallingActions.append("didStart") }
@@ -39,12 +35,11 @@ class SIPAppSpec: QuickSpec {
                             if case  .callDidStop(let call) = action {  didStopCall = call;  receivedCallingActions.append( "didStop") }
                         }
                     }
-                    sut = SIPApp(dependencies: depend)
+                    sut = SIPApp(dependencies: self.dependencies)
                     sut.add(subscriber: messageHandler)
                 }
                 
                 afterEach {
-                    depend = nil
                     sut = nil
                     messageHandler = nil
                     receivedCallingActions = nil
@@ -82,6 +77,16 @@ class SIPAppSpec: QuickSpec {
                 }
             }
         }
+    }
+    
+    var dependencies: Dependencies {
+        let csf = Mock.CurrentAppStateFetcher()
+        csf.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: Keys.SIP.Domain)
+        return Dependencies(
+            currentAppStateFetcher: csf,
+            callStarter: Mock.CallStarter(),
+            statePersister: Mock.StatePersister()
+        )
     }
 }
 

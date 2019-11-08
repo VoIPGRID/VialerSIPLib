@@ -17,14 +17,12 @@ class StartCallSpec: QuickSpec {
 
             var startedCalls: [Call.State]!
             var failedCalls: [Call.State]!
-            var depend: Dependencies!
 
             beforeEach {
                 startedCalls = []
                 failedCalls = []
-                depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
 
-                sut = StartCall(dependencies:depend) {
+                sut = StartCall(dependencies:self.dependencies) {
                     if case   .callDidStart(let call) = $0 { startedCalls.append(call.state) }
                     if case .failedStarting(let call) = $0 {  failedCalls.append(call.state) }
                 }
@@ -34,7 +32,6 @@ class StartCallSpec: QuickSpec {
                 sut = nil
                 startedCalls = nil
                 failedCalls = nil
-                depend = nil
             }
 
             it("calls successfully with valid numbers"){
@@ -58,5 +55,13 @@ class StartCallSpec: QuickSpec {
                 expect(failedCalls).toEventually(equal([.failed, .failed, .failed]))
             }
         }
+    }
+    
+    var dependencies: Dependencies {
+        Dependencies(
+            currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
+                       callStarter: Mock.CallStarter(),
+                    statePersister: Mock.StatePersister()
+        )
     }
 }
