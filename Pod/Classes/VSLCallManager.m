@@ -18,7 +18,7 @@
 #define VSLBlockSafeRun(block, ...) block ? block(__VA_ARGS__) : nil
 @interface VSLCallManager()
 @property (strong, nonatomic) NSMutableArray *calls;
-@property (strong, nonatomic) VSLAudioController *audioController; //orp readded
+@property (strong, nonatomic) VSLAudioController *audioController;
 @property (strong, nonatomic) CXCallController *callController;
 @end
 
@@ -44,7 +44,7 @@
     return _calls;
 }
 
-- (VSLAudioController *)audioController { //orp readded
+- (VSLAudioController *)audioController {
     if (!_audioController) {
         _audioController = [[VSLAudioController alloc] init];
     }
