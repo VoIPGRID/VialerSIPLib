@@ -7,11 +7,11 @@
 //
 
 protocol CurrentAppStateFetching: MessageSubscriber {
-    var appState: AppState? { get }
+    var appState: AppState! { get }
 }
 
 class CurrentAppStateFetcher: CurrentAppStateFetching {
-    var appState: AppState?
+    var appState: AppState!
     
     func handle(msg: Message) {
         if case .feature(.state(.useCase( .stateLoaded(let state)))) = msg { appState = state }

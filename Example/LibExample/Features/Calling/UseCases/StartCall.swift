@@ -42,7 +42,6 @@ extension StartCall {
 // MARK: - Interactor
 extension StartCall {
     private class Interactor {
-        
         init(callStarter:CallStarting, response: @escaping (StartCall.Response) -> Void) {
             self.response = response
             var callStarter = callStarter
@@ -73,9 +72,10 @@ extension StartCall {
     }
 }
 
+// MARK: - Gateways
 protocol CallStarting {
     var callback: ((Bool, Call) -> Void)? { get set }
-    func start(call:Call)
     var appState: AppState? { get set }
-}
 
+    func start(call:Call)
+}

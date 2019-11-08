@@ -44,26 +44,26 @@ class KeepState: UseCase {
     
     private func handle(response: KeepState.Response) {
         switch response {
-        case       .stateChanged(let state)           : handleChanged(state: state)
-        case        .stateLoaded(let state)           : handleStateLoaded(state: state)
-        case   .failedPersisting(let state, let error): handleFailedPersisting(state: state, with: error)
+        case       .stateChanged(let state)           : stateChanged(state: state)
+        case        .stateLoaded(let state)           : loaded(state: state)
+        case   .failedPersisting(let state, let error): persistingFailed(for: state, with: error)
         case .failedLoadingState(           let error): handleFailedLoadingState(error: error)
         case            .fetched(let state           ): handleFetched(state: state)
             
         }
     }
     
-    private func handleChanged(state: AppState) {
+    private func stateChanged(state: AppState) {
         self.state = state
         responseHandler(.stateChanged(state))
     }
     
-    private func handleFailedPersisting(state: AppState, with error: Error) {
+    private func persistingFailed(for state: AppState, with error: Error) {
         self.state = state
         responseHandler(.failedPersisting(state, error))
     }
     
-    private func handleStateLoaded(state: AppState) {
+    private func loaded(state: AppState) {
         self.state = state  
         responseHandler(.stateLoaded(state))
     }

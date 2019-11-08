@@ -34,9 +34,7 @@ class CallingFeature: Feature {
     private func handle(response: CreateCall.Response) {
         switch response {
         case .callCreated(let c):
-            if let appState = dependencies.currentAppStateFetcher.appState {
-                start(call: c, appState: appState)
-            }
+            start(call: c, appState: dependencies.currentAppStateFetcher.appState)
         }
     }
     
