@@ -21,8 +21,6 @@ enum Message {
             
             enum UseCase {
                 case loadInitialState
-                case fetchCurrentState
-                case fetched(AppState)
                 case stateChanged(AppState)
                 case persistingFailed(AppState, Error)
                 case stateLoaded(AppState)

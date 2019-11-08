@@ -21,7 +21,7 @@ class CallingFeatureSpec: QuickSpec {
             beforeEach {
                 depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: CurrentAppStateFetcher())
                 
-                depend.callStarter.appState = AppState(transportMode: .udp, accountNumber: "0815")
+                depend.callStarter.appState = AppState(transportMode: .udp, accountNumber: "0815", serverAddress: "server")
                 messageHandler = Mock.MessageHandler {
                     if case .feature(.calling(.useCase(.call(.action(.callDidStop (let call)))))) = $0 { endedCall   = call }
                 }

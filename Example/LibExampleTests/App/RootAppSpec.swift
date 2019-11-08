@@ -23,7 +23,7 @@ class RootAppSpec: QuickSpec {
                 }
 
                 let csf = Mock.CurrentAppStateFetcher()
-                csf.appState = AppState(transportMode: .udp, accountNumber:"4711")
+                csf.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: "server")
                 let dependencies = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: csf)
 
                 sut = RootApp(dependencies: dependencies)

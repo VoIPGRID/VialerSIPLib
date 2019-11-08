@@ -15,13 +15,11 @@ class KeepState: UseCase {
         case setServerAddress(String, AppState)
         case setAccounNumber(String, AppState)
         case loadState
-        case fetchCurrentState
     }
     
     enum Response {
         case       stateChanged(AppState)
         case        stateLoaded(AppState)
-        case            fetched(AppState)
         case   failedPersisting(AppState, Error)
         case failedLoadingState(          Error)
     }
@@ -48,8 +46,6 @@ class KeepState: UseCase {
         case        .stateLoaded(let state)           : loaded(state: state)
         case   .failedPersisting(let state, let error): persistingFailed(for: state, with: error)
         case .failedLoadingState(           let error): handleFailedLoadingState(error: error)
-        case            .fetched(let state           ): handleFetched(state: state)
-            
         }
     }
     
@@ -68,11 +64,6 @@ class KeepState: UseCase {
         responseHandler(.stateLoaded(state))
     }
     
-    private func handleFetched(state: AppState) {
-        self.state = state
-        responseHandler(.fetched(state))
-    }
-    
     private func handleFailedLoadingState(error: Error) {
         responseHandler(.failedLoadingState(error))
     }
@@ -87,7 +78,6 @@ extension KeepState {
         func handle(request: KeepState.Request, response: @escaping ((KeepState.Response) -> ())) {
             switch request {
             case         .loadState                                      : loadState(response: response)
-            case .fetchCurrentState                                      :  response(.fetched(state))
             case   .setAccounNumber(let accountNumber, let previousState):   persist(previousState: previousState, accountNumber:accountNumber, response:response)
             case  .setTransportMode(         let mode, let previousState):       set(mode:mode, previousState:previousState,response:response)
             case  .setServerAddress(      let address, let previousState):       set(serverAddress: address, previousState: previousState, response: response)

@@ -17,7 +17,6 @@ class KeepStateSpec: QuickSpec {
             var retrievedError: Error?
             var retrievedTransportModes: [TransportMode]?
             var loadedState: AppState?
-            var fetchedState: AppState?
             var statePesister: Mock.StatePersister?
             
             beforeEach {
@@ -34,8 +33,6 @@ class KeepStateSpec: QuickSpec {
                         retrievedError = error
                     case .failedLoadingState(let error):
                         retrievedError = error
-                    case .fetched(let state):
-                        fetchedState = state
                     }
                 }
             }
@@ -75,12 +72,6 @@ class KeepStateSpec: QuickSpec {
                 sut.handle(request: .setTransportMode(.tcp, sut.state))
 
                 expect(retrievedError).toNot(beNil())
-            }
-            
-            it("fetches the current app state") {
-                sut.handle(request: .fetchCurrentState)
-                
-                expect(fetchedState).toNot(beNil())
             }
         }
     }

@@ -28,7 +28,7 @@ class SIPAppSpec: QuickSpec {
                 beforeEach {
                     receivedCallingActions = []
                     let csf = Mock.CurrentAppStateFetcher()
-                    csf.appState = AppState(transportMode: .udp, accountNumber:"4711")
+                    csf.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: Keys.SIP.Domain)
                     depend = Dependencies(callStarter: Mock.CallStarter(), statePersister: Mock.StatePersister(), currentAppStateFetcher: csf)
                     
                     messageHandler = Mock.MessageHandler {

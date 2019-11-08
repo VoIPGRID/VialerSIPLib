@@ -58,7 +58,7 @@ class Mock {
         var shouldFailLoading = false
         var shouldFailPersisting = false
 
-        private var appState: AppState! = AppState(transportMode: .udp, accountNumber: "0815")
+        private var appState: AppState! = AppState(transportMode: .udp, accountNumber: "0815", serverAddress: "server")
         func persist(state: AppState) throws {
             if shouldFailPersisting {
                 throw NSError(domain: "failed loading", code: 501, userInfo: nil)
@@ -77,7 +77,7 @@ class Mock {
     }
     
     class CurrentAppStateFetcher: CurrentAppStateFetching {
-        var appState: AppState?
+        var appState: AppState!
         
         func handle(msg: Message) {
             
