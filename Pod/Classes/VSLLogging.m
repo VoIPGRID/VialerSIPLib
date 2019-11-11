@@ -31,7 +31,8 @@
     if ([VSLEndpoint sharedEndpoint].logCallBackBlock) {
         [VSLEndpoint sharedEndpoint].logCallBackBlock(logMessage);
     } else {
-        [[DDLog sharedInstance] log:LOG_ASYNC_ENABLED message:logMessage];
+//        [[DDLog sharedInstance] log:LOG_ASYNC_ENABLED message:logMessage];
+        NSLog(@"%@",message);
     }
     va_end(args);
 }
