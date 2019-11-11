@@ -1,0 +1,9 @@
+struct Keys {
+   struct SIP {
+       static let Account = "123"
+       static let Password = "xyz"
+       static let Domain = ""
+       static let Proxy = ""
+   }
+   static let NumberToCall = "06"
+}
