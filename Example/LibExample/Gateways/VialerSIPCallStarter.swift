@@ -86,7 +86,7 @@ class VialerSIPCallStarter: CallStarting {
     
     func callStarted(call: Call) {
         if let provider = providerDelegate?.provider {
-            provider.reportOutgoingCall(with: call.uuid, connectedAt: Date())
+            provider.reportOutgoingCall(with: call.uuid, startedConnectingAt: Date())
         }
         self.callback?(true, call)
     }
