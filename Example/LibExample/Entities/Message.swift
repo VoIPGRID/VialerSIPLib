@@ -25,6 +25,8 @@ enum Message {
                 case persistingFailed(AppState, Error)
                 case stateLoaded(AppState)
                 case stateLoadingFailed(Error)
+                case reset
+                case resettingFailed(Error)
             }
         }
         
@@ -63,6 +65,17 @@ enum Message {
                 case register(Register)
                 case unregister(Unregister)
                 case server(Server)
+                case password(Password)
+            }
+            
+            enum Password {
+                case action(Action)
+                
+                enum Action {
+                    case changePassword(String)
+                    case passwordChanged(String)
+                    case passwordChangeFailed(Error)
+                }
             }
             
             enum Server {

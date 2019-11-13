@@ -11,13 +11,16 @@ import UIKit
 final class SettingsViewController: MessageViewController {
 
     @IBOutlet weak var accountNumberTextField: UITextField!
+    @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var serverAddressField: UITextField!
     @IBOutlet weak var modePicker: UIPickerView!
 
     private var         modes: [TransportMode] = TransportMode.allCases
-    private var  selectedMode: TransportMode?   { didSet { configureModePicker() } }
+    private var  selectedMode: TransportMode?   { didSet { configureModePicker()    } }
     private var accountNumber: String = ""      { didSet { configureAccountNumber() } }
     private var  serverAdress: String?          { didSet { configureServerAddress() } }
+    private var      password: String?          { didSet { configurePassword()      } }
+    private var    pickedMode: TransportMode?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,23 +33,28 @@ final class SettingsViewController: MessageViewController {
         configureAccountNumber()
         configureModePicker()
         configureServerAddress()
+        configurePassword()
     }
 
     override func handle(msg: Message) {
         super.handle(msg: msg)
-        if case .feature(.settings(.useCase(.server(   .action(.addressChanged(let newAddress)))))) = msg {    set(address: newAddress ) }
-        if case .feature(.settings(.useCase(.transport(.action(   .didActivate(     let mode )))))) = msg { select(   mode: mode       ) }
-        if case .feature(   .state(.useCase(                  .persistingFailed(_ , let error  )))) = msg {   show(  error: error      ) }
-        if case .feature(   .state(.useCase(                  .stateLoaded(         let state  )))) = msg { loaded(  state: state      ) }
-    
+        if case .feature(.settings(.useCase(   .server( .action(  .addressChanged(let newAddress)))))) = msg {    set( address: newAddress ) }
+        if case .feature(.settings(.useCase( .password( .action( .passwordChanged(let password))))))   = msg {    set(password: password   ) }
+        if case .feature(.settings(.useCase(.transport( .action(     .didActivate(let mode))))))       = msg { select(    mode: mode       ) }
+        if case .feature(   .state(.useCase(                    .persistingFailed(_ , let error))))    = msg {   show(   error: error      ) }
+        if case .feature(   .state(.useCase(                         .stateLoaded(let state ))))       = msg { loaded(   state: state      ) }
     }
     
-    @IBAction func setServerAddressTapped(_ sender: Any) {
-        
-        if let address = serverAddressField.text {
-            responseHandler?.handle(msg: .feature(.settings(.useCase(.server(.action(.changeAddress(address)))))))
-        }
+    @IBAction func set(_ sender: Any) {
+        if let    address = serverAddressField.text { responseHandler?.handle(msg: .feature(.settings(.useCase(   .server(.action( .changeAddress(address   ))))))) }
+        if let   password =      passwordField.text { responseHandler?.handle(msg: .feature(.settings(.useCase( .password(.action(.changePassword(password  ))))))) }
+        if let pickedMode =         self.pickedMode { responseHandler?.handle(msg: .feature(.settings(.useCase(.transport(.action(      .activate(pickedMode))))))) }
     }
+    
+    @IBAction func resetTapped(_ sender: Any) {
+        responseHandler?.handle(msg: .feature(.state(.useCase(.reset))))
+    }
+    
     private func show(error: Error) {
         let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -54,9 +62,10 @@ final class SettingsViewController: MessageViewController {
     }
     
     private func loaded(state: AppState) {
-        selectedMode = state.transportMode
+        selectedMode  = state.transportMode
         accountNumber = state.accountNumber
-        serverAdress = state.serverAddress
+        serverAdress  = state.serverAddress
+        password      = state.encryptedPassword
     }
     
     private func select(mode: TransportMode) {
@@ -65,6 +74,10 @@ final class SettingsViewController: MessageViewController {
     
     private func set(address: String) {
         self.serverAdress = address
+    }
+    
+    private func set(password: String) {
+        self.password = password
     }
 }
 
@@ -84,16 +97,21 @@ extension SettingsViewController {
     }
     
     private func configureServerAddress() {
-        if
-            let serverAdress = serverAdress {
+        if let serverAdress = serverAdress {
             serverAddressField?.text = serverAdress
+        }
+    }
+    
+    private func configurePassword() {
+        if let pw = password {
+            passwordField?.text = pw
         }
     }
 }
 
 extension SettingsViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        responseHandler?.handle(msg: .feature(.settings(.useCase(.transport(.action(.activate(modes[row])))))))
+        pickedMode = modes[row]
     }
 }
 

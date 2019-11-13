@@ -7,15 +7,16 @@
 //
 
 struct AppState {
-    let transportMode: TransportMode
-    let accountNumber: String
-    let serverAddress: String
-
-    var dictionary: [String : String] {
+    let     transportMode: TransportMode
+    let     accountNumber: String
+    let     serverAddress: String
+    let encryptedPassword:String
+    var        dictionary: [String : String] {
         return [
-            "transportMode": "\(transportMode)",
-            "accountNumber": accountNumber,
-            "serverAddress": serverAddress
+                "transportMode": transportMode.rawValue,
+                "accountNumber": accountNumber,
+                "serverAddress": serverAddress,
+            "encryptedPassword": encryptedPassword
         ]
     }
 }

@@ -11,12 +11,20 @@ import Foundation
 protocol StatePersisting {
     func persist(state: AppState) throws
     func loadState() throws -> AppState?
+    func deleteState() throws
 }
 
 struct StateDiskPersister: StatePersisting {
     
     private let dirName = "state"
     private let fileName = "state.xml"
+    
+    private enum ContentKeys: String {
+        case transportMode
+        case accountNumber
+        case serverAddress
+        case encryptedPassword
+    }
     
     init(pathBuilder: PathBuilding, fileManager: FileManager) {
         self.pathBuilder = pathBuilder
@@ -37,18 +45,25 @@ struct StateDiskPersister: StatePersisting {
         if let data = fileManager.contents(atPath: dir.appendingPathComponent(fileName).path) {
             if let dict = try PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String : String] {
                 if
-                    let modeString = dict["transportMode"],
-                    let accountNumber = dict["accountNumber"],
-                    let serverAddress = dict["serverAddress"]
+                    let modeString        = dict[ContentKeys.transportMode.rawValue],
+                    let accountNumber     = dict[ContentKeys.accountNumber.rawValue],
+                    let serverAddress     = dict[ContentKeys.serverAddress.rawValue],
+                    let encryptedPassword = dict[ContentKeys.encryptedPassword.rawValue]
                 {
                     if let mode = TransportMode(rawValue: modeString) {
-                        return AppState(transportMode: mode, accountNumber: accountNumber, serverAddress: serverAddress)
+                        return AppState(transportMode: mode, accountNumber: accountNumber, serverAddress: serverAddress, encryptedPassword: encryptedPassword)
                     }
                 }
             }
         } else {
-            return AppState(transportMode: .udp, accountNumber: Keys.SIP.Account, serverAddress: Keys.SIP.Domain)
+            return AppState(transportMode: .udp, accountNumber: Keys.SIP.Account, serverAddress: Keys.SIP.Domain, encryptedPassword: Keys.SIP.Password)
         }
         return nil
+    }
+    
+    func deleteState() throws {
+        let dir =  try pathBuilder.dictionaryInDocuments(named: dirName, fileManger: fileManager)
+        let fileURL = URL(fileURLWithPath: dir.appendingPathComponent(fileName).path)
+        try fileManager.removeItem(at: fileURL)
     }
 }

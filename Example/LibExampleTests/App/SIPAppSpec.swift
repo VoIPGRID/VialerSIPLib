@@ -81,7 +81,7 @@ class SIPAppSpec: QuickSpec {
     
     var dependencies: Dependencies {
         let csf = Mock.CurrentAppStateFetcher()
-        csf.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: Keys.SIP.Domain)
+        csf.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: Keys.SIP.Domain, encryptedPassword: "08/15")
         return Dependencies(
             currentAppStateFetcher: csf,
             callStarter: Mock.CallStarter(),

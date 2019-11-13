@@ -19,7 +19,9 @@ class KeepStateSpec: QuickSpec {
             var retrievedTransportModes: [TransportMode]?
             var loadedState: AppState?
             var statePesister: Mock.StatePersister?
-            
+            var stateWasReset = false
+            var resetError: Error?
+            var newPassword: String?
             beforeEach {
                 
                 retrievedTransportModes = []
@@ -34,11 +36,22 @@ class KeepStateSpec: QuickSpec {
                         retrievedError = error
                     case .failedLoadingState(let error):
                         retrievedError = error
+                    case .stateWasReset:
+                        stateWasReset = true
+                    case .failedDeletingState(let error):
+                        resetError = error
+                    case .passwordChanged(let state):
+                        newPassword = state.encryptedPassword
+                    case .passwordChangeFailed(_):
+                        break
                     }
                 }
             }
             
             afterEach {
+                newPassword = nil
+                resetError = nil
+                stateWasReset = false
                 statePesister = nil
                 loadedState = nil
                 retrievedError = nil
@@ -73,6 +86,25 @@ class KeepStateSpec: QuickSpec {
                 sut.handle(request: .setTransportMode(.tcp, sut.state))
                 
                 expect(retrievedError).toNot(beNil())
+            }
+            
+            it("receives an error if it fails to reset state") {
+                statePesister?.shouldFailResetting = true
+                sut.handle(request: .resetState)
+                
+                expect(resetError).toNot(beNil())
+            }
+            
+            it("resets the app's state") {
+                sut.handle(request: .resetState)
+                
+                expect(stateWasReset).to(beTrue())
+            }
+            
+            it("resets the app's state") {
+                sut.handle(request: .setPassword("4711", AppState(transportMode: .tls, accountNumber:"0815", serverAddress: "server", encryptedPassword:"1234567890" )))
+                
+                expect(newPassword).to(equal("4711"))
             }
         }
     }

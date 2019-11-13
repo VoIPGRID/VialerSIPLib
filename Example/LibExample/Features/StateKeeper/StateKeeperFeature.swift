@@ -18,17 +18,25 @@ class StateKeeperFeature: Feature {
     private lazy var keepState = KeepState(dependencies: self.dependencies){[weak self] response in self?.handle(response: response)}
 
     func handle(feature: Message.Feature) {
-        if case .settings(.useCase(.transport(.action(.didActivate(let mode))))) = feature { keepState.handle(request: .setTransportMode(mode, keepState.state)) }
-        if case .settings(.useCase(.server(.action(.addressChanged(let address))))) = feature { keepState.handle(request: .setServerAddress(address, keepState.state)) }
-        if case    .state(.useCase(.loadInitialState))                           = feature { keepState.handle(request:        .loadState                       ) }
+        if case .settings(.useCase(       .transport(.action(   .didActivate(let mode    )))))  = feature { keepState.handle(request: .setTransportMode(    mode, keepState.state)) }
+        if case .settings(.useCase(          .server(.action(.addressChanged(let address )))))  = feature { keepState.handle(request: .setServerAddress( address, keepState.state)) }
+        if case .settings(.useCase(        .password(.action(.changePassword(let password)))))  = feature { keepState.handle(request:      .setPassword(password, keepState.state)) }
+        if case    .state(.useCase(.loadInitialState                                        ))  = feature { keepState.handle(request:        .loadState                           ) }
+        if case    .state(.useCase(           .reset                                        ))  = feature { keepState.handle(request:       .resetState                           ) }
+
     }
     
     private func handle(response: KeepState.Response) {
         switch response {
-        case       .stateChanged(let state)           : rootMessageHandler?.handle(msg: .feature(.state(.useCase(      .stateChanged(state       )))))
-        case        .stateLoaded(let state)           : rootMessageHandler?.handle(msg: .feature(.state(.useCase(       .stateLoaded(state       )))))
-        case   .failedPersisting(let state, let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(  .persistingFailed(state, error)))))
-        case .failedLoadingState(           let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(.stateLoadingFailed(       error)))))
+        case         .stateChanged(let state)           : rootMessageHandler?.handle(msg: .feature(.state(.useCase(      .stateChanged(state       )))))
+        case          .stateLoaded(let state)           : rootMessageHandler?.handle(msg: .feature(.state(.useCase(       .stateLoaded(state       )))))
+        case     .failedPersisting(let state, let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(  .persistingFailed(state, error)))))
+        case   .failedLoadingState(           let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(.stateLoadingFailed(       error)))))
+        case        .stateWasReset                      : rootMessageHandler?.handle(msg: .feature(.state(.useCase(  .loadInitialState              ))))
+        case  .failedDeletingState(           let error): rootMessageHandler?.handle(msg: .feature(.state(.useCase(   .resettingFailed(       error)))))
+        case      .passwordChanged(let state)           : rootMessageHandler?.handle(msg: .feature(.settings(.useCase(.password(.action(.passwordChanged(state.encryptedPassword)))))))
+        case .passwordChangeFailed(           let error): rootMessageHandler?.handle(msg: .feature(.settings(.useCase(.password(.action(.passwordChangeFailed(error)))))))
+            
         }
     }
 }

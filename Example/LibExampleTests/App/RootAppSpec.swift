@@ -44,7 +44,7 @@ class RootAppSpec: QuickSpec {
     
     var stateFetcher: CurrentAppStateFetching {
         let f = Mock.CurrentAppStateFetcher()
-        f.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: "server")
+        f.appState = AppState(transportMode: .udp, accountNumber:"4711", serverAddress: "server", encryptedPassword: "08/15")
         return f
     }
     
@@ -53,7 +53,8 @@ class RootAppSpec: QuickSpec {
         csf.appState = AppState(
             transportMode: .udp,
             accountNumber:"4711",
-            serverAddress: "server"
+            serverAddress: "server",
+            encryptedPassword: "08/15"
         )
         return Dependencies(
             currentAppStateFetcher: csf,

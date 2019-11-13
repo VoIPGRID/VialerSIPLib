@@ -40,7 +40,7 @@ class CallingFeatureSpec: QuickSpec {
 
     var dependencies: Dependencies {
         var callStarter = Mock.CallStarter()
-        callStarter.appState = AppState(transportMode: .udp, accountNumber: "0815", serverAddress: "server")
+        callStarter.appState = AppState(transportMode: .udp, accountNumber: "0815", serverAddress: "server", encryptedPassword: "08/15")
         return Dependencies (
             currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
             callStarter: callStarter,

@@ -41,7 +41,7 @@ class StartCallSpec: QuickSpec {
                  "217   12",
                  "  12121212 ",
                  "+1721998983(9)"
-                    ].forEach { sut.handle(request: .startCall(Call(handle: $0), AppState(transportMode:.udp, accountNumber: Keys.SIP.Account, serverAddress: Keys.SIP.Domain))) }
+                    ].forEach { sut.handle(request: .startCall(Call(handle: $0), AppState(transportMode:.udp, accountNumber: Keys.SIP.Account, serverAddress: Keys.SIP.Domain, encryptedPassword: Keys.SIP.Password))) }
 
                 expect(startedCalls).toEventually(equal([.started, .started, .started, .started, .started, .started]))
             }
@@ -50,7 +50,7 @@ class StartCallSpec: QuickSpec {
                 ["12QQ45",
                  "",
                  " \n  "
-                ].forEach { sut.handle(request: .startCall(Call(handle: $0), AppState(transportMode:.udp, accountNumber: Keys.SIP.Account, serverAddress: Keys.SIP.Domain))) }
+                ].forEach { sut.handle(request: .startCall(Call(handle: $0), AppState(transportMode:.udp, accountNumber: Keys.SIP.Account, serverAddress: Keys.SIP.Domain, encryptedPassword: Keys.SIP.Password))) }
 
                 expect(failedCalls).toEventually(equal([.failed, .failed, .failed]))
             }
