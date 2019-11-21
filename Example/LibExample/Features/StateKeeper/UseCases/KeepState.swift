@@ -40,7 +40,7 @@ class KeepState: UseCase {
     private lazy var interactor: KeepState.Interactor = Interactor(statePersister: self.dependencies.statePersister)
     
     var state: AppState = AppState(transportMode: .tcp, accountNumber: Keys.SIP.Account, serverAddress: Keys.SIP.Domain, encryptedPassword: Keys.SIP.Password)
-
+    
     func handle(request: KeepState.Request) {
         interactor.state = state
         interactor.handle(request: request) { [weak self] response in self?.handle(response: response) }
@@ -48,19 +48,18 @@ class KeepState: UseCase {
     
     private func handle(response: KeepState.Response) {
         switch response {
-        case        .stateChanged(let state)           : stateChanged(state: state)
-        case         .stateLoaded(let state)           : loaded(state: state)
-        case    .failedPersisting(let state, let error): persistingFailed(for: state, with: error)
-        case  .failedLoadingState(           let error): handleFailedLoadingState(error: error)
-        case       .stateWasReset                      : stateWasReset()
-        case .failedDeletingState(           let error): stateResettingFailed(with: error)
-        case     .passwordChanged(let state)                      : passwordChanged(state: state)
-        case .passwordChangeFailed(let error): passwordChangeFailed(with: error)
-            
+        case        .stateWasReset                      :            stateWasReset()
+        case         .stateChanged(let state           ):             stateChanged(for: state             )
+        case          .stateLoaded(let state           ):                   loaded(for: state             )
+        case     .failedPersisting(let state, let error):         persistingFailed(for: state, with: error)
+        case   .failedLoadingState(           let error): handleFailedLoadingState(            with: error)
+        case  .failedDeletingState(           let error):     stateResettingFailed(            with: error)
+        case      .passwordChanged(let state           ):          passwordChanged(for: state             )
+        case .passwordChangeFailed(let error           ):     passwordChangeFailed(            with: error)
         }
     }
     
-    private func stateChanged(state: AppState) {
+    private func stateChanged(for state: AppState) {
         self.state = state
         responseHandler(.stateChanged(state))
     }
@@ -70,12 +69,12 @@ class KeepState: UseCase {
         responseHandler(.failedPersisting(state, error))
     }
     
-    private func loaded(state: AppState) {
+    private func loaded(for state: AppState) {
         self.state = state  
         responseHandler(.stateLoaded(state))
     }
     
-    private func handleFailedLoadingState(error: Error) {
+    private func handleFailedLoadingState(with error: Error) {
         responseHandler(.failedLoadingState(error))
     }
     
@@ -87,7 +86,7 @@ class KeepState: UseCase {
         responseHandler(.failedDeletingState(error))
     }
     
-    private func passwordChanged(state: AppState) {
+    private func passwordChanged(for state: AppState) {
         self.state = state
         responseHandler(.passwordChanged(state))
     }
@@ -95,90 +94,102 @@ class KeepState: UseCase {
     private func passwordChangeFailed(with error: Error) {
         responseHandler(.passwordChangeFailed(error))
     }
-    
 }
 
 extension KeepState {
-    fileprivate class Interactor {
+    private class Interactor {
         init(statePersister: StatePersisting) {
             self.statePersister = statePersister
         }
         
         func handle(request: KeepState.Request, response: @escaping ((KeepState.Response) -> ())) {
             switch request {
-            case         .loadState                                      : loadState(response: response)
-            case   .setAccounNumber(let accountNumber, let previousState):   persist(previousState: previousState, accountNumber:accountNumber, response:response)
-            case  .setTransportMode(         let mode, let previousState):       set(mode:mode, previousState:previousState,response:response)
-            case  .setServerAddress(      let address, let previousState):       set(serverAddress: address, previousState: previousState, response: response)
             case        .resetState                                      :     reset(response: response)
-            case       .setPassword(     let password, let previousState): set(password: password, previousState: previousState, response: response)
-                
+            case         .loadState                                      : loadState(response: response)
+            case   .setAccounNumber(let accountNumber, let previousState):       set(accountNumber: accountNumber, previousState: previousState, response:response)
+            case  .setTransportMode(         let mode, let previousState):       set(         mode: mode,          previousState: previousState, response:response)
+            case  .setServerAddress(      let address, let previousState):       set(serverAddress: address,       previousState: previousState, response: response)
+            case       .setPassword(     let password, let previousState):       set(     password: password,      previousState: previousState, response: response)
             }
         }
         
         private let statePersister: StatePersisting
         fileprivate var state: AppState!
-    }
-}
-
-extension KeepState.Interactor {
-    private func set(password:String, previousState: AppState, response: ((KeepState.Response) -> ())) {
-        let s = AppState(transportMode: previousState.transportMode, accountNumber: previousState.accountNumber, serverAddress: previousState.serverAddress, encryptedPassword: password)
-        do {
-            try statePersister.persist(state: s)
-            response(.passwordChanged(s))
-        } catch let error {
-            response(.passwordChangeFailed(error))
-        }
-    
-    }
-    
-    private func set(mode: TransportMode, previousState: AppState, response: ((KeepState.Response) -> ())) {
-        let s = AppState(transportMode: mode, accountNumber: previousState.accountNumber, serverAddress: previousState.serverAddress, encryptedPassword: previousState.encryptedPassword)
-        do {
-            try statePersister.persist(state: s)
-            response(.stateChanged(s))
-        } catch let error {
-            response(.failedPersisting(s, error))
-        }
-    }
-    
-    private func set(serverAddress:String, previousState: AppState, response: ((KeepState.Response) -> ())) {
-        let s = AppState(transportMode: previousState.transportMode, accountNumber: previousState.accountNumber, serverAddress: serverAddress, encryptedPassword: previousState.encryptedPassword)
-        do {
-            try statePersister.persist(state: s)
-            response(.stateChanged(s))
-        } catch let error {
-            response(.failedPersisting(s, error))
-        }
-    }
-    
-    fileprivate func loadState(response: ((KeepState.Response) -> ())) {
-        do {
-            if let state = try statePersister.loadState() {
-                response(.stateLoaded(state))
+        
+        private func set(password:String, previousState: AppState, response: ((KeepState.Response) -> ())) {
+            let s = AppState(
+                transportMode: previousState.transportMode,
+                accountNumber: previousState.accountNumber,
+                serverAddress: previousState.serverAddress,
+                encryptedPassword: password )
+            do {
+                try statePersister.persist(state: s)
+                response(.passwordChanged(s))
+            } catch let error {
+                response(.passwordChangeFailed(error))
             }
-        } catch let error {
-            response(.failedLoadingState(error))
+            
         }
-    }
-    
-    fileprivate func persist(previousState: AppState, accountNumber: String, response: ((KeepState.Response) -> ())) {
-        let s = AppState(transportMode: previousState.transportMode, accountNumber: accountNumber, serverAddress: previousState.serverAddress, encryptedPassword: previousState.encryptedPassword)
-        do {
-            try statePersister.persist(state: s)
-            response(.stateChanged(s))
-        } catch let error {
-            response(.failedPersisting(s, error))
+        
+        private func set(mode: TransportMode, previousState: AppState, response: ((KeepState.Response) -> ())) {
+            let s = AppState(
+                transportMode: mode,
+                accountNumber: previousState.accountNumber,
+                serverAddress: previousState.serverAddress,
+                encryptedPassword: previousState.encryptedPassword )
+            do {
+                try statePersister.persist(state: s)
+                response(.stateChanged(s))
+            } catch let error {
+                response(.failedPersisting(s, error))
+            }
         }
-    }
-    
-    func reset(response: ((KeepState.Response) -> ())) {
-        do {
-            try statePersister.deleteState()
-            response(.stateWasReset)
-        } catch let error {
-            response(.failedDeletingState(error))
+        
+        private func set(serverAddress:String, previousState: AppState, response: ((KeepState.Response) -> ())) {
+            let s = AppState(
+                transportMode: previousState.transportMode,
+                accountNumber: previousState.accountNumber,
+                serverAddress: serverAddress,
+                encryptedPassword: previousState.encryptedPassword )
+            do {
+                try statePersister.persist(state: s)
+                response(.stateChanged(s))
+            } catch let error {
+                response(.failedPersisting(s, error))
+            }
+        }
+        
+        fileprivate func loadState(response: ((KeepState.Response) -> ())) {
+            do {
+                if let state = try statePersister.loadState() {
+                    response(.stateLoaded(state))
+                }
+            } catch let error {
+                response(.failedLoadingState(error))
+            }
+        }
+        
+        fileprivate func set(accountNumber: String ,previousState: AppState, response: ((KeepState.Response) -> ())) {
+            let s = AppState(
+                transportMode: previousState.transportMode,
+                accountNumber: accountNumber,
+                serverAddress: previousState.serverAddress,
+                encryptedPassword: previousState.encryptedPassword )
+            do {
+                try statePersister.persist(state: s)
+                response(.stateChanged(s))
+            } catch let error {
+                response(.failedPersisting(s, error))
+            }
+        }
+        
+        func reset(response: ((KeepState.Response) -> ())) {
+            do {
+                try statePersister.deleteState()
+                response(.stateWasReset)
+            } catch let error {
+                response(.failedDeletingState(error))
+            }
         }
     }
 }

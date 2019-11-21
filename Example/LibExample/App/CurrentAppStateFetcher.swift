@@ -16,6 +16,5 @@ class CurrentAppStateFetcher: CurrentAppStateFetching {
     func handle(msg: Message) {
         if case .feature(.state(.useCase( .stateLoaded(let state)))) = msg { appState = state }
         if case .feature(.state(.useCase(.stateChanged(let state)))) = msg { appState = state }
-        
     }
 }
