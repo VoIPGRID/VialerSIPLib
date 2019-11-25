@@ -10,6 +10,7 @@
 enum Message {
     
     case feature(Feature)
+    
     enum Feature {
         case userHandling(UserHandling)
         case settings(Settings)
