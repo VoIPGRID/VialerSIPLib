@@ -62,7 +62,9 @@
     [account registerAccountWithCompletion:^(BOOL success, NSError * _Nullable error) {
         if (!success) {
             VSLLogError(@"Error registering the account: %@", error);
-            VSLBlockSafeRun(completion, nil, error);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                VSLBlockSafeRun(completion, nil, error);
+            });
         } else {
             VSLCall *call = [[VSLCall alloc] initOutboundCallWithNumberToCall:number account:account];
             [self addCall:call];
@@ -74,10 +76,14 @@
                 if (error) {
                     VSLLogError(@"Error requesting \"Start Call Transaction\" error: %@", error);
                     [self removeCall:call];
-                    VSLBlockSafeRun(completion, nil, error);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        VSLBlockSafeRun(completion, nil, error);
+                    });
                 } else {
                     VSLLogInfo(@"\"Start Call Transaction\" requested succesfully for Call(%@) with account(%ld)", call.uuid.UUIDString, (long)account.accountId);
-                    VSLBlockSafeRun(completion, call, nil);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        VSLBlockSafeRun(completion, call, nil);
+                    });
                 }
             }];
         }
@@ -117,9 +123,13 @@
     [self.callController requestTransaction:transaction completion:^(NSError * _Nullable error) {
         if (error) {
             VSLLogError(@"Error requesting transaction: %@. Error:%@", transaction, error);
-            VSLBlockSafeRun(completion,error);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                VSLBlockSafeRun(completion,error);
+            });
         } else {
-            VSLBlockSafeRun(completion,nil);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                VSLBlockSafeRun(completion,nil);
+            });
         }
     }];
 }
