@@ -4,7 +4,6 @@
 //
 
 #import "VSLCall.h"
-
 #import <AVFoundation/AVFoundation.h>
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
@@ -383,7 +382,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
             self.reinviteCall = YES;
         }
     } else {
-        VSLLogDebug(@"Can not send call update because the call is not yet setup or already disconnected");
+        VSLLogDebug(@"Can not send call update because the call is not yet setup or already disconnected.");
     }
 }
 
