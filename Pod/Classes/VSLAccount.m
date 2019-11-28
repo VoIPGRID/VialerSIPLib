@@ -222,7 +222,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     
     status = pjsua_acc_del((pjsua_acc_id)self.accountId);
     if (status != PJ_SUCCESS) {
-        VSLLogError(@"Unable to remove account from sip server.");
+        VSLLogError(@"Unable to remove account from sip server, status code:%d", status);
     }
     [[VSLEndpoint sharedEndpoint] removeAccount:self];
 }

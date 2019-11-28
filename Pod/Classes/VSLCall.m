@@ -351,11 +351,13 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 
         pj_status_t status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &callSetting, NULL);
         if (status != PJ_SUCCESS) {
-            VSLLogError(@"Cannot reinvite for call id: %ld!", (long)self.callId);
+            VSLLogError(@"Cannot REINVITE for call id: %ld, status code:%d", (long)self.callId, status);
         } else {
-            VSLLogDebug(@"Reinvite sent for call id: %ld", (long)self.callId);
+            VSLLogDebug(@"REINVITE sent for call id: %ld", (long)self.callId);
             self.reinviteCall = YES;
         }
+    } else {
+        VSLLogDebug(@"Can not send call REINVITE because the call is not yet setup or already disconnected.");
     }
 }
 
@@ -376,13 +378,13 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 
         pj_status_t status = pjsua_call_update2((pjsua_call_id)self.callId, &callSetting, NULL);
         if (status != PJ_SUCCESS) {
-            VSLLogError(@"Cannot sent UPDATE for call id: %ld!", (long)self.callId);
+            VSLLogError(@"Cannot sent UPDATE for call id: %ld, status code:%d", (long)self.callId, status);
         } else {
             VSLLogDebug(@"UPDATE sent for call id: %ld", (long)self.callId);
             self.reinviteCall = YES;
         }
     } else {
-        VSLLogDebug(@"Can not send call update because the call is not yet setup or already disconnected.");
+        VSLLogDebug(@"Can not send call UPDATE because the call is not yet setup or already disconnected.");
     }
 }
 
@@ -565,7 +567,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
                     return;
                 }
                 
-                VSLLogDebug(@"Bad or no internet connection, setting call manual to disconnect.");  // TODO: I don't get this message - what didn't work due to a bad connection?
+                VSLLogDebug(@"Bad or no internet connection, setting call manual to disconnect.");  // TODO: I don't get this message - what didn't work due to a bad connection? This also occurs on the quick cancel call situation
                 
                 // Mute the call to make sure the other party can't hear the user anymore.
                 if (!weakSelf.muted) {

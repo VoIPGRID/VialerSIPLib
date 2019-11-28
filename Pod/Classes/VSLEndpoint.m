@@ -316,7 +316,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
         pj_status_t status = pj_thread_register("VialerPJSIP", aPJThreadDesc, &pjThread);
 
         if (status != PJ_SUCCESS) {
-            VSLLogError(@"Error registering thread at PJSUA");
+            VSLLogError(@"Error registering thread at PJSUA, status code:%d", status);
         }
     }
 
@@ -327,7 +327,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     // Destroy PJSUA.
     pj_status_t status = pjsua_destroy();
     if (status != PJ_SUCCESS) {
-        VSLLogWarning(@"Error stopping SIP Endpoint");
+        VSLLogWarning(@"Error stopping SIP Endpoint, status code:%d", status);
     }
 
     self.state = VSLEndpointStopped;
@@ -398,7 +398,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     unsigned audioCodecCount = audioCodecInfoSize;
     pj_status_t status = pjsua_enum_codecs(audioCodecInfo, &audioCodecCount);
     if (status != PJ_SUCCESS) {
-        VSLLogError(@"Error getting list of audio codecs");
+        VSLLogError(@"Error getting list of audio codecs, status code:%d", status);
         return NO;
     }
 
@@ -409,7 +409,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
         status = pjsua_codec_set_priority(&codecId, priority);
         [self updateOpusSettings:codecId];
         if (status != PJ_SUCCESS) {
-            VSLLogError(@"Error setting codec priority to the correct value");
+            VSLLogError(@"Error setting codec priority to the correct value, status code:%d", status);
             return NO;
         }
     }
@@ -469,16 +469,16 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     const unsigned videoCodecInfoSize = 64;
     pjsua_codec_info videoCodecInfo[videoCodecInfoSize];
     unsigned videoCodecCount = videoCodecInfoSize;
-    pj_status_t videoStatus = pjsua_vid_enum_codecs(videoCodecInfo, &videoCodecCount);
-    if (videoStatus != PJ_SUCCESS) {
-        VSLLogError(@"Error getting list of video codecs");
+    pj_status_t status = pjsua_vid_enum_codecs(videoCodecInfo, &videoCodecCount);
+    if (status != PJ_SUCCESS) {
+        VSLLogError(@"Error getting list of video codecs, status code:%d", status);
         return NO;
     } else {
         for (NSUInteger i = 0; i < videoCodecCount; i++) {
             NSString *codecIdentifier = [NSString stringWithPJString:videoCodecInfo[i].codec_id];
             pj_uint8_t priority = [self priorityForVideoCodec:codecIdentifier];
             
-            videoStatus = pjsua_vid_codec_set_priority(&videoCodecInfo[i].codec_id, priority);
+            status = pjsua_vid_codec_set_priority(&videoCodecInfo[i].codec_id, priority);
 
             if (priority > 0) {
                 pjmedia_vid_codec_param param;
@@ -492,8 +492,8 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
                 param.dec_fmt.det.vid.size.h = 1920;
                 pjsua_vid_codec_set_param(&videoCodecInfo[i].codec_id, &param);
 
-                if (videoStatus != PJ_SUCCESS) {
-                    DDLogError(@"Error setting video codec priority to the correct value");
+                if (status != PJ_SUCCESS) {
+                    DDLogError(@"Error setting video codec priority to the correct value, status code:%d", status);
                     return NO;
                 }
             }
