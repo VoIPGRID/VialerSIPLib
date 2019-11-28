@@ -19,9 +19,9 @@ enum Message {
         case flag(Flag)
         
         enum Flag {
-            case isFeatureEnbaled(FeatureFlag)
-            case featureIsEnabled(FeatureFlag)
-            case featureIsDisabled(FeatureFlag)
+            case isEnbaled(FeatureFlag)
+            case didEnable(FeatureFlag)
+            case didDisable(FeatureFlag)
         }
         enum StateKeeping {
             case useCase(UseCase)

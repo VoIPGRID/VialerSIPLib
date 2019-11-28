@@ -30,7 +30,7 @@ class CallingViewController: MessageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        responseHandler?.handle(msg: .feature(.flag(.isFeatureEnbaled(.startCall))))
+        responseHandler?.handle(msg: .feature(.flag(.isEnbaled(.startCall))))
         state = .idle
     }
 
@@ -55,7 +55,7 @@ class CallingViewController: MessageViewController {
         if case .feature(.calling(.useCase(.call(.action(     .dialing(let call)))))) = msg { update(call: call, newState: .dialing) }
         if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = msg { update(call: call, newState: .calling) }
         if case .feature(.calling(.useCase(.call(.action(  .callFailed(let call)))))) = msg { update(call: call, newState:  .failed) }
-        if case .feature(.flag(.featureIsDisabled(.startCall))) = msg {  update(call: nil, newState: .disabled)}
+        if case .feature(   .flag(.didDisable(.startCall)))                           = msg { update(call: nil, newState: .disabled) }
     }
 
     // MARK: - State Handling

@@ -16,12 +16,10 @@ class FeatureFlagFeature: Feature {
     let dependencies: Dependencies
     
     func handle(feature: Message.Feature) {
-        if case .flag(.isFeatureEnbaled(let flag)) = feature {
-            if dependencies.featureFlagger.isEnabled(flag) {
-                rootMessageHandler.handle(msg: .feature(.flag(.featureIsEnabled(flag))))
-            } else {
-                rootMessageHandler.handle(msg: .feature(.flag(.featureIsDisabled(flag))))
-            }
+        if case .flag(.isEnbaled(let flag)) = feature {
+            dependencies.featureFlagger.isEnabled(flag)
+                ? rootMessageHandler.handle(msg: .feature(.flag( .didEnable(flag))))
+                : rootMessageHandler.handle(msg: .feature(.flag(.didDisable(flag))))
         }
     }
 }
