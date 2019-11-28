@@ -15,7 +15,7 @@ enum FeatureFlag {
 class FeatureFlagger {
     
     private let flags = [
-        FeatureFlag.startCall: false
+        FeatureFlag.startCall: true
     ]
     
     func isEnabled(_ flag:FeatureFlag) -> Bool {
