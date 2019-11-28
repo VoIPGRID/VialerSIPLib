@@ -38,12 +38,17 @@ class SIPApp: SubscribableApp {
     
     private lazy var features: [Feature] = [
         UserHandlingFeature(with: rootMessageHandler, dependencies: dependencies),
-        SettingsFeature(with: rootMessageHandler, dependencies: dependencies),
-        CallingFeature(with: rootMessageHandler, dependencies: dependencies),
-        StateKeeperFeature(with: rootMessageHandler, dependencies: dependencies)
+            SettingsFeature(with: rootMessageHandler, dependencies: dependencies),
+             CallingFeature(with: rootMessageHandler, dependencies: dependencies),
+         StateKeeperFeature(with: rootMessageHandler, dependencies: dependencies),
+         FeatureFlagFeature(with: rootMessageHandler, dependencies: dependencies)
     ]
     
     func handle(msg: Message) {
+        let interceptor = MessageInterceptor(featureFlagger: FeatureFlagger())
+        
+        guard let msg = interceptor.intercept(msg: msg) else { return }
+        
         subscribers.forEach { $0.handle(msg: msg) }
         
         if case .feature(let feature) = msg {

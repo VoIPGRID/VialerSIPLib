@@ -83,6 +83,8 @@
 		C9ADE20423575BE5002D813B /* CallingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ADE20223575BE5002D813B /* CallingViewController.swift */; };
 		C9ADE20523575BE5002D813B /* CallingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9ADE20323575BE5002D813B /* CallingViewController.xib */; };
 		C9CFBD8C2358AAFF005A3267 /* toolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CFBD8B2358AAFF005A3267 /* toolbox.swift */; };
+		C9E8B2AD239002AD006C362A /* FeatureFlagFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E8B2AC239002AD006C362A /* FeatureFlagFeature.swift */; };
+		C9E8B2AF2390093F006C362A /* FeatureFlagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E8B2AE2390093F006C362A /* FeatureFlagger.swift */; };
 		C9F0CFE6236C394900C57AB3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F0CFE4236C394900C57AB3 /* SettingsViewController.swift */; };
 		C9F0CFE7236C394900C57AB3 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9F0CFE5236C394900C57AB3 /* SettingsViewController.xib */; };
 		C9F0CFEB236C464D00C57AB3 /* StateKeeperFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F0CFEA236C464D00C57AB3 /* StateKeeperFeature.swift */; };
@@ -259,6 +261,8 @@
 		C9ADE20223575BE5002D813B /* CallingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallingViewController.swift; sourceTree = "<group>"; };
 		C9ADE20323575BE5002D813B /* CallingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CallingViewController.xib; sourceTree = "<group>"; };
 		C9CFBD8B2358AAFF005A3267 /* toolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toolbox.swift; sourceTree = "<group>"; };
+		C9E8B2AC239002AD006C362A /* FeatureFlagFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagFeature.swift; sourceTree = "<group>"; };
+		C9E8B2AE2390093F006C362A /* FeatureFlagger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagger.swift; sourceTree = "<group>"; };
 		C9F0CFE4236C394900C57AB3 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C9F0CFE5236C394900C57AB3 /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		C9F0CFEA236C464D00C57AB3 /* StateKeeperFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateKeeperFeature.swift; sourceTree = "<group>"; };
@@ -677,6 +681,7 @@
 		C91F854F234CE647007F6417 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				C9E8B2AB23900011006C362A /* FeatureFlagging */,
 				C9F0CFE9236C461D00C57AB3 /* StateKeeper */,
 				C91F8552234CE675007F6417 /* Settings */,
 				C91F8551234CE666007F6417 /* Calling */,
@@ -783,6 +788,7 @@
 				C9060ABA2359C1A100914898 /* Dependencies.swift */,
 				C9F0CFF1236C84DB00C57AB3 /* PathBuilder.swift */,
 				C99C2BDB2372F19500258041 /* CurrentAppStateFetcher.swift */,
+				C9E8B2AE2390093F006C362A /* FeatureFlagger.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -805,6 +811,14 @@
 				C9F0CFE5236C394900C57AB3 /* SettingsViewController.xib */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		C9E8B2AB23900011006C362A /* FeatureFlagging */ = {
+			isa = PBXGroup;
+			children = (
+				C9E8B2AC239002AD006C362A /* FeatureFlagFeature.swift */,
+			);
+			path = FeatureFlagging;
 			sourceTree = "<group>";
 		};
 		C9F0CFE9236C461D00C57AB3 /* StateKeeper */ = {
@@ -1251,6 +1265,8 @@
 				C9F0CFEB236C464D00C57AB3 /* StateKeeperFeature.swift in Sources */,
 				D406A258237967D3009AB3F7 /* Keys.swift in Sources */,
 				C9060ABE2359C2F600914898 /* VialerSIPCallStarter.swift in Sources */,
+				C9E8B2AF2390093F006C362A /* FeatureFlagger.swift in Sources */,
+				C9E8B2AD239002AD006C362A /* FeatureFlagFeature.swift in Sources */,
 				C91F8542234CD421007F6417 /* Feature.swift in Sources */,
 				C9ADE20123575A78002D813B /* RootApp.swift in Sources */,
 				C91F854C234CE3BC007F6417 /* CallingFeature.swift in Sources */,

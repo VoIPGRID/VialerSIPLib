@@ -10,4 +10,5 @@ struct Dependencies {
     var currentAppStateFetcher: CurrentAppStateFetching
     var callStarter: CallStarting
     var statePersister: StatePersisting
+    var featureFlagger: FeatureFlagger
 }
