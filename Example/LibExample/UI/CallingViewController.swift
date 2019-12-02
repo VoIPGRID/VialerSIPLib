@@ -23,14 +23,14 @@ class CallingViewController: MessageViewController {
     // MARK: - UI
     @IBOutlet weak var makeCallButton   : UIButton!
     @IBOutlet weak var hangUpButton     : UIButton!
-    @IBOutlet weak var phoneNumberField : UITextField! {didSet{configure(phoneNumberField: phoneNumberField)}}
+    @IBOutlet weak var phoneNumberField : UITextField! { didSet{configure(phoneNumberField: phoneNumberField)} }
 
     private var currentCall: Call?
     private var state      : CallState = .idle { didSet{ stateChanged()} }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        responseHandler?.handle(msg: .feature(.flag(.isEnbaled(.startCall))))
+        responseHandler?.handle(msg: .feature(.flag(.useCase(.isEnbaled(.startCall)))))
         state = .idle
     }
 
@@ -55,7 +55,7 @@ class CallingViewController: MessageViewController {
         if case .feature(.calling(.useCase(.call(.action(     .dialing(let call)))))) = msg { update(call: call, newState: .dialing) }
         if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = msg { update(call: call, newState: .calling) }
         if case .feature(.calling(.useCase(.call(.action(  .callFailed(let call)))))) = msg { update(call: call, newState:  .failed) }
-        if case .feature(   .flag(.didDisable(.startCall)))                           = msg { update(call: nil, newState: .disabled) }
+        if case .feature(   .flag(.useCase(.didDisable(.startCall))))                 = msg { update(call: nil, newState: .disabled) }
     }
 
     // MARK: - State Handling

@@ -11,11 +11,10 @@ enum FeatureFlag {
     case startCall
 }
 
-
 class FeatureFlagger {
     
-    private let flags = [
-        FeatureFlag.startCall: true
+    private let flags: [FeatureFlag: Bool] = [
+        .startCall: false
     ]
     
     func isEnabled(_ flag:FeatureFlag) -> Bool {
@@ -28,9 +27,9 @@ class MessageInterceptor {
     init(featureFlagger: FeatureFlagger) {
         self.featureFlagger = featureFlagger
     }
-    
+
     let featureFlagger: FeatureFlagger
-    
+
     func intercept(msg: Message) -> Message? {
         switch msg {
         case .feature(.calling(.useCase(.call(.action(.start(_)))))):
