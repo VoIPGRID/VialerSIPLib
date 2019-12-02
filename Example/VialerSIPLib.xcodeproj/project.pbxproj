@@ -86,6 +86,7 @@
 		C9E8B2AD239002AD006C362A /* FeatureFlagFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E8B2AC239002AD006C362A /* FeatureFlagFeature.swift */; };
 		C9E8B2AF2390093F006C362A /* FeatureFlagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E8B2AE2390093F006C362A /* FeatureFlagger.swift */; };
 		C9E8B2B223951329006C362A /* CheckFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E8B2B123951329006C362A /* CheckFlag.swift */; };
+		C9E8B2B523952882006C362A /* FeatureFlagFeatureSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E8B2B423952882006C362A /* FeatureFlagFeatureSpec.swift */; };
 		C9F0CFE6236C394900C57AB3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F0CFE4236C394900C57AB3 /* SettingsViewController.swift */; };
 		C9F0CFE7236C394900C57AB3 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9F0CFE5236C394900C57AB3 /* SettingsViewController.xib */; };
 		C9F0CFEB236C464D00C57AB3 /* StateKeeperFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F0CFEA236C464D00C57AB3 /* StateKeeperFeature.swift */; };
@@ -265,6 +266,7 @@
 		C9E8B2AC239002AD006C362A /* FeatureFlagFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagFeature.swift; sourceTree = "<group>"; };
 		C9E8B2AE2390093F006C362A /* FeatureFlagger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagger.swift; sourceTree = "<group>"; };
 		C9E8B2B123951329006C362A /* CheckFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckFlag.swift; sourceTree = "<group>"; };
+		C9E8B2B423952882006C362A /* FeatureFlagFeatureSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagFeatureSpec.swift; sourceTree = "<group>"; };
 		C9F0CFE4236C394900C57AB3 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C9F0CFE5236C394900C57AB3 /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		C9F0CFEA236C464D00C57AB3 /* StateKeeperFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateKeeperFeature.swift; sourceTree = "<group>"; };
@@ -629,6 +631,7 @@
 		C9060AC0235A026800914898 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				C9E8B2B32395286F006C362A /* FeatureFlagFeature */,
 				C9F0CFF5237039A600C57AB3 /* StateKeeperFeature */,
 				C902B1D92354CA08001FAFA9 /* CallingFeature */,
 				C902B1D12354B1FC001FAFA9 /* SettingsFeature */,
@@ -830,6 +833,14 @@
 				C9E8B2B123951329006C362A /* CheckFlag.swift */,
 			);
 			path = UseCases;
+			sourceTree = "<group>";
+		};
+		C9E8B2B32395286F006C362A /* FeatureFlagFeature */ = {
+			isa = PBXGroup;
+			children = (
+				C9E8B2B423952882006C362A /* FeatureFlagFeatureSpec.swift */,
+			);
+			path = FeatureFlagFeature;
 			sourceTree = "<group>";
 		};
 		C9F0CFE9236C461D00C57AB3 /* StateKeeper */ = {
@@ -1327,6 +1338,7 @@
 				C902B1D02354A233001FAFA9 /* UserHandlingSpec.swift in Sources */,
 				C902B1CC23549D37001FAFA9 /* LogInSpec.swift in Sources */,
 				C902B1E02354CC81001FAFA9 /* CallingFeatureSpec.swift in Sources */,
+				C9E8B2B523952882006C362A /* FeatureFlagFeatureSpec.swift in Sources */,
 				C902B1D42354B223001FAFA9 /* SwitchTransportModeSpec.swift in Sources */,
 				C902B1D62354B5AE001FAFA9 /* SettingsFeatureSpec.swift in Sources */,
 				C902B1DC2354CA39001FAFA9 /* StartCallSpec.swift in Sources */,

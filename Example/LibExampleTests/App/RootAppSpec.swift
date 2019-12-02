@@ -59,7 +59,8 @@ class RootAppSpec: QuickSpec {
         return Dependencies(
             currentAppStateFetcher: csf,
             callStarter: Mock.CallStarter(),
-            statePersister: Mock.StatePersister()
+            statePersister: Mock.StatePersister(),
+            featureFlagger: FeatureFlagger()
         )
     }
 }

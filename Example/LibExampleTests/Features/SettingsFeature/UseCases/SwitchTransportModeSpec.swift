@@ -49,7 +49,8 @@ class SwitchTransportModeSpec: QuickSpec {
         Dependencies(
             currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
                        callStarter: Mock.CallStarter(),
-                    statePersister: Mock.StatePersister()
+                    statePersister: Mock.StatePersister(),
+                    featureFlagger: FeatureFlagger()
         )
     }
 }

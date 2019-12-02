@@ -86,4 +86,13 @@ class Mock {
         
         func handle(msg: Message) { }
     }
+    
+    class FeatureFlagger: FeatureFlagging {
+        
+        var flags: [FeatureFlag: Bool] = [:]
+        
+        func isEnabled(_ flag: FeatureFlag) -> Bool {
+            return flags[flag] ?? false
+        }
+    }
 }

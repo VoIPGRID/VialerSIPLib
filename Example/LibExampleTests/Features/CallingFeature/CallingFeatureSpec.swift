@@ -44,7 +44,8 @@ class CallingFeatureSpec: QuickSpec {
         return Dependencies (
             currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
             callStarter: callStarter,
-            statePersister: Mock.StatePersister()
+            statePersister: Mock.StatePersister(),
+            featureFlagger: FeatureFlagger()
         )
     }
 }
