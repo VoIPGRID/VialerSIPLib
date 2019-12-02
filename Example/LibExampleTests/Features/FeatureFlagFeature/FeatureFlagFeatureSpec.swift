@@ -29,14 +29,14 @@ class FeatureFlagFeatureSpec: QuickSpec {
             }
             
             var enabled: Bool? = nil
-            var numberOfEntries = 0
+            var recentListSize: RecentListSize!
             
             beforeEach {
                 featureFlagger = Mock.FeatureFlagger()
                 messageHandler = Mock.MessageHandler {
-                    if case .feature(.flag(.useCase( .didEnable(.recentListSize(let number))))) = $0 { numberOfEntries = number }
-                    if case .feature(.flag(.useCase( .didEnable(_)                          ))) = $0 {         enabled = true   }
-                    if case .feature(.flag(.useCase(.didDisable(_)                          ))) = $0 {         enabled = false  }
+                    if case .feature(.flag(.useCase( .didEnable(.recentListSize(let size))))) = $0 { recentListSize = size  }
+                    if case .feature(.flag(.useCase( .didEnable(_)                        ))) = $0 {        enabled = true  }
+                    if case .feature(.flag(.useCase(.didDisable(_)                        ))) = $0 {        enabled = false }
                 }
                 sut = FeatureFlagFeature(with: messageHandler, dependencies: dependencies)
             }
@@ -61,20 +61,20 @@ class FeatureFlagFeatureSpec: QuickSpec {
                 expect(enabled).to(beFalse())
             }
             
-            it("has enabled 10 recent call entries") {
-                featureFlagger.flags = [FeatureFlag.recentListSize(10): true]
-                sut.handle(feature: .flag(.useCase(.isEnbaled(.recentListSize(10)))))
+            it("has enabled short recent call list size") {
+                featureFlagger.flags = [FeatureFlag.recentListSize(.short): true]
+                sut.handle(feature: .flag(.useCase(.isEnbaled(.recentListSize(.short)))))
                 
                 expect(enabled).to(beTrue())
-                expect(numberOfEntries) == 10
+                expect(recentListSize) == .short
             }
             
-            it("hasnt enabled 20 recent call entries") {
-                featureFlagger.flags = [FeatureFlag.recentListSize(10): true]
-                sut.handle(feature: .flag(.useCase(.isEnbaled(.recentListSize(20)))))
+            it("hasnt enabled medium recent call list size") {
+                featureFlagger.flags = [FeatureFlag.recentListSize(.short): true]
+                sut.handle(feature: .flag(.useCase(.isEnbaled(.recentListSize(.medium)))))
                 
                 expect(enabled).to(beFalse())
-                expect(numberOfEntries) != 20
+                expect(recentListSize) != .medium
             }
         }
     }

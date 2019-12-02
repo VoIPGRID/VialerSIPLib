@@ -6,10 +6,17 @@
 //  Copyright © 2019 Harold. All rights reserved.
 //
 
+enum RecentListSize: Int {
+    case none = 0
+    case short = 10
+    case medium = 20
+    case large = 30
+    case all = 1000
+}
 
 enum FeatureFlag: Hashable {
     case startCall
-    case recentListSize(Int)
+    case recentListSize(RecentListSize)
     
     func hash(into hasher: inout Hasher) {
         switch self {
@@ -29,7 +36,7 @@ class FeatureFlagger: FeatureFlagging {
     
     private let flags: [FeatureFlag: Bool] = [
         .startCall: true,
-        .recentListSize(10): true
+        .recentListSize(.short): true
     ]
     
     func isEnabled(_ flag:FeatureFlag) -> Bool {

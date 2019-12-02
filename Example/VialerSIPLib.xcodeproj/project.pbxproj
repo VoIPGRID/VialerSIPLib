@@ -821,8 +821,8 @@
 		C9E8B2AB23900011006C362A /* FeatureFlagging */ = {
 			isa = PBXGroup;
 			children = (
-				C9E8B2B023951313006C362A /* UseCases */,
 				C9E8B2AC239002AD006C362A /* FeatureFlagFeature.swift */,
+				C9E8B2B023951313006C362A /* UseCases */,
 			);
 			path = FeatureFlagging;
 			sourceTree = "<group>";
