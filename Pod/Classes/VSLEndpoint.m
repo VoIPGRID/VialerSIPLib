@@ -864,7 +864,10 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
     param.restart_lis_delay = 100;
     param.restart_listener = PJ_TRUE;
 
-    pjsua_handle_ip_change(&param);
+    pj_status_t status = pjsua_handle_ip_change(&param);
+    if (status != PJ_SUCCESS) {
+        VSLLogError(@"Error handling ip change, status code:%d", status);
+    }
 }
 
 static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info) {
