@@ -35,23 +35,21 @@ class SIPApp: SubscribableApp {
     var rootMessageHandler: MessageHandling { return privateRootMessageHandler ?? self }
     private let privateRootMessageHandler: MessageHandling?
     private let dependencies: Dependencies
-    
+    private var subscribers: [MessageSubscriber] = []
     private lazy var features: [Feature] = [
         UserHandlingFeature(with: rootMessageHandler, dependencies: dependencies),
-        SettingsFeature(with: rootMessageHandler, dependencies: dependencies),
-        CallingFeature(with: rootMessageHandler, dependencies: dependencies),
-        StateKeeperFeature(with: rootMessageHandler, dependencies: dependencies)
+            SettingsFeature(with: rootMessageHandler, dependencies: dependencies),
+             CallingFeature(with: rootMessageHandler, dependencies: dependencies),
+         StateKeeperFeature(with: rootMessageHandler, dependencies: dependencies),
+         FeatureFlagFeature(with: rootMessageHandler, dependencies: dependencies)
     ]
     
     func handle(msg: Message) {
+        guard let msg = dependencies.featureToggler.process(msg: msg) else { return }
         subscribers.forEach { $0.handle(msg: msg) }
-        
-        if case .feature(let feature) = msg {
-            features.forEach { $0.handle(feature: feature) }
-        }
+        if case .feature(let feature) = msg { features.forEach { $0.handle(feature: feature) } }
     }
     
-    private var subscribers: [MessageSubscriber] = []
     func add(subscriber: MessageSubscriber) {
         subscribers.append(subscriber)
     }

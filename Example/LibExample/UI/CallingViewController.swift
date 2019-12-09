@@ -17,6 +17,7 @@ class CallingViewController: MessageViewController {
         case dialing
         case calling
         case failed
+        case disabled
     }
 
     // MARK: - UI
@@ -29,6 +30,7 @@ class CallingViewController: MessageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        responseHandler?.handle(msg: .feature(.flag(.useCase(.isEnbaled(.startCall)))))
         state = .idle
     }
 
@@ -53,6 +55,9 @@ class CallingViewController: MessageViewController {
         if case .feature(.calling(.useCase(.call(.action(     .dialing(let call)))))) = msg { update(call: call, newState: .dialing) }
         if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = msg { update(call: call, newState: .calling) }
         if case .feature(.calling(.useCase(.call(.action(  .callFailed(let call)))))) = msg { update(call: call, newState:  .failed) }
+        if case .feature(   .flag(.useCase(.didDisable(.startCall))))                 = msg { update(call: nil, newState: .disabled) }
+        if case .feature(   .flag(.useCase( .didEnable(.startCall))))                 = msg { update(call: nil, newState: .idle) }
+
     }
 
     // MARK: - State Handling
@@ -71,12 +76,18 @@ class CallingViewController: MessageViewController {
                 resetTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false){ [weak self] _ in self?.state = .idle }
             }
         }
-
+        
+        func disableCalling() {
+            makeCallButton.isHidden = true
+            hangUpButton.isHidden = true
+        }
+        
         switch state {
-        case .idle   : updateUI(enabledMakeCallButton:  true, enableHangUpButton: false, numberFieldColor: .white, resetToIdle: false)
-        case .dialing: updateUI(enabledMakeCallButton:  true, enableHangUpButton:  true, numberFieldColor:  .cyan, resetToIdle: false)
-        case .calling: updateUI(enabledMakeCallButton: false, enableHangUpButton:  true, numberFieldColor: .green, resetToIdle: false)
-        case .failed : updateUI(enabledMakeCallButton:  true, enableHangUpButton: false, numberFieldColor:   .red, resetToIdle:  true)
+        case     .idle: updateUI(enabledMakeCallButton:  true, enableHangUpButton: false, numberFieldColor: .white, resetToIdle: false)
+        case  .dialing: updateUI(enabledMakeCallButton:  true, enableHangUpButton:  true, numberFieldColor:  .cyan, resetToIdle: false)
+        case  .calling: updateUI(enabledMakeCallButton: false, enableHangUpButton:  true, numberFieldColor: .green, resetToIdle: false)
+        case   .failed: updateUI(enabledMakeCallButton:  true, enableHangUpButton: false, numberFieldColor:   .red, resetToIdle:  true)
+        case .disabled: disableCalling()
         }
     }
 }

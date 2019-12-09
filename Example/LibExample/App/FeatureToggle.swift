@@ -18,32 +18,32 @@ struct FeatureToggle {
     var process: (Message) -> Bool?
 }
 
-
 protocol FeatureToggling {
-    func isActive(flag:Flag) -> Bool
+    func isActive(flag: Flag) -> Bool
     func process(msg: Message) -> Message?
 }
 
 class FeatureToggler: FeatureToggling {
-    let featureFlags: [Flag: FeatureToggle] = [
-        .startCall: FeatureToggle(flag: .startCall, isActivated: false) { msg in
-            if case .feature(.calling(.useCase(.call(.action(.start(_)))))) = msg { return true }
-            return nil
+    let featureToggles: [Flag: FeatureToggle] = [
+        .startCall:
+            FeatureToggle(flag: .startCall, isActivated: true) {
+                if case .feature(.calling(.useCase(.call(.action(.start(_)))))) = $0 { return true }
+                return nil
         }
     ]
     
-    func isActive(flag:Flag) -> Bool {
-        featureFlags[flag]?.isActivated ?? false
+    func isActive(flag: Flag) -> Bool {
+        featureToggles[flag]?.isActivated ?? false
     }
     
     func process(msg: Message) -> Message? {
-        for x in featureFlags {
-            if let b = x.value.process(msg), b == true {
-                if x.value.isActivated {
-                    return msg
-                } else {
-                    return nil
-                }
+        for flagAndFeatureToggle in featureToggles {
+            let toggle = flagAndFeatureToggle.value
+            if
+                let processMsg = toggle.process(msg),
+                processMsg == true
+            {
+                return toggle.isActivated ? msg : nil
             }
         }
         return msg

@@ -19,9 +19,7 @@ class RootApp: SubscribableApp {
 
     func handle(msg: Message) {
         receivers.forEach {
-            if let msg = dependencies.featureToggler.process(msg: msg) {
-                $0.handle(msg: msg)
-            }
+            $0.handle(msg: msg)
         }
     }
 

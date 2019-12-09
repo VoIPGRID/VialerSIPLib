@@ -74,6 +74,8 @@
 		C97E4E13234F666300767A20 /* SwitchTransportMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E12234F666300767A20 /* SwitchTransportMode.swift */; };
 		C985C618239E6DE100EE5FBA /* IPAddressChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C985C617239E6DE100EE5FBA /* IPAddressChecker.swift */; };
 		C985C61A239E86FA00EE5FBA /* FeatureToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C985C619239E86FA00EE5FBA /* FeatureToggle.swift */; };
+		C985C61D239EA46A00EE5FBA /* FeatureToggleFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C985C61C239EA46A00EE5FBA /* FeatureToggleFeature.swift */; };
+		C985C620239EA68200EE5FBA /* CheckFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C985C61F239EA68200EE5FBA /* CheckFlag.swift */; };
 		C99C2BDA2370490D00258041 /* KeepStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C2BD92370490D00258041 /* KeepStateSpec.swift */; };
 		C99C2BDC2372F19500258041 /* CurrentAppStateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C2BDB2372F19500258041 /* CurrentAppStateFetcher.swift */; };
 		C9ADE1F12357339B002D813B /* CallSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ADE1F02357339B002D813B /* CallSpec.swift */; };
@@ -252,6 +254,8 @@
 		C97E4E12234F666300767A20 /* SwitchTransportMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTransportMode.swift; sourceTree = "<group>"; };
 		C985C617239E6DE100EE5FBA /* IPAddressChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPAddressChecker.swift; sourceTree = "<group>"; };
 		C985C619239E86FA00EE5FBA /* FeatureToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureToggle.swift; sourceTree = "<group>"; };
+		C985C61C239EA46A00EE5FBA /* FeatureToggleFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureToggleFeature.swift; sourceTree = "<group>"; };
+		C985C61F239EA68200EE5FBA /* CheckFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckFlag.swift; sourceTree = "<group>"; };
 		C99C2BD92370490D00258041 /* KeepStateSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepStateSpec.swift; sourceTree = "<group>"; };
 		C99C2BDB2372F19500258041 /* CurrentAppStateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentAppStateFetcher.swift; sourceTree = "<group>"; };
 		C9ADE1F02357339B002D813B /* CallSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallSpec.swift; sourceTree = "<group>"; };
@@ -681,6 +685,7 @@
 		C91F854F234CE647007F6417 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				C985C61B239EA43F00EE5FBA /* Feature Toggle */,
 				C9F0CFE9236C461D00C57AB3 /* StateKeeper */,
 				C91F8552234CE675007F6417 /* Settings */,
 				C91F8551234CE666007F6417 /* Calling */,
@@ -750,6 +755,23 @@
 			children = (
 				C97E4E12234F666300767A20 /* SwitchTransportMode.swift */,
 				C94DA21A23745A3500429DCF /* ChangeServer.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		C985C61B239EA43F00EE5FBA /* Feature Toggle */ = {
+			isa = PBXGroup;
+			children = (
+				C985C61C239EA46A00EE5FBA /* FeatureToggleFeature.swift */,
+				C985C61E239EA66100EE5FBA /* UseCases */,
+			);
+			path = "Feature Toggle";
+			sourceTree = "<group>";
+		};
+		C985C61E239EA66100EE5FBA /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				C985C61F239EA68200EE5FBA /* CheckFlag.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1262,8 +1284,10 @@
 				C91F854C234CE3BC007F6417 /* CallingFeature.swift in Sources */,
 				C91F851E234CCCE5007F6417 /* AppDelegate.swift in Sources */,
 				C9ADE1FF23574D14002D813B /* MessageTabBarController.swift in Sources */,
+				C985C620239EA68200EE5FBA /* CheckFlag.swift in Sources */,
 				C91F8557234CE7EB007F6417 /* LogOut.swift in Sources */,
 				C91F853E234CD3E4007F6417 /* SIPApp.swift in Sources */,
+				C985C61D239EA46A00EE5FBA /* FeatureToggleFeature.swift in Sources */,
 				C9F0CFEE236C47D800C57AB3 /* KeepState.swift in Sources */,
 				C91F8540234CD3FD007F6417 /* Message.swift in Sources */,
 				C91F8548234CE0FB007F6417 /* UserHandlingFeature.swift in Sources */,

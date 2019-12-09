@@ -16,7 +16,17 @@ enum Message {
         case settings(Settings)
         case calling(Calling)
         case state(StateKeeping)
+        case flag(FeatureFlag)
         
+        enum FeatureFlag {
+            case useCase(UseCase)
+            
+            enum UseCase {
+                case isEnbaled(Flag)
+                case didEnable(Flag)
+                case didDisable(Flag)
+            }
+        }
         enum StateKeeping {
             case useCase(UseCase)
             
