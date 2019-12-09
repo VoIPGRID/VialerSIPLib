@@ -72,6 +72,7 @@
 		C97E4E0E234F49DB00767A20 /* StartCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E0D234F49DB00767A20 /* StartCall.swift */; };
 		C97E4E10234F4A6800767A20 /* EndCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E0F234F4A6800767A20 /* EndCall.swift */; };
 		C97E4E13234F666300767A20 /* SwitchTransportMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97E4E12234F666300767A20 /* SwitchTransportMode.swift */; };
+		C985C618239E6DE100EE5FBA /* IPAddressChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C985C617239E6DE100EE5FBA /* IPAddressChecker.swift */; };
 		C99C2BDA2370490D00258041 /* KeepStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C2BD92370490D00258041 /* KeepStateSpec.swift */; };
 		C99C2BDC2372F19500258041 /* CurrentAppStateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C2BDB2372F19500258041 /* CurrentAppStateFetcher.swift */; };
 		C9ADE1F12357339B002D813B /* CallSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9ADE1F02357339B002D813B /* CallSpec.swift */; };
@@ -248,6 +249,7 @@
 		C97E4E0D234F49DB00767A20 /* StartCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartCall.swift; sourceTree = "<group>"; };
 		C97E4E0F234F4A6800767A20 /* EndCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndCall.swift; sourceTree = "<group>"; };
 		C97E4E12234F666300767A20 /* SwitchTransportMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTransportMode.swift; sourceTree = "<group>"; };
+		C985C617239E6DE100EE5FBA /* IPAddressChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPAddressChecker.swift; sourceTree = "<group>"; };
 		C99C2BD92370490D00258041 /* KeepStateSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepStateSpec.swift; sourceTree = "<group>"; };
 		C99C2BDB2372F19500258041 /* CurrentAppStateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentAppStateFetcher.swift; sourceTree = "<group>"; };
 		C9ADE1F02357339B002D813B /* CallSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallSpec.swift; sourceTree = "<group>"; };
@@ -783,6 +785,8 @@
 				C9060ABA2359C1A100914898 /* Dependencies.swift */,
 				C9F0CFF1236C84DB00C57AB3 /* PathBuilder.swift */,
 				C99C2BDB2372F19500258041 /* CurrentAppStateFetcher.swift */,
+				C9E8B2AE2390093F006C362A /* FeatureFlagger.swift */,
+				C985C617239E6DE100EE5FBA /* IPAddressChecker.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1280,6 +1284,7 @@
 				C97E4E0E234F49DB00767A20 /* StartCall.swift in Sources */,
 				C91F854A234CE2FB007F6417 /* SettingsFeature.swift in Sources */,
 				C91F8555234CE6F6007F6417 /* LogIn.swift in Sources */,
+				C985C618239E6DE100EE5FBA /* IPAddressChecker.swift in Sources */,
 				C9F0CFE6236C394900C57AB3 /* SettingsViewController.swift in Sources */,
 				C9F0CFF2236C84DB00C57AB3 /* PathBuilder.swift in Sources */,
 			);

@@ -21,9 +21,7 @@ class SettingsFeature: Feature {
     private lazy var        changeServer =        ChangeServer(dependencies: self.dependencies) { [weak self] response in self?.handle(response: response) }
 
     func handle(feature: Message.Feature) {
-        if case .settings(.useCase(let useCase)) = feature {
-            handle(useCase: useCase)
-        }
+        if case .settings(.useCase(let useCase)) = feature { handle(useCase: useCase) }
     }
     
     private func handle(useCase: Message.Feature.Settings.UseCase) {
@@ -42,6 +40,8 @@ class SettingsFeature: Feature {
         switch response {
         case .addressChanged(let address):
             rootMessageHandler?.handle(msg: .feature(.settings(.useCase(.server(.action(.addressChanged(address)))))))
+        case .addressChangeFailed(let address):
+            rootMessageHandler?.handle(msg: .feature(.settings(.useCase(.server(.action(.addressChangeFailed(address)))))))
         }
     }
 }

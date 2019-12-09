@@ -16,14 +16,22 @@ class SettingsFeatureSpec: QuickSpec {
             var sut: SettingsFeature!
             var messageHandler: Mock.MessageHandler!
             var receivedModes: [TransportMode]!
+            var changedAddressSuccess: Bool!
+            var changedAddress: String!
 
             beforeEach {
                 receivedModes = []
-                messageHandler = Mock.MessageHandler { if case .feature(.settings(.useCase(.transport(.action(.didActivate(let m)))))) = $0 { receivedModes.append(m)}}
+                messageHandler = Mock.MessageHandler {
+                    if case .feature(.settings(.useCase(.transport(.action(        .didActivate(let m)))))) = $0 { receivedModes.append(m)}
+                    if case .feature(.settings(.useCase(   .server(.action(     .addressChanged(let a)))))) = $0 { changedAddress = a; changedAddressSuccess = true }
+                    if case .feature(.settings(.useCase(   .server(.action(.addressChangeFailed(let a)))))) = $0 { changedAddress = a; changedAddressSuccess = false }
+                }
                 sut = SettingsFeature(with: messageHandler, dependencies: self.dependencies)
             }
             
             afterEach {
+                changedAddress = nil
+                changedAddressSuccess = nil
                 receivedModes = nil
                 messageHandler = nil
                 sut = nil
@@ -36,6 +44,25 @@ class SettingsFeatureSpec: QuickSpec {
                 
                 expect(receivedModes) == [.udp, .tcp, .tls, .udp]
             }
+            
+            it("changes serer address"){
+                sut.handle(feature: .settings(.useCase(.server(.action(.changeAddress("127.0.0.1"))))))
+                
+                expect(changedAddress) == "127.0.0.1"
+            }
+            
+            it("changes server address"){
+                sut.handle(feature: .settings(.useCase(.server(.action(.changeAddress("127.0.0.1"))))))
+                
+                expect(changedAddressSuccess) == true
+                expect(changedAddress) == "127.0.0.1"
+            }
+            
+            it("fails changing server address"){
+                sut.handle(feature: .settings(.useCase(.server(.action(.changeAddress("127.0.1"))))))
+                
+                expect(changedAddressSuccess) == false
+            }
         }
     }
     
@@ -43,7 +70,8 @@ class SettingsFeatureSpec: QuickSpec {
         Dependencies(
             currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
                        callStarter: Mock.CallStarter(),
-                    statePersister: Mock.StatePersister()
+                    statePersister: Mock.StatePersister(),
+                  ipAddressChecker: IPAddressChecker()
         )
     }
 }

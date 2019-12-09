@@ -49,6 +49,7 @@ private func createDependencies() -> Dependencies {
     return Dependencies(
         currentAppStateFetcher: CurrentAppStateFetcher(),
                    callStarter: VialerSIPCallStarter(),
-                statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager())
+                statePersister: StateDiskPersister(pathBuilder: PathBuilder(), fileManager: FileManager()),
+              ipAddressChecker: IPAddressChecker()
     )
 }

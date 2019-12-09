@@ -52,7 +52,8 @@ class UserHandlingFeatureSpec: QuickSpec, MessageHandling {
         Dependencies(
             currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
                        callStarter: Mock.CallStarter(),
-                    statePersister: Mock.StatePersister()
+                    statePersister: Mock.StatePersister(),
+                  ipAddressChecker: IPAddressChecker()
         )
     }
 }
