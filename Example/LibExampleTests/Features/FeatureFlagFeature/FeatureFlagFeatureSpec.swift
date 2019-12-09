@@ -24,7 +24,8 @@ class FeatureFlagFeatureSpec: QuickSpec {
                     currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
                                callStarter: Mock.CallStarter(),
                             statePersister: Mock.StatePersister(),
-                            featureFlagger: featureFlagger
+                            featureFlagger: featureFlagger,
+                          ipAddressChecker: IPAddressChecker()
                 )
             }
             
@@ -68,13 +69,25 @@ class FeatureFlagFeatureSpec: QuickSpec {
                 expect(enabled).to(beTrue())
                 expect(recentListSize) == .short
             }
-            
             it("hasnt enabled medium recent call list size") {
-                featureFlagger.flags = [FeatureFlag.recentListSize(.short): true]
+                featureFlagger.flags = [
+                    .recentListSize( .short): true,
+                ]
                 sut.handle(feature: .flag(.useCase(.isEnbaled(.recentListSize(.medium)))))
                 
                 expect(enabled).to(beFalse())
                 expect(recentListSize) != .medium
+            }
+            
+            it("has enabled medium recent call list size") {
+                featureFlagger.flags = [
+                    .recentListSize( .short): true,
+                    .recentListSize(.medium): true
+                ]
+                sut.handle(feature: .flag(.useCase(.isEnbaled(.recentListSize(.medium)))))
+                
+                expect(enabled).to(beTrue())
+                expect(recentListSize) == .medium
             }
         }
     }

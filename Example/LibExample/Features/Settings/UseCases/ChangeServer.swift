@@ -18,7 +18,9 @@ class ChangeServer: UseCase {
     func handle(request: ChangeServer.Request) {
         switch request {
         case .changeAddress(let address):
-            responseHandler(.addressChanged(address))
+            dependencies.ipAddressChecker.check(ip:address)
+                ? responseHandler(.addressChanged(address))
+                : responseHandler(.addressChangeFailed(address))
         }
     }
     
@@ -30,5 +32,6 @@ class ChangeServer: UseCase {
     
     enum Response {
         case addressChanged(String)
+        case addressChangeFailed(String)
     }
 }

@@ -36,7 +36,8 @@ class FeatureFlagger: FeatureFlagging {
     
     private let flags: [FeatureFlag: Bool] = [
         .startCall: true,
-        .recentListSize(.short): true
+        .recentListSize(.short): true,
+        .recentListSize(.medium): true
     ]
     
     func isEnabled(_ flag:FeatureFlag) -> Bool {

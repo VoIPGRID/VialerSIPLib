@@ -39,7 +39,8 @@ class LogOutSpec: QuickSpec {
             currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
                        callStarter: Mock.CallStarter(),
                     statePersister: Mock.StatePersister(),
-                    featureFlagger: FeatureFlagger()
+                    featureFlagger: FeatureFlagger(),
+                  ipAddressChecker: IPAddressChecker()
         )
     }
 }

@@ -11,4 +11,5 @@ struct Dependencies {
     var callStarter: CallStarting
     var statePersister: StatePersisting
     var featureFlagger: FeatureFlagging
+    var ipAddressChecker: IPAddressChecking
 }
