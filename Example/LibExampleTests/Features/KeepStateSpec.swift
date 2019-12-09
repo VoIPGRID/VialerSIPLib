@@ -27,10 +27,12 @@ class KeepStateSpec: QuickSpec {
                 retrievedTransportModes = []
                 statePesister = Mock.StatePersister()
                 sut = KeepState(dependencies:
-                    Dependencies(currentAppStateFetcher: CurrentAppStateFetcher(),
-                                            callStarter: Mock.CallStarter(),
-                                         statePersister: statePesister!,
-                                       ipAddressChecker: IPAddressChecker()
+                    Dependencies(
+                        currentAppStateFetcher: CurrentAppStateFetcher(),
+                                   callStarter: Mock.CallStarter(),
+                                statePersister: statePesister!,
+                              ipAddressChecker: IPAddressChecker(),
+                                featureToggler: FeatureToggler()
                     )
                 ) { response in
                     switch response {

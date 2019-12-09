@@ -50,7 +50,8 @@ class CallingFeatureSpec: QuickSpec {
             currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
                        callStarter: callStarter,
                     statePersister: Mock.StatePersister(),
-                  ipAddressChecker: IPAddressChecker()
+                  ipAddressChecker: IPAddressChecker(),
+                    featureToggler: FeatureToggler()
         )
     }
 }

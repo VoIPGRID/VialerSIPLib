@@ -86,4 +86,23 @@ class Mock {
         
         func handle(msg: Message) { }
     }
+    
+    class FeatureToggler: FeatureToggling {
+        
+        init(deactivatedFlags: [Flag]) {
+            self.deactivatedFlags = deactivatedFlags
+        }
+        
+        let deactivatedFlags: [Flag]
+        
+        func isActive(flag: Flag) -> Bool {
+            return deactivatedFlags.filter { (f) -> Bool in
+                return f == flag
+            }.count == 0
+        }
+        
+        func process(msg: Message) -> Message? {
+            return msg
+        }
+    }
 }

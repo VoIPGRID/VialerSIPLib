@@ -86,7 +86,8 @@ class SIPAppSpec: QuickSpec {
             currentAppStateFetcher: csf,
                        callStarter: Mock.CallStarter(),
                     statePersister: Mock.StatePersister(),
-                  ipAddressChecker: IPAddressChecker()
+                  ipAddressChecker: IPAddressChecker(),
+                    featureToggler: FeatureToggler()
         )
     }
 }

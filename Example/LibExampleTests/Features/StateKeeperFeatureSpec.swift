@@ -47,7 +47,8 @@ class StateKeeperFeatureSpec: QuickSpec {
             currentAppStateFetcher: Mock.CurrentAppStateFetcher(),
                        callStarter: Mock.CallStarter(),
                     statePersister: Mock.StatePersister(),
-                  ipAddressChecker: IPAddressChecker()
+                  ipAddressChecker: IPAddressChecker(),
+                    featureToggler: FeatureToggler()
         )
     }
 }

@@ -16,13 +16,13 @@ class RootAppSpec: QuickSpec {
             var sut: RootApp!
             var messageHandler: Mock.MessageHandler!
             var interceptedHandle: String?
-
+            
             beforeEach {
                 messageHandler = Mock.MessageHandler {
                     if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = $0 { interceptedHandle = call.handle }
                 }
                 
-                sut = RootApp(dependencies: self.dependencies)
+                sut = RootApp(dependencies: self.createDependencies(deactivated: [  .startCall]))
                 sut.add(subscriber: messageHandler)
             }
             
@@ -48,7 +48,7 @@ class RootAppSpec: QuickSpec {
         return f
     }
     
-    var dependencies: Dependencies {
+    private func createDependencies(deactivated: [Flag]) -> Dependencies {
         let csf = Mock.CurrentAppStateFetcher()
         csf.appState = AppState(
             transportMode: .udp,
@@ -60,7 +60,8 @@ class RootAppSpec: QuickSpec {
             currentAppStateFetcher: csf,
                        callStarter: Mock.CallStarter(),
                     statePersister: Mock.StatePersister(),
-                  ipAddressChecker: IPAddressChecker()
+                  ipAddressChecker: IPAddressChecker(),
+                    featureToggler: Mock.FeatureToggler(deactivatedFlags: deactivated)
         )
     }
 }
