@@ -89,12 +89,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
         [call answerWithCompletion:^(NSError *error) {
             if (error) {
                 VSLLogError(@"Error answering call(%@) error:%@", call.uuid.UUIDString, error);
-//                CXCallUpdate *update = [[CXCallUpdate alloc] init];
-//                NSString * handleValue = @"Call cancelled remotely";
-//                CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:handleValue];
-//                update.remoteHandle = handle;
-//                [self.provider reportCallWithUUID:call.uuid updated:update];
-                
+               
                 //[self.provider reportCallWithUUID:call.uuid endedAtDate:[NSDate date] reason:CXCallEndedReasonRemoteEnded];
                 
                 [action fail];
