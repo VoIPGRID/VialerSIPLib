@@ -96,14 +96,6 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     return self;
 }
 
-- (instancetype _Nullable)initInboundCallWithUUID:(NSUUID * _Nonnull)uuid number:(NSString * _Nonnull)number name:(NSString * _Nonnull)name {
-    self.uuid = uuid;
-    self.callerNumber = [VialerUtils cleanPhoneNumber:number];
-    self.incoming = YES;
-    self.callerName = name;
-    return self;
-}
-
 - (instancetype)initOutboundCallWithNumberToCall:(NSString *)number account:(VSLAccount *)account {
     if (self = [self initPrivateWithAccount:account]) {
         self.numberToCall = [VialerUtils cleanPhoneNumber:number];
@@ -115,6 +107,14 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     self.invite = invite;
     
     return [self initInboundCallWithCallId:callId account:account];
+}
+
+- (instancetype _Nullable)initInboundCallWithUUID:(NSUUID * _Nonnull)uuid number:(NSString * _Nonnull)number name:(NSString * _Nonnull)name {
+    self.uuid = uuid;
+    self.callerNumber = [VialerUtils cleanPhoneNumber:number];
+    self.incoming = YES;
+    self.callerName = name;
+    return self;
 }
 
 - (void)dealloc {
