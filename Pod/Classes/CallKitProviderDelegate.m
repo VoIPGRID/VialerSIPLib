@@ -89,8 +89,6 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
         [call answerWithCompletion:^(NSError *error) {
             if (error) {
                 VSLLogError(@"Error answering call(%@) error:%@", call.uuid.UUIDString, error);
-               
-                //[self.provider reportCallWithUUID:call.uuid endedAtDate:[NSDate date] reason:CXCallEndedReasonRemoteEnded];
                 
                 [action fail];
 
