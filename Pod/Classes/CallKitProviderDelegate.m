@@ -66,7 +66,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     update.localizedCallerName = call.callerName;
 
     NSString * handleValue = @"";
-    if ([update.localizedCallerName length] == 0) { // Doing this to not let the caller contact name override the platform's one // TODO: not sure if this is still working, with using 'Connecting Call...' as a placeholder for the CallKit UI at setup.
+    if ([update.localizedCallerName length] == 0) { // Doing this to not let the caller contact name override the platform's one.
         handleValue = call.callerNumber;
     }
     CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:handleValue];
