@@ -61,7 +61,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 /**
  * This causes CallKit to update the "native" call screen.
  */
-- (void)reportIncomingCall:(VSLCall *)call {  // TODO should be 'renamed' to updateIncomingCall, not sure
+- (void)reportIncomingCall:(VSLCall *)call {
     CXCallUpdate *update = [[CXCallUpdate alloc] init];
     update.localizedCallerName = call.callerName;
 
@@ -89,6 +89,14 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
         [call answerWithCompletion:^(NSError *error) {
             if (error) {
                 VSLLogError(@"Error answering call(%@) error:%@", call.uuid.UUIDString, error);
+//                CXCallUpdate *update = [[CXCallUpdate alloc] init];
+//                NSString * handleValue = @"Call cancelled remotely";
+//                CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:handleValue];
+//                update.remoteHandle = handle;
+//                [self.provider reportCallWithUUID:call.uuid updated:update];
+                
+                //[self.provider reportCallWithUUID:call.uuid endedAtDate:[NSDate date] reason:CXCallEndedReasonRemoteEnded];
+                
                 [action fail];
 
             } else {
@@ -229,6 +237,9 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 
 - (void)callStateChanged:(NSNotification *)notification {
     __weak VSLCall *call = [[notification userInfo] objectForKey:VSLNotificationUserInfoCallKey];
+
+    VSLLogDebug(@"AFV callStateChanged");
+
     switch (call.callState) {
         case VSLCallStateNull:
             break;
@@ -276,6 +287,8 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
             // TODO: would this be a better place for reporting to the provider that the call ended instead of CallManager.endCall?
             break;
     }
+    VSLLogDebug(@"AFV callStateChanged");
+
 }
 
 @end
