@@ -277,7 +277,6 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
                 VSLLogDebug(@"Call remotly ended, in DISCONNECTED state, with UUID: %@", call.uuid);
                 [self.provider reportCallWithUUID:call.uuid endedAtDate:[NSDate date] reason:CXCallEndedReasonRemoteEnded];
             }
-            // TODO: would this be a better place for reporting to the provider that the call ended instead of CallManager.endCall?
             break;
     }
     VSLLogDebug(@"AFV callStateChanged");
