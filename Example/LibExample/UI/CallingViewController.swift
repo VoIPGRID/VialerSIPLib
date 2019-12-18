@@ -55,8 +55,8 @@ class CallingViewController: MessageViewController {
         if case .feature(.calling(.useCase(.call(.action(     .dialing(let call)))))) = msg { update(call: call, newState: .dialing) }
         if case .feature(.calling(.useCase(.call(.action(.callDidStart(let call)))))) = msg { update(call: call, newState: .calling) }
         if case .feature(.calling(.useCase(.call(.action(  .callFailed(let call)))))) = msg { update(call: call, newState:  .failed) }
-        if case .feature(   .flag(.useCase(.didDisable(.startCall))))                 = msg { update(call: nil, newState: .disabled) }
-        if case .feature(   .flag(.useCase( .didEnable(.startCall))))                 = msg { update(call: nil, newState: .idle) }
+        if case .feature(   .flag(.useCase(.didDisable)))                             = msg { update(call: nil, newState: .disabled) }
+        if case .feature(   .flag(.useCase( .didEnable)))                             = msg { update(call: nil, newState:     .idle) }
 
     }
 

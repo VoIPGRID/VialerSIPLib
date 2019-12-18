@@ -17,4 +17,11 @@ class MessageNavigationController: UINavigationController, MessageHandling, Resp
     func handle(msg: Message) {
         viewControllers.compactMap { $0 as? MessageHandling}.forEach { $0.handle(msg: msg)}
     }
+    
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        if var vc = viewController as? ResponseHandling {
+            vc.responseHandler = responseHandler
+        }
+        super.pushViewController(viewController, animated: animated)
+    }
 }

@@ -13,6 +13,8 @@ class CheckFlag: UseCase {
             dependencies.featureToggler.isActive(flag: flag)
                 ? responseHandler( .enabled(flag))
                 : responseHandler(.disabled(flag))
+        case .allEnabledFlags:
+            responseHandler(.allFlags(dependencies.featureToggler.featureFlagModels))
         }
     }
     
@@ -20,12 +22,14 @@ class CheckFlag: UseCase {
     typealias ResponseType = Response
     
     enum Request {
-        case isEnabled(Flag)
+        case isEnabled(FeatureFlag)
+        case allEnabledFlags
     }
     
     enum Response {
-        case enabled(Flag)
-        case disabled(Flag)
+        case enabled(FeatureFlag)
+        case disabled(FeatureFlag)
+        case allFlags([FeatureFlagModel])
     }
     
     required init(dependencies: Dependencies, responseHandler: @escaping ((Response) -> ())) {

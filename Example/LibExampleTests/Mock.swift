@@ -21,9 +21,9 @@ class Mock {
     }
     
     struct CallStarter: CallStarting {
-        var appState: AppState?
-        
         init() {}
+        
+        var appState: AppState?
         
         var deferResponse: ((Bool) -> DispatchTimeInterval) = {
             switch $0 {
@@ -41,11 +41,12 @@ class Mock {
     }
     
     struct CallManager: CallManaging {
-        
         init(shouldSucceed: Bool) {
             self.shouldSucceed = shouldSucceed
         }
+        
         let shouldSucceed: Bool
+        
         func startCall(toNumber: String, for: VSLAccount, completion: @escaping ((VSLCall?, Error?) -> ())) {
             shouldSucceed
                 ? completion(VSLCall(inboundCallWithCallId: 9, account: VSLAccount(callManager: VSLCallManager())), nil)
@@ -54,7 +55,6 @@ class Mock {
     }
     
     class StatePersister: StatePersisting  {
-        
         var shouldFailLoading = false
         var shouldFailPersisting = false
         var shouldFailResetting = false
@@ -88,14 +88,14 @@ class Mock {
     }
     
     class FeatureToggler: FeatureToggling {
-        
-        init(deactivatedFlags: [Flag]) {
+        init(deactivatedFlags: [FeatureFlag]) {
             self.deactivatedFlags = deactivatedFlags
         }
         
-        let deactivatedFlags: [Flag]
+        var featureFlagModels: [FeatureFlagModel] = []
+        let deactivatedFlags: [FeatureFlag]
         
-        func isActive(flag: Flag) -> Bool {
+        func isActive(flag: FeatureFlag) -> Bool {
             return deactivatedFlags.filter { (f) -> Bool in
                 return f == flag
             }.count == 0

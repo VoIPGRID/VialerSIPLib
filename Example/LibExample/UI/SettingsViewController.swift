@@ -14,6 +14,7 @@ final class SettingsViewController: MessageViewController {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var serverAddressField: UITextField!
     @IBOutlet weak var modePicker: UIPickerView!
+    @IBOutlet weak var featureFlagsButton: UIButton!
 
     private var         modes: [TransportMode] = TransportMode.allCases
     private var  selectedMode: TransportMode?   { didSet { configureModePicker()    } }
@@ -21,6 +22,7 @@ final class SettingsViewController: MessageViewController {
     private var  serverAdress: String?          { didSet { configureServerAddress() } }
     private var      password: String?          { didSet { configurePassword()      } }
     private var    pickedMode: TransportMode?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,13 +48,20 @@ final class SettingsViewController: MessageViewController {
     }
     
     @IBAction func set(_ sender: Any) {
-        if let    address = serverAddressField.text { responseHandler?.handle(msg: .feature(.settings(.useCase(   .server(.action( .changeAddress(address   ))))))) }
-        if let   password =      passwordField.text { responseHandler?.handle(msg: .feature(.settings(.useCase( .password(.action(.changePassword(password  ))))))) }
+        if let    address = serverAddressField.text { responseHandler?.handle(msg: .feature(.settings(.useCase(   .server(.action( .changeAddress(   address))))))) }
+        if let   password =      passwordField.text { responseHandler?.handle(msg: .feature(.settings(.useCase( .password(.action(.changePassword(  password))))))) }
         if let pickedMode =         self.pickedMode { responseHandler?.handle(msg: .feature(.settings(.useCase(.transport(.action(      .activate(pickedMode))))))) }
     }
     
     @IBAction func resetTapped(_ sender: Any) {
         responseHandler?.handle(msg: .feature(.state(.useCase(.reset))))
+    }
+    
+    @IBAction func featureFlagsTapepd(_ sender: Any) {
+        self.navigationController?.pushViewController(
+            MessageViewControllerFactory(kind: .featureFlagSettings).make(),
+            animated: true
+        )
     }
     
     private func show(error: Error) {
@@ -106,6 +115,27 @@ extension SettingsViewController {
         if let pw = password {
             passwordField?.text = pw
         }
+    }
+    
+    private func configureFeatureFlagButton() {
+        #if DEBUG
+        showFeatureFlagButton()
+        #else
+        hideFeatureFlagButton()
+        #endif
+    }
+    
+    private func hideFeatureFlagButton() {
+        toggleFeatureFlagButton(hide: true)
+    }
+    
+    private func showFeatureFlagButton() {
+        toggleFeatureFlagButton(hide: false)
+    }
+    
+    private func toggleFeatureFlagButton(hide:Bool) {
+        featureFlagsButton.isHidden = hide
+        featureFlagsButton.isEnabled = !hide
     }
 }
 

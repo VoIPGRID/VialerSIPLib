@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController" customModule="LibExample" customModuleProvider="target">
             <connections>
                 <outlet property="accountNumberTextField" destination="vW5-bU-kmy" id="3U4-KQ-d0q"/>
+                <outlet property="featureFlagsButton" destination="18I-Ua-Uzh" id="v6e-Xr-pH4"/>
                 <outlet property="modePicker" destination="Ugg-aq-u6m" id="VgX-Ep-JiO"/>
                 <outlet property="passwordField" destination="vlz-YB-7T7" id="7AW-tq-bu5"/>
                 <outlet property="serverAddressField" destination="6fn-MK-ts4" id="plj-dJ-0DL"/>
@@ -83,6 +84,14 @@ Password</string>
                     <state key="normal" title="Set"/>
                     <connections>
                         <action selector="set:" destination="-1" eventType="touchUpInside" id="pBN-Pa-BiI"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="18I-Ua-Uzh">
+                    <rect key="frame" x="161" y="570" width="93" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" title="Feature Flags"/>
+                    <connections>
+                        <action selector="featureFlagsTapepd:" destination="-1" eventType="touchUpInside" id="iIY-Ki-IOs"/>
                     </connections>
                 </button>
             </subviews>

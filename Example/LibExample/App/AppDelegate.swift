@@ -22,10 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let app: RootApp
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let navigationController = MessageNavigationController(rootViewController:  CallingViewController())
+        let callingNavigationController = MessageNavigationController(rootViewController:  MessageViewControllerFactory(kind: .calling).make())
+        let settingsNavigationController = MessageNavigationController(rootViewController:  MessageViewControllerFactory(kind: .settings).make())
         let tabBarController = MessageTabBarController()
         
-        tabBarController.setViewControllers([navigationController, SettingsViewController()], animated: false)
+        tabBarController.setViewControllers([callingNavigationController, settingsNavigationController], animated: false)
         tabBarController.tabBar.items?[0].title = "Calling"
         tabBarController.tabBar.items?[1].title = "Settings"
         tabBarController.responseHandler = app

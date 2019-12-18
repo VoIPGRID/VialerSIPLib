@@ -8,31 +8,69 @@
 
 import Foundation
 
-enum Flag {
+enum FeatureFlag: CaseIterable {
     case startCall
+    case stopCall
 }
 
-struct FeatureToggle {
-    let flag: Flag
+struct FeatureFlagModel {
+    let featureFlag: FeatureFlag
     let isActivated: Bool
-    var process: (Message) -> Bool?
+    let title: String
 }
 
 protocol FeatureToggling {
-    func isActive(flag: Flag) -> Bool
+    func isActive(flag: FeatureFlag) -> Bool
     func process(msg: Message) -> Message?
+    var featureFlagModels: [FeatureFlagModel] { get }
 }
 
 class FeatureToggler: FeatureToggling {
-    let featureToggles: [Flag: FeatureToggle] = [
-        .startCall:
-            FeatureToggle(flag: .startCall, isActivated: true) {
-                if case .feature(.calling(.useCase(.call(.action(.start(_)))))) = $0 { return true }
-                return nil
-        }
-    ]
     
-    func isActive(flag: Flag) -> Bool {
+    fileprivate
+    struct FeatureToggle {
+        let flag: FeatureFlag
+        let isActivated: Bool
+        let title: String
+        var process: (Message) -> Bool?
+    }
+
+    init() {
+        featureToggles = [
+            .startCall: startCallFeatureToggle(),
+             .stopCall:  stopCallFeatureToggle()
+        ]
+    }
+
+    private let featureToggles: [FeatureFlag: FeatureToggle]
+    
+    var featureFlagModels: [FeatureFlagModel] {
+        return FeatureFlag.allCases.map { (ff) -> FeatureFlagModel in
+            return FeatureFlagModel(
+                        featureFlag: ff,
+                        isActivated: featureToggles[ff]?.isActivated ?? false,
+                        title: featureToggles[ff]?.title ?? "\(ff)"
+            )
+        }
+    }
+    
+    var activatedFlags: [FeatureFlag] {
+        let allFlags = FeatureFlag.allCases
+        return allFlags.filter { (f) -> Bool in
+            guard let toggle = featureToggles[f] else { return false}
+            return toggle.isActivated
+        }
+    }
+    
+    var deactivatedFlags: [FeatureFlag] {
+        let allFlags = FeatureFlag.allCases
+        return allFlags.filter { (f) -> Bool in
+            guard let toggle = featureToggles[f] else { return true}
+            return !toggle.isActivated
+        }
+    }
+    
+    func isActive(flag: FeatureFlag) -> Bool {
         featureToggles[flag]?.isActivated ?? false
     }
     
@@ -48,4 +86,20 @@ class FeatureToggler: FeatureToggling {
         }
         return msg
     }
+}
+
+fileprivate func startCallFeatureToggle() -> FeatureToggler.FeatureToggle {
+    return FeatureToggler.FeatureToggle(
+            flag: .startCall,
+            isActivated: true,
+            title: "Start Call"
+        ) {_ in return nil }
+}
+
+fileprivate func stopCallFeatureToggle() -> FeatureToggler.FeatureToggle {
+    return FeatureToggler.FeatureToggle(
+            flag: .stopCall,
+            isActivated: false,
+            title: "Stop Call"
+    ){ _ in return nil }
 }

@@ -18,15 +18,15 @@ class FeatureFlagFeature: Feature {
     private lazy var checkFlag = CheckFlag(dependencies: self.dependencies) { self.handle(response: $0) }
     
     func handle(feature: Message.Feature) {
-        if case .flag(.useCase(.isEnbaled(let flag))) = feature {
-            checkFlag.handle(request: .isEnabled(flag))
-        }
+        if case .flag(.useCase(.isEnbaled(let flag))) = feature { checkFlag.handle(request: .isEnabled(flag)) }
+        if case .flag(.useCase(.getAllFlags))         = feature { checkFlag.handle(request: .allEnabledFlags) }
     }
     
     private func handle(response: CheckFlag.Response) {
         switch response {
-        case  .enabled(let flag): rootMessageHandler.handle(msg: .feature(.flag(.useCase( .didEnable(flag)))))
-        case .disabled(let flag): rootMessageHandler.handle(msg: .feature(.flag(.useCase(.didDisable(flag)))))
+        case  .enabled(let  flag): rootMessageHandler.handle(msg: .feature(.flag(.useCase( .didEnable( flag)))))
+        case .disabled(let  flag): rootMessageHandler.handle(msg: .feature(.flag(.useCase(.didDisable( flag)))))
+        case .allFlags(let flags): rootMessageHandler.handle(msg: .feature(.flag(.useCase(  .allFlags(flags)))))
         }
     }
 }

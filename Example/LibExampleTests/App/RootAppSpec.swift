@@ -48,7 +48,7 @@ class RootAppSpec: QuickSpec {
         return f
     }
     
-    private func createDependencies(deactivated: [Flag]) -> Dependencies {
+    private func createDependencies(deactivated: [FeatureFlag]) -> Dependencies {
         let csf = Mock.CurrentAppStateFetcher()
         csf.appState = AppState(
             transportMode: .udp,
