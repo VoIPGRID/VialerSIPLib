@@ -559,15 +559,16 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
                 }
             }
             
-            // When there is bad or no internet connection, try to set the call to be disconnected when the user presses the hangup button. TODO: is there (here) a flow for a good internet connection?
-            // To make sure the correct flow is followed to dispatch screens. TODO: how is it made sure here?
+            // Hanging up the call takes some time. It could fail due to a bad of no internet connection.
+            // Check after some delay if the call was indeed disconnected. If it's not the case disconnect it manually.
             __weak VSLCall *weakSelf = self;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(VSLCallDelayTimeCheckSuccessfullHangup * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 if (!weakSelf || weakSelf.callState == VSLCallStateDisconnected) {
-                    return;
+                    return; // After the delay, the call was indeed successfull disconnected.
                 }
                 
-                VSLLogDebug(@"Bad or no internet connection, setting call manual to disconnect.");  // TODO: I don't get this message - what didn't work due to a bad connection? This also occurs on the quick cancel call situation
+                // The call is still not disconnected, so manual disconnect it anyway.
+                VSLLogDebug(@"Hangup unsuccessfull, possibly due to bad or no internet connection, so manually disconnecting the call.");
                 
                 // Mute the call to make sure the other party can't hear the user anymore.
                 if (!weakSelf.muted) {
