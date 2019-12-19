@@ -231,8 +231,6 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 - (void)callStateChanged:(NSNotification *)notification {
     __weak VSLCall *call = [[notification userInfo] objectForKey:VSLNotificationUserInfoCallKey];
 
-    VSLLogDebug(@"AFV callStateChanged");
-
     switch (call.callState) {
         case VSLCallStateNull:
             break;
@@ -279,8 +277,6 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
             }
             break;
     }
-    VSLLogDebug(@"AFV callStateChanged");
-
 }
 
 @end
