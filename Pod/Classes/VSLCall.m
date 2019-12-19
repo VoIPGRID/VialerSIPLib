@@ -51,7 +51,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) NSTimeInterval lastSeenConnectDuration;
 @property (strong, nonatomic) NSString *numberToCall;
 //@property (weak, nonatomic) VSLAccount *account;
-@property (nonatomic) BOOL reinviteCall; // Not used, but also never set to NO, so also useless is used.
+@property (nonatomic) BOOL reinviteCall; // Not used, but also never set to NO, so useless?.
 @property (readwrite, nonatomic) NSTimer *audioCheckTimer;
 @property (readwrite, nonatomic) int audioCheckTimerFired;
 @property (readwrite, nonatomic) VSLCallAudioState callAudioState;
