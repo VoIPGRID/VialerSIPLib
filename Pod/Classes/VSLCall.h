@@ -216,7 +216,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 /**
  *  The VSLAccount the call belongs to.
  */
-@property (weak, nonatomic) VSLAccount * _Nullable account; // TODO: ok?
+@property (weak, nonatomic) VSLAccount * _Nullable account;
 
 /**
  *  The state in which the call currently has.
