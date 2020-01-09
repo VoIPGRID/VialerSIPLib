@@ -82,19 +82,7 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
 }
 
 - (BOOL)shouldRemoveEndpoint {
-    if (!self.endpointAvailable) {
-        return false;
-    }
-    if (self.accounts.count == 0){
-        return true;
-    }
-    
-    for (VSLAccount* account in self.accounts){
-        if (account.accountId == 0) {
-            return true;
-        }
-    }
-    return false;
+    return (self.endpointAvailable && self.accounts.count == 0);
 }
 
 - (void)removeEndpoint {
