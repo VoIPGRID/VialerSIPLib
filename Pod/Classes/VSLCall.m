@@ -50,8 +50,6 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) VSLCallTransferState transferStatus;
 @property (readwrite, nonatomic) NSTimeInterval lastSeenConnectDuration;
 @property (strong, nonatomic) NSString *numberToCall;
-//@property (weak, nonatomic) VSLAccount *account;
-@property (nonatomic) BOOL reinviteCall; // Not used, but also never set to NO, so useless?.
 @property (readwrite, nonatomic) NSTimer *audioCheckTimer;
 @property (readwrite, nonatomic) int audioCheckTimerFired;
 @property (readwrite, nonatomic) VSLCallAudioState callAudioState;
@@ -354,7 +352,6 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
             VSLLogError(@"Cannot REINVITE for call id: %ld, status code:%d", (long)self.callId, status);
         } else {
             VSLLogDebug(@"REINVITE sent for call id: %ld", (long)self.callId);
-            self.reinviteCall = YES;
         }
     } else {
         VSLLogDebug(@"Can not send call REINVITE because the call is not yet setup or already disconnected.");
@@ -381,7 +378,6 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
             VSLLogError(@"Cannot sent UPDATE for call id: %ld, status code:%d", (long)self.callId, status);
         } else {
             VSLLogDebug(@"UPDATE sent for call id: %ld", (long)self.callId);
-            self.reinviteCall = YES;
         }
     } else {
         VSLLogDebug(@"Can not send call UPDATE because the call is not yet setup or already disconnected.");
@@ -559,7 +555,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
                 }
             }
             
-            // Hanging up the call takes some time. It could fail due to a bad of no internet connection.
+            // Hanging up the call takes some time. It could fail due to a bad or no internet connection.
             // Check after some delay if the call was indeed disconnected. If it's not the case disconnect it manually.
             __weak VSLCall *weakSelf = self;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(VSLCallDelayTimeCheckSuccessfullHangup * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
