@@ -207,10 +207,6 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     mediaConfig.has_ioqueue = PJ_TRUE;
     mediaConfig.thread_cnt = 1;
     mediaConfig.no_vad = PJ_TRUE;
-    mediaConfig.jb_init = 2;
-    mediaConfig.jb_min_pre = 1;
-    mediaConfig.jb_max_pre = 3;
-    mediaConfig.jb_max = 4;
 
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
