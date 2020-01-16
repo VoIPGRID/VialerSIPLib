@@ -710,7 +710,7 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
         pjsua_call_get_info(call_id, &callInfo);
         
         VSLCallManager *callManager = [VialerSIPLib sharedInstance].callManager;
-        VSLCall *call = [callManager lastCallForAccount:account]; // TODO: save to say that the last one is the right one?
+        VSLCall *call = [callManager lastCallForAccount:account]; // TODO: safe to say that the last one is the right one?
      
         if (call) {
             call.callId = call_id;
@@ -740,8 +740,6 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 }
 
 - (void)callDealloc:(NSNotification *)notification {
-    // Called when a call is deallocated.
-    
     if (!self.endpointConfiguration.unregisterAfterCall || self.state != VSLEndpointStarted) {
         return;
     }
@@ -751,7 +749,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
             NSArray *calls = [self.callManager callsForAccount:account];
             if (calls.count == 0) {
                 NSError *error;
-                [account unregisterAccount:&error];  // TODO: I think the whish is to unregister an account when is has not 1 call active. Does this for-if-if achieve that?
+                [account unregisterAccount:&error];  // TODO: I think the wish is to unregister an account when it has not got 1 call active. Does this for-if-if achieve that?
             }
         }
     }

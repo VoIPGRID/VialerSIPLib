@@ -10,7 +10,7 @@
 #import "VSLEndpoint.h"
 #import "VSLLogging.h"
 
-NSString * const CallKitProviderDelegateOutboundCallStartedNotification = @"CallKitProviderDelegate§OutboundCallStarted";
+NSString * const CallKitProviderDelegateOutboundCallStartedNotification = @"CallKitProviderDelegateOutboundCallStarted";
 NSString * const CallKitProviderDelegateInboundCallAcceptedNotification = @"CallKitProviderDelegateInboundCallAccepted";
 NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"CallKitProviderDelegateInboundCallRejected";
 
@@ -110,7 +110,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 
 /**
  * Delegate method called when the user declines the incoming call from within the
- * "native" CallKit interface, and from our own call interface.
+ * "native" CallKit interface and from our own call interface.
  */
 - (void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action {
     // Find call.

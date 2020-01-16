@@ -73,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             VSLAudioCodecs(audioCodec: .ILBC, andPriority: 210),
             VSLAudioCodecs(audioCodec: .g711a, andPriority: 209)
         ]
+        // TODO: Remove the below if not needed.
 //        codecConfiguration.videoCodecs = [
 //            VSLVideoCodecs(videoCodec: .H264, andPriority: 210)
 //        ]
@@ -133,6 +134,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if error != nil {
                 DDLogWrapper.logError("Could not create outbound call. Error: \(error!)")
             }
+            // TODO: Investigate the need of returning false in case of error here.
         })
         return true
     }
