@@ -14,6 +14,7 @@
 #import "VSLStunConfiguration.h"
 #import "VSLTransportConfiguration.h"
 #import "CallKitProviderDelegate.h"
+#import "VSLEndpoint.h"
 
 
 /**
@@ -211,16 +212,12 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 @property (readonly, nonatomic) VSLCallManager * _Nonnull callManager;
 
+@property (readonly, nonatomic) VSLEndpoint * _Nonnull endpoint;
+
 /**
  *  The shared instance for the sip library.
  */
 + (instancetype _Nonnull)sharedInstance;
-
-/**
- *  Classbased function to check if CallKit can be used
- *  @return BOOL true if the iOS version support CallKit, otherwise false.
- **/
-+ (BOOL)callKitAvailable;
 
 /**
  *  This will configure the basic Endpoint to use with pjsip.

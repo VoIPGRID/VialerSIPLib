@@ -28,18 +28,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         DDLogWrapper.setup()
-
-        if #available(iOS 10.0, *) {
-            setupCallKit()
-        }
-        
+        setupCallKit()
         setupLogCallBack()
         setupVoIPEndpoint()
         setupAccount()
         return true
     }
 
-    @available(iOS 10.0, *)
     fileprivate func setupCallKit() {
         providerDelegate = CallKitProviderDelegate(callManager: VialerSIPLib.sharedInstance().callManager)
     }
@@ -78,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             VSLAudioCodecs(audioCodec: .ILBC, andPriority: 210),
             VSLAudioCodecs(audioCodec: .g711a, andPriority: 209)
         ]
+        // TODO: Remove the below if not needed.
 //        codecConfiguration.videoCodecs = [
 //            VSLVideoCodecs(videoCodec: .H264, andPriority: 210)
 //        ]
@@ -125,30 +121,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func displayIncomingCall(call: VSLCall) {
-        if #available(iOS 10, *) {
-            DDLogWrapper.logInfo("Incoming call block invoked, routing through CallKit.")
-            providerDelegate?.reportIncomingCall(call)
-        } else {
-            DDLogWrapper.logInfo("Incoming call block invoked, using own app presentation.")
-            NotificationCenter.default.post(name: AppDelegate.Configuration.Notifications.incomingCall,
-                                            object: self,
-                                            userInfo: [VSLNotificationUserInfoCallKey : call])
-        }
+        DDLogWrapper.logInfo("Incoming call block invoked, routing through CallKit.")
+        providerDelegate?.reportIncomingCall(call)
     }
 
     // MARK: - CallKit outbound call from a iOS native view e.g. Contacts or Recents.
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
-        if #available(iOS 10.0, *) {
-            guard let handle = userActivity.startCallHandle else {
-                return false
-            }
-
-            VialerSIPLib.sharedInstance().callManager.startCall(toNumber: handle, for:account, completion: { (call, error) in
-                if error != nil {
-                    DDLogWrapper.logError("Could not create outbound call. Error: \(error!)")
-                }
-            })
+        guard let handle = userActivity.startCallHandle else {
+            return false
         }
+        VialerSIPLib.sharedInstance().callManager.startCall(toNumber: handle, for:account, completion: { (call, error) in
+            if error != nil {
+                DDLogWrapper.logError("Could not create outbound call. Error: \(error!)")
+            }
+            // TODO: Investigate the need of returning false in case of error here.
+        })
         return true
     }
 }

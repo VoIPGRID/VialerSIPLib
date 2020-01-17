@@ -145,6 +145,15 @@
 - (VSLCall * _Nullable)firstActiveCallForAccount:(VSLAccount * _Nonnull)account;
 
 /**
+ *  Returns the last call for the given account
+ *
+ *  @param account The VSLAccount instance for which to return the last call.
+ *
+ *  @return The last call for the given account, otherwise nil.
+ */
+- (VSLCall * _Nullable)lastCallForAccount:(VSLAccount * _Nonnull)account;
+
+/**
  *  Reinvite all active calls for the given account.
  *
  *  @param account The VSLAccount instance for which to reinvite all calls.
