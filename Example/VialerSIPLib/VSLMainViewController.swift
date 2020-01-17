@@ -45,17 +45,15 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
                                                selector: #selector(incomingCallNotification(_:)),
                                                name: AppDelegate.Configuration.Notifications.incomingCall,
                                                object: nil)
-        // If we are CallKit compatible
-        if #available(iOS 10.0, *) {
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(directlyShowActiveCallController(_:)),
-                                                   name: Notification.Name.CallKitProviderDelegateOutboundCallStarted,
-                                                   object: nil)
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(directlyShowActiveCallController(_:)),
-                                                   name: Notification.Name.CallKitProviderDelegateInboundCallAccepted,
-                                                   object: nil)
-        }
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(directlyShowActiveCallController(_:)),
+                                               name: Notification.Name.CallKitProviderDelegateOutboundCallStarted,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(directlyShowActiveCallController(_:)),
+                                               name: Notification.Name.CallKitProviderDelegateInboundCallAccepted,
+                                               object: nil)
 
         account.addObserver(self, forKeyPath: #keyPath(VSLAccount.accountState), options: .new, context: &myContext)
         updateUI()
@@ -69,14 +67,12 @@ class VSLMainViewController: UIViewController, UIPickerViewDataSource, UIPickerV
                                                   name:AppDelegate.Configuration.Notifications.incomingCall,
                                                   object: nil)
 
-        if #available(iOS 10.0, *) {
-            NotificationCenter.default.removeObserver(self,
-                                                      name: Notification.Name.CallKitProviderDelegateOutboundCallStarted,
-                                                      object: nil)
-            NotificationCenter.default.removeObserver(self,
-                                                      name: Notification.Name.CallKitProviderDelegateInboundCallAccepted,
-                                                      object: nil)
-        }
+        NotificationCenter.default.removeObserver(self,
+                                                  name: Notification.Name.CallKitProviderDelegateOutboundCallStarted,
+                                                  object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: Notification.Name.CallKitProviderDelegateInboundCallAccepted,
+                                                  object: nil)
     }
 
     // MARK: - Outlets

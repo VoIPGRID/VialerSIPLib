@@ -22,7 +22,7 @@ In active development.
 ### Requirements
 
 - Cocoapods
-- iOS 9.0 or greater
+- iOS 10.0 or greater
 - [Git lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
 
 ### Installation
@@ -31,7 +31,7 @@ VialerSIPLib is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-    platform :ios, '9.0'
+    platform :ios, '10.0'
     pod 'VialerSIPLib'
 ```
 

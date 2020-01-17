@@ -67,6 +67,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     pjsua_acc_info accountInfo;
     pj_status_t status;
     
+    [self checkCurrentThreadIsRegisteredWithPJSUA];
     status = pjsua_acc_get_info((pjsua_acc_id)self.accountId, &accountInfo);
     if (status != PJ_SUCCESS) {
         return 0;
@@ -221,7 +222,7 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     
     status = pjsua_acc_del((pjsua_acc_id)self.accountId);
     if (status != PJ_SUCCESS) {
-        VSLLogError(@"Unable to remove account from sip server.");
+        VSLLogError(@"Unable to remove account from sip server, status code:%d", status);
     }
     [[VSLEndpoint sharedEndpoint] removeAccount:self];
 }

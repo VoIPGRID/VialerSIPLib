@@ -8,13 +8,11 @@
         Copied from Speakerbox example app.
  */
 
-@available(iOS 10.0, *)
 protocol StartCallConvertible {
     var startCallHandle: String? { get }
     var video: Bool? { get }
 }
 
-@available(iOS 10.0, *)
 extension StartCallConvertible {
     var video: Bool? {
         return nil

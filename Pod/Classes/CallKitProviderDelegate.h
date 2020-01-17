@@ -16,6 +16,8 @@ extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNoti
 
 @interface CallKitProviderDelegate : NSObject <CXProviderDelegate>
 
+@property (strong, nonatomic) CXProvider *provider;
+
 /**
  * This init is not available.
  */

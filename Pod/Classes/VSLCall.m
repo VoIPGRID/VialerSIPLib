@@ -4,7 +4,6 @@
 //
 
 #import "VSLCall.h"
-
 #import <AVFoundation/AVFoundation.h>
 #import "NSError+VSLError.h"
 #import "NSString+PJString.h"
@@ -37,7 +36,6 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) NSString *remoteURI;
 @property (readwrite, nonatomic) NSString *callerName;
 @property (readwrite, nonatomic) NSString *callerNumber;
-@property (readwrite, nonatomic) NSInteger callId;
 @property (readwrite, nonatomic) NSString *messageCallId;
 @property (readwrite, nonatomic) NSUUID *uuid;
 @property (readwrite, nonatomic) BOOL incoming;
@@ -52,14 +50,11 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) VSLCallTransferState transferStatus;
 @property (readwrite, nonatomic) NSTimeInterval lastSeenConnectDuration;
 @property (strong, nonatomic) NSString *numberToCall;
-@property (weak, nonatomic) VSLAccount *account;
-@property (nonatomic) BOOL reinviteCall;
 @property (readwrite, nonatomic) NSTimer *audioCheckTimer;
 @property (readwrite, nonatomic) int audioCheckTimerFired;
 @property (readwrite, nonatomic) VSLCallAudioState callAudioState;
 @property (readwrite, nonatomic) int previousRxPkt;
 @property (readwrite, nonatomic) int previousTxPkt;
-@property (readwrite, nonatomic) SipInvite *invite;
 /**
  *  Stats
  */
@@ -110,6 +105,14 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     self.invite = invite;
     
     return [self initInboundCallWithCallId:callId account:account];
+}
+
+- (instancetype _Nullable)initInboundCallWithUUID:(NSUUID * _Nonnull)uuid number:(NSString * _Nonnull)number name:(NSString * _Nonnull)name {
+    self.uuid = uuid;
+    self.callerNumber = [VialerUtils cleanPhoneNumber:number];
+    self.incoming = YES;
+    self.callerName = name;
+    return self;
 }
 
 - (void)dealloc {
@@ -346,11 +349,12 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 
         pj_status_t status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &callSetting, NULL);
         if (status != PJ_SUCCESS) {
-            VSLLogError(@"Cannot reinvite for call id: %ld!", (long)self.callId);
+            VSLLogError(@"Cannot REINVITE for call id: %ld, status code:%d", (long)self.callId, status);
         } else {
-            VSLLogDebug(@"Reinvite sent for call id: %ld", (long)self.callId);
-            self.reinviteCall = YES;
+            VSLLogDebug(@"REINVITE sent for call id: %ld", (long)self.callId);
         }
+    } else {
+        VSLLogDebug(@"Can not send call REINVITE because the call is not yet setup or already disconnected.");
     }
 }
 
@@ -371,13 +375,12 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 
         pj_status_t status = pjsua_call_update2((pjsua_call_id)self.callId, &callSetting, NULL);
         if (status != PJ_SUCCESS) {
-            VSLLogError(@"Cannot sent UPDATE for call id: %ld!", (long)self.callId);
+            VSLLogError(@"Cannot sent UPDATE for call id: %ld, status code:%d", (long)self.callId, status);
         } else {
             VSLLogDebug(@"UPDATE sent for call id: %ld", (long)self.callId);
-            self.reinviteCall = YES;
         }
     } else {
-        VSLLogDebug(@"Can not send call update because the call is not yet setup or already disconnected");
+        VSLLogDebug(@"Can not send call UPDATE because the call is not yet setup or already disconnected.");
     }
 }
 
@@ -552,15 +555,16 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
                 }
             }
             
-            // When there is bad or no internet connection, try to set the call to be disconnected when the user presses the hangup button.
-            // To make sure the correct flow is followed to dispatch screens.
+            // Hanging up the call takes some time. It could fail due to a bad or no internet connection.
+            // Check after some delay if the call was indeed disconnected. If it's not the case disconnect it manually.
             __weak VSLCall *weakSelf = self;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(VSLCallDelayTimeCheckSuccessfullHangup * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 if (!weakSelf || weakSelf.callState == VSLCallStateDisconnected) {
-                    return;
+                    return; // After the delay, the call was indeed successfull disconnected.
                 }
                 
-                VSLLogDebug(@"Bad or no internet connection, setting call manual to disconnect.");
+                // The call is still not disconnected, so manual disconnect it anyway.
+                VSLLogDebug(@"Hangup unsuccessfull, possibly due to bad or no internet connection, so manually disconnecting the call.");
                 
                 // Mute the call to make sure the other party can't hear the user anymore.
                 if (!weakSelf.muted) {
