@@ -741,33 +741,37 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 
 - (void)callDealloc:(NSNotification *)notification {
     if (!self.endpointConfiguration.unregisterAfterCall || self.state != VSLEndpointStarted) {
+        // Don't remove (unregister) transports after the call ended, or when the endpoint didn't start at all.
         return;
     }
 
-    for (VSLAccount *account in self.accounts) {  // TODO: why or how multiple accounts?
-        if (![self.callManager firstActiveCallForAccount:account]) {  // TODO: when is this true? Is it True when 1 call is dealloc and posted a notification to this method?
+    // Unregister accounts that have no active calls.
+    for (VSLAccount *account in self.accounts) {
+        if (![self.callManager firstActiveCallForAccount:account]) {
             NSArray *calls = [self.callManager callsForAccount:account];
             if (calls.count == 0) {
                 NSError *error;
-                [account unregisterAccount:&error];  // TODO: I think the wish is to unregister an account when it has not got 1 call active. Does this for-if-if achieve that?
+                [account unregisterAccount:&error];
             }
         }
     }
     
-    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {  // TODO: Why this if, if you want to remove all transports, check if there are situations it's False.
+    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {  // Since UDP transports don't recreate automatically, only remove TLS / TCP transports.
         // Remove all current transports.
         pjsua_transport_id transportIds[32];
         unsigned count = PJ_ARRAY_SIZE(transportIds);
         
         pj_status_t status = pjsua_enum_transports (transportIds, &count);
 
-        if (status == PJ_SUCCESS && count > 1) {
+        if (status == PJ_SUCCESS && count > 1) { // TODO: why not > 0?
             for (int i = 1; i < count; i++) {
                 pjsua_transport_id tId = transportIds[i];
                 pjsua_transport_info info;
                 pj_status_t status = pjsua_transport_get_info(tId, &info);
-                if (status == PJ_SUCCESS) {  // TODO: success in retrieving info, not closing / removing transport.
-                    VSLLogInfo(@"SUCCESS: Destroyed transport: %d", i); // TODO: to me it looks like there is nothing destroyed, should pjsua_transport_close() be called for each tId? Or not? https://trac.pjsip.org/repos/ticket/1840 '2018: need to deprecate this API'
+                if (status == PJ_SUCCESS) {
+                    // TODO: It looks like there is nothing destroyed.
+                    // Call pjsip_transport_shutdown or pjsua_transport_close() for each tId? https://trac.pjsip.org/repos/ticket/1840 '2018: need to deprecate this API'.
+                    VSLLogInfo(@"SUCCESS: Destroyed transport: %d", i);
                 } else {
                     VSLLogError(@"FAILED: Destroyed transport: %d", i);
                 }
