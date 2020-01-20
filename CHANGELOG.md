@@ -1,6 +1,20 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+---
+## [3.6.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.6.0) (20/1/2020)
+
+Released on Monday, Jan 20, 2020
+
+### Fixed
+- Applied VAD setting only when using OPUS.
+- Dropped 9.0 ios support.
+- Various threading issues.
+- Various logging improvements.
+
+### Added
+- Implementation for ios 13 voip push notifications handling.  
+---
 
 ## [3.5.6](https://github.com/VoIPGRID/VialerSIPLib/tree/3.5.6) (29/7/2019)
 
