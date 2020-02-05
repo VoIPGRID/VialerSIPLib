@@ -90,7 +90,10 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
     if (status == PJ_SUCCESS) {
         return YES;
     } else {
-        VSLLogWarning(@"Failure in enabling sound device");
+        char statusmsg[PJ_ERR_MSG_SIZE];
+        pj_strerror(status, statusmsg, sizeof(statusmsg));
+        VSLLogWarning(@"Failure in enabling sound device, status: %s", statusmsg);
+        
         return NO;
     }
 }

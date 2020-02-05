@@ -44,7 +44,9 @@ static int const VSLRingbackInterval = 4000;
     status = pjmedia_tonegen_create2(endpoint.pjPool, &name, (unsigned int)endpoint.endpointConfiguration.clockRate, VSLRingbackChannelCount, (unsigned int)samplesPerFrame, 16, PJMEDIA_TONEGEN_LOOP, &_ringbackPort);
 
     if (status != PJ_SUCCESS) {
-        VSLLogDebug(@"Error creating ringback tones, status code:%d", status);
+        char statusmsg[PJ_ERR_MSG_SIZE];
+        pj_strerror(status, statusmsg, sizeof(statusmsg));
+        VSLLogDebug(@"Error creating ringback tones, status: %s", statusmsg);
         return nil;
     }
 
@@ -64,7 +66,9 @@ static int const VSLRingbackInterval = 4000;
     status = pjsua_conf_add_port(endpoint.pjPool, [self ringbackPort], (int *)&_ringbackSlot);
 
     if (status != PJ_SUCCESS) {
-        VSLLogDebug(@"Error adding media port for ringback tones, status code:%d", status);
+        char statusmsg[PJ_ERR_MSG_SIZE];
+        pj_strerror(status, statusmsg, sizeof(statusmsg));
+        VSLLogDebug(@"Error adding media port for ringback tones, status: %s", statusmsg);
         return nil;
     }
     return self;
@@ -75,7 +79,9 @@ static int const VSLRingbackInterval = 4000;
     // Destory the conference port otherwise the maximum number of ports will reached and pjsip will crash.
     pj_status_t status = pjsua_conf_remove_port((int)self.ringbackSlot);
     if (status != PJ_SUCCESS) {
-        VSLLogWarning(@"Error removing the port, status code:%d", status);
+        char statusmsg[PJ_ERR_MSG_SIZE];
+        pj_strerror(status, statusmsg, sizeof(statusmsg));
+        VSLLogWarning(@"Error removing the port, status: %s", statusmsg);
         return;
     }
     
@@ -99,7 +105,9 @@ static int const VSLRingbackInterval = 4000;
         // Destory the conference port otherwise the maximum number of ports will reached and pjsip will crash.
         pj_status_t status = pjsua_conf_remove_port((int)self.ringbackSlot);
         if (status != PJ_SUCCESS) {
-            VSLLogWarning(@"Error removing the port, status code:%d", status);
+            char statusmsg[PJ_ERR_MSG_SIZE];
+            pj_strerror(status, statusmsg, sizeof(statusmsg));
+            VSLLogWarning(@"Error removing the port, status: %s", statusmsg);
         }
     }
 }
