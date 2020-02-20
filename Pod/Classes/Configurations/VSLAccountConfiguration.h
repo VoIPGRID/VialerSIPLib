@@ -56,6 +56,7 @@ typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
      * above to specify how the Contact update should be performed when
      * receiving 2xx response.
      */
+    
     VSLContactRewriteMethodAlwaysUpdate = PJSUA_CONTACT_REWRITE_ALWAYS_UPDATE
 };
 

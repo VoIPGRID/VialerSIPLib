@@ -589,10 +589,11 @@ static void logCallBack(int logLevel, const char *data, int len) {
  * Notify application when call state has changed.
  */
 static void onCallState(pjsua_call_id callId, pjsip_event *event) {
-    VSLLogVerbose(@"PJSUA callback: call state changed.");
     pjsua_call_info callInfo;
     pjsua_call_get_info(callId, &callInfo);
 
+    VSLLogVerbose(@"PJSUA callback: call state changed to %@.", VSLCallStateString(callInfo.state));
+    
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
     if (account) {
         VSLCall *call = [[VSLEndpoint sharedEndpoint].callManager callWithCallId:callId];
@@ -875,7 +876,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 - (void)ipAddressChanged:(NSNotification *)notification {
     pjsua_ip_change_param param;
     pjsua_ip_change_param_default(&param);
-    param.restart_lis_delay = 100;
+    param.restart_lis_delay = 100; //msec
     param.restart_listener = PJ_TRUE;
 
     pj_status_t status = pjsua_handle_ip_change(&param);
@@ -896,31 +897,31 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 
     switch (op) {
         case PJSUA_IP_CHANGE_OP_NULL: {
-            VSLLogDebug(@"AFV: Hasn't start ip change process, status: %s", statusmsg);
+            VSLLogDebug(@"Hasn't start ip change process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_RESTART_LIS: {
-            VSLLogDebug(@"AFV: The restart listener process, status: %s", statusmsg);
+            VSLLogDebug(@"The restart listener process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_SHUTDOWN_TP: {
-            VSLLogDebug(@"AFV: The shutdown transport process, statust: %s", statusmsg);
+            VSLLogDebug(@"The shutdown transport process, statust: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_UPDATE_CONTACT: {
-            VSLLogDebug(@"AFV: The update contact process, status: %s", statusmsg);
+            VSLLogDebug(@"The update contact process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_HANGUP_CALLS: {
-            VSLLogDebug(@"AFV: The hanging up call process, status: %s", statusmsg);
+            VSLLogDebug(@"The hanging up call process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS: {
-            VSLLogDebug(@"AFV: The re-INVITE call process, status: %s", statusmsg);
+            VSLLogDebug(@"The re-INVITE call process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_COMPLETED: {
-            VSLLogDebug(@"AFV: The ip change process has completed, status: %s", statusmsg);
+            VSLLogDebug(@"The ip change process has completed, status: %s", statusmsg);
             [VSLEndpoint sharedEndpoint].ipChangeInProgress = NO;
             break;
         }
@@ -961,6 +962,8 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 }
 
 static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info) {
+    VSLLogVerbose(@"Transport state changed to: %@", VSLTransportStateName(state));
+    
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration]) {
         VSLCallManager *callManager = [VSLEndpoint sharedEndpoint].callManager;
         for (VSLAccount *account in [VSLEndpoint sharedEndpoint].accounts) {
