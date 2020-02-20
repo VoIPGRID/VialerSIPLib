@@ -230,6 +230,11 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
         pjsua_transport_config_default(&transportConfig);
 
 
+        if (endpointConfiguration.hasTLSConfiguration) {
+            // FYI transportConfig.tls_setting.method defaults to PJSIP_SSL_UNSPECIFIED_METHOD > PJSIP_SSL_DEFAULT_METHOD > PJSIP_TLSV1_METHOD
+            transportConfig.tls_setting.method = PJSIP_TLSV1_2_METHOD;
+        }
+        
         pjsip_transport_type_e transportType = (pjsip_transport_type_e)transportConfiguration.transportType;
         pjsua_transport_id transportId;
 
