@@ -888,33 +888,39 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 
 static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info) {
     VSLLogInfo(@"onIpChangeProgress:");
-
+    
+    [VSLEndpoint sharedEndpoint].ipChangeInProgress = YES;
+    
     char statusmsg[PJ_ERR_MSG_SIZE];
     pj_strerror(status, statusmsg, sizeof(statusmsg));
 
     switch (op) {
         case PJSUA_IP_CHANGE_OP_NULL: {
-            VSLLogDebug(@"Hasn't start ip change process, status: %s", statusmsg);
+            VSLLogDebug(@"AFV: Hasn't start ip change process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_RESTART_LIS: {
-            VSLLogDebug(@"The restart listener process, status: %s", statusmsg);
+            VSLLogDebug(@"AFV: The restart listener process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_SHUTDOWN_TP: {
-            VSLLogDebug(@"The shutdown transport process, statust: %s", statusmsg);
+            VSLLogDebug(@"AFV: The shutdown transport process, statust: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_UPDATE_CONTACT: {
-            VSLLogDebug(@"The update contact process, status: %s", statusmsg);
+            VSLLogDebug(@"AFV: The update contact process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_HANGUP_CALLS: {
-            VSLLogDebug(@"The hanging up call process, status: %s", statusmsg);
+            VSLLogDebug(@"AFV: The hanging up call process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS: {
-            VSLLogDebug(@"The re-INVITE call process, status: %s", statusmsg);
+            VSLLogDebug(@"AFV: The re-INVITE call process, status: %s", statusmsg);
+            break;
+        }
+        case PJSUA_IP_CHANGE_OP_COMPLETED: {
+            VSLLogDebug(@"AFV: The ip change process has completed, status: %s", statusmsg);
             [VSLEndpoint sharedEndpoint].ipChangeInProgress = NO;
             break;
         }
