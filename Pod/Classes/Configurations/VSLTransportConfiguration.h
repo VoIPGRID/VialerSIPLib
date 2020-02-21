@@ -64,4 +64,6 @@ typedef NS_ENUM(NSUInteger, VSLTransportType) {
  */
 + (instancetype _Nullable)configurationWithTransportType:(VSLTransportType)transportType;
 
+#define VSLTransportStateName(pjsip_transport_state) [@[@"PJSIP_TP_STATE_CONNECTED", @"PJSIP_TP_STATE_DISCONNECTED", @"PJSIP_TP_STATE_SHUTDOWN", @"PJSIP_TP_STATE_DESTROY"] objectAtIndex:pjsip_transport_state]
+
 @end

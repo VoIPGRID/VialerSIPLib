@@ -150,6 +150,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     pj_status_t status = pjsua_create();
     if (status != PJ_SUCCESS) {
         self.state = VSLEndpointStopped;
+        
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
                          localizedDescriptionKey:NSLocalizedString(@"Could not create PJSIP Enpoint instance", nil)
@@ -212,6 +213,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
     if (status != PJ_SUCCESS) {
         [self destroyPJSUAInstance];
+        
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
                          localizedDescriptionKey:NSLocalizedString(@"Could not initialize Endpoint.", nil)
@@ -228,6 +230,11 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
         pjsua_transport_config_default(&transportConfig);
 
 
+        if (endpointConfiguration.hasTLSConfiguration) {
+            // FYI transportConfig.tls_setting.method defaults to PJSIP_SSL_UNSPECIFIED_METHOD > PJSIP_SSL_DEFAULT_METHOD > PJSIP_TLSV1_METHOD
+            transportConfig.tls_setting.method = PJSIP_TLSV1_2_METHOD;
+        }
+        
         pjsip_transport_type_e transportType = (pjsip_transport_type_e)transportConfiguration.transportType;
         pjsua_transport_id transportId;
 
@@ -248,6 +255,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     status = pjsua_start();
     if (status != PJ_SUCCESS) {
         [self destroyPJSUAInstance];
+        
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil
                          localizedDescriptionKey:NSLocalizedString(@"Could not start PJSIP Endpoint", nil)
@@ -312,7 +320,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
         pj_status_t status = pj_thread_register("VialerPJSIP", aPJThreadDesc, &pjThread);
 
         if (status != PJ_SUCCESS) {
-            VSLLogError(@"Error registering thread at PJSUA, status code:%d", status);
+            char statusmsg[PJ_ERR_MSG_SIZE];
+            pj_strerror(status, statusmsg, sizeof(statusmsg));
+            VSLLogError(@"Error registering thread at PJSUA, status: %s", statusmsg);
         }
     }
 
@@ -323,7 +333,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     // Destroy PJSUA.
     pj_status_t status = pjsua_destroy();
     if (status != PJ_SUCCESS) {
-        VSLLogWarning(@"Error stopping SIP Endpoint, status code:%d", status);
+        char statusmsg[PJ_ERR_MSG_SIZE];
+        pj_strerror(status, statusmsg, sizeof(statusmsg));
+        VSLLogWarning(@"Error stopping SIP Endpoint, status: %s", statusmsg);
     }
 
     self.state = VSLEndpointStopped;
@@ -394,7 +406,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     unsigned audioCodecCount = audioCodecInfoSize;
     pj_status_t status = pjsua_enum_codecs(audioCodecInfo, &audioCodecCount);
     if (status != PJ_SUCCESS) {
-        VSLLogError(@"Error getting list of audio codecs, status code:%d", status);
+        char statusmsg[PJ_ERR_MSG_SIZE];
+        pj_strerror(status, statusmsg, sizeof(statusmsg));
+        VSLLogError(@"Error getting list of audio codecs, status: %s", statusmsg);
         return NO;
     }
 
@@ -405,7 +419,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
         status = pjsua_codec_set_priority(&codecId, priority);
         [self updateOpusSettings:codecId];
         if (status != PJ_SUCCESS) {
-            VSLLogError(@"Error setting codec priority to the correct value, status code:%d", status);
+            char statusmsg[PJ_ERR_MSG_SIZE];
+            pj_strerror(status, statusmsg, sizeof(statusmsg));
+            VSLLogError(@"Error setting codec priority to the correct value, status: %s", statusmsg);
             return NO;
         }
     }
@@ -467,7 +483,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     unsigned videoCodecCount = videoCodecInfoSize;
     pj_status_t status = pjsua_vid_enum_codecs(videoCodecInfo, &videoCodecCount);
     if (status != PJ_SUCCESS) {
-        VSLLogError(@"Error getting list of video codecs, status code:%d", status);
+        char statusmsg[PJ_ERR_MSG_SIZE];
+        pj_strerror(status, statusmsg, sizeof(statusmsg));
+        VSLLogError(@"Error getting list of video codecs, status: %d", statusmsg);
         return NO;
     } else {
         for (NSUInteger i = 0; i < videoCodecCount; i++) {
@@ -489,7 +507,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
                 pjsua_vid_codec_set_param(&videoCodecInfo[i].codec_id, &param);
 
                 if (status != PJ_SUCCESS) {
-                    DDLogError(@"Error setting video codec priority to the correct value, status code:%d", status);
+                    char statusmsg[PJ_ERR_MSG_SIZE];
+                    pj_strerror(status, statusmsg, sizeof(statusmsg));
+                    DDLogError(@"Error setting video codec priority to the correct value, status: %s", statusmsg);
                     return NO;
                 }
             }
@@ -574,10 +594,11 @@ static void logCallBack(int logLevel, const char *data, int len) {
  * Notify application when call state has changed.
  */
 static void onCallState(pjsua_call_id callId, pjsip_event *event) {
-    VSLLogVerbose(@"PJSUA callback: call state changed.");
     pjsua_call_info callInfo;
     pjsua_call_get_info(callId, &callInfo);
 
+    VSLLogVerbose(@"PJSUA callback: call state changed to %@.", VSLCallStateString(callInfo.state));
+    
     VSLAccount *account = [[VSLEndpoint sharedEndpoint] lookupAccount:callInfo.acc_id];
     if (account) {
         VSLCall *call = [[VSLEndpoint sharedEndpoint].callManager callWithCallId:callId];
@@ -751,7 +772,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
             NSArray *calls = [self.callManager callsForAccount:account];
             if (calls.count == 0) {
                 NSError *error;
-                [account unregisterAccount:&error];
+                [account unregisterAccount:&error];  // TODO: I think the wish is to unregister an account when it has not got 1 call active. Does this for-if-if achieve that?
             }
         }
     }
@@ -768,6 +789,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
                 pjsua_transport_id tId = transportIds[i];
                 pjsua_transport_info info;
                 pj_status_t status = pjsua_transport_get_info(tId, &info);
+
                 if (status == PJ_SUCCESS) {
                     // TODO: It looks like there is nothing destroyed.
                     // Call pjsip_transport_shutdown or pjsua_transport_close() for each tId? https://trac.pjsip.org/repos/ticket/1840 '2018: need to deprecate this API'.
@@ -851,7 +873,7 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 /**
  *  Register account again if network has changed connection.
  *
- *  To prevent registration to quickly or to often, we wait for a second before actually sending the registration.
+ *  To prevent registration to quickly or to often, we wait for some time before actually sending the registration.
  *  This is needed because switching to or between mobile networks can happen multiple times in a short time.
  *
  *  @param notification The notification which lead to this function being invoked over GCD.
@@ -859,43 +881,57 @@ static void onCallTransferStatus(pjsua_call_id callId, int statusCode, const pj_
 - (void)ipAddressChanged:(NSNotification *)notification {
     pjsua_ip_change_param param;
     pjsua_ip_change_param_default(&param);
-    param.restart_lis_delay = 100;
+    param.restart_lis_delay = 100; //msec
     param.restart_listener = PJ_TRUE;
 
     pj_status_t status = pjsua_handle_ip_change(&param);
     if (status != PJ_SUCCESS) {
-        VSLLogError(@"Error handling ip change, status code:%d", status);
+        char statusmsg[PJ_ERR_MSG_SIZE];
+        pj_strerror(status, statusmsg, sizeof(statusmsg));
+        VSLLogError(@"Error handling ip change, status: %s", statusmsg);
     }
 }
 
 static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const pjsua_ip_change_op_info *info) {
     VSLLogInfo(@"onIpChangeProgress:");
-
+    
     [VSLEndpoint sharedEndpoint].ipChangeInProgress = YES;
+    
+    char statusmsg[PJ_ERR_MSG_SIZE];
+    pj_strerror(status, statusmsg, sizeof(statusmsg));
 
     switch (op) {
+        case PJSUA_IP_CHANGE_OP_NULL: {
+            VSLLogDebug(@"Hasn't start ip change process, status: %s", statusmsg);
+            break;
+        }
         case PJSUA_IP_CHANGE_OP_RESTART_LIS: {
-            VSLLogInfo(@"Restart Listener: %u", status);
+            VSLLogDebug(@"The restart listener process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_SHUTDOWN_TP: {
-            VSLLogInfo(@"Account Shutdown transport: %u", status);
+            VSLLogDebug(@"The shutdown transport process, statust: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_UPDATE_CONTACT: {
-            VSLLogInfo(@"Account update contact: %u", status);
+            VSLLogDebug(@"The update contact process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_HANGUP_CALLS: {
-            VSLLogInfo(@"Account hangup calls: %u", status);
+            VSLLogDebug(@"The hanging up call process, status: %s", statusmsg);
             break;
         }
         case PJSUA_IP_CHANGE_OP_ACC_REINVITE_CALLS: {
-            VSLLogInfo(@"Account reinvite calls: %u", status);
+            VSLLogDebug(@"The re-INVITE call process, status: %s", statusmsg);
+            break;
+        }
+        case PJSUA_IP_CHANGE_OP_COMPLETED: {
+            VSLLogDebug(@"The ip change process has completed, status: %s", statusmsg);
             [VSLEndpoint sharedEndpoint].ipChangeInProgress = NO;
             break;
         }
         default:
+            VSLLogError(@"Unhandled ip change operation encountered, status: %s", statusmsg);
             break;
     }
 }
@@ -931,6 +967,8 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 }
 
 static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state state, const pjsip_transport_state_info *info) {
+    VSLLogVerbose(@"Transport state changed to: %@", VSLTransportStateName(state));
+    
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration]) {
         VSLCallManager *callManager = [VSLEndpoint sharedEndpoint].callManager;
         for (VSLAccount *account in [VSLEndpoint sharedEndpoint].accounts) {

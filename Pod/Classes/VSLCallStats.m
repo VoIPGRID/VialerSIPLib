@@ -247,7 +247,10 @@ NSString * const VSLCallStatsTotalMBsUsed = @"VSLCallStatsTotalMBsUsed";
             self.MOS = 0;
         }
     } else {
-        VSLLogDebug(@"No stream found");
+        char statusmsg[PJ_ERR_MSG_SIZE];
+        pj_strerror(status, statusmsg, sizeof(statusmsg));
+        VSLLogDebug(@"No stream found, status: %s", statusmsg);
+
         self.activeCodec = @"Unknown";
     }
     
