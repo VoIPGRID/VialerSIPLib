@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 ---
+## [3.7.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.7.0) (21/2/2020)
+
+Released on Friday, Feb 21, 2020
+
+### Fixed
+- Better debug information
+
+### Added
+- Handling end of ip change event added by PJSIP 2.10.
+- Make use of updated Vialer-pjsip-iOS library providing updates for:
+- PJSIP 2.10
+- h264 2.0.0
+- opus 1.3.1
+- OpenSSL 1.1.1d
+---
 ## [3.6.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.6.0) (20/1/2020)
 
 Released on Monday, Jan 20, 2020
