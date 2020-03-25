@@ -239,6 +239,13 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 }
 
 #pragma mark - Actions
+- (void)checkCurrentThreadIsRegisteredWithPJSUA {
+    static pj_thread_desc a_thread_desc;
+    static pj_thread_t *a_thread;
+    if (!pj_thread_is_registered()) {
+        pj_thread_register("VialerPJSIP", a_thread_desc, &a_thread);
+    }
+}
 
 - (void)startWithCompletion:(void (^)(NSError * error))completion {
     NSAssert(self.account, @"An account must be set to be able to start a call");
@@ -254,6 +261,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         callSetting.flag &= ~PJSUA_CALL_INCLUDE_DISABLED_MEDIA;
     }
 
+    [self checkCurrentThreadIsRegisteredWithPJSUA];
     pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, NULL, (int *)&_callId);
     VSLLogVerbose(@"Call(%@) started with id:%ld", self.uuid.UUIDString, (long)self.callId);
 
