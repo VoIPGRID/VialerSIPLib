@@ -404,6 +404,14 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     const unsigned audioCodecInfoSize = 64;
     pjsua_codec_info audioCodecInfo[audioCodecInfoSize];
     unsigned audioCodecCount = audioCodecInfoSize;
+    
+    // Register thread if needed.
+    NSError *threadError;
+    if (![self createPJSIPThreadWithError:&threadError]) {
+        VSLLogError(@"Error registering the thread for PJSIP: %@", threadError);
+        return NO;
+    }
+    
     pj_status_t status = pjsua_enum_codecs(audioCodecInfo, &audioCodecCount);
     if (status != PJ_SUCCESS) {
         char statusmsg[PJ_ERR_MSG_SIZE];
