@@ -66,7 +66,9 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
 
 - (BOOL)configureLibraryWithEndPointConfiguration:(VSLEndpointConfiguration * _Nonnull)endpointConfiguration error:(NSError * _Nullable __autoreleasing *)error {
     // Make sure interrupts are handled by pjsip
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    });    
 
     // Start the Endpoint
     NSError *endpointConfigurationError;
