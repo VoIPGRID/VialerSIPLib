@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 ---
+## [3.7.1](https://github.com/VoIPGRID/VialerSIPLib/tree/3.7.1) (6/4/2020)
+
+Released on Monday, Apr 4, 2020
+
+### Fixed
+- Fixed various threading issues which were causing crashes 
+---
 ## [3.7.0](https://github.com/VoIPGRID/VialerSIPLib/tree/3.7.0) (21/2/2020)
 
 Released on Friday, Feb 21, 2020
