@@ -107,6 +107,13 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 @property (readonly, nonatomic) BOOL sipRegisterOnAdd;
 
+
+@property (readonly, nonatomic) unsigned int retryIntervalSec;
+@optional
+
+
+@property (readonly, nonatomic) unsigned int retryFirstIntervalSec;
+@optional
 /**
  *  When set to YES, calls will be dropped after registration fails.
  *

@@ -113,6 +113,14 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
         if ([sipUser respondsToSelector:@selector(sipRegisterOnAdd)]) {
             accountConfiguration.sipRegisterOnAdd = sipUser.sipRegisterOnAdd;
         }
+        
+        if ([sipUser respondsToSelector:@selector(retryFirstIntervalSec)]) {
+            accountConfiguration.retryFirstIntervalSec = sipUser.retryFirstIntervalSec;
+        }
+        
+        if ([sipUser respondsToSelector:@selector(retryIntervalSec)]) {
+            accountConfiguration.retryIntervalSec = sipUser.retryIntervalSec;
+        }
 
         if ([sipUser respondsToSelector:@selector(dropCallOnRegistrationFailure)]) {
             accountConfiguration.dropCallOnRegistrationFailure = sipUser.dropCallOnRegistrationFailure;

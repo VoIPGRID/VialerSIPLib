@@ -111,6 +111,15 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     acc_cfg.id = [[accountConfiguration.sipAddress stringByAppendingString:transportString] prependSipUri].pjString;
     acc_cfg.reg_uri = [[accountConfiguration.sipDomain stringByAppendingString:transportString] prependSipUri].pjString;
     acc_cfg.register_on_acc_add = accountConfiguration.sipRegisterOnAdd ? PJ_TRUE : PJ_FALSE;
+    
+    acc_cfg.reg_first_retry_interval = accountConfiguration.retryFirstIntervalSec ? accountConfiguration.retryFirstIntervalSec : 10;
+    NSLog(@"lib");
+    NSLog(@"%i", acc_cfg.reg_first_retry_interval);
+    NSLog(@"%i", accountConfiguration.retryFirstIntervalSec);
+    acc_cfg.reg_retry_interval = accountConfiguration.retryIntervalSec ? accountConfiguration.retryIntervalSec : 300;
+    NSLog(@"lib");
+    NSLog(@"%i ", acc_cfg.reg_retry_interval);
+    NSLog(@"%i ", accountConfiguration.retryIntervalSec);
     acc_cfg.publish_enabled = accountConfiguration.sipPublishEnabled ? PJ_TRUE : PJ_FALSE;
     acc_cfg.reg_timeout = VSLAccountRegistrationTimeoutInSeconds;
     acc_cfg.drop_calls_on_reg_fail = accountConfiguration.dropCallOnRegistrationFailure ? PJ_TRUE : PJ_FALSE;
