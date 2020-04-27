@@ -109,37 +109,17 @@ typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
 @property (nonatomic) BOOL sipRegisterOnAdd;
 
 /**
-* Specify interval of auto registration retry upon registration failure
-* (including caused by transport problem), in second. Set to 0 to
-* disable auto re-registration. Note that if the registration retry
-* occurs because of transport failure, the first retry will be done
-* after \a firstRetryIntervalSec seconds instead. Also note that
-* the interval will be randomized slightly by some seconds (specified
-* in \a reg_retry_random_interval) to avoid all clients re-registering
-* at the same time.
-*
-* See also \a firstRetryIntervalSec and \a randomRetryIntervalSec
-* settings.
-*
-* Default: PJSUA_REG_RETRY_INTERVAL
-*/
+ *  Specify interval in seconds of auto registration retry upon registration failure.
+ *
+ *  Default: PJSUA_REG_RETRY_INTERVAL
+ */
 @property (nonatomic) unsigned int retryIntervalSec;
 
 /**
-* Specify interval of auto registration retry upon registration failure
-* (including caused by transport problem), in second. Set to 0 to
-* disable auto re-registration. Note that if the registration retry
-* occurs because of transport failure, the first retry will be done
-* after \a firstRetryIntervalSec seconds instead. Also note that
-* the interval will be randomized slightly by some seconds (specified
-* in \a reg_retry_random_interval) to avoid all clients re-registering
-* at the same time.
-*
-* See also \a firstRetryIntervalSec and \a randomRetryIntervalSec
-* settings.
-*
-* Default: PJSUA_REG__FIRST_RETRY_INTERVAL
-*/
+ *  Specify interval in seconds of the registration retry upon first registration failure.
+ *
+ *  Default: PJSUA_REG__FIRST_RETRY_INTERVAL
+ */
 @property (nonatomic) unsigned int retryFirstIntervalSec;
 
 /**
