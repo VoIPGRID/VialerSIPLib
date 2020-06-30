@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 ---
+## [3.7.2](https://github.com/VoIPGRID/VialerSIPLib/tree/3.7.2) (30/6/2020)
+
+Released on Tuesday, June 30, 2020
+
+### Fixed
+- Fixed reinvite for cases which were failing. 
+---
 ## [3.7.1](https://github.com/VoIPGRID/VialerSIPLib/tree/3.7.1) (6/4/2020)
 
 Released on Monday, Apr 4, 2020
