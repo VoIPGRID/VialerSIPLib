@@ -348,24 +348,22 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     if (self.callState > VSLCallStateNull && self.callState < VSLCallStateDisconnected) {
         pjsua_call_setting callSetting;
         pjsua_call_setting_default(&callSetting);
-
-        VSLIpChangeConfiguration *ipChangeConfiguration = [VSLEndpoint sharedEndpoint].endpointConfiguration.ipChangeConfiguration;
-        if (ipChangeConfiguration) {
-            callSetting.flag = ipChangeConfiguration.ipAddressChangeReinviteFlags;
-        }
+        
+        callSetting.flag = PJSUA_CALL_REINIT_MEDIA + PJSUA_CALL_NO_SDP_OFFER;
+                
         if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
             callSetting.vid_cnt = 0;
-            callSetting.flag &= ~PJSUA_CALL_INCLUDE_DISABLED_MEDIA;
         }
 
+        VSLLogDebug(@"Sending Reinvite.");
         pj_status_t status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &callSetting, NULL);
+        
         if (status != PJ_SUCCESS) {
             char statusmsg[PJ_ERR_MSG_SIZE];
             pj_strerror(status, statusmsg, sizeof(statusmsg));
-
-            VSLLogError(@"Cannot REINVITE for call id: %ld, status: %s", (long)self.callId, statusmsg);
-        } else {
-            VSLLogDebug(@"REINVITE sent for call id: %ld", (long)self.callId);
+            VSLLogError(@"REINVITE failed for call id: %ld, status: %s.", (long)self.callId, statusmsg);
+                    } else {
+            VSLLogDebug(@"REINVITE successfully sent for call id: %ld", (long)self.callId);
         }
     } else {
         VSLLogDebug(@"Can not send call REINVITE because the call is not yet setup or already disconnected.");
