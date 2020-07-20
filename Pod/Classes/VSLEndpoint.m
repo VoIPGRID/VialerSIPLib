@@ -745,6 +745,9 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
             call.callId = call_id;
             call.invite = [[SipInvite alloc] initWithInvitePacket:rdata->pkt_info.packet];
 
+            // Answer 180 to the server so it will create a tone signalling the caller that the remote side is ringing.
+            pjsua_call_answer(call_id, 180, NULL, NULL);
+            
             if ([VSLEndpoint sharedEndpoint].incomingCallBlock) {
                 [VSLEndpoint sharedEndpoint].incomingCallBlock(call);
             }
