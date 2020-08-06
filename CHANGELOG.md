@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 ---
+## [3.7.3](https://github.com/VoIPGRID/VialerSIPLib/tree/3.7.3) (6/8/2020)
+
+Released on Thursday, August 6th, 2020
+
+### Fixed
+- Properly replying to the server with ringing.
+---
 ## [3.7.2](https://github.com/VoIPGRID/VialerSIPLib/tree/3.7.2) (30/6/2020)
 
 Released on Tuesday, June 30, 2020
