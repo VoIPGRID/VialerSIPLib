@@ -109,6 +109,20 @@ typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
 @property (nonatomic) BOOL sipRegisterOnAdd;
 
 /**
+ *  Specify interval in seconds of auto registration retry upon registration failure.
+ *
+ *  Default: PJSUA_REG_RETRY_INTERVAL
+ */
+@property (nonatomic) unsigned int retryIntervalSec;
+
+/**
+ *  Specify interval in seconds of the registration retry upon first registration failure.
+ *
+ *  Default: PJSUA_REG__FIRST_RETRY_INTERVAL
+ */
+@property (nonatomic) unsigned int retryFirstIntervalSec;
+
+/**
  *  If YES, the account presence will be published to the server where the account belongs.
  */
 @property (nonatomic) BOOL sipPublishEnabled;
