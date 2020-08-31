@@ -86,8 +86,9 @@ static NSString *const P_ASSERTED_IDENTITY_KEY = @"P-Asserted-Identity";
  */
 - (NSString *) findLineContaining:(NSString *)key inPacket:(char*) packet {
     NSString *packetAsString = [NSString stringWithUTF8String:packet];
-    NSArray *lines = [packetAsString componentsSeparatedByString:@"\n"];
-    
+    NSString *lineSeparator = [packetAsString rangeOfString:@"\r\n"].location != NSNotFound ? @"\r\n" : @"\n";
+    NSArray *lines = [packetAsString componentsSeparatedByString:lineSeparator];
+
     for (id line in lines) {
         if ([line hasPrefix:key]) {
             return [line stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@: ", key] withString:@""];
