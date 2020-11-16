@@ -200,6 +200,24 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
         }
     }
 
+   ////////////////////////////////////////////////////////////////////////// PodChanges
+
+    /* Encryption part */
+    /* Always initialize these two, so pjsip can receive encrypted and unecnrypted calls */
+
+    pjmedia_srtp_keying_method method1 = PJMEDIA_SRTP_KEYING_DTLS_SRTP;
+    pjmedia_srtp_keying_method method2 = PJMEDIA_SRTP_KEYING_SDES;
+    endpointConfig.srtp_opt.keying_count = 0;// 2;
+    endpointConfig.srtp_opt.keying[0] = method1;
+    endpointConfig.srtp_opt.keying[1] = method2;
+    endpointConfig.srtp_opt.crypto_count = 0;// 16;
+
+    /* Initialize srtp as optional */
+    endpointConfig.use_srtp = PJMEDIA_SRTP_OPTIONAL;
+    endpointConfig.srtp_secure_signaling = 0;
+
+    ///////////////////////////////////////////////////////////////////////
+
     // Configure the media information for the endpoint.
     pjsua_media_config mediaConfig;
     pjsua_media_config_default(&mediaConfig);
@@ -208,6 +226,11 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     mediaConfig.has_ioqueue = PJ_TRUE;
     mediaConfig.thread_cnt = 1;
     mediaConfig.no_vad = PJ_TRUE;
+
+    ////////////////////////////////// PodChanges
+    mediaConfig.enable_ice = PJ_TRUE;
+    mediaConfig.ice_opt.aggressive = PJ_TRUE;
+    ///////////////////////////////////////
 
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
@@ -739,6 +762,11 @@ static void onIncomingCall(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_rx_
         pjsua_call_get_info(call_id, &callInfo);
         
         VSLCallManager *callManager = [VialerSIPLib sharedInstance].callManager;
+        /////////////////////////////////////////////////////////////////// PodChanges
+        VSLLogInfo(@"call: ** %@", [callManager callsForAccount:account]);
+        VSLCall *_call = [[VSLCall alloc] initInboundCallWithCallId:call_id account:account]; // Add Call directly
+        [callManager addCall:_call];
+
         VSLCall *call = [callManager lastCallForAccount:account]; // TODO: safe to say that the last one is the right one?
      
         if (call) {

@@ -160,8 +160,18 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     }
     
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
-        acc_cfg.srtp_secure_signaling = 1;
-        acc_cfg.use_srtp = PJMEDIA_SRTP_MANDATORY;
+         ///////////////////////////////////////////// PodChanges
+        acc_cfg.srtp_secure_signaling = 0; //1;
+        acc_cfg.use_srtp = PJMEDIA_SRTP_OPTIONAL; // PJMEDIA_SRTP_MANDATORY;
+//        acc_cfg.srtp_secure_signaling = 1;
+//        acc_cfg.use_srtp = PJMEDIA_SRTP_MANDATORY;
+        acc_cfg.enable_rtcp_mux = PJ_TRUE;
+        acc_cfg.srtp_opt.crypto_count = 0;// PJMEDIA_SRTP_MAX_CRYPTOS;
+        acc_cfg.srtp_opt.keying_count = 0;// PJMEDIA_SRTP_MAX_CRYPTOS;
+        ////////////////////////////////////////// Ice
+        acc_cfg.ice_cfg_use = PJSUA_ICE_CONFIG_USE_CUSTOM;
+        acc_cfg.ice_cfg.enable_ice = PJ_TRUE;
+        acc_cfg.ice_cfg.ice_opt.aggressive = PJ_TRUE;
     }
     
     if (accountConfiguration.turnConfiguration) {
@@ -176,6 +186,8 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     if (accountConfiguration.iceConfiguration) {
         acc_cfg.ice_cfg_use = PJSUA_ICE_CONFIG_USE_DEFAULT;
         acc_cfg.ice_cfg.enable_ice = accountConfiguration.iceConfiguration.enableIce;
+        /////////////////////////////////////////////////////// PodChanges
+        acc_cfg.ice_cfg.ice_opt.aggressive = PJ_TRUE;
     }
     
     int accountId;
