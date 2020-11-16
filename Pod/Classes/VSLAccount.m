@@ -19,6 +19,8 @@
 
 static NSUInteger const VSLAccountRegistrationTimeoutInSeconds = 800;
 static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
+NSString * const VSLAccountStateNotification = @"VSLAccountStateNotification";
+NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateKey";
 
 @interface VSLAccount()
 @property (readwrite, nonnull, nonatomic) VSLAccountConfiguration *accountConfiguration;
@@ -54,6 +56,12 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
                     (long)_accountState, VSLAccountStateString(accountState), (long)accountState);
         _accountState = accountState;
     }
+    NSDictionary *notificationUserInfo = @{
+                                                  VSLNotificationAccountStateKey : [NSNumber numberWithInt: accountState]
+                                                  };
+           [[NSNotificationCenter defaultCenter] postNotificationName:VSLAccountStateNotification
+                                                               object:nil
+                                                             userInfo:notificationUserInfo];
 }
 
 - (BOOL)isAccountValid {

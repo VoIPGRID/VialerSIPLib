@@ -6,6 +6,10 @@
 #import <Foundation/Foundation.h>
 #import "VSLAccountConfiguration.h"
 
+
+extern NSString * _Nonnull const VSLAccountStateNotification;
+extern NSString * _Nonnull const VSLNotificationAccountStateKey;
+
 @class VSLCall, VSLCallManager;
 
 /**
