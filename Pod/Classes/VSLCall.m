@@ -281,6 +281,67 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     completion(error);
 }
 
+- (void)answerWithVideoWithCompletion:(void (^)(NSError *error))completion {
+    
+    pjsua_call_setting opt;
+    pjsua_call_setting_default(&opt);
+    opt.vid_cnt = 1; //0 - disable video in the call
+    
+    pj_status_t status;
+    
+    if (self.callId != PJSUA_INVALID_ID) {
+        
+        //ONEGO: use pjsua_call_answer2 -> doesn't answer call correctly
+        status = pjsua_call_answer2((int)self.callId, &opt, PJSIP_SC_OK, NULL, NULL);
+        
+        if (status != PJ_SUCCESS) {
+            //@"Could not answer call PJSIP returned status code:%d", status;
+            NSError *error = [NSError VSLUnderlyingError:nil
+                                 localizedDescriptionKey:NSLocalizedString(@"Could not answer call", nil)
+                             localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"PJSIP status code: %d", nil), status]
+                                             errorDomain:VSLCallErrorDomain
+                                               errorCode:VSLCallErrorCannotAnswerCall];
+            completion(error);
+        } else {
+            completion(nil);
+        }
+        
+    } else {
+        //@"Could not answer call, PJSIP indicated callId(%ld) as invalid", (long)self.callId);
+        NSError *error = [NSError VSLUnderlyingError:nil
+                             localizedDescriptionKey:NSLocalizedString(@"Could not answer call", nil)
+                         localizedFailureReasonError:[NSString stringWithFormat:NSLocalizedString(@"Call Id: %d invalid", nil), self.callId]
+                                         errorDomain:VSLCallErrorDomain
+                                           errorCode:VSLCallErrorCannotAnswerCall];
+        completion(error);
+    }
+}
+
+- (void) displayWindow: (UIView *) parent {
+//#if PJSUA_HAS_VIDEO
+    
+    int vid_idx;
+    pjsua_vid_win_id wid;
+    
+    vid_idx = pjsua_call_get_vid_stream_idx(self.callId);
+    if (vid_idx >= 0) {
+        pjsua_call_info ci;
+        pjsua_call_get_info(self.callId, &ci);
+        wid = ci.media[vid_idx].stream.vid.win_in;
+      
+        pjsua_vid_win_info wi;
+        if (pjsua_vid_win_get_info(wid, &wi) == PJ_SUCCESS) {
+            UIView *view = (__bridge UIView *)wi.hwnd.info.ios.window;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [parent addSubview:view];
+            });
+        }
+    }
+}
+
+
+
 - (AVAudioPlayer *)disconnectedSoundPlayer {
     if (!_disconnectedSoundPlayer) {
         NSBundle *podBundle = [NSBundle bundleForClass:self.classForCoder];
