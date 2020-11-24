@@ -205,16 +205,17 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     /* Encryption part */
     /* Always initialize these two, so pjsip can receive encrypted and unecnrypted calls */
 
-    pjmedia_srtp_keying_method method1 = PJMEDIA_SRTP_KEYING_DTLS_SRTP;
-    pjmedia_srtp_keying_method method2 = PJMEDIA_SRTP_KEYING_SDES;
-    endpointConfig.srtp_opt.keying_count = 0;// 2;
-    endpointConfig.srtp_opt.keying[0] = method1;
-    endpointConfig.srtp_opt.keying[1] = method2;
-    endpointConfig.srtp_opt.crypto_count = 0;// 16;
-
-    /* Initialize srtp as optional */
-    endpointConfig.use_srtp = PJMEDIA_SRTP_OPTIONAL;
-    endpointConfig.srtp_secure_signaling = 0;
+//    pjmedia_srtp_keying_method method1 = PJMEDIA_SRTP_KEYING_DTLS_SRTP;
+//    pjmedia_srtp_keying_method method2 = PJMEDIA_SRTP_KEYING_SDES;
+//    endpointConfig.srtp_opt.keying[0] = method1;
+//    endpointConfig.srtp_opt.keying[1] = method2;
+//    
+//    endpointConfig.srtp_opt.keying_count = 0;// 2;
+//    endpointConfig.srtp_opt.crypto_count = 0;// 16;
+//
+//    /* Initialize srtp as optional */
+//    endpointConfig.use_srtp = PJMEDIA_SRTP_OPTIONAL;
+//    endpointConfig.srtp_secure_signaling = 0;
 
     ///////////////////////////////////////////////////////////////////////
 
@@ -228,8 +229,8 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     mediaConfig.no_vad = PJ_TRUE;
 
     ////////////////////////////////// PodChanges
-    mediaConfig.enable_ice = PJ_TRUE;
-    mediaConfig.ice_opt.aggressive = PJ_TRUE;
+//    mediaConfig.enable_ice = PJ_TRUE;
+//    mediaConfig.ice_opt.aggressive = PJ_TRUE;
     ///////////////////////////////////////
 
     // Initialize Endpoint.
