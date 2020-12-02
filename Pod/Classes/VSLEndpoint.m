@@ -536,6 +536,20 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
                 param.enc_fmt.det.vid.fps.denum = 1;
                 param.dec_fmt.det.vid.size.w = 1920;
                 param.dec_fmt.det.vid.size.h = 1920;
+                
+                /*
+                               param.enc_fmt.det.vid.size.w = 640;
+                                param.enc_fmt.det.vid.size.h = 480;
+                               param.enc_fmt.det.vid.fps.num = 30;
+                               param.enc_fmt.det.vid.fps.denum = 1;
+
+                               //        p.ignoreFmtp = PJ_TRUE;
+                               param.dec_fmt.det.vid.size.w = 1280;
+                               param.dec_fmt.det.vid.size.h = 720;
+                               param.dec_fmt.det.vid.fps.num = 90;
+                               param.dec_fmt.det.vid.fps.denum = 1;
+                               */
+                
                 pjsua_vid_codec_set_param(&videoCodecInfo[i].codec_id, &param);
 
                 if (status != PJ_SUCCESS) {

@@ -295,6 +295,10 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         status = pjsua_call_answer2((int)self.callId, &opt, PJSIP_SC_OK, NULL, NULL);
         
         if (status != PJ_SUCCESS) {
+            char statusmsg[PJ_ERR_MSG_SIZE];
+            pj_strerror(status, statusmsg, sizeof(statusmsg));
+            VSLLogError(@"Could not answer call PJSIP returned status: %s", statusmsg);
+            
             //@"Could not answer call PJSIP returned status code:%d", status;
             NSError *error = [NSError VSLUnderlyingError:nil
                                  localizedDescriptionKey:NSLocalizedString(@"Could not answer call", nil)
@@ -317,6 +321,24 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     }
 }
 
+- (UIView *) myCallWindow {
+    int vid_idx;
+       pjsua_vid_win_id wid;
+       
+       vid_idx = pjsua_call_get_vid_stream_idx(self.callId);
+       if (vid_idx >= 0) {
+           pjsua_call_info ci;
+           pjsua_call_get_info(self.callId, &ci);
+           wid = ci.media[vid_idx].stream.vid.win_in;
+         
+           pjsua_vid_win_info wi;
+           if (pjsua_vid_win_get_info(wid, &wi) == PJ_SUCCESS) {
+               UIView *view = (__bridge UIView *)wi.hwnd.info.ios.window;
+               return view;
+           }
+       }
+}
+
 - (void) displayWindow: (UIView *) parent {
 //#if PJSUA_HAS_VIDEO
     
@@ -324,7 +346,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     pjsua_vid_win_id wid;
     
     vid_idx = pjsua_call_get_vid_stream_idx(self.callId);
-    if (vid_idx >= 0) {
+    if (vid_idx > 0) {
         pjsua_call_info ci;
         pjsua_call_get_info(self.callId, &ci);
         wid = ci.media[vid_idx].stream.vid.win_in;
