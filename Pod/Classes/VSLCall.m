@@ -55,6 +55,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) VSLCallAudioState callAudioState;
 @property (readwrite, nonatomic) int previousRxPkt;
 @property (readwrite, nonatomic) int previousTxPkt;
+
 /**
  *  Stats
  */
@@ -67,9 +68,17 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 
 #pragma mark - Life Cycle
 
+static NSUUID * _mockUUID = nil;
++ (NSUUID *)mockUUID { return _mockUUID; }
++ (void)setMockUUID:(NSUUID *)newMockUUID { _mockUUID = newMockUUID; }
+
 - (instancetype)initPrivateWithAccount:(VSLAccount *)account {
     if (self = [super init]) {
-        self.uuid = [[NSUUID alloc] init];
+        if ([VSLCall mockUUID] == nil) {
+            self.uuid = [[NSUUID alloc] init];
+        } else {
+            self.uuid = [[VSLCall mockUUID] copy];
+        }
         self.account = account;
     }
     return self;

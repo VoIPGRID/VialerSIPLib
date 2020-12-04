@@ -9,6 +9,7 @@
 #import <VialerPJSIP/pjsua.h>
 #import "SipInvite.h"
 
+
 /**
  *  Notification which is posted when the call's state changes.
  *  The call for which the state changed can be found in the
@@ -197,6 +198,11 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 @interface VSLCall : NSObject
 
 #pragma mark - Properties
+
+/**
+ *  The mockID for voippush without UUID
+ */
+@property (class) NSUUID * _Nullable mockUUID;
 
 /**
  *  The callId which a call receives from PJSIP when it is created.
