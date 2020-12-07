@@ -123,6 +123,9 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
     acc_cfg.reg_timeout = VSLAccountRegistrationTimeoutInSeconds;
     acc_cfg.drop_calls_on_reg_fail = accountConfiguration.dropCallOnRegistrationFailure ? PJ_TRUE : PJ_FALSE;
     
+    acc_cfg.reg_first_retry_interval = 10;
+    acc_cfg.reg_retry_interval = 300;
+    
     // Add account information to the pjsua account configuration.
     acc_cfg.cred_count = 1;
     acc_cfg.cred_info[0].scheme = accountConfiguration.sipAuthScheme.pjString;
