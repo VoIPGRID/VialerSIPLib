@@ -218,7 +218,15 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
 //    endpointConfig.srtp_secure_signaling = 0;
 
     ///////////////////////////////////////////////////////////////////////
-
+    
+    endpointConfig.srtp_opt.keying[0] = PJMEDIA_SRTP_KEYING_DTLS_SRTP;
+    endpointConfig.srtp_opt.keying[1] = PJMEDIA_SRTP_KEYING_SDES;
+    endpointConfig.srtp_opt.keying_count = 2;
+    endpointConfig.srtp_opt.crypto_count = 0;//PJMEDIA_SRTP_MAX_CRYPTOS;
+    endpointConfig.use_srtp = PJMEDIA_SRTP_OPTIONAL;
+    endpointConfig.srtp_secure_signaling = 0;
+    
+    
     // Configure the media information for the endpoint.
     pjsua_media_config mediaConfig;
     pjsua_media_config_default(&mediaConfig);
@@ -228,6 +236,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     mediaConfig.thread_cnt = 1;
     mediaConfig.no_vad = PJ_TRUE;
 
+    
+    
+    
     ////////////////////////////////// PodChanges
 //    mediaConfig.enable_ice = PJ_TRUE;
 //    mediaConfig.ice_opt.aggressive = PJ_TRUE;
@@ -482,7 +493,8 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
             const pjmedia_codec_info *codecInfo;
             pjmedia_codec_param param;
             pjmedia_codec_opus_config opus_cfg;
-
+            
+            
             pjmedia_codec_mgr_find_codecs_by_id(endpointMgr, &codecId, &count, &codecInfo, NULL);
             pjmedia_codec_mgr_get_default_param(endpointMgr, codecInfo, &param);
             pjmedia_codec_opus_get_config(&opus_cfg);
@@ -541,6 +553,11 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
                 */
                 
                 //from zona
+                
+              
+                param.enc_fmt.det.vid.avg_bps = 512 * 1024;
+                param.enc_fmt.det.vid.max_bps = 768 * 1024;
+                
                 param.enc_fmt.det.vid.size.w = 640;
                 param.enc_fmt.det.vid.size.h = 480;
                 param.enc_fmt.det.vid.fps.num = 30;

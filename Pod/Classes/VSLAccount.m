@@ -173,12 +173,19 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
          ///////////////////////////////////////////// PodChanges
         acc_cfg.srtp_secure_signaling = 0; //1;
-        acc_cfg.use_srtp = PJMEDIA_SRTP_OPTIONAL; // PJMEDIA_SRTP_MANDATORY;
+        acc_cfg.use_srtp = PJMEDIA_SRTP_OPTIONAL; //
 //        acc_cfg.srtp_secure_signaling = 1;
 //        acc_cfg.use_srtp = PJMEDIA_SRTP_MANDATORY;
         acc_cfg.enable_rtcp_mux = PJ_TRUE;
-        acc_cfg.srtp_opt.crypto_count = 0;// PJMEDIA_SRTP_MAX_CRYPTOS;
-        acc_cfg.srtp_opt.keying_count = 0;// PJMEDIA_SRTP_MAX_CRYPTOS;
+        
+        acc_cfg.srtp_opt.keying_count = 2;
+        acc_cfg.srtp_opt.keying[0] = PJMEDIA_SRTP_KEYING_DTLS_SRTP;
+        acc_cfg.srtp_opt.keying[1] = PJMEDIA_SRTP_KEYING_SDES;
+        acc_cfg.srtp_opt.crypto_count = 0;//PJMEDIA_SRTP_MAX_CRYPTOS;
+        
+//        acc_cfg.srtp_opt.crypto_count = 0;// PJMEDIA_SRTP_MAX_CRYPTOS;
+  //      acc_cfg.srtp_opt.keying_count = 0;// PJMEDIA_SRTP_MAX_CRYPTOS;
+        
         ////////////////////////////////////////// Ice
         acc_cfg.ice_cfg_use = PJSUA_ICE_CONFIG_USE_CUSTOM;
         acc_cfg.ice_cfg.enable_ice = PJ_TRUE;
