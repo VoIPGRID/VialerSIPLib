@@ -209,6 +209,11 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     mediaConfig.thread_cnt = 1;
     mediaConfig.no_vad = PJ_TRUE;
 
+    // kory 20201221
+    mediaConfig.ec_options = 0;
+    mediaConfig.ec_tail_len = 50;
+    mediaConfig.ptime = 20;
+
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
     if (status != PJ_SUCCESS) {
@@ -228,6 +233,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     for (VSLTransportConfiguration *transportConfiguration in endpointConfiguration.transportConfigurations) {
         pjsua_transport_config transportConfig;
         pjsua_transport_config_default(&transportConfig);
+
+        // kory 20201221
+        transportConfig.qos_type = PJ_QOS_TYPE_VOICE;
 
 
         if (endpointConfiguration.hasTLSConfiguration) {
