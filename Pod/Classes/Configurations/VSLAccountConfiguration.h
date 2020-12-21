@@ -63,6 +63,11 @@ typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
 @interface VSLAccountConfiguration : NSObject
 
 /**
+ *  The pAssertedIdentity that should be used when set P-Asserted-Identity header value.
+ */
+@property (strong, nonatomic) NSString * pAssertedIdentity;
+
+/**
  *  The account that should be used when authenticate on remote PBX.
  */
 @property (strong, nonatomic) NSString * _Nonnull sipAccount;

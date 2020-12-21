@@ -57,7 +57,12 @@ static NSString *const P_ASSERTED_IDENTITY_KEY = @"P-Asserted-Identity";
     
     NSString *remotePartyIdAddress = remotePartyId[0];
 
-    return [VSLCall getCallerInfoFromRemoteUri:remotePartyIdAddress];
+    if ([header isEqualToString:P_ASSERTED_IDENTITY_KEY]) {
+        return @{@"caller_name": [remotePartyIdAddress stringByReplacingOccurrencesOfString:@"\r" withString:@""],
+                 @"caller_number": [remotePartyIdAddress stringByReplacingOccurrencesOfString:@"\r" withString:@""],};
+    } else {
+        return [VSLCall getCallerInfoFromRemoteUri:remotePartyIdAddress];
+    }
 }
 
 /**

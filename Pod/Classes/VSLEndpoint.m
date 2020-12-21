@@ -961,7 +961,7 @@ static void onIpChangeProgress(pjsua_ip_change_op op, pj_status_t status, const 
 
     if (![packet isEqualToString: @""]) {
         NSString *callCompletedElsewhere = @"Call completed elsewhere";
-        NSString *originatorCancel = @"ORIGINATOR_CANCEL";
+        NSString *originatorCancel = @"CANCEL";
         VSLCallTerminateReason reason = VSLCallTerminateReasonUnknown;
         
         if ([packet rangeOfString:callCompletedElsewhere].location != NSNotFound) {

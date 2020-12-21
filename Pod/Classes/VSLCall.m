@@ -262,7 +262,10 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     }
 
     [self checkCurrentThreadIsRegisteredWithPJSUA];
-    pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, NULL, (int *)&_callId);
+    
+    pjsua_msg_data *msg_data = [self makeMsgData];
+    
+    pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, msg_data, (int *)&_callId);
     VSLLogVerbose(@"Call(%@) started with id:%ld", self.uuid.UUIDString, (long)self.callId);
 
     NSError *error;
@@ -279,6 +282,28 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     }
 
     completion(error);
+}
+
+- (pjsua_msg_data *)makeMsgData {
+    if (self.account.accountConfiguration.pAssertedIdentity != nil) {
+        pjsua_msg_data *msg_data = malloc(sizeof(pjsua_msg_data));
+        pjsua_msg_data_init(msg_data);
+        
+        pj_pool_t *pool;
+        pj_caching_pool cp;
+        pj_caching_pool_init(&cp, &pj_pool_factory_default_policy, 0);
+        pool = pj_pool_create(&cp.factory, "call_header", 1000, 1000, NULL);
+        
+        pj_str_t hName = [[NSString alloc] initWithString: @"P-Asserted-Identity"].pjString;
+        pj_str_t hValue = self.account.accountConfiguration.pAssertedIdentity.pjString;
+        pjsip_generic_string_hdr *hdr = pjsip_generic_string_hdr_create(pool, &hName, &hValue);
+
+        pj_list_push_back(&msg_data->hdr_list, hdr);
+        pj_pool_release(pool);
+        return msg_data;
+    } else {
+        return NULL;
+    }
 }
 
 - (AVAudioPlayer *)disconnectedSoundPlayer {
@@ -543,7 +568,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 }
 
 - (BOOL)decline:(NSError **)error {
-    pj_status_t status = pjsua_call_answer((int)self.callId, PJSIP_SC_BUSY_HERE, NULL, NULL);
+    pj_status_t status = pjsua_call_answer((int)self.callId, PJSIP_SC_DECLINE, NULL, NULL);
     if (status != PJ_SUCCESS) {
         if (error != NULL) {
             *error = [NSError VSLUnderlyingError:nil

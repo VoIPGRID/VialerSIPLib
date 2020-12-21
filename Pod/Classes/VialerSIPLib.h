@@ -77,6 +77,13 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
 @protocol SIPEnabledUser <NSObject>
 
 /**
+ *  The pAssertedIdentity that should be used when set P-Asserted-Identity header value.
+ *
+ *  @return NSString with the pAssertedIdentity.
+ */
+@property (readonly, nonatomic) NSString * pAssertedIdentity;
+
+/**
  *  The sip account that should be used when authenticate on remote PBX.
  *
  *  @return NSString with the password.
