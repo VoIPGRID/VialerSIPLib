@@ -246,6 +246,11 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
 
         // kory 20201221
         transportConfig.qos_type = PJ_QOS_TYPE_VOICE;
+        
+        // kory 20201224
+        transportConfig.qos_params.flags = PJ_QOS_PARAM_HAS_DSCP;
+        transportConfig.qos_params.dscp_val = 24;
+        transportConfig.qos_params.wmm_prio = PJ_QOS_WMM_PRIO_VOICE;
 
 
         if (endpointConfiguration.hasTLSConfiguration) {

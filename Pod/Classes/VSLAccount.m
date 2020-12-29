@@ -123,6 +123,12 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     acc_cfg.cred_info[0].data_type = PJSIP_CRED_DATA_PLAIN_PASSWD;
     acc_cfg.cred_info[0].data = accountConfiguration.sipPassword.pjString;
     acc_cfg.proxy_cnt = 0;
+
+    // kory 20201224
+    acc_cfg.rtp_cfg.qos_type = PJ_QOS_TYPE_VOICE;
+    acc_cfg.rtp_cfg.qos_params.flags = PJ_QOS_PARAM_HAS_DSCP;
+    acc_cfg.rtp_cfg.qos_params.dscp_val = 24;
+    acc_cfg.rtp_cfg.qos_params.wmm_prio = PJ_QOS_WMM_PRIO_VOICE;
     
     // If a proxy server is present on the account configuration add this to pjsua account configuration.
     if (accountConfiguration.sipProxyServer) {
