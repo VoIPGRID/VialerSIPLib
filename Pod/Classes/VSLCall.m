@@ -348,25 +348,80 @@ static NSUUID * _mockUUID = nil;
        }
 }
 
+-(void) stopPreviews {
+    static const int MAX_DEVS = 10;
+    pjmedia_vid_dev_info info_devs[MAX_DEVS];
+    unsigned int num_devs = MAX_DEVS;
+    if(pjsua_vid_enum_devs(info_devs, &num_devs) == PJ_SUCCESS)
+    {
+        for(int i=0; i<num_devs; i++)
+        {
+            pjmedia_vid_dev_info dev_info = info_devs[i];
+            if (dev_info.id == PJMEDIA_VID_DEFAULT_CAPTURE_DEV)
+            {
+                printf("preview stop id: %d \n", dev_info.id);
+                //pjsua_vid_preview_start(dev_info.id, &vid_preview_param);
+                pjsua_vid_preview_stop(dev_info.id);
+            }
+        }
+    }
+}
+
+- (UIView *) myPreviewWindow {
+    pj_status_t status;
+    pjsua_vid_win_id pre_id;
+    pjsua_vid_win_info pre_info;
+    pjsua_vid_preview_param param;
+    pjsua_vid_preview_param_default(&param);
+    param.wnd_flags = PJMEDIA_VID_DEV_WND_BORDER | PJMEDIA_VID_DEV_WND_RESIZABLE;
+    status = pjsua_vid_preview_start(PJMEDIA_VID_DEFAULT_CAPTURE_DEV, &param);
+    
+    if (status == PJ_SUCCESS) {
+        pre_id = pjsua_vid_preview_get_win(PJMEDIA_VID_DEFAULT_CAPTURE_DEV);
+        
+    }
+
+    status = pjsua_vid_win_get_info(pre_id, &pre_info);
+    
+    if (status == PJ_SUCCESS) {
+        UIView *view = (__bridge UIView *)pre_info.hwnd.info.ios.window;
+        return view;
+    }
+}
+
+- (void) startOutgoingStream {
+    
+    pjsua_call_vid_strm_op_param param;
+    pjsua_call_vid_strm_op_param_default(&param);
+    param.cap_dev = 0;
+    pjsua_vid_dev_set_setting(param.cap_dev, PJMEDIA_VID_DEV_CAP_ORIENTATION, (const void *)PJMEDIA_ORIENT_ROTATE_270DEG, PJ_TRUE);
+//    pj_status_t status = pjsua_call_set_vid_strm(self.callId, PJSUA_CALL_VID_STRM_ADD, &param);
+    pj_status_t status = pjsua_call_set_vid_strm(self.callId, PJSUA_CALL_VID_STRM_START_TRANSMIT, &param);
+    
+    // DLog(@"pjsua_call_set_vid_strm status = %i", status);
+    
+}
+
 - (void) displayWindow: (UIView *) parent {
-//#if PJSUA_HAS_VIDEO
-    
-    int vid_idx;
-    pjsua_vid_win_id wid;
-    
-    vid_idx = pjsua_call_get_vid_stream_idx(self.callId);
-    if (vid_idx > 0) {
-        pjsua_call_info ci;
-        pjsua_call_get_info(self.callId, &ci);
-        wid = ci.media[vid_idx].stream.vid.win_in;
-      
-        pjsua_vid_win_info wi;
-        if (pjsua_vid_win_get_info(wid, &wi) == PJ_SUCCESS) {
-            UIView *view = (__bridge UIView *)wi.hwnd.info.ios.window;
+    if (PJSUA_HAS_VIDEO) {
+        
+        int vid_idx;
+        pjsua_vid_win_id wid;
+        
+        vid_idx = pjsua_call_get_vid_stream_idx(self.callId);
+        if (vid_idx > 0) {
+            pjsua_call_info ci;
+            pjsua_call_get_info(self.callId, &ci);
+            wid = ci.media[vid_idx].stream.vid.win_in;
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [parent addSubview:view];
-            });
+            pjsua_vid_win_info wi;
+            if (pjsua_vid_win_get_info(wid, &wi) == PJ_SUCCESS) {
+                UIView *view = (__bridge UIView *)wi.hwnd.info.ios.window;
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [parent addSubview:view];
+                });
+            }
         }
     }
 }
@@ -653,6 +708,7 @@ static NSUUID * _mockUUID = nil;
     if (self.callId != PJSUA_INVALID_ID) {
         if (self.callState != VSLCallStateDisconnected) {
             self.userDidHangUp = YES;
+            [self stopPreviews];
             pj_status_t status = pjsua_call_hangup((int)self.callId, 0, NULL, NULL);
             if (status != PJ_SUCCESS) {
                 if (error != NULL) {

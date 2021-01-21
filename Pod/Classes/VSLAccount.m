@@ -147,6 +147,13 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
     acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite ? PJ_TRUE : PJ_FALSE;
     acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite ? PJ_TRUE : PJ_FALSE;
     
+    acc_cfg.vid_in_auto_show = PJ_TRUE;
+    acc_cfg.vid_out_auto_transmit = PJ_TRUE;
+
+    acc_cfg.vid_wnd_flags = PJMEDIA_VID_DEV_WND_BORDER | PJMEDIA_VID_DEV_WND_RESIZABLE;
+    acc_cfg.vid_cap_dev = PJMEDIA_VID_DEFAULT_CAPTURE_DEV;
+    acc_cfg.vid_rend_dev = PJMEDIA_VID_DEFAULT_RENDER_DEV;
+    
     // Only set the contact rewrite method when allow contact rewrite is set to TRUE.
     if (accountConfiguration.allowContactRewrite) {
         acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
@@ -181,7 +188,9 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
         acc_cfg.srtp_opt.keying_count = 2;
         acc_cfg.srtp_opt.keying[0] = PJMEDIA_SRTP_KEYING_DTLS_SRTP;
         acc_cfg.srtp_opt.keying[1] = PJMEDIA_SRTP_KEYING_SDES;
-        acc_cfg.srtp_opt.crypto_count = 0;//PJMEDIA_SRTP_MAX_CRYPTOS;
+        acc_cfg.srtp_opt.crypto_count = PJMEDIA_SRTP_MAX_CRYPTOS;
+        
+        acc_cfg.rtcp_fb_cfg.dont_use_avpf = PJ_TRUE;
         
 //        acc_cfg.srtp_opt.crypto_count = 0;// PJMEDIA_SRTP_MAX_CRYPTOS;
   //      acc_cfg.srtp_opt.keying_count = 0;// PJMEDIA_SRTP_MAX_CRYPTOS;
@@ -191,14 +200,9 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
         acc_cfg.ice_cfg.enable_ice = PJ_TRUE;
         acc_cfg.ice_cfg.ice_opt.aggressive = PJ_TRUE;
         
-        //acc_cfg.vid_in_auto_show = PJ_TRUE;
-        //acc_cfg.vid_out_auto_transmit = PJ_TRUE;
-
-        /*acc_cfg.vid_wnd_flags = PJMEDIA_VID_DEV_WND_BORDER | PJMEDIA_VID_DEV_WND_RESIZABLE;
-        acc_cfg.vid_cap_dev = PJMEDIA_VID_DEFAULT_CAPTURE_DEV;
-        acc_cfg.vid_rend_dev = PJMEDIA_VID_DEFAULT_RENDER_DEV;
+        
         acc_cfg.reg_retry_interval = 300;
-        acc_cfg.reg_first_retry_interval = 30;*/
+        acc_cfg.reg_first_retry_interval = 30;
         
     }
     
