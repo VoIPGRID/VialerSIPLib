@@ -146,6 +146,7 @@ static NSUUID * _mockUUID = nil;
             } break;
             case VSLCallStateIncoming: {
                 pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_RINGING, NULL, NULL);
+//                pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_PROGRESS, NULL, NULL);
                 if (status != PJ_SUCCESS) {
                     VSLLogWarning(@"Error %d while sending status code PJSIP_SC_RINGING", status);
                 }
@@ -330,6 +331,16 @@ static NSUUID * _mockUUID = nil;
     }
 }
 
+- (BOOL) isVideoCall {
+    pjsua_call_info info;
+    pjsua_call_get_info(self.callId, &info);
+    if (info.rem_vid_cnt > 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
 - (UIView *) myCallWindow {
     int vid_idx;
        pjsua_vid_win_id wid;
@@ -346,25 +357,6 @@ static NSUUID * _mockUUID = nil;
                return view;
            }
        }
-}
-
--(void) stopPreviews {
-    static const int MAX_DEVS = 10;
-    pjmedia_vid_dev_info info_devs[MAX_DEVS];
-    unsigned int num_devs = MAX_DEVS;
-    if(pjsua_vid_enum_devs(info_devs, &num_devs) == PJ_SUCCESS)
-    {
-        for(int i=0; i<num_devs; i++)
-        {
-            pjmedia_vid_dev_info dev_info = info_devs[i];
-            if (dev_info.id == PJMEDIA_VID_DEFAULT_CAPTURE_DEV)
-            {
-                printf("preview stop id: %d \n", dev_info.id);
-                //pjsua_vid_preview_start(dev_info.id, &vid_preview_param);
-                pjsua_vid_preview_stop(dev_info.id);
-            }
-        }
-    }
 }
 
 - (UIView *) myPreviewWindow {
@@ -387,19 +379,6 @@ static NSUUID * _mockUUID = nil;
         UIView *view = (__bridge UIView *)pre_info.hwnd.info.ios.window;
         return view;
     }
-}
-
-- (void) startOutgoingStream {
-    
-    pjsua_call_vid_strm_op_param param;
-    pjsua_call_vid_strm_op_param_default(&param);
-    param.cap_dev = 0;
-    pjsua_vid_dev_set_setting(param.cap_dev, PJMEDIA_VID_DEV_CAP_ORIENTATION, (const void *)PJMEDIA_ORIENT_ROTATE_270DEG, PJ_TRUE);
-//    pj_status_t status = pjsua_call_set_vid_strm(self.callId, PJSUA_CALL_VID_STRM_ADD, &param);
-    pj_status_t status = pjsua_call_set_vid_strm(self.callId, PJSUA_CALL_VID_STRM_START_TRANSMIT, &param);
-    
-    // DLog(@"pjsua_call_set_vid_strm status = %i", status);
-    
 }
 
 - (void) displayWindow: (UIView *) parent {
@@ -708,7 +687,6 @@ static NSUUID * _mockUUID = nil;
     if (self.callId != PJSUA_INVALID_ID) {
         if (self.callState != VSLCallStateDisconnected) {
             self.userDidHangUp = YES;
-            [self stopPreviews];
             pj_status_t status = pjsua_call_hangup((int)self.callId, 0, NULL, NULL);
             if (status != PJ_SUCCESS) {
                 if (error != NULL) {
