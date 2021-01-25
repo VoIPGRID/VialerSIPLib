@@ -235,7 +235,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     mediaConfig.has_ioqueue = PJ_TRUE;
     mediaConfig.thread_cnt = 1;
     mediaConfig.no_vad = PJ_TRUE;
-    
+    mediaConfig.vid_preview_enable_native = PJ_FALSE;
     mediaConfig.ice_no_rtcp = PJ_TRUE;
 
     
@@ -545,31 +545,31 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
                 pjsua_vid_codec_get_param(&videoCodecInfo[i].codec_id, &param);
                 
 //                 vialer default
-//                param.ignore_fmtp = PJ_TRUE;
-//                param.enc_fmt.det.vid.size.w = 288;
-//                param.enc_fmt.det.vid.size.h = 352;
-//                param.enc_fmt.det.vid.fps.num = 20;
-//                param.enc_fmt.det.vid.fps.denum = 1;
-//                param.dec_fmt.det.vid.size.w = 1920;
-//                param.dec_fmt.det.vid.size.h = 1920;
+                param.ignore_fmtp = PJ_TRUE;
+                param.enc_fmt.det.vid.size.w = 288;
+                param.enc_fmt.det.vid.size.h = 352;
+                param.enc_fmt.det.vid.fps.num = 20;
+                param.enc_fmt.det.vid.fps.denum = 1;
+                param.dec_fmt.det.vid.size.w = 1920;
+                param.dec_fmt.det.vid.size.h = 1920;
                 
                 
                 //from zona
                 
               
-                param.enc_fmt.det.vid.avg_bps = 512 * 1024;
-                param.enc_fmt.det.vid.max_bps = 768 * 1024;
-
-                param.enc_fmt.det.vid.size.w = 640;
-                param.enc_fmt.det.vid.size.h = 480;
-                param.enc_fmt.det.vid.fps.num = 30;
-                param.enc_fmt.det.vid.fps.denum = 1;
-
-                //        p.ignoreFmtp = PJ_TRUE;
-                param.dec_fmt.det.vid.size.w = 1280;
-                param.dec_fmt.det.vid.size.h = 720;
-                param.dec_fmt.det.vid.fps.num = 90;
-                param.dec_fmt.det.vid.fps.denum = 1;
+//                param.enc_fmt.det.vid.avg_bps = 512 * 1024;
+//                param.enc_fmt.det.vid.max_bps = 768 * 1024;
+//
+//                param.enc_fmt.det.vid.size.w = 640;
+//                param.enc_fmt.det.vid.size.h = 480;
+//                param.enc_fmt.det.vid.fps.num = 30;
+//                param.enc_fmt.det.vid.fps.denum = 1;
+//
+//                //        p.ignoreFmtp = PJ_TRUE;
+//                param.dec_fmt.det.vid.size.w = 1280;
+//                param.dec_fmt.det.vid.size.h = 720;
+//                param.dec_fmt.det.vid.fps.num = 90;
+//                param.dec_fmt.det.vid.fps.denum = 1;
                 
                 pjsua_vid_codec_set_param(&videoCodecInfo[i].codec_id, &param);
 
