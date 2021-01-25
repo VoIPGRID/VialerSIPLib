@@ -145,8 +145,8 @@ static NSUUID * _mockUUID = nil;
 
             } break;
             case VSLCallStateIncoming: {
-                pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_RINGING, NULL, NULL);
-//                pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_PROGRESS, NULL, NULL);
+//                pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_RINGING, NULL, NULL);
+                pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_PROGRESS, NULL, NULL);
                 if (status != PJ_SUCCESS) {
                     VSLLogWarning(@"Error %d while sending status code PJSIP_SC_RINGING", status);
                 }
@@ -370,7 +370,7 @@ static NSUUID * _mockUUID = nil;
     
     if (status == PJ_SUCCESS) {
         pre_id = pjsua_vid_preview_get_win(PJMEDIA_VID_DEFAULT_CAPTURE_DEV);
-        
+ 
     }
 
     status = pjsua_vid_win_get_info(pre_id, &pre_info);
