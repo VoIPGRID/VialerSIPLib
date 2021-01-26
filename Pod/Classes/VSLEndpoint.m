@@ -550,8 +550,15 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
                 param.enc_fmt.det.vid.size.h = 352;
                 param.enc_fmt.det.vid.fps.num = 20;
                 param.enc_fmt.det.vid.fps.denum = 1;
-                param.dec_fmt.det.vid.size.w = 1920;
-                param.dec_fmt.det.vid.size.h = 1920;
+                
+                
+                param.dec_fmt.det.vid.size.w = 1280;
+                param.dec_fmt.det.vid.size.h = 720;
+                param.dec_fmt.det.vid.fps.num = 90;
+                param.dec_fmt.det.vid.fps.denum = 1;
+                                
+                //param.dec_fmt.det.vid.size.w = 1920;
+                //param.dec_fmt.det.vid.size.h = 1920;
                 
                 
                 //from zona
@@ -742,12 +749,12 @@ static void onRegState2(pjsua_acc_id acc_id, pjsua_reg_info *info) {
  * Notification about media events such as video notifications. Adjust renderer window size to original video size.
  */
 static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_event *event) {
-    VSLLogVerbose(@"PJSUA callback: media event.");
+    //VSLLogVerbose(@"PJSUA callback: media event.");
     
     #if PJSUA_HAS_VIDEO
         if (event->type == PJMEDIA_EVENT_FMT_CHANGED) {
             char event_name[5];
-            VSLLogVerbose(@"Media event %s", pjmedia_fourcc_name(event->type, event_name));
+            //VSLLogVerbose(@"Media event %s", pjmedia_fourcc_name(event->type, event_name));
             pjsua_call_info ci;
             pjsua_vid_win_id wid;
             pjmedia_rect_size size;
@@ -772,7 +779,7 @@ static void onCallMediaEvent(pjsua_call_id call_id, unsigned med_idx, pjmedia_ev
  * This is a general notification callback which is called whenever a transaction within the call has changed state.
  */
 static void onTxStateChange(pjsua_call_id call_id, pjsip_transaction *tx, pjsip_event *event) {
-    VSLLogVerbose(@"PJSUA callback: transaction within the call has changed state.");
+    //VSLLogVerbose(@"PJSUA callback: transaction within the call has changed state.");
     pjsua_call_info callInfo;
     pjsua_call_get_info(call_id, &callInfo);
 
