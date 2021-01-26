@@ -381,6 +381,47 @@ static NSUUID * _mockUUID = nil;
     }
 }
 
+- (void) stopAllPreviews {
+    static const int MAX_DEVS = 10;
+    pjmedia_vid_dev_info info_devs[MAX_DEVS];
+    unsigned int num_devs = MAX_DEVS;
+    if (pjsua_vid_enum_devs(info_devs, &num_devs) == PJ_SUCCESS) {
+        for (int i=0; i<num_devs; i++) {
+            pjmedia_vid_dev_info dev_info = info_devs[i];
+            printf("preview stop id: %d \n", dev_info.id);
+            pjsua_vid_preview_stop(dev_info.id);
+        }
+    }
+}
+
+- (void) switchCamera: (BOOL) is_front {
+    pjsua_call_id call_id = self.callId;
+    int devsCount = pjsua_vid_dev_count();
+    pjsua_call_vid_strm_op_param param;
+    pjsua_call_vid_strm_op_param_default(&param);
+    
+    for (int i=0; i<devsCount; i++) {
+        pjmedia_vid_dev_info devInfo;
+        pjsua_vid_dev_get_info(i, &devInfo);
+        
+        if (devInfo.dir == PJMEDIA_DIR_CAPTURE) { // && devInfo.name == "Back Camera"
+            param.cap_dev = i;
+//            pjsua_call_set_vid_strm(call_id, PJSUA_CALL_VID_STRM_CHANGE_CAP_DEV, &param);
+        }
+    }
+    param.cap_dev = 4; //PJMEDIA_VID_DEFAULT_CAPTURE_DEV ;
+    pjsua_call_set_vid_strm(call_id, PJSUA_CALL_VID_STRM_CHANGE_CAP_DEV, &param);
+}
+
+- (void) pauseStream: (BOOL) is_paused {
+    pjsua_call_id call_id = self.callId;
+    pjsua_call_vid_strm_op_param param;
+    pjsua_call_vid_strm_op_param_default(&param);
+    param.dir = PJMEDIA_DIR_ENCODING_DECODING;
+    pjsua_call_vid_strm_op op = is_paused ? PJSUA_CALL_VID_STRM_STOP_TRANSMIT : PJSUA_CALL_VID_STRM_START_TRANSMIT;
+    pjsua_call_set_vid_strm(call_id, op, &param);
+}
+
 - (void) displayWindow: (UIView *) parent {
     if (PJSUA_HAS_VIDEO) {
         

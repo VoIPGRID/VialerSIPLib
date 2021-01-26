@@ -476,6 +476,9 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 - (UIView *) myCallWindow;
 - (UIView *) myPreviewWindow;
 - (BOOL) isVideoCall;
+- (void) stopAllPreviews;
+- (void) switchCamera: (BOOL) is_front;
+- (void) pauseStream: (BOOL) is_paused;
 
 - (BOOL)answer:(NSError * _Nullable * _Nullable)error __attribute__((unavailable("Deprecated, use VSLCallManager -answerCall: completion: instead")));
 
