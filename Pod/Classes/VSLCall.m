@@ -296,7 +296,7 @@ static NSUUID * _mockUUID = nil;
     pjsua_call_setting opt;
     pjsua_call_setting_default(&opt);
     opt.vid_cnt = 1; //0 - disable video in the call
-    
+    [self checkCurrentThreadIsRegisteredWithPJSUA];
     pj_status_t status;
     
     if (self.callId != PJSUA_INVALID_ID) {
@@ -354,12 +354,13 @@ static NSUUID * _mockUUID = nil;
            pjsua_vid_win_info wi;
            if (pjsua_vid_win_get_info(wid, &wi) == PJ_SUCCESS) {
                UIView *view = (__bridge UIView *)wi.hwnd.info.ios.window;
-               return view;
+                   return view;
            }
        }
 }
 
 - (UIView *) myPreviewWindow {
+    [self checkCurrentThreadIsRegisteredWithPJSUA];
     pj_status_t status;
     pjsua_vid_win_id pre_id;
     pjsua_vid_win_info pre_info;
@@ -382,6 +383,7 @@ static NSUUID * _mockUUID = nil;
 }
 
 - (void) stopAllPreviews {
+    [self checkCurrentThreadIsRegisteredWithPJSUA];
     static const int MAX_DEVS = 10;
     pjmedia_vid_dev_info info_devs[MAX_DEVS];
     unsigned int num_devs = MAX_DEVS;
@@ -394,33 +396,60 @@ static NSUUID * _mockUUID = nil;
     }
 }
 
-- (void) switchCamera: (BOOL) is_front {
-    pjsua_call_id call_id = self.callId;
-    int devsCount = pjsua_vid_dev_count();
-    pjsua_call_vid_strm_op_param param;
-    pjsua_call_vid_strm_op_param_default(&param);
-    
-    for (int i=0; i<devsCount; i++) {
-        pjmedia_vid_dev_info devInfo;
-        pjsua_vid_dev_get_info(i, &devInfo);
-        
-        if (devInfo.dir == PJMEDIA_DIR_CAPTURE) { // && devInfo.name == "Back Camera"
-            param.cap_dev = i;
-//            pjsua_call_set_vid_strm(call_id, PJSUA_CALL_VID_STRM_CHANGE_CAP_DEV, &param);
-        }
+static bool isVideoActive(pjsua_call_id call_id) {
+    bool result=false;
+    pjsua_call_info callInfo;
+    pjsua_call_get_info(call_id, &callInfo);
+    int index = pjsua_call_get_vid_stream_idx(call_id);
+    if (index<callInfo.media_cnt) {
+        result = (callInfo.media[index].status == PJSUA_CALL_MEDIA_ACTIVE);
     }
-    param.cap_dev = 4; //PJMEDIA_VID_DEFAULT_CAPTURE_DEV ;
-    pjsua_call_set_vid_strm(call_id, PJSUA_CALL_VID_STRM_CHANGE_CAP_DEV, &param);
+    NSLog(@"MyLogger: videoActive: %s", result ? "true" : "false");
+    return result;
+}
+
+static bool isRemoteVideoAactive(pjsua_call_id call_id) {
+    pjsua_call_info callInfo;
+    pjsua_call_get_info(call_id, &callInfo);
+    NSLog(@"MyLogger: remoteVideoActive: %s", (callInfo.rem_vid_cnt>0) ? "true" : "false");
+    return (callInfo.rem_vid_cnt>0);
+}
+
+- (void) switchCamera: (BOOL) is_front {
+    [self checkCurrentThreadIsRegisteredWithPJSUA];
+    pjsua_call_id call_id = self.callId;
+    if (isVideoActive(call_id)) {
+        pjsua_call_vid_strm_op_param param;
+        pjsua_call_vid_strm_op_param_default(&param);
+        param.cap_dev = (is_front) ? 2 : 3;
+        pjsua_call_set_vid_strm(call_id, PJSUA_CALL_VID_STRM_CHANGE_CAP_DEV, &param);
+    }
+    
+//    int devsCount = pjsua_vid_dev_count();
+//    for (int i=0; i<devsCount; i++) {
+//        pjmedia_vid_dev_info devInfo;
+//        pjsua_vid_dev_get_info(i, &devInfo);
+//
+//        if (devInfo.dir == PJMEDIA_DIR_CAPTURE) { // && devInfo.name == "Back Camera"
+//            param.cap_dev = i;
+////            pjsua_call_set_vid_strm(call_id, PJSUA_CALL_VID_STRM_CHANGE_CAP_DEV, &param);
+//        }
+//    }
 }
 
 - (void) pauseStream: (BOOL) is_paused {
-    pjsua_call_id call_id = self.callId;
+    pjsua_schedule_timer2(&pauseStr, (is_paused), 0);
+}
+
+void pauseStr(is_paused) {
+    pjsua_call_id call_id = 0; // callId;
     pjsua_call_vid_strm_op_param param;
-    pjsua_call_vid_strm_op_param_default(&param);
-    param.dir = PJMEDIA_DIR_ENCODING_DECODING;
+        pjsua_call_vid_strm_op_param_default(&param);
+        param.dir = PJMEDIA_DIR_ENCODING_DECODING;
     pjsua_call_vid_strm_op op = is_paused ? PJSUA_CALL_VID_STRM_STOP_TRANSMIT : PJSUA_CALL_VID_STRM_START_TRANSMIT;
     pjsua_call_set_vid_strm(call_id, op, &param);
 }
+
 
 - (void) displayWindow: (UIView *) parent {
     if (PJSUA_HAS_VIDEO) {
