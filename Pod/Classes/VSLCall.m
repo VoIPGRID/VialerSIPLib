@@ -43,6 +43,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) BOOL muted;
 @property (readwrite, nonatomic) BOOL speaker;
 @property (readwrite, nonatomic) BOOL onHold;
+@property (readwrite, nonatomic) BOOL paused;
 @property (strong, nonatomic) NSString *currentAudioSessionCategory;
 @property (nonatomic) BOOL connected;
 @property (nonatomic) BOOL userDidHangUp;
@@ -360,6 +361,8 @@ static NSUUID * _mockUUID = nil;
          
            pjsua_vid_win_info wi;
            if (pjsua_vid_win_get_info(wid, &wi) == PJ_SUCCESS) {
+               self.paused = FALSE;
+               [self updateCallInfo: ci];
                UIView *view = (__bridge UIView *)wi.hwnd.info.ios.window;
                    return view;
            }
@@ -444,16 +447,21 @@ static bool isRemoteVideoAactive(pjsua_call_id call_id) {
 //    }
 }
 
-- (void) pauseStream: (BOOL) is_paused {
-    pjsua_schedule_timer2(&pauseStr, (is_paused), 0);
+- (void) pauseStream {
+    pj_status_t status;
+    status = pjsua_schedule_timer2(&pauseStr, ((__bridge void *)(self)), 0);
+    if (status == PJ_SUCCESS) {
+        self.paused = !self.paused;
+    }
 }
 
-void pauseStr(is_paused) {
-    pjsua_call_id call_id = 0; // callId;
+void pauseStr(void *uData) {
+    VSLCall *self = (__bridge VSLCall *)(uData);
+    pjsua_call_id call_id = self.callId; // callId;
     pjsua_call_vid_strm_op_param param;
-        pjsua_call_vid_strm_op_param_default(&param);
-        param.dir = PJMEDIA_DIR_ENCODING_DECODING;
-    pjsua_call_vid_strm_op op = is_paused ? PJSUA_CALL_VID_STRM_STOP_TRANSMIT : PJSUA_CALL_VID_STRM_START_TRANSMIT;
+    pjsua_call_vid_strm_op_param_default(&param);
+    param.dir = PJMEDIA_DIR_ENCODING_DECODING;
+    pjsua_call_vid_strm_op op = self.paused ? PJSUA_CALL_VID_STRM_STOP_TRANSMIT : PJSUA_CALL_VID_STRM_START_TRANSMIT;
     pjsua_call_set_vid_strm(call_id, op, &param);
 }
 

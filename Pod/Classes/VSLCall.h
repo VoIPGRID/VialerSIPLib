@@ -285,6 +285,11 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 @property (readonly, nonatomic) BOOL muted;
 
 /**
+ *  True if the outgoing stream is paused.
+ */
+@property (readonly, nonatomic) BOOL paused;
+
+/**
  *  True if the call is on hold locally.
  */
 @property (readonly, nonatomic) BOOL onHold;
@@ -478,7 +483,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 - (BOOL) isVideoCall;
 - (void) stopAllPreviews;
 - (void) switchCamera: (BOOL) is_front;
-- (void) pauseStream: (BOOL) is_paused;
+- (void) pauseStream;
 
 - (BOOL)answer:(NSError * _Nullable * _Nullable)error __attribute__((unavailable("Deprecated, use VSLCallManager -answerCall: completion: instead")));
 
