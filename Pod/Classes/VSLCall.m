@@ -145,11 +145,18 @@ static NSUUID * _mockUUID = nil;
 
             } break;
             case VSLCallStateIncoming: {
-//                pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_RINGING, NULL, NULL);
+                
                 pj_status_t status = pjsua_call_answer((pjsua_call_id)self.callId, PJSIP_SC_PROGRESS, NULL, NULL);
                 if (status != PJ_SUCCESS) {
                     VSLLogWarning(@"Error %d while sending status code PJSIP_SC_RINGING", status);
                 }
+                
+                // A workaround depending on the call answering status: PJSIP_SC_PROGRESS (the video only works correctly with this). Connects audio again.
+                
+                pjsua_call_info callInfo;
+                pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
+                pjsua_conf_connect(0, callInfo.conf_slot);
+                
             } break;
 
             case VSLCallStateCalling: {
