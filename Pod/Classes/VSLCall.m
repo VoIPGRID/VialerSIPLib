@@ -44,6 +44,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 @property (readwrite, nonatomic) BOOL speaker;
 @property (readwrite, nonatomic) BOOL onHold;
 @property (readwrite, nonatomic) BOOL paused;
+@property (readwrite, nonatomic) BOOL isFront;
 @property (strong, nonatomic) NSString *currentAudioSessionCategory;
 @property (nonatomic) BOOL connected;
 @property (nonatomic) BOOL userDidHangUp;
@@ -411,9 +412,7 @@ static bool isVideoActive(pjsua_call_id call_id) {
     pjsua_call_info callInfo;
     pjsua_call_get_info(call_id, &callInfo);
     int index = pjsua_call_get_vid_stream_idx(call_id);
-    if (index<callInfo.media_cnt) {
-        result = (callInfo.media[index].status == PJSUA_CALL_MEDIA_ACTIVE);
-    }
+    result = pjsua_call_vid_stream_is_running(call_id, index, PJMEDIA_DIR_ENCODING);
     NSLog(@"MyLogger: videoActive: %s", result ? "true" : "false");
     return result;
 }
@@ -425,15 +424,22 @@ static bool isRemoteVideoAactive(pjsua_call_id call_id) {
     return (callInfo.rem_vid_cnt>0);
 }
 
-- (void) switchCamera: (BOOL) is_front {
+- (void) switchCamera {
     [self checkCurrentThreadIsRegisteredWithPJSUA];
-    pjsua_call_id call_id = self.callId;
-    if (isVideoActive(call_id)) {
-        pjsua_call_vid_strm_op_param param;
-        pjsua_call_vid_strm_op_param_default(&param);
-        param.cap_dev = (is_front) ? 2 : 3;
-        pjsua_call_set_vid_strm(call_id, PJSUA_CALL_VID_STRM_CHANGE_CAP_DEV, &param);
+    if (isVideoActive(self.callId)) {
+        pj_status_t status;
+        pjsua_call_id call_id = self.callId;
+        if (isVideoActive(call_id)) {
+            pjsua_call_vid_strm_op_param param;
+            pjsua_call_vid_strm_op_param_default(&param);
+            param.cap_dev = (self.isFront) ? 2 : 3;
+            status = pjsua_call_set_vid_strm(call_id, PJSUA_CALL_VID_STRM_CHANGE_CAP_DEV, &param);
+            if (status == PJ_SUCCESS) {
+                self.isFront = !self.isFront;
+            }
+        }
     }
+    
     
 //    int devsCount = pjsua_vid_dev_count();
 //    for (int i=0; i<devsCount; i++) {

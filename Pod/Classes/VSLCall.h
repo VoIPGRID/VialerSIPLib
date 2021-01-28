@@ -290,6 +290,11 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 @property (readonly, nonatomic) BOOL paused;
 
 /**
+ *  True if the front camera is capture device.
+ */
+@property (readonly , nonatomic) BOOL isFront;
+
+/**
  *  True if the call is on hold locally.
  */
 @property (readonly, nonatomic) BOOL onHold;
@@ -482,7 +487,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
 - (UIView *) myPreviewWindow;
 - (BOOL) isVideoCall;
 - (void) stopAllPreviews;
-- (void) switchCamera: (BOOL) is_front;
+- (void) switchCamera;
 - (void) pauseStream;
 
 - (BOOL)answer:(NSError * _Nullable * _Nullable)error __attribute__((unavailable("Deprecated, use VSLCallManager -answerCall: completion: instead")));
