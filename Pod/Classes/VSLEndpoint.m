@@ -206,23 +206,15 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     mediaConfig.clock_rate = (unsigned int)endpointConfiguration.clockRate == 0 ? PJSUA_DEFAULT_CLOCK_RATE : (unsigned int)endpointConfiguration.clockRate;
     mediaConfig.snd_clock_rate = (unsigned int)endpointConfiguration.sndClockRate;
     mediaConfig.has_ioqueue = PJ_TRUE;
-    //mediaConfig.thread_cnt = 1;
     mediaConfig.no_vad = PJ_TRUE;
 
-    // kory 20201221
-    //mediaConfig.ec_options = 0;
-    //mediaConfig.ec_tail_len = 50;
+    // kory 20201230
+    mediaConfig.thread_cnt = 2; // modify 1 >> 2
     mediaConfig.ptime = 20;
-
-    // kory 20201222
-    mediaConfig.thread_cnt = 2;
     mediaConfig.quality = 10;
     mediaConfig.audio_frame_ptime = 40;
-    mediaConfig.ec_tail_len = 25;
-    mediaConfig.ec_options = PJMEDIA_ECHO_WEBRTC | PJMEDIA_ECHO_USE_SW_ECHO | PJMEDIA_ECHO_USE_NOISE_SUPPRESSOR | PJMEDIA_ECHO_AGGRESSIVENESS_MODERATE;
-
-    // kory 20201230
-    mediaConfig.ec_tail_len = 10;
+    //mediaConfig.ec_tail_len = 10;
+    //mediaConfig.ec_options = PJMEDIA_ECHO_WEBRTC | PJMEDIA_ECHO_USE_SW_ECHO | PJMEDIA_ECHO_USE_NOISE_SUPPRESSOR | PJMEDIA_ECHO_AGGRESSIVENESS_MODERATE;
 
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
