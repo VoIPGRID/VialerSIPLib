@@ -426,7 +426,7 @@ static bool isRemoteVideoAactive(pjsua_call_id call_id) {
 
 - (void) switchCamera {
     [self checkCurrentThreadIsRegisteredWithPJSUA];
-    if (isVideoActive(self.callId)) {
+    if (!self.paused) {
         pj_status_t status;
         pjsua_call_id call_id = self.callId;
         if (isVideoActive(call_id)) {
