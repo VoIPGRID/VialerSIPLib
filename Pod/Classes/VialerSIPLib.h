@@ -219,6 +219,8 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  */
 + (instancetype _Nonnull)sharedInstance;
 
++ (void)orientationChanged:(UIDeviceOrientation)orientation;
+
 /**
  *  This will configure the basic Endpoint to use with pjsip.
  *

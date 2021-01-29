@@ -224,4 +224,45 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
     return NO;
 }
 
++ (void)orientationChanged:(UIDeviceOrientation)orientation
+{
+#if PJSUA_HAS_VIDEO
+    const pjmedia_orient pj_ori[4] =
+    {
+        PJMEDIA_ORIENT_ROTATE_90DEG,  /* UIDeviceOrientationPortrait */
+        PJMEDIA_ORIENT_ROTATE_270DEG, /* UIDeviceOrientationPortraitUpsideDown */
+        PJMEDIA_ORIENT_ROTATE_180DEG, /* UIDeviceOrientationLandscapeLeft,
+                                         home button on the right side */
+        PJMEDIA_ORIENT_NATURAL        /* UIDeviceOrientationLandscapeRight,
+                                         home button on the left side */
+    };
+    static pj_thread_desc a_thread_desc;
+    static pj_thread_t *a_thread;
+    static UIDeviceOrientation prev_ori = 0;
+    UIDeviceOrientation dev_ori = orientation;
+    int i;
+    
+    if (dev_ori == prev_ori) return;
+            
+    if (dev_ori >= UIDeviceOrientationPortrait &&
+        dev_ori <= UIDeviceOrientationLandscapeRight)
+    {
+        if (!pj_thread_is_registered()) {
+            pj_thread_register("ipjsua", a_thread_desc, &a_thread);
+        }
+        
+        /* Here we set the orientation for all video devices.
+         * This may return failure for renderer devices or for
+         * capture devices which do not support orientation setting,
+         * we can simply ignore them.
+         */
+        for (i = pjsua_vid_dev_count()-1; i >= 0; i--) {
+            pjsua_vid_dev_set_setting(i, PJMEDIA_VID_DEV_CAP_ORIENTATION,
+                                      &pj_ori[dev_ori-1], PJ_TRUE);
+        }
+    }
+#endif
+}
+
+
 @end
