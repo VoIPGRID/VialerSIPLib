@@ -82,11 +82,12 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
 }
 
 - (BOOL)activateSoundDevice {
-    [self deactivateSoundDevice];
+    VSLLogDebug(@"Activating audiosession");
+    [self checkCurrentThreadIsRegisteredWithPJSUA];
+    pjsua_set_no_snd_dev();
     pj_status_t status;
     status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
     if (status == PJ_SUCCESS) {
-        VSLLogDebug(@"Activating audiosession");
         return YES;
     } else {
         char statusmsg[PJ_ERR_MSG_SIZE];
@@ -107,13 +108,9 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
 }
 
 - (void)deactivateSoundDevice {
+    VSLLogDebug(@"Deactivating audiosession");
     [self checkCurrentThreadIsRegisteredWithPJSUA];
-    pj_status_t status;
-    status = pjsua_get_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
-    if (status == PJ_SUCCESS) {
-        VSLLogDebug(@"Deactivating audiosession");
-        pjsua_set_no_snd_dev();
-    }
+    pjsua_set_no_snd_dev();
 }
 
 - (void)deactivateAudioSession {
