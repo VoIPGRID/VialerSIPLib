@@ -116,6 +116,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 }
 
 - (void)dealloc {
+    [self.audioCheckTimer invalidate];
     [[NSNotificationCenter defaultCenter] postNotificationName:VSLCallDeallocNotification
                                                         object:nil
                                                       userInfo:nil];
@@ -264,7 +265,6 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     [self checkCurrentThreadIsRegisteredWithPJSUA];
     
     pjsua_msg_data *msg_data = [self makeMsgData];
-    
     pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, msg_data, (int *)&_callId);
     VSLLogVerbose(@"Call(%@) started with id:%ld", self.uuid.UUIDString, (long)self.callId);
 
@@ -299,7 +299,6 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         pjsip_generic_string_hdr *hdr = pjsip_generic_string_hdr_create(pool, &hName, &hValue);
 
         pj_list_push_back(&msg_data->hdr_list, hdr);
-        pj_pool_release(pool);
         return msg_data;
     } else {
         return NULL;
