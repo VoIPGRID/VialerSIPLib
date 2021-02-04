@@ -154,10 +154,10 @@ static NSUUID * _mockUUID = nil;
                 }
                 
                 // A workaround depending on the call answering status: PJSIP_SC_PROGRESS (the video only works correctly with this). Connects audio again.
-                
+                /*
                 pjsua_call_info callInfo;
                 pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
-                pjsua_conf_connect(0, callInfo.conf_slot);
+                pjsua_conf_connect(0, callInfo.conf_slot); */
                 
             } break;
 
