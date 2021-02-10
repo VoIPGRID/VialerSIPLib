@@ -351,6 +351,11 @@ static NSUUID * _mockUUID = nil;
 }
 
 - (UIView *) myCallWindow {
+    
+    if (!self.isVideoCall) {
+        return  [[UIView alloc] initWithFrame: CGRectZero];
+    }
+    
     int vid_idx;
        pjsua_vid_win_id wid;
        
@@ -372,6 +377,11 @@ static NSUUID * _mockUUID = nil;
 
 - (UIView *) myPreviewWindow {
     [self checkCurrentThreadIsRegisteredWithPJSUA];
+    
+    if (!self.isVideoCall) {
+        return  [[UIView alloc] initWithFrame: CGRectZero];
+    }
+    
     pj_status_t status;
     pjsua_vid_win_id pre_id;
     pjsua_vid_win_info pre_info;
