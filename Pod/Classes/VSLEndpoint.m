@@ -229,7 +229,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
     
     // Configure the media information for the endpoint.
     pjsua_media_config mediaConfig;
-    pjsua_media_config_default(&mediaConfig);
+    pjsua_media_config_default(&mediaConfig);    
     mediaConfig.clock_rate = (unsigned int)endpointConfiguration.clockRate == 0 ? PJSUA_DEFAULT_CLOCK_RATE : (unsigned int)endpointConfiguration.clockRate;
     mediaConfig.snd_clock_rate = (unsigned int)endpointConfiguration.sndClockRate;
     mediaConfig.has_ioqueue = PJ_TRUE;

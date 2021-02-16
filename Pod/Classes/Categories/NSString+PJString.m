@@ -25,6 +25,17 @@
     return sipUri;
 }
 
+- (NSString *)prependSipsUri {
+    NSString *sipUri = self;
+
+    if (![sipUri hasPrefix:@"sips:"]) {
+        sipUri = [NSString stringWithFormat:@"sips:%@", sipUri];
+    }
+
+    return sipUri;
+}
+
+
 - (pj_str_t)sipUriWithDomain:(NSString *)domain {
     NSString *sipUri = [self prependSipUri];
 

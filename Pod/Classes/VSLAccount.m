@@ -108,16 +108,31 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration]) {
         transportString = @";transport=tcp";
     }
-    if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
+    
+    
+    BOOL tls = ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]);
+    
+    if (tls) {
         transportString = @";transport=tls";
     }
+    
+    
     
     pjsua_acc_config acc_cfg;
     pjsua_acc_config_default(&acc_cfg);
     
     // Add sip information to the pjsua account configuration.
-    acc_cfg.id = [[accountConfiguration.sipAddress stringByAppendingString:transportString] prependSipUri].pjString;
-    acc_cfg.reg_uri = [[accountConfiguration.sipDomain stringByAppendingString:transportString] prependSipUri].pjString;
+    
+    if (tls) {
+        acc_cfg.id = [[accountConfiguration.sipAddress stringByAppendingString:transportString] prependSipsUri].pjString;
+        acc_cfg.reg_uri = [[accountConfiguration.sipDomain stringByAppendingString:transportString] prependSipsUri].pjString;
+    } else {
+        acc_cfg.id = [[accountConfiguration.sipAddress stringByAppendingString:transportString] prependSipUri].pjString;
+        acc_cfg.reg_uri = [[accountConfiguration.sipDomain stringByAppendingString:transportString] prependSipUri].pjString;
+    }
+    
+        
+    
     acc_cfg.register_on_acc_add = accountConfiguration.sipRegisterOnAdd ? PJ_TRUE : PJ_FALSE;
     acc_cfg.publish_enabled = accountConfiguration.sipPublishEnabled ? PJ_TRUE : PJ_FALSE;
     acc_cfg.reg_timeout = VSLAccountRegistrationTimeoutInSeconds;
@@ -138,7 +153,11 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
     // If a proxy server is present on the account configuration add this to pjsua account configuration.
     if (accountConfiguration.sipProxyServer) {
         acc_cfg.proxy_cnt = 1;
-        acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:transportString] prependSipUri].pjString;
+        if (tls) {
+            acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:transportString] prependSipsUri].pjString;
+        } else {
+            acc_cfg.proxy[0] = [[accountConfiguration.sipProxyServer stringByAppendingString:transportString] prependSipUri].pjString;
+        }
     }
     
     acc_cfg.sip_stun_use = accountConfiguration.sipStunType;
@@ -179,15 +198,14 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
     
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
          ///////////////////////////////////////////// PodChanges
-        acc_cfg.srtp_secure_signaling = 0; //1;
+        acc_cfg.srtp_secure_signaling = 0; //2;
+        
         acc_cfg.use_srtp = PJMEDIA_SRTP_OPTIONAL; // //PJSUA_DEFAULT_USE_SRTP; //PJMEDIA_SRTP_MANDATORY;
         acc_cfg.enable_rtcp_mux = PJ_TRUE;
         
-        acc_cfg.srtp_opt.keying_count = 3;
-        //acc_cfg.srtp_opt.keying[0] = PJMEDIA_SRTP_ESDPREQCRYPTO;
+        acc_cfg.srtp_opt.keying_count = 0;
         acc_cfg.srtp_opt.keying[0] = PJMEDIA_SRTP_KEYING_DTLS_SRTP;
         acc_cfg.srtp_opt.keying[1] = PJMEDIA_SRTP_KEYING_SDES;
-        acc_cfg.srtp_opt.keying[2] = PJMEDIA_SRTP_ESDPREQCRYPTO;
         
         acc_cfg.srtp_opt.crypto_count = PJMEDIA_SRTP_MAX_CRYPTOS;
         

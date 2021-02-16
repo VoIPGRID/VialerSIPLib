@@ -30,6 +30,8 @@
  *  @return NSString
  */
 - (NSString *)prependSipUri;
+- (NSString *)prependSipsUri;
+
 
 /**
  *  This will create a sip uri with added domain info if necessary.
