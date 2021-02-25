@@ -204,6 +204,8 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  */
 @property (class) NSUUID * _Nullable mockUUID;
 
+@property (nonatomic) NSTimeInterval timerOffset;
+
 /**
  *  The callId which a call receives from PJSIP when it is created.
  */

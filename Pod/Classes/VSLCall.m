@@ -243,18 +243,28 @@ static NSUUID * _mockUUID = nil;
     if (self.callId == PJSUA_INVALID_ID) {
         return 0;
     }
-
+    
     pjsua_call_info callInfo;
     pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
     NSTimeInterval latestConnecDuration = callInfo.connect_duration.sec;
 
+    NSTimeInterval result;
+    
     // Workaround for callInfo.connect_duration being 0 at end of call
     if (latestConnecDuration > self.lastSeenConnectDuration) {
         self.lastSeenConnectDuration = latestConnecDuration;
-        return latestConnecDuration;
+        result =  latestConnecDuration;
     } else {
-        return self.lastSeenConnectDuration;
+        result = self.lastSeenConnectDuration;
     }
+    
+    result = result - self.timerOffset;
+    
+    if (result < 0) {
+        result = 0;
+    }
+    
+    return result;
 }
 
 #pragma mark - Actions
