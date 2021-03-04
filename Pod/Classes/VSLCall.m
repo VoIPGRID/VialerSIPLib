@@ -481,6 +481,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 }
 
 - (void)checkIfAudioPresent {
+    if (self.callState == VSLCallStateDisconnected) { return; }
     if (self.callId == PJSUA_INVALID_ID) { return; }
     pjsua_call_info callInfo;
     pjsua_call_get_info((pjsua_call_id)self.callId, &callInfo);
