@@ -203,7 +203,7 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
         acc_cfg.use_srtp = PJMEDIA_SRTP_OPTIONAL; // //PJSUA_DEFAULT_USE_SRTP; //PJMEDIA_SRTP_MANDATORY;
         acc_cfg.enable_rtcp_mux = PJ_TRUE;
         
-        acc_cfg.srtp_opt.keying_count = 0;
+        acc_cfg.srtp_opt.keying_count = 2;
         acc_cfg.srtp_opt.keying[0] = PJMEDIA_SRTP_KEYING_DTLS_SRTP;
         acc_cfg.srtp_opt.keying[1] = PJMEDIA_SRTP_KEYING_SDES;
         
