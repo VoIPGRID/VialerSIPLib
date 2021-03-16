@@ -1,12 +1,3 @@
-#
-# Be sure to run `pod lib lint VialerSIPLib.podspec --use-libraries' to ensure this is a
-# valid spec and remove all comments before submitting the spec.
-#
-# Any lines starting with a # are optional, but encouraged
-#
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
 	s.name             	= "VialerSIPLib"
 	s.version          	= "3.7.3"
@@ -26,8 +17,9 @@ Pod::Spec.new do |s|
 	s.public_header_files   = "Pod/Classes/**/*.h"
 
 	s.resource_bundles  = { 'VialerSIPLib' => 'Pod/Resources/*.wav' }
+	s.static_framework = true
 
-	s.dependency 'Vialer-pjsip-iOS'
+	s.dependency 'Vialer-pjsip-iOS', '~> 3.5s'
 	s.dependency 'CocoaLumberjack'
     s.dependency 'Reachability'
 end
