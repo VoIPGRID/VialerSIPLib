@@ -210,12 +210,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
 
     // kory 20201230
     mediaConfig.thread_cnt = 2; // modify 1 >> 2
-    mediaConfig.ptime = 20;
-    mediaConfig.quality = 10;
-    mediaConfig.audio_frame_ptime = 40;
-    //mediaConfig.ec_tail_len = 10;
-    //mediaConfig.ec_options = PJMEDIA_ECHO_WEBRTC | PJMEDIA_ECHO_USE_SW_ECHO | PJMEDIA_ECHO_USE_NOISE_SUPPRESSOR | PJMEDIA_ECHO_AGGRESSIVENESS_MODERATE;
-
+    
     // Initialize Endpoint.
     status = pjsua_init(&endpointConfig, &logConfig, &mediaConfig);
     if (status != PJ_SUCCESS) {
@@ -243,7 +238,6 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
         transportConfig.qos_params.flags = PJ_QOS_PARAM_HAS_DSCP;
         transportConfig.qos_params.dscp_val = 24;
         transportConfig.qos_params.wmm_prio = PJ_QOS_WMM_PRIO_VOICE;
-
 
         if (endpointConfiguration.hasTLSConfiguration) {
             // FYI transportConfig.tls_setting.method defaults to PJSIP_SSL_UNSPECIFIED_METHOD > PJSIP_SSL_DEFAULT_METHOD > PJSIP_TLSV1_METHOD
