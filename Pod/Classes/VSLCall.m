@@ -634,9 +634,9 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 
     pj_status_t status;
     if (!self.muted) {
-        status = pjsua_conf_disconnect(0, callInfo.conf_slot);
+        status = pjsua_conf_adjust_tx_level(callInfo.conf_slot, 0);
     } else {
-        status = pjsua_conf_connect(0, callInfo.conf_slot);
+        status = pjsua_conf_adjust_tx_level(callInfo.conf_slot, 1);
     }
 
     if (status == PJ_SUCCESS) {
