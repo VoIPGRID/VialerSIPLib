@@ -292,8 +292,13 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         pj_str_t hName = [[NSString alloc] initWithString: @"P-Asserted-Identity"].pjString;
         pj_str_t hValue = self.account.accountConfiguration.pAssertedIdentity.pjString;
         pjsip_generic_string_hdr *hdr = pjsip_generic_string_hdr_create([VSLEndpoint sharedEndpoint].pjPool, &hName, &hValue);
-
         pj_list_push_back(&msg_data->hdr_list, hdr);
+        
+        pj_str_t cidName = [[NSString alloc] initWithString: @"CID"].pjString;
+        pj_str_t cidValue = _uuid.UUIDString.pjString;
+        pjsip_generic_string_hdr *hdr2 = pjsip_generic_string_hdr_create([VSLEndpoint sharedEndpoint].pjPool, &cidName, &cidValue);
+        pj_list_push_back(&msg_data->hdr_list, hdr2);
+        
         return msg_data;
     } else {
         return NULL;
