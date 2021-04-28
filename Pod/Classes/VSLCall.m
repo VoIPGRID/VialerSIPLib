@@ -295,7 +295,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         pj_list_push_back(&msg_data->hdr_list, hdr);
         
         pj_str_t cidName = [[NSString alloc] initWithString: @"CID"].pjString;
-        pj_str_t cidValue = _uuid.UUIDString.pjString;
+        pj_str_t cidValue = _uuid.UUIDString.lowercaseString.pjString;
         pjsip_generic_string_hdr *hdr2 = pjsip_generic_string_hdr_create([VSLEndpoint sharedEndpoint].pjPool, &cidName, &cidValue);
         pj_list_push_back(&msg_data->hdr_list, hdr2);
         
