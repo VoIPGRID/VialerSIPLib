@@ -547,9 +547,9 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
                 param.enc_fmt.det.vid.avg_bps = 512 * 1024;
                 param.enc_fmt.det.vid.max_bps = 768 * 1024;
                 
-                param.enc_fmt.det.vid.size.w = 640;
-                param.enc_fmt.det.vid.size.h = 480;
-                param.enc_fmt.det.vid.fps.num = 25;
+                param.enc_fmt.det.vid.size.w = 480;
+                param.enc_fmt.det.vid.size.h = 640;
+                param.enc_fmt.det.vid.fps.num = 30;
                 param.enc_fmt.det.vid.fps.denum = 1;
                                 
                 param.dec_fmt.det.vid.size.w = 1280;

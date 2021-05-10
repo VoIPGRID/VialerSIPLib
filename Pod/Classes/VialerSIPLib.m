@@ -226,6 +226,7 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
 
 + (void)orientationChanged:(UIDeviceOrientation)orientation
 {
+    
 #if PJSUA_HAS_VIDEO
     const pjmedia_orient pj_ori[4] =
     {

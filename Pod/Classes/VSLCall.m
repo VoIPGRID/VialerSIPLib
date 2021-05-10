@@ -19,6 +19,9 @@ static NSString * const VSLCallErrorDomain = @"VialerSIPLib.VSLCall";
 static double const VSLCallDelayTimeCheckSuccessfullHangup = 0.5;
 
 NSString * const VSLCallStateChangedNotification = @"VSLCallStateChangedNotification";
+
+NSString * const VSLMediaStateChangedNotification = @"VSLMediaStateChangedNotification";
+
 NSString * const VSLNotificationUserInfoVideoSizeRenderKey = @"VSLNotificationUserInfoVideoSizeRenderKey";
 NSString * const VSLCallConnectedNotification = @"VSLCallConnectedNotification";
 NSString * const VSLCallDisconnectedNotification = @"VSLCallDisconnectedNotification";
@@ -313,7 +316,7 @@ static NSUUID * _mockUUID = nil;
 - (void)answerWithVideoWithCompletion:(void (^)(NSError *error))completion {
     
     pjsua_call_setting opt;
-    pjsua_call_setting_default(&opt);
+    pjsua_call_setting_default(&opt);    
     opt.vid_cnt = 1; //0 - disable video in the call
     [self checkCurrentThreadIsRegisteredWithPJSUA];
     pj_status_t status;
@@ -517,7 +520,6 @@ void pauseStr(void *uData) {
 }
 
 
-
 - (AVAudioPlayer *)disconnectedSoundPlayer {
     if (!_disconnectedSoundPlayer) {
         NSBundle *podBundle = [NSBundle bundleForClass:self.classForCoder];
@@ -694,6 +696,14 @@ void pauseStr(void *uData) {
             self.audioCheckTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(checkIfAudioPresent) userInfo: nil repeats: YES];
         });
     }
+    
+    NSDictionary *notificationUserInfo = @{
+                                           VSLNotificationUserInfoCallKey : self,
+                                           VSLNotificationUserInfoCallStateKey: [NSNumber numberWithInt:(VSLMediaState)mediaState]
+                                           };
+    [[NSNotificationCenter defaultCenter] postNotificationName:VSLMediaStateChangedNotification
+                                                        object:nil
+                                                      userInfo:notificationUserInfo];
 
     [self updateCallInfo:callInfo];
 }

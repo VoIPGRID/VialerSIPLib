@@ -17,6 +17,8 @@
  */
 extern NSString * _Nonnull const VSLCallStateChangedNotification;
 
+extern NSString * _Nonnull const VSLMediaStateChangedNotification;
+
 /**
  *  Notification which is posted when the call's media event recived.
  *  The callId for which the media event changed can be found in the
