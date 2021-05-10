@@ -364,7 +364,6 @@ static NSUUID * _mockUUID = nil;
 }
 
 - (UIView *) myCallWindow {
-    
     if (!self.isVideoCall) {
         return  [[UIView alloc] initWithFrame: CGRectZero];
     }
@@ -388,7 +387,10 @@ static NSUUID * _mockUUID = nil;
        }
 }
 
-- (UIView *) myPreviewWindow {
+- (UIView *) myPreviewWindow {    
+    return  [[UIView alloc] initWithFrame: CGRectZero];
+    //TODO: freeze
+    
     [self checkCurrentThreadIsRegisteredWithPJSUA];
     
     if (!self.isVideoCall) {
@@ -415,6 +417,7 @@ static NSUUID * _mockUUID = nil;
         return view;
     }
 }
+
 
 - (void) stopAllPreviews {
     [self checkCurrentThreadIsRegisteredWithPJSUA];
