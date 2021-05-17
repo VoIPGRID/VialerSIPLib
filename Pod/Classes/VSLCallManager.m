@@ -91,7 +91,7 @@
 }
 
 - (void)answerCall:(VSLCall *)call completion:(void (^)(NSError *error))completion {
-    [call answerWithCompletion:completion];
+    [call answerWithHeader:@"" completion:completion];
 }
 
 - (void)endCall:(VSLCall *)call completion:(void (^)(NSError *error))completion {
@@ -153,7 +153,7 @@
     if ([self.calls count] == 0) {
         return;
     }
-    
+
     for (VSLCall *call in self.calls) {
         VSLLogVerbose(@"Ending call: %@", call.uuid.UUIDString);
         NSError *hangupError;
@@ -253,7 +253,7 @@
 
 - (NSArray <VSLCall *> *)activeCallsForAccount:(VSLAccount *)account {
     if ([self.calls count] == 0) {
-        
+
     }
 
     NSMutableArray *activeCallsForAccount = [[NSMutableArray alloc] init];

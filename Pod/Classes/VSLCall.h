@@ -464,7 +464,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  @warning Do not user this function directly, user VSLCallManager -anserCall: completion: otherwise the
  *  audio session is not activated.
  */
-- (void)answerWithCompletion:(void (^ _Nullable)(NSError * _Nullable error))completion;
+- (void)answerWithHeader:(NSString *)header completion:(void (^ _Nullable)(NSError * _Nullable error))completion;
 - (BOOL)answer:(NSError * _Nullable * _Nullable)error __attribute__((unavailable("Deprecated, use VSLCallManager -answerCall: completion: instead")));
 
 /**

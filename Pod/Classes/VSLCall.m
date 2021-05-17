@@ -103,7 +103,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 
 - (instancetype _Nullable)initInboundCallWithCallId:(NSUInteger)callId account:(VSLAccount * _Nonnull)account andInvite:(SipInvite *)invite {
     self.invite = invite;
-    
+
     return [self initInboundCallWithCallId:callId account:account];
 }
 
@@ -263,7 +263,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     }
 
     [self checkCurrentThreadIsRegisteredWithPJSUA];
-    
+
     pjsua_msg_data *msg_data = [self makeMsgData];
     pj_status_t status = pjsua_call_make_call((int)self.account.accountId, &sipUri, &callSetting, NULL, msg_data, (int *)&_callId);
     VSLLogVerbose(@"Call(%@) started with id:%ld", self.uuid.UUIDString, (long)self.callId);
@@ -288,17 +288,34 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     if (self.account.accountConfiguration.pAssertedIdentity != nil) {
         pjsua_msg_data *msg_data = malloc(sizeof(pjsua_msg_data));
         pjsua_msg_data_init(msg_data);
-        
+
         pj_str_t hName = [[NSString alloc] initWithString: @"P-Asserted-Identity"].pjString;
         pj_str_t hValue = self.account.accountConfiguration.pAssertedIdentity.pjString;
         pjsip_generic_string_hdr *hdr = pjsip_generic_string_hdr_create([VSLEndpoint sharedEndpoint].pjPool, &hName, &hValue);
         pj_list_push_back(&msg_data->hdr_list, hdr);
-        
+
         pj_str_t cidName = [[NSString alloc] initWithString: @"CID"].pjString;
         pj_str_t cidValue = _uuid.UUIDString.lowercaseString.pjString;
         pjsip_generic_string_hdr *hdr2 = pjsip_generic_string_hdr_create([VSLEndpoint sharedEndpoint].pjPool, &cidName, &cidValue);
         pj_list_push_back(&msg_data->hdr_list, hdr2);
-        
+
+        return msg_data;
+    } else {
+        return NULL;
+    }
+}
+
+- (pjsua_msg_data *)makeMsgData2:(NSString *)header {
+    if (true) {
+        pjsua_msg_data *msg_data = malloc(sizeof(pjsua_msg_data));
+        pjsua_msg_data_init(msg_data);
+
+        pj_str_t hName = [[NSString alloc] initWithString: @"User-Agent"].pjString;
+
+        pj_str_t hValue = header.pjString;
+        pjsip_generic_string_hdr *hdr = pjsip_generic_string_hdr_create([VSLEndpoint sharedEndpoint].pjPool, &hName, &hValue);
+        pj_list_push_back(&msg_data->hdr_list, hdr);
+
         return msg_data;
     } else {
         return NULL;
@@ -372,16 +389,16 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
     if (self.callState > VSLCallStateNull && self.callState < VSLCallStateDisconnected) {
         pjsua_call_setting callSetting;
         pjsua_call_setting_default(&callSetting);
-        
+
         callSetting.flag = PJSUA_CALL_REINIT_MEDIA + PJSUA_CALL_NO_SDP_OFFER;
-                
+
         if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
             callSetting.vid_cnt = 0;
         }
 
         VSLLogDebug(@"Sending Reinvite.");
         pj_status_t status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &callSetting, NULL);
-        
+
         if (status != PJ_SUCCESS) {
             char statusmsg[PJ_ERR_MSG_SIZE];
             pj_strerror(status, statusmsg, sizeof(statusmsg));
@@ -442,7 +459,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
             self.callerName = callerInfo[@"caller_name"];
             self.callerNumber = callerInfo[@"caller_number"];
         }
-        
+
         if (self.invite != nil) {
             if ([self.invite hasPAssertedIdentity]) {
                 self.callerName = [self.invite getPAssertedIdentityName];
@@ -529,13 +546,14 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 }
 
 #pragma mark - User actions
-- (void)answerWithCompletion:(void (^)(NSError *error))completion {
+- (void)answerWithHeader:(NSString *)header completion:(void (^)(NSError *error))completion {
     pj_status_t status;
 
     if (self.callId != PJSUA_INVALID_ID) {
         pjsua_call_setting callSetting;
         pjsua_call_setting_default(&callSetting);
 
+        pjsua_msg_data *msg_data = [self makeMsgData2: header];
         if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
             callSetting.vid_cnt = 0;
         }
@@ -597,7 +615,7 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
                                                errorCode:VSLCallErrorCannotHangupCall];
                 }
             }
-            
+
             // Hanging up the call takes some time. It could fail due to a bad or no internet connection.
             // Check after some delay if the call was indeed disconnected. If it's not the case disconnect it manually.
             __weak VSLCall *weakSelf = self;
@@ -605,10 +623,10 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
                 if (!weakSelf || weakSelf.callState == VSLCallStateDisconnected) {
                     return; // After the delay, the call was indeed successfull disconnected.
                 }
-                
+
                 // The call is still not disconnected, so manual disconnect it anyway.
                 VSLLogDebug(@"Hangup unsuccessfull, possibly due to bad or no internet connection, so manually disconnecting the call.");
-                
+
                 // Mute the call to make sure the other party can't hear the user anymore.
                 if (!weakSelf.muted) {
                     [weakSelf toggleMute:nil];
@@ -677,12 +695,12 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
             callSetting.vid_cnt = 0;
         }
-        
+
         status = pjsua_call_reinvite2((pjsua_call_id)self.callId, &callSetting, NULL);
     } else {
         status = pjsua_call_set_hold((pjsua_call_id)self.callId, NULL);
     }
-    
+
     if (status == PJ_SUCCESS) {
         self.onHold = !self.onHold;
         VSLLogVerbose(self.onHold ? @"Call is on hold": @"On hold state ended");

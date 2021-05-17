@@ -86,10 +86,10 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     if (call) {
         [self.callManager.audioController configureAudioSession];
 
-        [call answerWithCompletion:^(NSError *error) {
+        [call answerWithHeader:@"" completion:^(NSError *error) {
             if (error) {
                 VSLLogError(@"Error answering call(%@) error:%@", call.uuid.UUIDString, error);
-                
+
                 [action fail];
 
             } else {
