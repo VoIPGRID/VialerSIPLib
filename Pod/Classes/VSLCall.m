@@ -553,12 +553,12 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
         pjsua_call_setting callSetting;
         pjsua_call_setting_default(&callSetting);
 
-        pjsua_msg_data *msg_data = [self makeMsgData2: header];
         if ([VSLEndpoint sharedEndpoint].endpointConfiguration.disableVideoSupport) {
             callSetting.vid_cnt = 0;
         }
 
-        status = pjsua_call_answer2((int)self.callId, &callSetting, PJSIP_SC_OK, NULL, NULL);
+        pjsua_msg_data *msg_data = [self makeMsgData2: header];
+        status = pjsua_call_answer2((int)self.callId, &callSetting, PJSIP_SC_OK, NULL, msg_data);
 
         if (status != PJ_SUCCESS) {
             char statusmsg[PJ_ERR_MSG_SIZE];
