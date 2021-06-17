@@ -545,16 +545,16 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
                 pjsua_vid_codec_get_param(&videoCodecInfo[i].codec_id, &param);
                 
                 param.enc_fmt.det.vid.avg_bps = 512 * 1024;
-                param.enc_fmt.det.vid.max_bps = 768 * 1024;
+                param.enc_fmt.det.vid.max_bps = 2048 * 1024;
                 
                 param.enc_fmt.det.vid.size.w = 480;
                 param.enc_fmt.det.vid.size.h = 640;
                 param.enc_fmt.det.vid.fps.num = 30;
                 param.enc_fmt.det.vid.fps.denum = 1;
-                                
-                param.dec_fmt.det.vid.size.w = 1280;
-                param.dec_fmt.det.vid.size.h = 720;
-                param.dec_fmt.det.vid.fps.num = 90;
+
+                param.dec_fmt.det.vid.size.w = 2048;
+                param.dec_fmt.det.vid.size.h = 1024;
+                param.dec_fmt.det.vid.fps.num = 30;
                 param.dec_fmt.det.vid.fps.denum = 1;
                 
                 
@@ -572,7 +572,7 @@ static void onTransportStateChanged(pjsip_transport *tp, pjsip_transport_state s
 //                //        p.ignoreFmtp = PJ_TRUE;
 //                param.dec_fmt.det.vid.size.w = 1280;
 //                param.dec_fmt.det.vid.size.h = 720;
-//                param.dec_fmt.det.vid.fps.num = 90;
+//                param.dec_fmt.det.vid.fps.num = 30;
 //                param.dec_fmt.det.vid.fps.denum = 1;
                 
                 pjsua_vid_codec_set_param(&videoCodecInfo[i].codec_id, &param);

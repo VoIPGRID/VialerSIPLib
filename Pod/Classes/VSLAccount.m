@@ -162,10 +162,10 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
     
     acc_cfg.sip_stun_use = accountConfiguration.sipStunType;
     acc_cfg.media_stun_use = accountConfiguration.mediaStunType;
-    
-    acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite ? PJ_TRUE : PJ_FALSE;
-    acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite ? PJ_TRUE : PJ_FALSE;
-    
+//
+//    acc_cfg.allow_via_rewrite = accountConfiguration.allowViaRewrite ? PJ_TRUE : PJ_FALSE;
+//    acc_cfg.allow_contact_rewrite = accountConfiguration.allowContactRewrite ? PJ_TRUE : PJ_FALSE;
+//
     acc_cfg.vid_in_auto_show = PJ_TRUE;
     acc_cfg.vid_out_auto_transmit = PJ_TRUE;
 
@@ -174,9 +174,9 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
     acc_cfg.vid_rend_dev = PJMEDIA_VID_DEFAULT_RENDER_DEV;
     
     // Only set the contact rewrite method when allow contact rewrite is set to TRUE.
-    if (accountConfiguration.allowContactRewrite) {
-        acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
-    }
+//    if (accountConfiguration.allowContactRewrite) {
+//        acc_cfg.contact_rewrite_method = accountConfiguration.contactRewriteMethod;
+//    }
     
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTCPConfiguration] || [[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
         VSLIpChangeConfiguration *ipChangeConfiguration = [VSLEndpoint sharedEndpoint].endpointConfiguration.ipChangeConfiguration;
@@ -199,22 +199,13 @@ NSString * const VSLNotificationAccountStateKey = @"VSLNotificationAccountStateK
     if ([[VSLEndpoint sharedEndpoint].endpointConfiguration hasTLSConfiguration]) {
          ///////////////////////////////////////////// PodChanges
         acc_cfg.srtp_secure_signaling = 0; //2;
-        
+
         acc_cfg.use_srtp = PJMEDIA_SRTP_OPTIONAL; // //PJSUA_DEFAULT_USE_SRTP; //PJMEDIA_SRTP_MANDATORY;
-        acc_cfg.enable_rtcp_mux = PJ_TRUE;
-        
+
         acc_cfg.srtp_opt.keying_count = 2;
         acc_cfg.srtp_opt.keying[0] = PJMEDIA_SRTP_KEYING_DTLS_SRTP;
         acc_cfg.srtp_opt.keying[1] = PJMEDIA_SRTP_KEYING_SDES;
-        
-        acc_cfg.srtp_opt.crypto_count = PJMEDIA_SRTP_MAX_CRYPTOS;
-        
-        acc_cfg.rtcp_fb_cfg.dont_use_avpf = PJ_TRUE;
-                
-        ////////////////////////////////////////// Ice
-        acc_cfg.ice_cfg_use = PJSUA_ICE_CONFIG_USE_CUSTOM;
         acc_cfg.ice_cfg.enable_ice = PJ_TRUE;
-        acc_cfg.ice_cfg.ice_opt.aggressive = PJ_TRUE;
         
         
         acc_cfg.reg_retry_interval = 300;

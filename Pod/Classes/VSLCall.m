@@ -387,10 +387,7 @@ static NSUUID * _mockUUID = nil;
        }
 }
 
-- (UIView *) myPreviewWindow {    
-    return  [[UIView alloc] initWithFrame: CGRectZero];
-    //TODO: freeze
-    
+- (UIView *) myPreviewWindow {
     [self checkCurrentThreadIsRegisteredWithPJSUA];
     
     if (!self.isVideoCall) {
