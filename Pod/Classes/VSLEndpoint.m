@@ -561,7 +561,17 @@ static void logCallBack(int logLevel, const char *data, int len) {
     if ([[NSCharacterSet newlineCharacterSet] characterIsMember:last]) {
         logString = [logString substringToIndex:[logString length] - 1];
     }
-
+    
+    
+    logString = [@"[PJSIP]" stringByAppendingString:logString];
+    
+    
+//    VSLCall *call = [[VSLEndpoint sharedEndpoint].callManager callWithCallId:0];
+//    if (call) {
+//        NSString * uuid = [NSString stringWithFormat:@"[%@]", call.uuid.UUIDString];
+//        logString = [uuid stringByAppendingString:logString];
+//    }
+    
     switch (logLevel) {
         case 1:
             VSLLogError(@"%@", logString);

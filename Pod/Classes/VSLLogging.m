@@ -5,6 +5,9 @@
 
 #import "Constants.h"
 #import "VSLLogging.h"
+#import "VialerSIPLib.h"
+#import "VSLCall.h"
+#import "VSLCallManager.h"
 #import "VSLEndpoint.h"
 
 @implementation VSLLogging
@@ -17,6 +20,37 @@
     NSString *logFile = [NSString stringWithFormat:@"%s", file];
     NSString *logFunction = [NSString stringWithFormat:@"%s", function];
     
+    NSString *level = nil;
+    switch (flag) {
+        case DDLogFlagError:
+            level = @"[ERROR]\t";
+            break;
+        case DDLogFlagWarning:
+            level = @"[WARN]\t";
+            break;
+        case DDLogFlagInfo:
+            level = @"[INFO]\t";
+            break;
+        case DDLogFlagDebug:
+            level = @"[DEBUG]\t";
+            break;
+        case DDLogFlagVerbose:
+            level = @"[VERBOSE]\t";
+            break;
+    }
+    
+    VSLCallManager *callManager = [[VialerSIPLib sharedInstance] callManager];
+    VSLCall *call = [callManager callWithCallId:0];   // maybe not good practice
+    NSString * uuid = @"[undefined]";
+    if (call) {
+        uuid = [NSString stringWithFormat:@"[%@]\t", call.uuid.UUIDString];
+    } else {
+        uuid = [NSString stringWithFormat:@"[%@]\t", [VialerSIPLib sharedInstance].uuid.UUIDString];
+    }
+    
+    message = [level stringByAppendingString:message];
+    message = [uuid stringByAppendingString:message];
+        
     DDLogMessage *logMessage = [[DDLogMessage alloc] initWithMessage:message
                                                                level:ddLogLevel
                                                                 flag:flag
