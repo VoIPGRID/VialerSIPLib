@@ -221,6 +221,11 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
 
 @property (readonly, nonatomic) VSLEndpoint * _Nonnull endpoint;
 
+/*
+ * Lucas: for the case of no uuid available from VSLCall, inbound case 
+ */
+@property (readwrite, nonatomic) NSUUID *uuid;
+
 /**
  *  The shared instance for the sip library.
  */
