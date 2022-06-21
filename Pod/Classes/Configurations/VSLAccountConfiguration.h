@@ -80,6 +80,11 @@ typedef NS_ENUM(NSUInteger, VSLContactRewriteMethod) {
 /**
  *  The proxy address where to connect to.
  */
+ @property (nonatomic) NSString * _Nonnull contactParams;
+
+ /**
+  *    params to add to contact header
+  */
 @property (strong, nonatomic) NSString * _Nonnull sipProxyServer;
 
 /**

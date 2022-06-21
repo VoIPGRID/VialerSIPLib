@@ -123,7 +123,8 @@ static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
     acc_cfg.cred_info[0].data_type = PJSIP_CRED_DATA_PLAIN_PASSWD;
     acc_cfg.cred_info[0].data = accountConfiguration.sipPassword.pjString;
     acc_cfg.proxy_cnt = 0;
-    
+    acc_cfg.contact_uri_params = accountConfiguration.contactParams.pjString;
+
     // If a proxy server is present on the account configuration add this to pjsua account configuration.
     if (accountConfiguration.sipProxyServer) {
         acc_cfg.proxy_cnt = 1;

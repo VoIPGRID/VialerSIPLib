@@ -106,6 +106,10 @@ NSString * const VSLNotificationUserInfoErrorStatusMessageKey = @"VSLNotificatio
         accountConfiguration.sipPassword = sipUser.sipPassword;
         accountConfiguration.sipDomain = sipUser.sipDomain;
 
+        if ([sipUser respondsToSelector:@selector(contactParams)]) {
+             accountConfiguration.contactParams = sipUser.contactParams;
+         }
+
         if ([sipUser respondsToSelector:@selector(sipProxy)]) {
             accountConfiguration.sipProxyServer = sipUser.sipProxy;
         }
