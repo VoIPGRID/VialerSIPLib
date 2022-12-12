@@ -15,7 +15,8 @@ extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNoti
 @class VSLCallManager, VSLCall;
 
 @interface CallKitProviderDelegate : NSObject <CXProviderDelegate>
-
+@property (assign) BOOL needToAnswerCallLater;
+@property (readwrite, nonatomic) NSString *callUUIDToAnswer;
 @property (strong, nonatomic) CXProvider *provider;
 
 /**

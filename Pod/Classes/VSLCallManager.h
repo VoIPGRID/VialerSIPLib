@@ -99,12 +99,16 @@
  * @return An NSArray containing all the accounts calls or nil.
  */
 - (NSArray * _Nullable)callsForAccount:(VSLAccount * _Nonnull)account;
-
+/**
+            Return all calls from callManager
+ */
+- (NSArray<VSLCall *> * _Nonnull)allCalls;
 /**
  *  Add the given call to the Call Manager.
  *
  *  @param call The VSLCall instance to add.
  */
+
 - (void)addCall:(VSLCall * _Nonnull)call;
 
 /**

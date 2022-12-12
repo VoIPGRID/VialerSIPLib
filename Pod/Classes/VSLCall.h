@@ -248,6 +248,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  */
 @property (readonly, nonatomic) VSLMediaState mediaState;
 
+@property (readwrite, nonatomic) Boolean isNeedToAnswerWhenAccountSetted;
 /**
  *  The local URI of the call.
  */
@@ -278,6 +279,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  */
 @property (readonly, nonatomic) BOOL muted;
 
+@property (readonly, nonatomic) BOOL speaker;
 /**
  *  True if the call is on hold locally.
  */
@@ -420,7 +422,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  @param callInfo pjsip callInfo
  */
 - (void)mediaStateChanged:(pjsua_call_info)callInfo;
-
+- (void)needToStartAfterAccountSetted;
 /**
  *  Start the call. The number that will be called is the number provided when the call was created using
  *  -initWithNumbertoCall
@@ -428,6 +430,7 @@ typedef NS_ENUM(NSInteger, VSLCallTerminateReason) {
  *  @param completion A completion block called when the call is started. The block has an error
  *  parameter which contains an error when the outbound call fails, otherwise Nil.
  */
+
 - (void)startWithCompletion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
 
 /**

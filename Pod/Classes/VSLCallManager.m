@@ -44,6 +44,13 @@
     return _calls;
 }
 
+- (NSMutableArray *)allCalls {
+    if (!_calls) {
+        _calls = [[NSMutableArray alloc] init];
+    }
+    return _calls;
+}
+
 - (VSLAudioController *)audioController {
     if (!_audioController) {
         _audioController = [[VSLAudioController alloc] init];

@@ -53,7 +53,14 @@ NSString * const VSLAudioControllerAudioResumed = @"VSLAudioControllerAudioResum
     }
     VSLLogVerbose(output == VSLAudioControllerOutputSpeaker ? @"Speaker modus activated": @"Speaker modus deactivated");
 }
-
+- (void)toggleSpeaker {
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    if ([[audioSession currentRoute] outputs] == VSLAudioControllerOutputSpeaker) {
+        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
+    }else {
+        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+    }
+}
 - (void)configureAudioSession {
     NSError *audioSessionCategoryError;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];

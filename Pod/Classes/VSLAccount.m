@@ -17,7 +17,7 @@
 #import "VSLEndpointConfiguration.h"
 #import "VSLLogging.h"
 
-static NSUInteger const VSLAccountRegistrationTimeoutInSeconds = 800;
+static NSUInteger const VSLAccountRegistrationTimeoutInSeconds = 1000000;
 static NSString * const VSLAccountErrorDomain = @"VialerSIPLib.VSLAccount";
 
 @interface VSLAccount()
