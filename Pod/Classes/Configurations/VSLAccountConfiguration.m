@@ -16,7 +16,7 @@
         self.sipStunType = VSLStunUseDefault;
         self.contactRewriteMethod = VSLContactRewriteMethodAlwaysUpdate;
         self.contactUseSrcPort = YES;
-        self.allowViaRewrite = YES;
+        self.allowViaRewrite = NO;
         self.allowContactRewrite = YES;
     }
     return self;

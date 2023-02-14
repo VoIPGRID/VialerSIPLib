@@ -508,12 +508,6 @@ NSString * const VSLCallErrorDuringSetupCallNotification = @"VSLCallErrorDuringS
 #pragma mark - User actions
 - (void)answerWithCompletion:(void (^)(NSError *error))completion {
     pj_status_t status;
-    if (self.account == nil || self.callState == VSLCallStateNull){
-        self.isNeedToAnswerWhenAccountSetted = true;
-        
-        completion(nil);
-        return;
-    }
     if (self.callId != PJSUA_INVALID_ID) {
         pjsua_call_setting callSetting;
         pjsua_call_setting_default(&callSetting);
