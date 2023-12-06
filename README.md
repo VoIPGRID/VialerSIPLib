@@ -1,3 +1,7 @@
+> [!CAUTION]
+> We are no longer supporting this library and have therefore archived this repository. Please fork it if you wish to continue using it.
+
+
 # VialerSIPLib
 
 <!--- [![CI Status](http://img.shields.io/travis/wearespindle/VialerSIPLib.svg?style=flat)](https://travis-ci.org/wearespindle/VialerSIPLib) -->
@@ -15,7 +19,7 @@ We use this library in our own app, [Vialer](https://www.vialerapp.com). To make
 
 ## Status
 
-In active development.
+No longer supported.
 
 ## Usage
 
