@@ -44,6 +44,9 @@ typedef NS_ENUM(NSInteger, VSLAudioControllerOutputs) {
  */
 @property (nonatomic) VSLAudioControllerOutputs output;
 
+
+- (void)toggleSpeaker;
+
 /**
  *  Configure audio.
  */

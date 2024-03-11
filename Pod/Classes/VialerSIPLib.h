@@ -95,6 +95,10 @@ typedef NS_ENUM(NSUInteger, VialerSIPLibErrors) {
  *
  *  @return NSString with the domain.
  */
+ 
+@property (readonly, nonatomic) NSString * _Nonnull contactParams;
+@optional
+
 @property (readonly, nonatomic) NSString * _Nonnull sipDomain;
 @optional
 

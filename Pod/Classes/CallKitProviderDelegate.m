@@ -23,7 +23,8 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
 - (instancetype)initWithCallManager:(VSLCallManager *)callManager {
     if (self = [super init]) {
         self.callManager = callManager;
-        
+        self.needToAnswerCallLater = NO;
+        self.callUUIDToAnswer = @"";
         self.provider = [[CXProvider alloc] initWithConfiguration:[self providerConfiguration]];
         [self.provider setDelegate:self queue:nil];
         
@@ -85,10 +86,17 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     __weak VSLCall *call = [self.callManager callWithUUID:action.callUUID];
     if (call) {
         [self.callManager.audioController configureAudioSession];
-
+        VSLLogError(@"Error answering call(%ld) error:%s", [call callStateText] , "CALL STATE IS NULL NEED TO ANSWER LEATEER");
+        if ([call account] == nil || [call callState] == VSLCallStateNull){
+            self.needToAnswerCallLater = YES;
+            self.callUUIDToAnswer = [[call uuid] UUIDString];
+            VSLLogError(@"Error answering call(%@) error:%s", call.uuid.UUIDString, "CALL STATE IS NULL NEED TO ANSWER LEATEER");
+            [action fulfill];
+            return;
+        }
         [call answerWithCompletion:^(NSError *error) {
             if (error) {
-                VSLLogError(@"Error answering call(%@) error:%@", call.uuid.UUIDString, error);
+                VSLLogError(@"Error answering call(%@) error:%@, HERE MY BAD ERROR", call.uuid.UUIDString, error);
                 
                 [action fail];
 
@@ -103,8 +111,9 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
             }
         }];
     } else {
+        self.needToAnswerCallLater = YES;
         VSLLogError(@"Error answering call(%@). No call found", action.callUUID.UUIDString);
-        [action fail];
+        [action fulfill];
     }
 }
 
@@ -118,6 +127,7 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     if (!call) {
         VSLLogInfo(@"Error hanging up call(%@). No call found.", action.callUUID.UUIDString);
         [action fulfill];
+        [self.callManager endAllCallsForAccount:call.account];
         return;
     }
 
@@ -135,9 +145,11 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
     if (error) {
         VSLLogInfo(@"Error hanging up call(%@) error:%@", call.uuid.UUIDString, error);
         [action fail];
+        [self.callManager endAllCallsForAccount:call.account];
     } else {
         VSLLogVerbose(@"Ending call %@", call.uuid.UUIDString);
         [action fulfill];
+        [self.callManager endAllCallsForAccount:call.account];
     }
 }
 
@@ -267,12 +279,18 @@ NSString * const CallKitProviderDelegateInboundCallRejectedNotification = @"Call
             break;
 
         case VSLCallStateDisconnected:
+            VSLLogDebug(@"Call remotly ended, in DISCONNECTED state, with UUID:  %hhd      %hhd", call.userDidHangUp, call.connected);
+            self.needToAnswerCallLater = false;
+            self.callUUIDToAnswer = @"";
             if (!call.connected) {
                 VSLLogDebug(@"Call never connected, in DISCONNECTED state, with UUID: %@", call.uuid);
                 [self.provider reportOutgoingCallWithUUID:call.uuid connectedAtDate:[NSDate date]];
                 [self.provider reportCallWithUUID:call.uuid endedAtDate:[NSDate date] reason:CXCallEndedReasonUnanswered];
             } else if (!call.userDidHangUp) {
                 VSLLogDebug(@"Call remotly ended, in DISCONNECTED state, with UUID: %@", call.uuid);
+                [self.provider reportCallWithUUID:call.uuid endedAtDate:[NSDate date] reason:CXCallEndedReasonRemoteEnded];
+            } else {
+                VSLLogDebug(@"Call ENDED BY OUR USER: %@", call.uuid);
                 [self.provider reportCallWithUUID:call.uuid endedAtDate:[NSDate date] reason:CXCallEndedReasonRemoteEnded];
             }
             break;
